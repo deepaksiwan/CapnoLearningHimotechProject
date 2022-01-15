@@ -11,19 +11,19 @@ const Viewmanageform = () =>{
             to: "/bankform", displayViewmanagelist: "Download Fill-in PDF Blank Forms"
         },
         {
-            to: "/uploadclientform", displayViewmanagelist: "Upload Completed Client Forms"
+            to: "/upload/client/form", displayViewmanagelist: "Upload Completed Client Forms"
         },
         {
-            to: "/uploadtrainnerform", displayViewmanagelist: "Upload Completed Trainer Forms"
+            to: "/upload/trainner/form", displayViewmanagelist: "Upload Completed Trainer Forms"
         },
         {
-            to: "/viewuploadedclientform", displayViewmanagelist: "View Completed Client Forms"
+            to: "/view/uploaded/client/form", displayViewmanagelist: "View Completed Client Forms"
         },
         {
-            to: "/viewuploadedtrainerform", displayViewmanagelist: "View Completed Trainer Forms"
+            to: "/view/uploaded/trainer/form", displayViewmanagelist: "View Completed Trainer Forms"
         },
         {
-            to: "/viewcompletedclientwork", displayViewmanagelist: "View Homework Assignment"
+            to: "/view/completed/client/work", displayViewmanagelist: "View Homework Assignment"
         }
     ]
 

@@ -10,7 +10,7 @@ const Chart = (props) => {
     const [xAxis, setXaxis] = useState([]);
     const [yAxis, setYaxis] = useState([]);
     const accessToken = localStorage.getItem('accessToken');
-   
+
     useEffect(() => {
         // super(props);
 
@@ -23,40 +23,40 @@ const Chart = (props) => {
 
     }, [])
 
- const getCsv = () =>{
-    fetch("https://capno-api.herokuapp.com/api/session/data?session_id="+ session + "&signal_name="+ props.signal ,
-    {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'x-access-token': accessToken,
-        },
-    }
-).then((response) => {
-    if (response.status == 200) {
-        response.json().then((resp) => {
-            console.warn("result", resp);
-            if(resp.sessions[0]){
-                getData(resp.sessions[0].sessiondata)
+    const getCsv = () => {
+        fetch("https://capno-api.herokuapp.com/api/session/data?session_id=" + session + "&signal_name=" + props.signal,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
             }
-            
-    
-        });
-    }
-    else if (response.status == 401) {
-        logout()
-    }
-    else {
-        alert("network error")
-    }
-   
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    console.warn("result", resp);
+                    if (resp.sessions[0]) {
+                        getData(resp.sessions[0].sessiondata)
+                    }
 
-})
- }
- const logout = () => {
-    localStorage.clear();
-    alert("You Logout successful")
-}
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+    }
+    const logout = () => {
+        localStorage.clear();
+        alert("You Logout successful")
+    }
     async function getData(_csvFile) {
         let _x = [];
         let _y = [];
@@ -78,7 +78,7 @@ const Chart = (props) => {
         })
 
     }
-    
+
 
 
 
@@ -87,7 +87,7 @@ const Chart = (props) => {
 
             {
                 xAxis.length > 0 && yAxis.length > 0 &&
-                
+
                 <Plot className="plot-charts"
                     data={[
                         {
@@ -95,31 +95,36 @@ const Chart = (props) => {
                             y: yAxis,
                             marker: { color: props.color },
                             type: props.type
-                           
+
                         },
                         // { type: (props.type)  },
 
                     ]}
                     layout={{
-						autosize: true,
+                        yaxis: {rangemode: 'tozero'},
+                        xaxis: {rangemode: 'tozero'},
+                        autosize: true,
                         margin: {
                             l: 20,
                             r: 8,
                             b: 20,
                             t: 10,
                             pad: 2
-                          },
-					}}
+                        },
+                    }}
                 />
             }
             {
                 xAxis.length == 0 && yAxis.length == 0 &&
-                
-               <div className="wrp-chart-loader">
-                   <div class='loader'></div>
-                    <div class='loader'></div>
-                    <div class='loader'></div>
-               </div>
+
+                <div className="wrp-chart-loader">
+                    <div class="loading">
+                        <div class="loading-1"></div>
+                        <div class="loading-2"></div>
+                        <div class="loading-3"></div>
+                        <div class="loading-4"></div>
+                    </div>
+                </div>
             }
         </div>
 

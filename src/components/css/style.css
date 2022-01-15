@@ -270,6 +270,25 @@ body.smr-open .slide-menu-right {
   background-color: #efecec;
   min-height: 100vh;
 }
+.login-database{
+  background-color: #800080;
+  padding: 6px 10px;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+.login-database > p{
+  font-size: 13px;
+  color: #fff;
+}
+.invalid-p{
+  color: #fff;
+  font-size: 14px;
+  background-color: #800080;
+  padding: 6px 10px;
+  display: inline-block;
+  border-radius: 4px;
+  margin-top: 20px;
+}
 .login-content{
   width: 350px;
   background-color: #fff;
@@ -575,8 +594,11 @@ a:hover {
   background-color: #800080;
   min-height: 100vh;
   padding-left: 40px;
-  padding-top: 60px;
+  padding-top: 20px;
   position: fixed;
+}
+.mrb-header{
+  margin-bottom: 10px;
 }
 .sidebar-list{
   margin: 0px;
@@ -1382,80 +1404,6 @@ box-shadow: 1px 1px 8px 1px #00000052;
     cursor: no-drop!important;
 }
 
-
-/* loader css open here */
-.wrp-chart-loader{
-  display: flex;
-  justify-content: center;
-  border: 1px solid blue;
-  
-}
-.loader {
-  width: 20px;
-  height: 20px;
-  background-color: black;
-  border-radius: 50%;
-  margin-left: 8px;
-  -webkit-box-shadow: 1px 5px 11px 1px rgba(0, 0, 0, 0.71);
-  box-shadow: 1px 5px 11px 1px rgba(0, 0, 0, 0.71);
-}
-
-.loader:nth-child(1) {
-  animation: firstAnimation 2s infinite;
-}
-.loader:nth-child(2) {
-  animation: secondAnimation 2.2s infinite;
-}
-.loader:nth-child(3) {
-  animation: thirdAnimation 2.4s infinite;
-}
-
-@keyframes firstAnimation {
-  0% {
-    transform: translateY(-7px);
-    background-color: blue;
-  }
-  50% {
-    transform: translateY(7px);
-    background-color: red;
-  }
-  100% {
-    transform: translateY(-7px);
-    background-color: green;
-  }
-}
-
-@keyframes secondAnimation {
-  0% {
-    transform: translateY(-7px);
-    background-color: red;
-  }
-  50% {
-    transform: translateY(7px);
-    background-color: green;
-  }
-  100% {
-    transform: translateY(-7px);
-    background-color: blue;
-  }
-}
-@keyframes thirdAnimation {
-  0% {
-    transform: translateY(-7px);
-    background-color: green;
-  }
-  50% {
-    transform: translateY(7px);
-    background-color: blue;
-  }
-  100% {
-    transform: translateY(-7px);
-    background-color: red;
-  }
-}
-
-
-/* loader css closed here */
 .chart-w > div{
   height: 100%! important;
 }

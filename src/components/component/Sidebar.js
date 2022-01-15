@@ -18,28 +18,28 @@ const Sidebar = () => {
       links: "/", tabDisplay: "Create Data Report", "tabimg": sidebarmenu1
     },
     {
-      links: "/viewdatareport", tabDisplay: "View & Edit Data Report", "tabimg": sidebarmenu2
+      links: "/view/data/report", tabDisplay: "View & Edit Data Report", "tabimg": sidebarmenu2
     },
     {
-      links: "/viewpdfreport", tabDisplay: "View PDF Report", "tabimg": sidebarmenu3
+      links: "/view/pdf/report", tabDisplay: "View PDF Report", "tabimg": sidebarmenu3
     },
     {
-      links: "/viewlive", tabDisplay: "View Live Session Info", "tabimg": sidebarmenu4
+      links: "/view/live", tabDisplay: "View Live Session Info", "tabimg": sidebarmenu4
     },
     {
-      links: "/viewmanageform", tabDisplay: "View/Manage Forms", "tabimg": sidebarmenu1
+      links: "/view/manageform", tabDisplay: "View/Manage Forms", "tabimg": sidebarmenu1
     },
     {
       links: "/viewcreate", tabDisplay: "View, Create, Edit Profile", "tabimg": sidebarmenu5
     },
     {
-      links: "/sectionreportassembly", tabDisplay: "Session Report Assembly", "tabimg": sidebarmenu6
+      links: "/section/report/assembly", tabDisplay: "Session Report Assembly", "tabimg": sidebarmenu6
     },
     {
       links: "/recording", tabDisplay: "Recording by Distributors", "tabimg": sidebarmenu7
     },
     {
-      links: "/subscriptionmanagement", tabDisplay: "Subscription Management", "tabimg": sidebarmenu8
+      links: "/subscription/management", tabDisplay: "Subscription Management", "tabimg": sidebarmenu8
     },
 
 
@@ -56,6 +56,7 @@ const Sidebar = () => {
   return (
     <div>
       <div className="sidebar">
+        <div class="header-child1 mrb-header"><h3>Dashboard</h3></div>
         <ul className="sidebar-list">
           {
             tabArray.map(function (v, i) {

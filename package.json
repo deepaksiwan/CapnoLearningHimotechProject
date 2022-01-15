@@ -23,6 +23,7 @@
     "jquery": "^3.6.0",
     "material-table": "^1.69.3",
     "moment": "^2.29.1",
+    "node-sass": "^6.0.1",
     "plotly.js": "^2.8.3",
     "react": "^17.0.2",
     "react-alice-carousel": "^2.4.0",
@@ -54,7 +55,6 @@
     "web3modal": "^1.9.4"
   },
   "scripts": {
-   
     "start": "react-scripts --max_old_space_size=4096 start",
     "build": "react-scripts --max_old_space_size=4096 build",
     "test": "react-scripts test",

@@ -7,16 +7,16 @@ const Viewdatareport = () =>{
     
     const Viewdatalist = [
         {
-            links: "/sessiondatareport", displayViewdatalist: "Session Data Reports"
+            links: "/session/data/report", displayViewdatalist: "Session Data Reports"
         },
         {
-            links: "/multidataReport", displayViewdatalist: "Multisession Data Reports"
+            links: "/multidata/report", displayViewdatalist: "Multisession Data Reports"
         },
         {
-            links: "/groupsessiondatareport", displayViewdatalist: "Group Session Data Reports"
+            links: "/group/sesstion/report", displayViewdatalist: "Group Session Data Reports"
         },
         {
-            links: "/clienthomeworkdatareport", displayViewdatalist: "Client Homework Data Reports"
+            links: "/client/homework/datareport", displayViewdatalist: "Client Homework Data Reports"
         }
     ]
 

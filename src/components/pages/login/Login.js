@@ -33,8 +33,9 @@ const Login = () => {
             localStorage.setItem('user_id', data.user_id);
             localStorage.setItem('session_id', data.user_id);
             localStorage.setItem('accessToken', data.accessToken);
-            localStorage.setItem('selectedTrainer', null);
             localStorage.setItem('selectedGroup', false);
+            localStorage.setItem('selectedTrainer', null);
+            // localStorage.setItem('selectedGroup', false);
             localStorage.setItem('userType', data.user_type);
             if(data.user_type == 1 || data.user_type == 2){
                 localStorage.setItem('selectedTrainer', data.user_id);
@@ -59,9 +60,13 @@ const Login = () => {
           <div className="wrp-login">
               <form onSubmit={ loginUser }>
                   <div className="login-content">
+                  <div className="login-database">
+                          <p>Login to CapnoTrainer® Cloud Database</p>
+                      </div>
                       <div className="user-img">
                           <img src={user} alt="user-img" />
                       </div>
+                      
                       <div className="wrp-label">
                           <label>Email Address</label>
                           <input
@@ -82,7 +87,7 @@ const Login = () => {
                       </div>
                       {
                           alerts &&
-                          <p>Invalid Login</p>
+                          <p className="invalid-p">Invalid Login</p>
                       }
                     
                       <button className="login-btn"  type="submit" >Login</button>

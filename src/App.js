@@ -59,44 +59,44 @@ function App(){
 				<Route  path="/configure" element={<Configure />} />
 				<Route  path="/dashboard" element={<Dashboard />} />
 				<Route  path="/demodatareport" element={<Demodatareport />} />
-				<Route  path="/uploadclientform" element={<Uploadclientform />} />
+				<Route  path="/upload/client/form" element={<Uploadclientform />} />
 				<Route  path="/bankform" element={<Bankform />} />
-				<Route  path="/editprofile" element={<Editprofile />} />
-				<Route  path="/hardwareprofile" element={<Hardwareprofile />} />
-				<Route  path="/clientinformation" element={<Clientinformation />} />
-				<Route  path="/trainerinformation" element={<Trainerinformation />} />
+				<Route  path="/edit/profile" element={<Editprofile />} />
+				<Route  path="/hardware/profile" element={<Hardwareprofile />} />
+				<Route  path="/client/information" element={<Clientinformation />} />
+				<Route  path="/trainer/information" element={<Trainerinformation />} />
 				<Route  path="/" element={<Createdata />} />
 				<Route path="/choose/report/config" element={<CreatesaveDatasession />} />
-				<Route  path="/viewpdfreport" element={<Viewpdfreport />} />
-				<Route  path="/viewdatareport" element={<Viewdatareport />} />
-				<Route  path="/viewlive" element={<Viewlive />} />
-				<Route  path="/viewmanageform" element={<Viewmanageform />} />
+				<Route  path="/view/pdf/report" element={<Viewpdfreport />} />
+				<Route  path="/view/data/report" element={<Viewdatareport />} />
+				<Route  path="/view/live" element={<Viewlive />} />
+				<Route  path="/view/manageform" element={<Viewmanageform />} />
 				<Route  path="/viewcreate" element={<Viewcreate />} />
-				<Route  path="/sectionreportassembly" element={<Sectionreportassembly />} />
-				<Route  path="/subscriptionmanagement" element={<Subscriptionmanagement />} />
+				<Route  path="/section/report/assembly" element={<Sectionreportassembly />} />
+				<Route  path="/subscription/management" element={<Subscriptionmanagement />} />
 				<Route  path="/dropdown" element={<Dropdown />} />
 				<Route  path="/recording" element={<Recording />} />
-				<Route  path="/uploadtrainnerform" element={<Uploadtrainnerform />} />
-				<Route  path="/viewuploadedclientform" element={<Viewuploadedclientform />} />
-				<Route  path="/viewcompletedclientwork" element={<Viewcompletedclientwork />} />
-				<Route  path="/viewuploadedtrainerform" element={<Viewuploadedtrainerform />} />
-				<Route  path="/editclient" element={<Editclient />} />
-				<Route  path="/edittrainer" element={<Edittrainer />} />
-				<Route  path="/groupinformation" element={<Groupinformation />} />
-				<Route  path="/editgroup" element={<Editgroup />} />
+				<Route  path="/upload/trainner/form" element={<Uploadtrainnerform />} />
+				<Route  path="/view/uploaded/client/form" element={<Viewuploadedclientform />} />
+				<Route  path="/view/completed/client/work" element={<Viewcompletedclientwork />} />
+				<Route  path="/view/uploaded/trainer/form" element={<Viewuploadedtrainerform />} />
+				<Route  path="/edit/client" element={<Editclient />} />
+				<Route  path="/edit/trainer" element={<Edittrainer />} />
+				<Route  path="/group/information" element={<Groupinformation />} />
+				<Route  path="/edit/group" element={<Editgroup />} />
 				<Route  path="/createmultisession" element={<Createmultisession />} />
 				<Route  path="/creategroupsessetionreport" element={<Creategroupsessetionreport />} />
-				<Route  path="/groupsessiondatareport" element={<Groupsessiondatareport />} />
+				<Route  path="/group/session/data/report" element={<Groupsessiondatareport />} />
 				<Route  path="/chart" element={<Chart />} />
 				<Route  path="/create/report/:config" element={<ChartTable />} />
-				<Route  path="/sessiondatareport" element={<SessiondataReport />} />
-				<Route path="/multidataReport" element={<MultidataReport />} />
-				<Route path="/clienthomeworkdatareport" element={<Clienthomeworkdatareport />} />
-				<Route path="/pdfsessionreport" element={<PdfsessionReport />} />
-				<Route path="/pdfmultisessionreport" element={<PdfmultisessionReport />} />
-				<Route path="/groupsesstionreport" element={<GroupsesstionReport />} />
-				<Route path="/pdfclienthomeworkreport" element={<PdfclienthomeworkReport />} />
-				<Route path="/pdfsessetionreportNotes" element={<PdfsessetionreportNotes />} />
+				<Route  path="/session/data/report" element={<SessiondataReport />} />
+				<Route path="/multidata/report" element={<MultidataReport />} />
+				<Route path="/client/homework/datareport" element={<Clienthomeworkdatareport />} />
+				<Route path="/pdf/session/report" element={<PdfsessionReport />} />
+				<Route path="/pdf/multisession/report" element={<PdfmultisessionReport />} />
+				<Route path="/group/sesstion/report" element={<GroupsesstionReport />} />
+				<Route path="/pdf/client/homework/report" element={<PdfclienthomeworkReport />} />
+				<Route path="/pdf/sessetion/report/notes" element={<PdfsessetionreportNotes />} />
 				<Route path="/assemblyreport" element={<Assemblyreport />} />
 				
 				</Route>

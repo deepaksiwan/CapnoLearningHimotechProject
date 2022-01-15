@@ -25,6 +25,7 @@ const Filter = () => {
     const selectedTrainer = localStorage.getItem('selectedTrainer');
     const selectedClient = localStorage.getItem('selectedClient');
     const selectedSession = localStorage.getItem('selectedSession');
+    const selectedGroup = localStorage.getItem('selectedGroup');
     const userType = localStorage.getItem('userType');
 
     const accessToken = localStorage.getItem('accessToken');
@@ -105,8 +106,9 @@ const Filter = () => {
     const getClients = () => {
         setsesstion([]);
         let _userId = localStorage.getItem('selectedTrainer');
+        let _selectedGroup = localStorage.getItem('selectedGroup');
         let _userType = 3
-        let _groupSelected = groupSelected.current.checked ? groupSelected.current.checked : false ;
+        let _groupSelected = _selectedGroup === "true" ? true : false ;
         let _trainer = true;
         if (_userId == "all") {
             _trainer = false;
@@ -252,7 +254,13 @@ const Filter = () => {
     const handleGroup = () => {
         localStorage.setItem('selectedSession', null);
         localStorage.setItem('selectedClient', null);
+        if(groupSelected.current.checked){
+        localStorage.setItem('selectedGroup', true);
+        }
+        else{
+        localStorage.setItem('selectedGroup', false);
 
+        }
         getClients();
     }
 
@@ -331,7 +339,7 @@ const Filter = () => {
                             <div className="main-checkbox">
                                 <div className="checkbox-wrp">
                                     <div class="custom-radios">
-                                        <input type="checkbox" id="color-8" value="color-8" onChange={handleGroup} ref={groupSelected} defaultChecked={false} />
+                                        <input type="checkbox" id="color-8" value="color-8" onChange={handleGroup} ref={groupSelected} defaultChecked={(selectedGroup === "true" ? true : false)} />
                                         <label for="color-8">
                                             <span className="redious">
                                             </span>

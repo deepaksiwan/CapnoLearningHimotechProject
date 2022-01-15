@@ -8,19 +8,19 @@ const Viewpdfreport = () =>{
     
     const Viewpdflist = [
         {
-            links: "/pdfsessionreport", displayViewpdflist: "Session Data Reports"
+            links: "/pdf/session/report", displayViewpdflist: "Session Data Reports"
         },
         {
-            links: "/pdfmultisessionreport", displayViewpdflist: "Multisession Data Reports"
+            links: "/pdf/multisession/report", displayViewpdflist: "Multisession Data Reports"
         },
         {
-            links: "/groupsesstionreport", displayViewpdflist: "Group Session Data Reports"
+            links: "/group/session/data/report", displayViewpdflist: "Group Session Data Reports"
         },
         {
-            links: "/pdfclienthomeworkreport", displayViewpdflist: "Client Homework Data Reports"
+            links: "/pdf/client/homework/report", displayViewpdflist: "Client Homework Data Reports"
         },
         {
-            links: "/pdfsessetionreportNotes", displayViewpdflist: "Session Report Notes"
+            links: "/pdf/sessetion/report/notes", displayViewpdflist: "Session Report Notes"
         }
     ]
 
