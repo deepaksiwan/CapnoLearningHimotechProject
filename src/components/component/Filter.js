@@ -26,6 +26,11 @@ const Filter = () => {
     const selectedClient = localStorage.getItem('selectedClient');
     const selectedSession = localStorage.getItem('selectedSession');
     const selectedGroup = localStorage.getItem('selectedGroup');
+    const selectedtrainerActive = localStorage.getItem('selectedtrainerActive');
+    const selectedtrainerInactive = localStorage.getItem('selectedtrainerInactive');
+    const selectedclientActive = localStorage.getItem('selectedclientActive');
+    const selectedclientInactive = localStorage.getItem('selectedclientInactive');
+    const selectedHomework = localStorage.getItem('selectedHomework');
     const userType = localStorage.getItem('userType');
 
     const accessToken = localStorage.getItem('accessToken');
@@ -55,6 +60,22 @@ const Filter = () => {
         // console.log(trainerActive);
         let _trainerActive = trainerActive.current.checked;
         let _trainerInactive = trainerInactive.current.checked;
+
+        if(trainerActive.current.checked){
+            localStorage.setItem('selectedtrainerActive', true);
+            }
+            else{
+            localStorage.setItem('selectedtrainerActive', false);
+    
+            }
+            if(trainerInactive.current.checked){
+                localStorage.setItem('selectedtrainerInactive', true);
+                }
+                else{
+                localStorage.setItem('selectedtrainerInactive', false);
+        
+                }
+        
         if (_trainerActive && !_trainerInactive) {
             url = "https://capno-api.herokuapp.com/api/trainers?user_id=" + userId + "&status=1";;
         }
@@ -120,6 +141,21 @@ const Filter = () => {
             localStorage.setItem('selectedGroup', true);
             _userType = 4;
         }
+
+        if(clientActive.current.checked){
+            localStorage.setItem('selectedclientActive', true);
+            }
+            else{
+            localStorage.setItem('selectedclientActive', false);
+    
+            }
+            if(clientInactive.current.checked){
+                localStorage.setItem('selectedclientInactive', true);
+                }
+                else{
+                localStorage.setItem('selectedclientInactive', false);
+        
+                }
         let url = "https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&status=2&trainer=" + _trainer + "&user_type=" + _userType;
         let _clientActive = clientActive.current.checked;
         let _clientInactive = clientInactive.current.checked;
@@ -181,6 +217,13 @@ const Filter = () => {
         if (_homework) {
             _hw = 1;
         }
+        if(cid.current.checked){
+            localStorage.setItem('selectedHomework', true);
+            }
+            else{
+            localStorage.setItem('selectedHomework', false);
+    
+            }
         let url = "https://capno-api.herokuapp.com/api/sessions?cid=" + _cid + "&hw=" + _hw;
 
 
@@ -283,7 +326,7 @@ const Filter = () => {
 
                             <div className="checkbox-wrp">
                                 <div class="custom-radios">
-                                    <input type="checkbox" id="active" onChange={getTrainers} ref={trainerActive} defaultChecked={true}
+                                    <input type="checkbox" id="active" onChange={getTrainers} ref={trainerActive} defaultChecked={(selectedtrainerActive === "true" ? true : false)}
 
                                     />
                                     <label for="active">
@@ -297,7 +340,7 @@ const Filter = () => {
                             </div>
                             <div className="checkbox-wrp">
                                 <div class="custom-radios">
-                                    <input type="checkbox" id="inactive" onChange={getTrainers} ref={trainerInactive} defaultChecked={false} />
+                                    <input type="checkbox" id="inactive" onChange={getTrainers} ref={trainerInactive} defaultChecked={(selectedtrainerInactive === "true" ? true : false)} />
                                     <label for="inactive">
                                         <span className="redious">
                                         </span>
@@ -351,7 +394,7 @@ const Filter = () => {
                                 </div>
                                 <div className="checkbox-wrp">
                                     <div class="custom-radios">
-                                        <input type="checkbox" id="color-9" value="color-9" onChange={getClients} ref={clientActive} defaultChecked={true} />
+                                        <input type="checkbox" id="color-9" value="color-9" onChange={getClients} ref={clientActive} defaultChecked={(selectedclientActive === "true" ? true : false)} />
                                         <label for="color-9">
                                             <span className="redious">
                                             </span>
@@ -363,7 +406,7 @@ const Filter = () => {
                                 </div>
                                 <div className="checkbox-wrp">
                                     <div class="custom-radios">
-                                        <input type="checkbox" id="color-10" value="color-10" onChange={getClients} ref={clientInactive} defaultChecked={false} />
+                                        <input type="checkbox" id="color-10" value="color-10" onChange={getClients} ref={clientInactive} defaultChecked={(selectedclientInactive === "true" ? true : false)} />
                                         <label for="color-10">
                                             <span className="redious">
                                             </span>
@@ -398,7 +441,7 @@ const Filter = () => {
                 <div className="step-box">
                     <div className="checkbox-wrp">
                         <div class="custom-radios">
-                            <input type="checkbox" id="cid" onChange={getSession} ref={cid} defaultChecked={false} />
+                            <input type="checkbox" id="cid" onChange={getSession} ref={cid} defaultChecked={(selectedHomework === "true" ? true : false)} />
                             <label for="cid">
                                 <span className="redious">
                                 </span>

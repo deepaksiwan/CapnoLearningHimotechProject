@@ -32,9 +32,16 @@ const Login = () => {
 		if (data.status) {
             localStorage.setItem('user_id', data.user_id);
             localStorage.setItem('session_id', data.user_id);
+            localStorage.setItem('client_id', data.user_id);
             localStorage.setItem('accessToken', data.accessToken);
             localStorage.setItem('selectedGroup', false);
+            localStorage.setItem('selectedtrainerActive',true);
+            localStorage.setItem('selectedtrainerInactive',false);
+            localStorage.setItem('selectedclientActive',true);
+            localStorage.setItem('selectedclientInactive',false);
+            localStorage.setItem('selectedHomework',false);
             localStorage.setItem('selectedTrainer', null);
+            localStorage.setItem('selectedClient', data.user_id);
             // localStorage.setItem('selectedGroup', false);
             localStorage.setItem('userType', data.user_type);
             if(data.user_type == 1 || data.user_type == 2){
