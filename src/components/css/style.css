@@ -283,11 +283,11 @@ body.smr-open .slide-menu-right {
 .invalid-p{
   color: #fff;
   font-size: 14px;
-  background-color: #800080;
+  background-color: red;
   padding: 6px 10px;
   display: inline-block;
   border-radius: 4px;
-  margin-top: 20px;
+  margin-top: 35px;
 }
 .login-content{
   width: 350px;
@@ -1413,3 +1413,31 @@ box-shadow: 1px 1px 8px 1px #00000052;
 .plot-charts{
   width: 100%! important;
 }
+
+.MuiIconButton-root:hover{
+  outline: none;
+}
+/* login loader css */
+
+#loader{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #dcefff;
+  border-top: 2px solid blue;
+  animation: rotate 2s infinite ease;
+  margin-left: 10px;
+  position: relative;
+  top: 4px;
+}
+@keyframes rotate{
+  0%{
+    transform: none;
+  }
+ 100%{
+   transform: rotate(1turn);
+   
+}
+}
+/* login loader css */

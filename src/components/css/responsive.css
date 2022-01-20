@@ -306,7 +306,12 @@
     
 }
 @media(max-width: 580px){
-
+    .downloadimg {
+        margin-right: 3px;
+    }
+    .downloadimg > img {
+        width: 18px;
+    }
     .awssld__container {
         padding-bottom: 100%! important;
     }

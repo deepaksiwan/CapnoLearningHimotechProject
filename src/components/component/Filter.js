@@ -269,7 +269,7 @@ const Filter = () => {
     //    trainer check react
     const logout = () => {
         localStorage.clear();
-        alert("You Logout successful")
+        window.location.reload();
     }
     const updateSelectClient = () => {
         localStorage.setItem('selectedClient', clientSelected.current.value);
@@ -448,7 +448,7 @@ const Filter = () => {
                             </label>
                         </div>
                         <div className="caption-cheeckbox">
-                            <p>Home Work</p>
+                            <p>Home Work Session</p>
                         </div>
                     </div>
                     <div className="select-client">

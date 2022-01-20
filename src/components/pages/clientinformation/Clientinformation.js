@@ -4,6 +4,12 @@ import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 
 const Clientinformation = () => {
+    const accessToken = localStorage.getItem('accessToken');
+    const [clients, setinclients] = useState([]);
+    const [data, setData] = useState([]);
+        let _userId = localStorage.getItem('user_id');
+        let _userType = 3
+        let _trainer = false;
 
     const [firstname, setfirstname]=useState("");
     const [lastname, setlastname]=useState("");
@@ -27,11 +33,11 @@ const Clientinformation = () => {
 
         let data = {firstname,lastname,email,password,age,gender,education,profession,telephone,complaint,address,city,zipcode,state,country}
 
-        fetch("http://localhost:5000/api/client/create",{
+        fetch("https://capno-api.herokuapp.com/api/clients",{
             method:'POST',
-            headers:{
-                'Accept': 'application/json',
-                'content-Type': 'application/json'
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': accessToken,
             },
             body:JSON.stringify(data)
         }).then((result)=>{

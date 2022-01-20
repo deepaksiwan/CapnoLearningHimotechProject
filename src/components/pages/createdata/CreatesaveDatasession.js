@@ -44,7 +44,7 @@ const CreatesaveDatasession = () => {
     }
     const logout = () => {
         localStorage.clear();
-        alert("You Logout successful")
+        window.location.reload();
     }
     return (
         <div className="demodata-bg">

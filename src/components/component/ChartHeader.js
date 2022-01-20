@@ -111,7 +111,7 @@ const ChartHeader = (props) => {
     
     const logout = () => {
         localStorage.clear();
-        alert("You Logout successful")
+        window.location.reload();
     }
     return (
         <div className="bg-c-header">

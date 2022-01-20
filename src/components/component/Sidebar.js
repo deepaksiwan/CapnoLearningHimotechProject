@@ -50,7 +50,7 @@ const Sidebar = () => {
 
   const logout = () => {
     localStorage.clear();
-    // alert("You Logout successful")
+    window.location.reload();
   }
 
   return (

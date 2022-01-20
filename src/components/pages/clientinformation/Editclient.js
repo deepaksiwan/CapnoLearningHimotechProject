@@ -1,20 +1,80 @@
-import React from 'react';
+import React, {useEffect,useRef,useState} from 'react';
 import {Link,useParams, Router} from 'react-router-dom';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
-import download from '../../images/download.png'
-import preveiw from '../../images/preveiw.png'
+import edit from '../../images/edit.png'
+import checks from '../../images/checks.png'
 import Delete from '../../images/delete.png';
 
 const Editclient = () => {
 
-    const data =[
-        {
-            firstname: "Wolf",lastname: "Fellner",email: "ns4234@gmail", trainer:"Trainer",status:"Active",telephone:"9191919191", action: <p><a href='#' className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg"><img src={preveiw} /></a> <a href='#' className="downloadimg"><img src={Delete} /></a></p>
-        },
+    const accessToken = localStorage.getItem('accessToken');
+    const [clients, setinclients] = useState([]);
+    const [data, setData] = useState([]);
+        let _userId = localStorage.getItem('user_id');
+        let _userType = 3
+        let _trainer = false;
+       
+    useEffect(() =>{
+        editClinet();
+
+    },[]);
+
+    const editClinet = () =>{
+
         
-    ]
+
+        fetch("https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&trainer=" + _trainer + "&user_type=" + _userType,
+        
+               {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+               }
+        
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    console.warn("result", resp);
+                    let _temp = [] ;
+                    resp.clients.map((v,i) => {
+                        _temp.push({
+                            firstname: v.firstname,
+                            lastname: v.lastname,
+                            email:v.email,
+                            trainer: v.firstname,
+                            status: v.status,
+                            telephone: v.telephone,
+                            actions : <p><a href='#' className="downloadimg" ><img src={edit} /></a> <a href='#' className="downloadimg"><img src={checks} /></a> <a href='#' className="downloadimg"><img src={Delete} /></a></p>
+                        })
+                    })
+                    setData(_temp);
+                   
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+
+
+    }
+
+    const logout = () => {
+        localStorage.clear();
+        window.location.reload();
+    }
+
+    
 
     const columns =[
         {
@@ -36,7 +96,7 @@ const Editclient = () => {
             title: "Telephone", field: "telephone"
         },
         {
-            title: <span className="text-right">Actions</span>, field: "action"
+            title: <span className="text-right">Actions</span>, field: "actions"
         }
     ]
 

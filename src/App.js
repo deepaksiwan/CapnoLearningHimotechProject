@@ -89,10 +89,10 @@ function App(){
 				<Route  path="/group/session/data/report" element={<Groupsessiondatareport />} />
 				<Route  path="/chart" element={<Chart />} />
 				<Route  path="/create/report/:config" element={<ChartTable />} />
-				<Route  path="/session/data/report" element={<SessiondataReport />} />
+				<Route  path="/session/data/report/:type" element={<SessiondataReport />} />
 				<Route path="/multidata/report" element={<MultidataReport />} />
 				<Route path="/client/homework/datareport" element={<Clienthomeworkdatareport />} />
-				<Route path="/pdf/session/report" element={<PdfsessionReport />} />
+				<Route path="/pdf/session/data/report/:pdftype" element={<PdfsessionReport />} />
 				<Route path="/pdf/multisession/report" element={<PdfmultisessionReport />} />
 				<Route path="/group/sesstion/report" element={<GroupsesstionReport />} />
 				<Route path="/pdf/client/homework/report" element={<PdfclienthomeworkReport />} />

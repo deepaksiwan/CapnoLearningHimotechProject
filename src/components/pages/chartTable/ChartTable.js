@@ -48,7 +48,7 @@ const ChartTable = () => {
     }
     const logout = () => {
         localStorage.clear();
-        alert("You Logout successful")
+        window.location.reload();
     }
     // const graphs = [
     //     {   csvfile: "60c4378df1710signalB.csv",

@@ -55,7 +55,7 @@ const Chart = (props) => {
     }
     const logout = () => {
         localStorage.clear();
-        alert("You Logout successful")
+        window.location.reload();
     }
     async function getData(_csvFile) {
         let _x = [];
