@@ -120,7 +120,7 @@ const Viewdatareport = () =>{
                                 <div className="create-list-box"><Link to={(reports.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" ) ? "": "/session/data/report/group" }className={(reports.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" ) ? "deactivate": "" }>Group Session Data Reports</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(reports.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "": "/session/data/report/homework" } className={(reports.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "deactivate": "" }>Client Homework Data Session</Link></div>
+                                <div className="create-list-box"><Link to={(reports.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "": "/session/data/report/homework" } className={(reports.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "deactivate": "" }>Client Homework Data Reports</Link></div>
                             </li>
                        </ul>
                    </div>

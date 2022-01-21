@@ -79,7 +79,7 @@ const Bankform = () => {
                </div>
                <div className="right-section">
                 <div className="head-demoreport">
-                    <h3>Bank form</h3>
+                    <h3>Blank form</h3>
                 </div>
                 <div className="wrp-bankform">
                     <div style={{ maxWidth: '100%' }}>

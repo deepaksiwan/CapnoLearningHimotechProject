@@ -49,6 +49,7 @@ import PdfclienthomeworkReport from './components/pages/viewpdfreport/Pdfclienth
 import PdfsessetionreportNotes from './components/pages/viewpdfreport/PdfsessetionreportNotes';
 import Assemblyreport from './components/pages/sectionreportassembly/Assemblyreport';
 import Privateroutelogin from './components/component/Privateroutelogin';
+import Uploadhomeworkasignment from './components/pages/viewmanageform/Uploadhomeworkasignment';
 
 function App(){
 	return(
@@ -98,6 +99,7 @@ function App(){
 				<Route path="/pdf/client/homework/report" element={<PdfclienthomeworkReport />} />
 				<Route path="/pdf/sessetion/report/notes" element={<PdfsessetionreportNotes />} />
 				<Route path="/assemblyreport" element={<Assemblyreport />} />
+				<Route path="/upload/homework/asignment" element={<Uploadhomeworkasignment />} />
 				
 				</Route>
 				

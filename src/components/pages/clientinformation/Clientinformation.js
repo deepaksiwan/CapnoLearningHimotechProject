@@ -43,7 +43,7 @@ const Clientinformation = () => {
         }).then((result)=>{
             // console.warn("result",result);
             result.json().then((resp)=>{
-                console.warn("resp",resp);
+                // console.warn("resp",resp);
 
             })
         })
