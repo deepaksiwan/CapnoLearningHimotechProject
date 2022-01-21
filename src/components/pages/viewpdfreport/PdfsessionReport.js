@@ -139,9 +139,6 @@ const PdfsessionReport = () => {
                         columns={columns}
                         data={data}
                         title=""
-                        
-                      
-                       
                         />
                         
                     </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect,useState} from "react";
 import {Link,useParams, Router} from 'react-router-dom';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
@@ -7,30 +7,17 @@ import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 
 const Bankform = () => {
+    const accessToken = localStorage.getItem('accessToken');
+    const [forms, setforms] = useState([]);
+    const [data, setdata] = useState([]);
 
-    const data =[
-        {
-            name: "Assessment Record Fill-in.pdf", download: <p><a href='#' className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg"><img src={preveiw} /></a></p>
-        },
-        {
-            name: "Behavior Report Fill-in.pdf", download: <p><a href='#' className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg"><img src={preveiw} /></a></p>
-        },
-        {
-            name: "Guided Breathing Record Fill-in.pdf", download: <p><a href='#' className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg"><img src={preveiw} /></a></p>
-        },
-        {
-            name: "Homework Record Fill-in.pdf", download: <p><a href='#' className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg"><img src={preveiw} /></a></p>
-        },
-        {
-            name: "Interview Checklist Fill-in.pdf", download: <p><a href='#' className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg"><img src={preveiw} /></a></p>
-        },
-        {
-            name: "Interview Questionnaire Fill-in.pdf", download: <p><a href='#' className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg"><img src={preveiw} /></a></p>
-        },
-        {
-            name: "Outcome Report Fill-in.pdf", download: <p><a href='#' className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg"><img src={preveiw} /></a></p>
-        }
-    ]
+
+    useEffect(() => {
+        PdfbankForm();
+
+    }, []);
+
+    
 
     const columns =[
         {
@@ -39,9 +26,50 @@ const Bankform = () => {
         {
             title: <span className="text-right">Actions</span>, field: "download"
         }
+       
     ]
 
+    const PdfbankForm = () => {
+        fetch("https://capno-api.herokuapp.com/api/forms/blank",
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    console.log("result", resp);
+                    let _temp = [] ;
+                    resp.forms.map((v,i) => {
+                        _temp.push({
+                            name : v.forms,
+                            download: <p><a href={v.file} className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg" target="_blank"><img src={preveiw} /></a></p>
+                            
+                        })
+                    })
+                    setdata(_temp);
 
+                  
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+    }
+    const logout = () => {
+        localStorage.clear();
+        window.location.reload();
+    }
     return(
         <div className="">
             <Header />

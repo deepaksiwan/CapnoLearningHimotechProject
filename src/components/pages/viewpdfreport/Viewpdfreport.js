@@ -98,9 +98,6 @@ const Viewpdfreport = () =>{
         alert("You Logout successful")
     }
 
-    const viewarray = [
-
-    ];
 
     return(
         <div>

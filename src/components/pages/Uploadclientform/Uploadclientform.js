@@ -1,9 +1,58 @@
-import React from "react";
+import React, { Component, useEffect, useRef, useState } from "react";
 import {Link,useParams} from 'react-router-dom';
 import Header from '../../component/Header';
 import Sidebar from '../../component/Sidebar';
 
 const Uploadclientform = () =>{
+    const accessToken = localStorage.getItem('accessToken');
+    const userId = localStorage.getItem('user_id');
+    const [trainers, settrainers] = useState([]);
+    const trainerActive = useRef();
+
+    
+
+
+    useEffect( ()=>{
+        getTrainers();
+
+    },[])
+
+    const getTrainers = () => {
+
+        fetch("https://capno-api.herokuapp.com/api/trainers?user_id=" + userId + "&status=1",
+
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': accessToken,
+            },
+        }
+        
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                   settrainers(resp.trainers)
+         
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+    }
+    const logout = () => {
+        localStorage.clear();
+        window.location.reload();
+    }
+
+
     return(
         <div>
          <Header />
@@ -31,8 +80,8 @@ const Uploadclientform = () =>{
                   
                   <div className="checkbox-wrp">
                       <div class="custom-radios">
-                           <input type="checkbox" id="color-6" />
-                           <label for="color-6">
+                           <input type="checkbox" id="6" ref={trainerActive} />
+                           <label for="6">
                            <span className="redious">
                            </span>
                            </label>
@@ -43,8 +92,8 @@ const Uploadclientform = () =>{
                   </div>
                   <div className="checkbox-wrp">
                       <div class="custom-radios">
-                           <input type="checkbox" id="color-7"  />
-                           <label for="color-7">
+                           <input type="checkbox" id="7"  />
+                           <label for="7">
                            <span className="redious">
                            </span>
                            </label>
@@ -57,12 +106,14 @@ const Uploadclientform = () =>{
                   <div className="select-client">
                    <select>
                        <option>Choose a trainer</option>
-                       <option>Choose a client</option>
-                       <option>Choose a client</option>
-                       <option>Choose a client</option>
-                       <option>Choose a client</option>
-                       <option>Choose a client</option>
-                       <option>Choose a client</option>
+                       {
+                           trainers.map((trainers, i)=>{
+                               return(
+                                <option>{trainers.firstname} {trainers.lastname}</option>
+                               )
+                           })
+                       }
+                     
                    </select>
                   </div>
                    </div>
