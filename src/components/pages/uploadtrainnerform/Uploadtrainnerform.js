@@ -1,4 +1,5 @@
 import React, { Component, useEffect, useRef, useState } from "react";
+import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import { Link, useParams } from 'react-router-dom';
 import Header from '../../component/Header';
 import Sidebar from '../../component/Sidebar';
@@ -31,7 +32,11 @@ const Uploadclientform = () => {
     const userType = localStorage.getItem('userType');
     const selectedSession = localStorage.getItem('selectedSession');
     const accessToken = localStorage.getItem('accessToken');
+    const [modal, setModal] = useState(false);
+    const toggleModal = () => setModal(!modal);
 
+    const [successModal, setsuccessModal] = useState(false);
+    const successToggleModal = () => setsuccessModal(!successModal);
 
 
     useEffect(() => {
@@ -53,6 +58,14 @@ const Uploadclientform = () => {
         formData.append('form', formFile.current.files[0]);
         formData.append('session_id', session_id);
 
+        if (client_id == "" || formname.current.value == "" || !formFile.current.files[0] || session_id == "") {
+
+            toggleModal();
+            return false;
+
+        }
+        formFile.current.value = "";
+
         fetch("https://capno-api.herokuapp.com/api/forms/trainer/upload", {
             method: 'POST',
             headers: {
@@ -67,7 +80,7 @@ const Uploadclientform = () => {
             })
         })
 
-        alert("Successfully submitted");
+        successToggleModal();
 
     }
 
@@ -486,6 +499,26 @@ const Uploadclientform = () => {
                                 </div>
                             </div>
                         </div>
+                        <Modal isOpen={successModal} toggle={successToggleModal} className="connect-box" centered={true}>
+                            <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
+                            <ModalBody>
+                                <div className="modal-p">
+                                    <p>Form Submited Successfully</p>
+                                </div>
+                            </ModalBody>
+
+                        </Modal>
+
+
+                        <Modal isOpen={modal} toggle={toggleModal} className="connect-box" centered={true}>
+                            <ModalHeader toggle={toggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
+                            <ModalBody>
+                                <div className="modal-error-p">
+                                    <p>Please Fill all field</p>
+                                </div>
+                            </ModalBody>
+
+                        </Modal>
                         <div className="client-submit-btn">
                             <button type="submit" onClick={submittrainerform}>Submit</button>
                         </div>

@@ -121,10 +121,10 @@ const Viewmanageform = () =>{
                                 <div className="create-list-box"><Link to={(selectedSession === "null")? "" : "/view/uploaded/trainer/form"} className={(selectedSession === "null")? "deactivate" : ""}>View Completed Trainer Forms</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to="/view/completed/client/work">View Homework Assignment</Link></div>
+                                <div className="create-list-box"><Link to={(selectedClient === "null" || selectedSession === "null")? "" : "/view/completed/client/work"} className={(selectedClient === "null" || selectedSession === "null")? "deactivate" : ""}>View Homework Assignment</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to="/upload/homework/asignment">Upload Homework Assignment</Link></div>
+                                <div className="create-list-box"><Link to={(selectedClient === "null" || selectedSession === "null")? "" : "/upload/homework/asignment"} className={(selectedClient === "null" || selectedSession === "null")? "deactivate" : ""}>Upload Homework Assignment</Link></div>
                             </li>
 
                        </ul>

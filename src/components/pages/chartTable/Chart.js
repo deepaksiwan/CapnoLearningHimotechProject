@@ -84,8 +84,9 @@ const Chart = (props) => {
 
     return (
         <div>
-
+           
             {
+                
                 xAxis.length > 0 && yAxis.length > 0 &&
 
                 <Plot className="plot-charts"
@@ -106,7 +107,7 @@ const Chart = (props) => {
                         autosize: true,
                         margin: {
                             l: 20,
-                            r: 8,
+                            r: 10,
                             b: 20,
                             t: 10,
                             pad: 2

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect,useState} from "react";
 import {Link,useParams, Router} from 'react-router-dom';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
@@ -7,23 +7,65 @@ import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 
 const PdfsessetionreportNotes = () => {
+    const accessToken = localStorage.getItem('accessToken');
+    const sessionid = localStorage.getItem('selectedSession');
+    const [notes, senotes] = useState([]);
+    const [data, setData] = useState([]);
+    useEffect(() => {
+        pdfReportNote();
+        
 
-    const data =[
-        {
-            report: <a href="#">27 Jul 2021, 07:06 groutestReport</a>, Createdate: "31 Aug 2021, 12:31",download: <p><a href='#' className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg"><img src={preveiw} /></a></p>
-        }
-       
-    ]
+    }, []);
+
+    const pdfReportNote = () => {
+        fetch("https://capno-api.herokuapp.com/api/report/notes?session_id=" + sessionid,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    console.warn("result", resp);
+                    let _temp = [] ;
+                    resp.notes.map((v,i) => {
+                        _temp.push({
+                            notes : v.notes,
+                           
+                            actions : <p><a href='#' className="downloadimg"><img src={preveiw} /></a></p>
+                        })
+                    })
+                    setData(_temp);
+
+                    // let len = pdfs.length;
+                    //   console.warn(len);
+                   
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+    }
+
+    
 
     const columns =[
         {
-            title: "Report", field: "report"
+            title: "Notes", field: "notes"
         },
+        
         {
-            title: <span className="text-right">Created Date</span>, field: "Createdate"
-        },
-        {
-            title: <span className="text-right">Actions</span>, field: "download"
+            title: <span className="text-right">Actions</span>, field: "actions"
         }
     ]
 

@@ -1,4 +1,5 @@
 import React, { Component, useEffect, useRef, useState } from "react";
+import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import { Link, useParams } from 'react-router-dom';
 import Header from '../../component/Header';
 import Sidebar from '../../component/Sidebar';
@@ -29,9 +30,14 @@ const Uploadclientform = () => {
     const selectedclientInactive = localStorage.getItem('selectedclientInactive');
     const selectedHomework = localStorage.getItem('selectedHomework');
     const userType = localStorage.getItem('userType');
-
     const accessToken = localStorage.getItem('accessToken');
+    const selectedSession = localStorage.getItem('selectedSession');
+    
+    const [modal, setModal] = useState(false);
+    const toggleModal = () => setModal(!modal) ;
 
+    const [successModal, setsuccessModal] = useState(false);
+    const successToggleModal = () => setsuccessModal(!successModal) ;
 
 
     useEffect(() => {
@@ -42,29 +48,42 @@ const Uploadclientform = () => {
     }, [])
 
 
-    const submitclientform = () =>{
+    const submitclientform = () => {
+
         let formData = new FormData();
         let client_id = localStorage.getItem('selectedClient');
-        
+
         formData.append('client_id', client_id);
         formData.append('form_id', formname.current.value);
         formData.append('form', formFile.current.files[0]);
 
-        fetch("https://capno-api.herokuapp.com/api/forms/client/upload",{
-            method:'POST',
-            headers:{
+        
+
+        if (client_id == "" || formname.current.value == "" || !formFile.current.files[0]) {
+
+            toggleModal();
+            return false;
+
+        }
+        formFile.current.value = "";
+        
+        fetch("https://capno-api.herokuapp.com/api/forms/client/upload", {
+            method: 'POST',
+            headers: {
                 'x-access-token': accessToken,
             },
-            body:formData
-        }).then((result)=>{
+            body: formData
+        }).then((result) => {
             // console.warn("result",result);
-            result.json().then((resp)=>{
+            result.json().then((resp) => {
                 // console.log("resp",resp);
 
             })
         })
 
-        alert("Successfully submitted");
+        // alert("Successfully submitted");
+        successToggleModal();
+       
 
     }
 
@@ -83,7 +102,7 @@ const Uploadclientform = () => {
                     console.log("result", resp);
                     setblankform(resp.forms);
 
-                  
+
 
                 });
             }
@@ -324,7 +343,7 @@ const Uploadclientform = () => {
                                             </div>
                                         </div>
                                         <div className="select-client">
-                                            <select ref={trainerSelected} onChange={updateSelectTrainer}  >
+                                            <select ref={trainerSelected} onChange={updateSelectTrainer} required>
                                                 <option>Choose a trainer</option>
                                                 <option value={"all"}>All trainers</option>
                                                 {
@@ -396,13 +415,13 @@ const Uploadclientform = () => {
                                         <div className="select-client mrt-select">
                                             <select ref={formname}>
                                                 {
-                                                    blankform.map((bankforms, i)=> {
-                                                        return(
-                                                                <option value={bankforms.id} >{bankforms.forms}</option>
+                                                    blankform.map((bankforms, i) => {
+                                                        return (
+                                                            <option value={bankforms.id} >{bankforms.forms}</option>
                                                         );
                                                     })
                                                 }
-                                                
+
                                             </select>
                                         </div>
                                     </div>
@@ -417,6 +436,27 @@ const Uploadclientform = () => {
                                 </div>
                             </div>
                         </div>
+                                <Modal isOpen={successModal} toggle={successToggleModal} className="connect-box" centered={true}>
+                                    <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
+                                    <ModalBody>
+                                        <div className="modal-p">
+                                            <p>Form Submited Successfully</p>
+                                        </div>
+                                    </ModalBody>
+
+                                </Modal>
+                        
+                        
+                                <Modal isOpen={modal} toggle={toggleModal} className="connect-box" centered={true}>
+                                    <ModalHeader toggle={toggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
+                                    <ModalBody>
+                                        <div className="modal-error-p">
+                                            <p>Please Fill all field</p>
+                                        </div>
+                                    </ModalBody>
+
+                                </Modal>
+                         
                         <div className="client-submit-btn">
                             <button type="submit" onClick={submitclientform}>Submit</button>
                         </div>
