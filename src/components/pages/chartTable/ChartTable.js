@@ -27,6 +27,12 @@ const ChartTable = () => {
     const [signalModal, setsignalModal] = useState(false);
     const toggleSignalModal = () => setsignalModal(!signalModal);
 
+    const [unitModal, setunitModal] = useState(false);
+    const toggleunitModal = () => setunitModal(!unitModal);
+
+    const [annotationtModal, setannotationtModal] = useState(false);
+    const toggleannotationtModal = () => setannotationtModal(!annotationtModal);
+
     useEffect(() => {
         reportChart();
 
@@ -222,10 +228,77 @@ const ChartTable = () => {
                                             <li><a href="#" onClick={toggletrehSoldModal}><i class="fa fa-area-chart" aria-hidden="true"></i></a></li>
                                         </ul>
 
+                                        <ul className="right-filter">
+                                            <li><a href="#"><i class="fa fa-search-plus"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-search-minus"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-arrow-right"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-arrow-left"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-play"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-pause"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-undo"></i></a></li>
+                                            <li><a href="#" onClick={toggleunitModal}><i class="fa fa-thermometer-full" aria-hidden="true"></i></a></li>
+                                            <li><a href="#" onClick={toggleannotationtModal}><i class="fa fa-comment"></i></a></li>
+                                        </ul>
+
+                                        {/* unit modal */}
+                                        <Modal isOpen={unitModal} toggle={toggleunitModal} className="modal-box-wrp" centered={true}>
+                                            <ModalHeader toggle={toggleunitModal}><span className="ml-1 roititle modal-head">Change Y-Scale Unit for PCO <sub>2</sub> Waveform</span></ModalHeader>
+                                            <ModalBody>
+                                                <ul className="range-list">
+                                                    <li>
+                                                        <div className="range-content-wrp">
+                                                            <div className="range-c-child1">
+                                                                <p>Y-axis unit:</p>
+                                                            </div>
+                                                            <div className="range-c-child2">
+                                                                <p><input type="radio" id="yes" name="selector" /><label for="yes">mmHg</label> <input type="radio" className="mrl-input" id="no" name="selector" /><label for="no">kPa</label> <input type="radio" className="mrl-input" id="no" name="selector" /><label for="no">Percentage</label></p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </ModalBody>
+
+                                        </Modal>                 
+
+                                        {/* unit modal */}
+
+                                        {/* annotations modal */}
+
+                                        <Modal isOpen={annotationtModal} toggle={toggleannotationtModal} className="modal-box-wrp" centered={true}>
+                                            <ModalHeader toggle={toggleannotationtModal}><span className="ml-1 roititle modal-head">Configure Annotations Visibility for PetCO <sub>2</sub> History</span></ModalHeader>
+                                            <ModalBody>
+                                                <ul className="range-list">
+                                                    <li>
+                                                        <div className="range-content-wrp">
+                                                            <div className="range-c-child1">
+                                                                <p>Show Live Annotations:</p>
+                                                            </div>
+                                                            <div className="range-c-child2 range-c-child2s">
+                                                                <p><input type="radio" id="yes" name="selector" /><label for="yes">Yes</label> <input type="radio" className="mrl-input" id="no" name="selector" /><label for="no">No</label></p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div className="range-content-wrp">
+                                                            <div className="range-c-child1">
+                                                                <p>Show Report Annotations:</p>
+                                                            </div>
+                                                            <div className="range-c-child2 range-c-child2s">
+                                                                <p><input type="radio" id="yes" name="selector" /><label for="yes">Yes</label> <input type="radio" className="mrl-input" id="no" name="selector" /><label for="no">No</label></p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </ModalBody>
+
+                                        </Modal>
+
+                                        {/* annotations modal */}
+
                                         {/* trehsold modal */}
                                             
                                         <Modal isOpen={trehSoldModal} toggle={toggletrehSoldModal} className="modal-box-wrp" centered={true}>
-                                            <ModalHeader toggle={toggletrehSoldModal}><span className="ml-1 roititle">Trehsold Setting (Raw PCO2)</span></ModalHeader>
+                                            <ModalHeader toggle={toggletrehSoldModal}><span className="ml-1 roititle modal-head">Trehsold Setting (Raw PCO <sub>2</sub>)</span></ModalHeader>
                                             <ModalBody>
                                                 <ul className="range-list">
                                                     <li>
@@ -312,7 +385,7 @@ const ChartTable = () => {
 
                                         {/* signal modal */}
                                         <Modal isOpen={signalModal} toggle={toggleSignalModal} className="modal-box-wrp" centered={true}>
-                                            <ModalHeader toggle={toggleSignalModal}><span className="ml-1 roititle">Signal Setting (Raw PCO2)</span></ModalHeader>
+                                            <ModalHeader toggle={toggleSignalModal}><span className="ml-1 roititle modal-head">Signal Setting (Raw PCO <sub>2</sub>)</span></ModalHeader>
                                             <ModalBody>
                                                 <ul className="range-list">
                                                     <li>
@@ -418,7 +491,7 @@ const ChartTable = () => {
 
                                         {/* graph modal */}
                                         <Modal isOpen={graphModal} toggle={toggleGraphModal} className="modal-box-wrp" centered={true}>
-                                            <ModalHeader toggle={toggleGraphModal}><span className="ml-1 roititle">Graph Setting (Raw PCO2)</span></ModalHeader>
+                                            <ModalHeader toggle={toggleGraphModal}><span className="ml-1 modal-head roititle">Graph Setting (Raw PCO <sub>2</sub>)</span></ModalHeader>
                                             <ModalBody>
                                                 <ul className="range-list">
                                                     <li>

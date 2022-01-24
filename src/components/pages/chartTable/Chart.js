@@ -106,10 +106,10 @@ const Chart = (props) => {
                         xaxis: {rangemode: 'tozero'},
                         autosize: true,
                         margin: {
-                            l: 20,
-                            r: 10,
+                            l: 30,
+                            r: 30,
                             b: 20,
-                            t: 10,
+                            t: 20,
                             pad: 2
                         },
                     }}

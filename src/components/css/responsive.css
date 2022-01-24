@@ -27,6 +27,9 @@
     
 }
 @media(max-width: 1166px){
+    .modal-box-wrp {
+        max-width: 45%;
+    }
     .wrp-chart-header{
         flex-wrap: wrap;
     }
@@ -67,6 +70,9 @@
     
 }
 @media(max-width: 992px){
+    .modal-box-wrp {
+        max-width: 65%;
+    }
     .wrp-chart-header{
         display: inherit;
     }
@@ -191,9 +197,21 @@
     
 }
 @media(max-width: 767px){
+    .modal-box-wrp {
+        max-width: 100%;
+    }
     .wrp-chart-header {
         padding: 15px 15px 15px 15px;
         width: 100%;
+    }
+    .min-axis{
+        margin-right: 8px;
+    }
+    .min-axis > input{
+        width: 65%;
+    }
+    .max-axis > input{
+        width: 65%;
     }
     .select-row{
         margin-left: 0px;

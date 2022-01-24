@@ -64,7 +64,7 @@ function App(){
 				<Route  path="/bankform" element={<Bankform />} />
 				<Route  path="/edit/profile" element={<Editprofile />} />
 				<Route  path="/hardware/profile" element={<Hardwareprofile />} />
-				<Route  path="/client/information" element={<Clientinformation />} />
+				<Route  path="/edit/client/:id" element={<Clientinformation />} />
 				<Route  path="/trainer/information" element={<Trainerinformation />} />
 				<Route  path="/" element={<Createdata />} />
 				<Route path="/choose/report/config" element={<CreatesaveDatasession />} />
@@ -81,7 +81,7 @@ function App(){
 				<Route  path="/view/uploaded/client/form" element={<Viewuploadedclientform />} />
 				<Route  path="/view/completed/client/work" element={<Viewcompletedclientwork />} />
 				<Route  path="/view/uploaded/trainer/form" element={<Viewuploadedtrainerform />} />
-				<Route  path="/edit/client" element={<Editclient />} />
+				<Route  path="/list/client" element={<Editclient />} />
 				<Route  path="/edit/trainer" element={<Edittrainer />} />
 				<Route  path="/group/information" element={<Groupinformation />} />
 				<Route  path="/edit/group" element={<Editgroup />} />

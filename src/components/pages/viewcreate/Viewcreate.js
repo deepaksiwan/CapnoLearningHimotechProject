@@ -10,7 +10,7 @@ const Viewcreate = () =>{
            links:"/client/information", displayViewcreatelist: "New Client"
         },
         {
-            links:"/edit/client", displayViewcreatelist: "Edit Client"
+            links:"/list/client", displayViewcreatelist: "Edit Client"
         },
         {
             links:"/trainer/information",displayViewcreatelist: "New Trainer"

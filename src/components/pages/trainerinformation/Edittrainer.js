@@ -112,16 +112,7 @@ const Edittrainer = () => {
                 <div className="head-demoreport">
                     <h3>Trainers</h3>
                 </div>
-                <div className="choose-trainer">
-                    <label>Trainer</label>
-                    <select className="choose-trainerselectopt">
-                        <option>Choose a Trainer</option>
-                        <option>Trainer1</option>
-                        <option>Trainer2</option>
-                        <option>Trainer3</option>
-                        <option>Trainer4</option>
-                    </select>
-                </div>
+               
                 <div className="wrp-bankform">
                     <div style={{ maxWidth: '100%' }}>
                         <MaterialTable

@@ -11,45 +11,85 @@ const Clientinformation = () => {
         let _userType = 3
         let _trainer = false;
 
-    const [firstname, setfirstname]=useState("");
-    const [lastname, setlastname]=useState("");
-    const [gender, setGender]=useState("");
-    const [age, setAge]=useState("");
-    const [education, setEducation]=useState("");
-    const [profession, setProfession]=useState("");
-    const [telephone, setTelephone]=useState("");
-    const [email, setEmail]=useState("");
-    const [password, setPassword]=useState("");
-    const [complaint, setcomplaint]=useState("");
-    const [address, setAddress]=useState("");
-    const [city, setCity]=useState("");
-    const [zipcode, setzipcode]=useState("");
-    const [state, setState]=useState("");
-    const [country, setCountry]=useState("");
+    // const [firstname, setfirstname]=useState("");
+    // const [lastname, setlastname]=useState("");
+    // const [gender, setGender]=useState("");
+    // const [age, setAge]=useState("");
+    // const [education, setEducation]=useState("");
+    // const [profession, setProfession]=useState("");
+    // const [telephone, setTelephone]=useState("");
+    // const [email, setEmail]=useState("");
+    // const [password, setPassword]=useState("");
+    // const [complaint, setcomplaint]=useState("");
+    // const [address, setAddress]=useState("");
+    // const [city, setCity]=useState("");
+    // const [zipcode, setzipcode]=useState("");
+    // const [state, setState]=useState("");
+    // const [country, setCountry]=useState("");
+
+    const {id} = useParams();
+
+    useEffect(()=>{
+        getClient();
+    },[])
     
-    function saveClientinfo(){
-
-        // console.warn({firstname,lastname,email,password,age,gender,education,profession,telephone,complaint,address,city,zipcode,state,country})
-
-        let data = {firstname,lastname,email,password,age,gender,education,profession,telephone,complaint,address,city,zipcode,state,country}
-
-        fetch("https://capno-api.herokuapp.com/api/clients",{
-            method:'POST',
+    const getClient = () =>{
+        fetch("https://capno-api.herokuapp.com/api/client/profile/"+id,
+        {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'x-access-token': accessToken,
             },
-            body:JSON.stringify(data)
-        }).then((result)=>{
-            // console.warn("result",result);
-            result.json().then((resp)=>{
-                // console.warn("resp",resp);
+        }
+    ).then((response) => {
+        if (response.status == 200) {
+            response.json().then((resp) => {
+                console.log("result", resp);
+                setinclients(resp.clients);
 
-            })
-        })
 
-        alert("Successfully submitted");
+
+            });
+        }
+        else if (response.status == 401) {
+            logout()
+        }
+        else {
+            alert("network error")
+        }
+
+
+    })
     }
+
+    
+
+    // function saveClientinfo(){
+
+    //     // console.warn({firstname,lastname,email,password,age,gender,education,profession,telephone,complaint,address,city,zipcode,state,country})
+
+    //     let data = {firstname,lastname,email,password,age,gender,education,profession,telephone,complaint,address,city,zipcode,state,country}
+
+    //     fetch("https://capno-api.herokuapp.com/api/client/profile/"+id,{
+    //         method:'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'x-access-token': accessToken,
+    //         },
+    //         body:JSON.stringify(data)
+    //     }).then((result)=>{
+    //         // console.warn("result",result);
+    //         result.json().then((resp)=>{
+    //             // console.warn("resp",resp);
+    //             setinclients(resp.clients);
+
+
+    //         })
+    //     })
+
+    //     alert("Successfully submitted");
+    // }
     
 
     return (
@@ -67,13 +107,13 @@ const Clientinformation = () => {
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>First Name</p>
-                                        <input value={firstname} onChange={(e)=>{setfirstname(e.target.value)}} placeholder="Enter first name" />
+                                        <input  placeholder="Enter first name" />
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Last Name</p>
-                                        <input value={lastname} onChange={(e)=>{setlastname(e.target.value)}} placeholder="Enter last name" />
+                                        <input   placeholder="Enter last name" />
                                     </div>
                                 </div>
                             </div>
@@ -81,7 +121,7 @@ const Clientinformation = () => {
                                 <div className="col-lg-3">
                                     <div className="client-input">
                                         <p>Sex</p>
-                                        <select value={gender} onChange={(e)=>{setGender(e.target.value)}}>
+                                        <select  >
                                             <option>Male</option>
                                             <option>Female</option>
                                         </select>
@@ -90,13 +130,13 @@ const Clientinformation = () => {
                                 <div className="col-lg-3">
                                     <div className="client-input">
                                         <p>Age</p>
-                                        <input value={age} onChange={(e)=>{setAge(e.target.value)}} placeholder="Enter age" />
+                                        <input   placeholder="Enter age" />
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Education</p>
-                                        <select value={education} onChange={(e)=>{setEducation(e.target.value)}}>
+                                        <select >
                                             <option>Select an option</option>
                                             <option>High School Degree</option>
                                             <option>Two Years Diploma</option>
@@ -113,13 +153,13 @@ const Clientinformation = () => {
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Profession</p>
-                                        <input value={profession} onChange={(e)=>{setProfession(e.target.value)}} placeholder="Enter profession" />
+                                        <input  placeholder="Enter profession" />
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Telephone</p>
-                                        <input value={telephone} onChange={(e)=>{setTelephone(e.target.value)}} placeholder="Enter a telephone" />
+                                        <input   placeholder="Enter a telephone" />
                                     </div>
                                 </div>
                             </div>
@@ -127,13 +167,13 @@ const Clientinformation = () => {
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Email</p>
-                                        <input value={email} onChange={(e)=>{setEmail(e.target.value)}} placeholder="Enter an email" />
+                                        <input  placeholder="Enter an email" />
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Password</p>
-                                        <input value={password} onChange={(e)=>{setPassword(e.target.value)}} placeholder="Enter a telephone" />
+                                        <input  placeholder="Enter a telephone" />
                                     </div>
                                 </div>
                             </div>
@@ -141,7 +181,7 @@ const Clientinformation = () => {
                                 <div className="col-lg-12">
                                     <div className="client-input">
                                         <p>Presenting Complaint</p>
-                                        <textarea value={complaint} onChange={(e)=>{setcomplaint(e.target.value)}}  placeholder="Enter a present considiton"></textarea>
+                                        <textarea   placeholder="Enter a present considiton"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -149,7 +189,7 @@ const Clientinformation = () => {
                                 <div className="col-lg-12">
                                     <div className="client-input">
                                         <p>Address</p>
-                                        <textarea value={address} onChange={(e)=>{setAddress(e.target.value)}} name="address" placeholder="Enter physical adderss 1"></textarea>
+                                        <textarea  name="address" placeholder="Enter physical adderss 1"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -157,27 +197,27 @@ const Clientinformation = () => {
                                 <div className="col-lg-3">
                                     <div className="client-input">
                                         <p>City</p>
-                                        <input value={city} onChange={(e)=>{setCity(e.target.value)}} placeholder="Enter City" />
+                                        <input   placeholder="Enter City" />
                                     </div>
                                 </div>
                                 <div className="col-lg-3">
                                     <div className="client-input">
                                         <p>Postal Code</p>
-                                        <input value={zipcode} onChange={(e)=>{setzipcode(e.target.value)}} placeholder="Enter postal code" />
+                                        <input  placeholder="Enter postal code" />
                                     </div>
                                 </div>
                                 <div className="col-lg-3">
                                     <div className="client-input">
                                         <p>State/Province</p>
                                         <select name="state" id="state">
-                                            <option value={state} onChange={(e)=>{setState(e.target.value)}} >Choose States/Province</option>
+                                            <option >Choose States/Province</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div className="col-lg-3">
                                     <div className="client-input">
                                         <p>Country</p>
-                                        <select value={country} onChange={(e)=>{setCountry(e.target.value)}} name="country">
+                                        <select  name="country">
                                             <option value="">Choose Country</option>
                                             <option value="1">Afghanistan</option>
                                             <option value="2">Albania</option>
@@ -195,7 +235,7 @@ const Clientinformation = () => {
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="create-btn">
-                                        <button type="submit" onClick={saveClientinfo}>Create</button>
+                                        <button type="submit" >Create</button>
                                     </div>
                                 </div>
                             </div>

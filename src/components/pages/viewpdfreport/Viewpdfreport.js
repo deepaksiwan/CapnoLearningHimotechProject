@@ -124,7 +124,7 @@ const Viewpdfreport = () =>{
                                 <div className="create-list-box"><Link to={(pdfs.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "": "/pdf/session/data/report/homework" } className={(pdfs.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "deactivate": "" }>Client Homework Data Session</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to="/pdf/sessetion/report/notes">Session Report Notes</Link></div>
+                                <div className="create-list-box"><Link to={(pdfs.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "": "/pdf/sessetion/report/notes" } className={(pdfs.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "deactivate": "" }>Session Report Notes</Link></div>
                             </li>
                        </ul>
                    </div>

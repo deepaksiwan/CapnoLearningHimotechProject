@@ -133,6 +133,8 @@ const Filter = () => {
         let _trainer = true;
         if (_userId == "all") {
             _trainer = false;
+         _userId = localStorage.getItem('user_id');
+
         }
     
 
@@ -157,6 +159,7 @@ const Filter = () => {
         
                 }
         let url = "https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&status=2&trainer=" + _trainer + "&user_type=" + _userType;
+    
         let _clientActive = clientActive.current.checked;
         let _clientInactive = clientInactive.current.checked;
 

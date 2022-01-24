@@ -1286,15 +1286,14 @@ box-shadow: 1px 1px 8px 1px #00000052;
   justify-content: space-between;
 }
 .modal-box-wrp {
-  max-width: 48%;
+  max-width: 35%;
 }
 .range-c-child1 > p{
-  font-size: 17px;
-    color: #000;
-    font-weight: 500;
+  font-size: 13px;
+  color: #000;
 }
 .range-c-child2{
-  width: 60%;
+  width: 68%;
 }
 .range-c-child2 > span{
   width: 100%;
@@ -1304,10 +1303,11 @@ box-shadow: 1px 1px 8px 1px #00000052;
     width: 100%;
     outline: none;
     color: #000;
-    font-size: 14px;
+    font-size: 13px;
     border: 2px solid #c867c6;
     border-radius: 8px;
-    padding: 8px 15px;
+    padding: 2px 8px;
+    font-size: 13px;
     box-shadow: 1px 1px 8px 1px #00000029;
 }
 .wrp-axis{
@@ -1318,24 +1318,28 @@ box-shadow: 1px 1px 8px 1px #00000052;
   width: 50%;
   border: 2px solid #c867c6;
   border-radius: 8px;
-  padding: 6px 15px;
+  padding: 0px 8px;
   margin-right: 20px;
 }
 .max-axis{
   width: 50%;
   border: 2px solid #c867c6;
   border-radius: 8px;
-  padding: 6px 15px;
+  padding: 0px 8px;
 }
 .min-axis > input{
   display: inline-block;
   border: none;
-  width: 75%;
+  outline: none;
+  width: 80%;
+  font-size: 13px;
 }
 .max-axis > input{
   display: inline-block;
   border: none;
-  width: 75%;
+  outline: none;
+  width: 80%;
+  font-size: 13px;
 }
 .range-c-child1,.range-c-child2{
   align-self: center;
@@ -1347,27 +1351,32 @@ box-shadow: 1px 1px 8px 1px #00000052;
   color: #fff;
 }
 .modal-title > span{
-  font-weight: 500! important;
+  font-weight: 400! important;
 }
 .modal-box-wrp > .modal-content .modal-header > button > span{
   color: #fff;
+  font-weight: 200;
+  position: relative;
+    top: 3px;
+}
+.close{
+  opacity: 1! important;
 }
 .range-c-child2 > p > input{
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
   position: relative;
   top: 3px;
 }
 .modal-box-wrp .modal-content > .modal-header{
-  padding: 12px 10px! important;
+  padding: 0px 6px 2px 6px! important;
 
 }
 .range-c-child2 > p > label{
   display: inline-block;
   margin-top: -10px;
-    margin-left: 8px;
-    font-weight: 500;
-    font-size: 15px;
+    margin-left: 6px;
+    font-size: 13px;
     color: #000;
 }
 .mrl-input{
@@ -1376,19 +1385,36 @@ box-shadow: 1px 1px 8px 1px #00000052;
 .range-c-child2 > p > input[type=radio]:checked ~ .check {
   border: 5px solid #0DFF92! important;
 }
+.min-axis > span{
+  font-size: 13px;
+}
+.min-axis > input{
+  font-size: 13px;
+}
+.max-axis > span{
+  font-size: 13px;
+}
+.range-list > li:first-child{
+  margin-top: 0px;
+}
 .range-list > li{
-  margin-top: 15px;
+  margin-top: 8px;
 }
 .raw-pcos{
   background-color: #e8ecef;
   border: 2px solid #c867c6;
     border-radius: 8px;
-    padding: 6px 15px;
+    padding: 2px 8px;
     box-shadow: 1px 1px 8px 1px #00000029;
 }
 .raw-pcos > p{
   color: #000;
-  font-size: 17px;
+  font-size: 13px;
+}
+.css-1yn2e29-InputColor{
+  height: 18px! important;
+  border: none! important;
+  top: 3px;
 }
 /* charttable page css closed here */
 
@@ -1531,20 +1557,23 @@ box-shadow: 1px 1px 8px 1px #00000052;
   padding: 0px;
   list-style: none;
   top: 5px;
-  right: 15px;
+  right: 8px;
   z-index: 10;
   display: flex;
 }
 .top-filter > li > a{
   display: inline-block;
   border: 1px solid #800080;
-  padding: 0px 6px;
+  padding: 0px 2px;
+  height: 15px;
   border-radius: 4px;
-  margin-left: 10px;
+  margin-left: 6px;
 }
 .top-filter > li > a > i{
-  font-size: 11px;
-  color: #000;
+  font-size: 9px;
+    color: #000;
+    position: relative;
+    top: -7px;
 }
 .chart-w > div > div{
   height: 100%! important;
@@ -1557,6 +1586,29 @@ box-shadow: 1px 1px 8px 1px #00000052;
 }
 .MuiIconButton-root:hover{
   outline: none;
+}
+.right-filter{
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  position: absolute;
+  top: 25px;
+  z-index: 10;
+  right: 8px;
+}
+.right-filter > li > a > i{
+  color: #000;
+  font-size: 12px;
+}
+.right-filter > li{
+  margin-top: 3px;
+  height: 15px;
+}
+sub {
+  bottom: -0.25em;
+}
+.range-c-child2{
+  width: 60%! important;
 }
 /* login loader css */
 
@@ -1603,6 +1655,12 @@ box-shadow: 1px 1px 8px 1px #00000052;
   font-size: 20px;
   text-align: center;
   text-transform: uppercase;
+}
+.modal-head{
+  font-size: 14px! important;
+}
+.modal-body{
+  padding: 10px! important;
 }
 /* popop css closed here */
 
