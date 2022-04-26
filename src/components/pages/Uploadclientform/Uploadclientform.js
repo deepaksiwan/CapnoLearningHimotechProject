@@ -112,10 +112,13 @@ const Uploadclientform = () => {
             else {
                 alert("network error")
             }
+            
 
 
         })
+       
     }
+    
 
     const getTrainers = () => {
 

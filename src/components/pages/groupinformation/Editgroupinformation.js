@@ -3,12 +3,15 @@ import { Link, useParams, Router } from 'react-router-dom';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
-import Addclientname from './Addclientname';
 import right from '../../images/right.png';
-
-const Groupinformation = () => {
+import Addclientname from './Addclientname';
+import EditgroupProfile from '../groupinformation/EditgroupProfile';
+import md5 from 'md5';
+const Editgroupinformation = () => {
     const accessToken = localStorage.getItem('accessToken');
     const [trainers, setTrainer] = useState([]);
+    const [group, setgroup] = useState([]);
+    const [groupProfile, setgroupProfile] = useState([]);
     const [clientList, setClientList] = useState([]);
     const [devicelist, setDeviceList] = useState({});
     const [clientCount, setClientCount] = useState(2);
@@ -22,13 +25,16 @@ const Groupinformation = () => {
     const associateTrainer = useRef();
     const associateHardwaretype = useRef();
     const [successModal, setsuccessModal] = useState(false);
+    const [Loader, setLoader] = useState(false)
     const successToggleModal = () => setsuccessModal(!successModal);
     const associated_owner = localStorage.getItem('associated_owner');
-    const [Loader, setLoader] = useState(false)
 
+    const { groupid } = useParams();
 
     useEffect(() => {
         getTrainer();
+        getGroup();
+        getProfileGroup();
     }, [])
 
     const CreateGroupprofile = () => {
@@ -38,9 +44,9 @@ const Groupinformation = () => {
         data['name'] = groupName.current.value;
         data['associated_owner'] = associated_owner;
         data['associated_practioner'] = associateTrainer.current.value;
-
         data['email'] = groupEmail.current.value;
         data['device_type'] = associateHardwaretype.current.value;
+        data['status'] = 1;
         let _temp = [];
         for (let i = 0; i < clientCount; i++) {
             _temp.push(devicelist[i + 1]);
@@ -49,7 +55,7 @@ const Groupinformation = () => {
         // console.log(data)
 
 
-        fetch("https://capno-api.herokuapp.com/api/group/create", {
+        fetch("https://capno-api.herokuapp.com/api/group/update/" + groupid, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -74,6 +80,70 @@ const Groupinformation = () => {
             }
             successToggleModal();
             setLoader(false)
+        })
+
+    }
+
+    const getGroup = () => {
+        fetch("https://capno-api.herokuapp.com/api/group/" + groupid,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    // console.log("result", resp);
+                    setgroup(resp.group[0]);
+
+
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+
+        })
+
+    }
+    const getProfileGroup = () => {
+        fetch("https://capno-api.herokuapp.com/api/group/profile/" + groupid,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    // console.log("result", resp);
+                    setgroupProfile(resp.groupProfile);
+
+
+
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+
         })
 
     }
@@ -168,20 +238,20 @@ const Groupinformation = () => {
                 </div>
                 <div className="right-section">
                     <div className="client-info-c">
-                        <h3>New Group Information</h3>
+                        <h3>Edit Group Information</h3>
                         <div className="client-info-box">
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Group Name</p>
-                                        <input placeholder="Enter first name" ref={groupName} />
+                                        <input placeholder="Enter first name" defaultValue={group.group_name} ref={groupName} />
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Group Email</p>
 
-                                        <input type="gmail" placeholder="Gmail" ref={groupEmail} />
+                                        <input type="gmail" placeholder="Gmail" defaultValue={group.email} ref={groupEmail} />
                                     </div>
                                 </div>
                             </div>
@@ -194,7 +264,7 @@ const Groupinformation = () => {
                                             {
                                                 trainers.map((trainer, i) => {
                                                     return (
-                                                        <option value={trainer.id} >{trainer.firstname} {trainer.lastname}</option>
+                                                        <option value={trainer.id} selected={md5(trainer.id.toString()) == group.associated_practioner ? true : false}>{trainer.firstname} {trainer.lastname}</option>
                                                     )
                                                 })
                                             }
@@ -205,9 +275,9 @@ const Groupinformation = () => {
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Associate Hardware Type</p>
-                                        <select ref={associateHardwaretype}>
-                                            <option value="1">5.0 Devices</option>
-                                            <option value="2">6.0 Devices</option>
+                                        <select ref={associateHardwaretype} defaultValue={group.device}>
+                                            <option value="1" selected={group.device == 1 ? true : false} >5.0 Devices</option>
+                                            <option value="2" selected={group.device == 2 ? true : false}>6.0 Devices</option>
                                         </select>
                                     </div>
                                 </div>
@@ -217,9 +287,9 @@ const Groupinformation = () => {
                             </div>
                             {/* {clientList.length} */}
                             {
-                                clientList.map((v, i) => {
+                                groupProfile.map((v, i) => {
                                     return (
-                                        <Addclientname index={v.count} handleClientList={handleClientList} />
+                                        <EditgroupProfile index={i + 1} data={v} />
                                     )
 
                                 })
@@ -228,38 +298,8 @@ const Groupinformation = () => {
 
                             <div className="row">
 
-                                <div className="col-lg-6">
-                                    <Modal isOpen={maxclientModal} toggle={maxclientToggleModal} className="connect-box" centered={true}>
-                                        <ModalHeader toggle={maxclientToggleModal}><span className="ml-1 roititle font-weight-bold">Max client limit</span></ModalHeader>
-                                        <ModalBody>
-                                            <div className="modal-p">
 
-                                                <h4>6!</h4>
-                                                <p>Max client limit is 6</p>
-                                            </div>
-                                        </ModalBody>
 
-                                    </Modal>
-                                    <div className="create-btn">
-                                        <button type="submit" onClick={addclient}>Add Client</button>
-                                    </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <Modal isOpen={minclientModal} toggle={minclientToggleModal} className="connect-box" centered={true}>
-                                        <ModalHeader toggle={minclientToggleModal}><span className="ml-1 roititle font-weight-bold">Min client limit</span></ModalHeader>
-                                        <ModalBody>
-                                            <div className="modal-p">
-
-                                                <h4>2!</h4>
-                                                <p>Min client limit is 2</p>
-                                            </div>
-                                        </ModalBody>
-
-                                    </Modal>
-                                    <div className="create-btn">
-                                        <button type="submit" onClick={removeclient}>Remove Client</button>
-                                    </div>
-                                </div>
                                 <div className="col-lg-6">
                                     <div className="create-btn">
                                         <Link to="/viewcreate" >Go Back</Link>
@@ -272,16 +312,16 @@ const Groupinformation = () => {
                                             <div className="modal-p">
                                                 <div className="right-circle"><img src={right} /></div>
                                                 <h4>Saved!</h4>
-                                                <p>Your Form has been Submited Successfully</p>
+                                                <p>Your Form has been Updated Successfully</p>
                                             </div>
                                         </ModalBody>
 
                                     </Modal>
                                     <div className="create-btn">
-                                        <button type="submit" onClick={CreateGroupprofile}>Create Group Profile
-
+                                        <button type="submit" onClick={CreateGroupprofile}>Update Group Information
                                             {
-                                                Loader && <div id="loader"></div>
+                                                Loader &&
+                                                <div id="loader"></div>
                                             }
                                         </button>
                                     </div>
@@ -296,4 +336,4 @@ const Groupinformation = () => {
     )
 }
 
-export default Groupinformation;
+export default Editgroupinformation;

@@ -137,6 +137,7 @@ h3{
 
 .header-c2{
   align-self: center;
+  display: flex;
 }
 
 .menu-list-d{
@@ -593,8 +594,7 @@ a:hover {
   width: 285px;
   background-color: #800080;
   min-height: 100vh;
-  padding-left: 40px;
-  padding-top: 20px;
+  padding: 20px 0px 0px 40px;
   position: fixed;
 }
 .mrb-header{
@@ -612,9 +612,11 @@ a:hover {
   color: #fff;
   font-size: 14px;
   display: block;
-    padding: 12px 0px;
+  padding: 12px 0px;
+  display: flex;
+  padding-right: 10px;
 }
-.sidebar-list > li > a > img{
+.sidebar-icon-img img{
   width: 14px;
   margin-right: 15px;
 }
@@ -785,6 +787,9 @@ label{
     display: flex;
     margin-top: 15px;
 }
+.radio-input{
+  margin-left: 30px;
+}
 .no-mr{
  margin-right: 10px;
 }
@@ -925,6 +930,10 @@ label{
 
 
 /* edit profile page css open here */
+.wrp-head-profile{
+  display: flex;
+  justify-content: space-between;
+}
 
 .wrp-editprofile{
   border-radius: 8px;
@@ -1034,6 +1043,7 @@ box-shadow: 1px 1px 8px 1px #00000052;
 
 .MuiTableHead-root > tr > th {
   background-color: #800080! important;
+  padding: 8px 15px;
 }
 .MuiTableSortLabel-root.MuiTableSortLabel-active.MuiTableSortLabel-root.MuiTableSortLabel-active .MuiTableSortLabel-icon {
   color: rgba(255, 255, 255, 0.54)! important;
@@ -1057,6 +1067,7 @@ box-shadow: 1px 1px 8px 1px #00000052;
 .downloadimg{
   display: inline-block;
   margin-right: 8px;
+  cursor: pointer;
 }
 .downloadimg > img{
   width: 22px;
@@ -1152,7 +1163,23 @@ box-shadow: 1px 1px 8px 1px #00000052;
     background-color: #800080;
     box-shadow: 1px 1px 8px 1px #00000029;
 }
-
+.create-btn > a{
+  display: inline-block;
+    width: 100%;
+    margin-top: 30px;
+    outline: none;
+    border-radius: 6px;
+    padding: 10px 15px;
+    font-size: 15px;
+    color: #fff;
+    text-align: center;
+    border: none;
+    background-color: #800080;
+    box-shadow: 1px 1px 8px 1px #00000029;
+}
+.mrb-option{
+  margin-bottom: 20px;
+}
 .lactive{
   display: inline-block;
   font-weight: 400;
@@ -1346,12 +1373,18 @@ box-shadow: 1px 1px 8px 1px #00000052;
 }
 .modal-header{
   background-color: #800080;
+  padding: 6px;
 }
 .modal-title{
   color: #fff;
 }
+.close {
+  font-weight: 300;
+  color: #fff;
+}
 .modal-title > span{
   font-weight: 400! important;
+  font-size: 16px;
 }
 .modal-box-wrp > .modal-content .modal-header > button > span{
   color: #fff;
@@ -1581,9 +1614,7 @@ box-shadow: 1px 1px 8px 1px #00000052;
 .plot-charts{
   width: 100%! important;
 }
-.modebar{
-  display: none! important;
-}
+ 
 .MuiIconButton-root:hover{
   outline: none;
 }
@@ -1641,13 +1672,59 @@ sub {
   border: 3px solid #4847a3;
   box-shadow: 1px 1px 8px 1px #00000052;
 }
-
+.right-circle{
+  width: 90px;
+  height: 90px;
+  line-height: 90px;
+  border-radius: 100%;
+  border: 3px solid #47c9a2;
+  background-color: #fff;
+  text-align: center;
+  margin: auto;
+}
+.wrp-delete-btn{
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+.cancel-btn1 > a{
+  display: inline-block;
+  padding: 8px 30px;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 4px;
+  background-color: #c1c1c1;
+  margin-right: 30px;
+  cursor: pointer;
+}
+.delete-btn1 > a{
+  display: inline-block;
+  cursor: pointer;
+  padding: 8px 30px;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 4px;
+  background-color: #f15e5e;
+}
+.cancel-circle{
+  border: 3px solid red! important;
+}
+.modal-header > button{
+  outline: none;
+}
+.right-circle > img{
+  width: 38px;
+}
+.modal-p > h4{
+  color: #000;
+  font-size: 36px;
+  text-align: center;
+  margin: 10px 0px;
+}
 .modal-p > p{
   color: green;
-  font-weight: 600;
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
-  text-transform: uppercase;
 }
 .modal-error-p > p{
   color: red;
@@ -1662,5 +1739,180 @@ sub {
 .modal-body{
   padding: 10px! important;
 }
+.registerdevice-btn{
+  margin-top: 50px;
+  text-align: right;
+}
+.registerdevice-btn > a{
+  display: inline-block;
+  padding: 8px 15px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  background-color: #800080;
+}
+.modal-p > input{
+  display: block;
+    width: 100%;
+    font-size: 15px;
+    padding: 6px 15px;
+    border: 1px solid #c867c6;
+    outline: none;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 1px 1px 8px 1px #00000029;
+
+}
+.btn-s-submit{
+  text-align: center;
+  margin-top: 30px;
+}
+.btn-s-submit > button{
+  border: none;
+  outline: none;
+  padding: 6px 20px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  background-color: #800080;
+}
+
 /* popop css closed here */
 
+.select-lang-box > select{
+    display: inline-block;
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 15px;
+    outline: none;
+    background-color: #fff;
+}
+
+.wrp-email-box{
+  padding-top: 10px;
+}
+.email-box{
+  width: 42%;
+  margin: auto;
+  border-radius: 8px;
+    background-color: #fff;
+    padding: 15px;
+    border: 2px solid #c867c6;
+    box-shadow: 1px 1px 8px 1px #00000052;
+}
+.radio-wrp{
+  display: flex;
+  justify-content: space-between;
+}
+.radio-btn > span{
+  color: #000;
+  font-size: 14px;
+}
+.radio-btn > input{
+  vertical-align: middle;
+}
+.radio-btn > input[type=radio] {
+    width: 15px;
+    height: 15px;
+}
+.select-radio-option > select{
+  display: inline-block;
+  width: 100%;
+  padding: 5px 15px;
+  color: #000;
+  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #800080;
+  margin-top: 20px;
+}
+.add-radio-btn{
+  text-align: center;
+}
+.add-radio-btn > button{
+  display: inline-block;
+  border: none;
+  outline: none;
+  padding: 6px 15px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  color: #fff;
+  margin-top: 15px;
+  background-color: #800080;
+  
+}
+.input-email > input{
+  display: inline-block;
+  width: 100%;
+  padding: 5px 15px;
+  color: #000;
+  font-size: 15px;
+  outline: none;
+  border-radius: 6px;
+  border: 1px solid #800080;
+  margin-top: 20px;
+}
+.btn-input{
+  text-align: center;
+}
+.btn-input > button{
+  display: inline-block;
+  border: none;
+  outline: none;
+  padding: 6px 15px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  color: #fff;
+  margin-top: 15px;
+  background-color: #800080;
+}
+.list-radio{
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  margin-top: 20px;
+}
+.list-radio > li{
+  padding: 5px 15px;
+  font-size: 14px;
+  color: #000;
+  border-radius: 6px;
+  border: 1px solid #800080;
+  margin-top: 10px;
+}
+
+
+/* list page css open here */
+.add-btn-wrp{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.head-listing {
+  align-self: center;
+}
+.head-listing > h3{
+  color: #000;
+    font-weight: 300;
+    font-size: 28px;
+}
+.add-btn{
+  align-self: center;
+}
+.add-btn > button{
+  display: inline-block;
+  border: none;
+  outline: none;
+  padding: 6px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  color: #fff;
+  background-color: #800080;
+}
+/* list page css closed here */

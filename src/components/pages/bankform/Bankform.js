@@ -3,8 +3,9 @@ import {Link,useParams, Router} from 'react-router-dom';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
-import download from '../../images/download.png'
-import preveiw from '../../images/preveiw.png'
+import download from '../../images/download.png';
+import preveiw from '../../images/preveiw.png';
+import { jsPDF } from "jspdf";
 
 const Bankform = () => {
     const accessToken = localStorage.getItem('accessToken');

@@ -1,5 +1,7 @@
 import React, { Component, useEffect, useRef, useState } from "react";
 import { Link } from 'react-router-dom'
+import i18n from "i18next";
+import { useTranslation, initReactI18next } from "react-i18next";
 import sidebarmenu1 from '../images/sidebarmenu1.png'
 const Filter = () => {
 
@@ -8,6 +10,7 @@ const Filter = () => {
     // const [active2, setactive2] = useState(false);
     // const [inactivetrainers, setinactivetrainers] = useState("");
     // const [group, setgroup] = useState("");
+    const { t } = useTranslation();
     const [clients, setinclients] = useState([]);
     const [trainers, settrainers] = useState([]);
     const [sesstion, setsesstion] = useState([]);
@@ -315,10 +318,10 @@ const Filter = () => {
         <div>
             <div className="reset-wrp">
                 <div className="reset-child1">
-                    <p>Choose a clients, and a session below populates and activates relevant menu options.</p>
+                    <p>{t('Choose-a-clients-and-a-session-below-populates-and-activates-relevant-menu-options')}</p>
                 </div>
                 <div className="reset-child2">
-                    <button onClick={Reset} className="reset">Reset</button>
+                    <button onClick={Reset} className="reset">{t('Reset')}</button>
                 </div>
             </div>
             <div className="wrp-step-box">
@@ -335,7 +338,7 @@ const Filter = () => {
                                     <label for="active">
                                         <span className="redious">
                                         </span>
-                                        <b className="lactive">Active</b>
+                                        <b className="lactive">{t('Active')}</b>
                                     </label>
                                 </div>
 
@@ -347,7 +350,7 @@ const Filter = () => {
                                     <label for="inactive">
                                         <span className="redious">
                                         </span>
-                                        <b className="lactive">Inactive</b>
+                                        <b className="lactive">{t('Inactive')}</b>
                                     </label>
                                 </div>
 
@@ -356,7 +359,7 @@ const Filter = () => {
                         <div className="select-client">
 
                             <select ref={trainerSelected} onChange={updateSelectTrainer}  >
-                                <option>Choose a trainer</option>
+                                <option>{t('Choose-a-trainer')}</option>
                                 <option value={"all"}>All trainers</option>
                                 {
                                     trainers.map((items) =>
@@ -370,7 +373,7 @@ const Filter = () => {
                             </select>
                         </div>
                         <div className="step-smallbox">
-                            <p>Step 1</p>
+                            <p>{t('Step-1')}</p>
                         </div>
                     </div>
 
@@ -392,7 +395,7 @@ const Filter = () => {
                                         </label>
                                     </div>
                                     <div className="caption-cheeckbox">
-                                        <p>Group</p>
+                                        <p>{t('Group')}</p>
                                     </div>
                                 </div>
                                 <div className="checkbox-wrp">
@@ -422,7 +425,7 @@ const Filter = () => {
                             </div>
                             <div className="select-client">
                                 <select ref={clientSelected} onChange={updateSelectClient}>
-                                    <option>Choose a client</option>
+                                    <option>{t('Choose-a-client')}</option>
 
                                     {
                                         clients.length > 0 && clients.map((client, i) =>
@@ -433,7 +436,7 @@ const Filter = () => {
                                 </select>
                             </div>
                             <div className="step-smallbox">
-                                <p>Step {userType == 1 ? 2 : 1}</p>
+                                <p>{t('Step')} {userType == 1 ? 2 : 1}</p>
                             </div>
                         </div>
 
@@ -451,12 +454,12 @@ const Filter = () => {
                             </label>
                         </div>
                         <div className="caption-cheeckbox">
-                            <p>Home Work Session</p>
+                            <p>{t('Home-Work-Session')}</p>
                         </div>
                     </div>
                     <div className="select-client">
                         <select ref={sessionSelected} onChange={updateselectedSecssion}>
-                            <option>Choose a session</option>
+                            <option>{t('Choose-a-session')}</option>
                             {
                                 sesstion.map((sesstion, i) =>
                                     <option selected={sesstion.id == selectedSession ? true : false} value={sesstion.id}>
@@ -467,7 +470,7 @@ const Filter = () => {
                         </select>
                     </div>
                     <div className="step-smallbox">
-                        <p>Step {userType == 1 ? 3 : userType == 2 ? 2 : 1}</p>
+                        <p>{t("Step")} {userType == 1 ? 3 : userType == 2 ? 2 : 1}</p>
                     </div>
                 </div>
 

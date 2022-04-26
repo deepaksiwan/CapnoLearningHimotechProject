@@ -34,7 +34,7 @@ const Uploadclientform = () => {
     const accessToken = localStorage.getItem('accessToken');
     const [modal, setModal] = useState(false);
     const toggleModal = () => setModal(!modal);
-
+    const [Loader, setLoader] = useState(false)
     const [successModal, setsuccessModal] = useState(false);
     const successToggleModal = () => setsuccessModal(!successModal);
 
@@ -49,6 +49,7 @@ const Uploadclientform = () => {
 
 
     const submittrainerform = () => {
+        setLoader(true)
         let formData = new FormData();
         let client_id = localStorage.getItem('selectedClient');
         let session_id = localStorage.getItem('selectedSession');
@@ -76,10 +77,11 @@ const Uploadclientform = () => {
             // console.warn("result",result);
             result.json().then((resp) => {
                 // console.log("resp",resp);
-
+                
             })
+           
         })
-
+        
         successToggleModal();
 
     }
@@ -520,7 +522,12 @@ const Uploadclientform = () => {
 
                         </Modal>
                         <div className="client-submit-btn">
-                            <button type="submit" onClick={submittrainerform}>Submit</button>
+                            <button type="submit" onClick={submittrainerform}>Submit
+                            {
+                                                Loader &&
+                                                <div id="loader"></div>
+                                            }
+                            </button>
                         </div>
                     </div>
 

@@ -27,6 +27,9 @@
     
 }
 @media(max-width: 1166px){
+    .email-box{
+        width: 60%;
+    }
     .modal-box-wrp {
         max-width: 45%;
     }
@@ -62,14 +65,23 @@
     }
     .burger-area {
         display: block;
+        align-self: center;
     }
     .burgers > img {
         width: 28px;
+    }
+    .select-lang-box > select{
+        padding: 2px 5px;
+        font-size: 14px;
+        margin-right: 15px;
     }
     
     
 }
 @media(max-width: 992px){
+    .email-box{
+        width: 80%;
+    }
     .modal-box-wrp {
         max-width: 65%;
     }
@@ -197,6 +209,13 @@
     
 }
 @media(max-width: 767px){
+    .radio-btn > input[type=radio] {
+        width: 13px;
+        height: 13px;
+    }
+    .email-box{
+        width: 100%;
+    }
     .modal-box-wrp {
         max-width: 100%;
     }
@@ -288,6 +307,15 @@
     }
 }
 @media(max-width: 640px){
+    .head-listing > h3{
+        font-size: 24px;
+    }
+    .add-btn > button{
+        padding: 5px 15px;
+    }
+    .radio-wrp{
+        display: inherit;
+    }
     .reset-wrp{
         display: inherit;
         text-align: center;

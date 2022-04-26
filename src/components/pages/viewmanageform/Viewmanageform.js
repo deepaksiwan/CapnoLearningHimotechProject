@@ -1,10 +1,14 @@
 import React, {useEffect,useState} from "react";
 import {Link,useParams} from 'react-router-dom';
+import i18n from "i18next";
+import { useTranslation, initReactI18next } from "react-i18next";
 import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
 
 const Viewmanageform = () =>{
+
+    const { t } = useTranslation();
     const accessToken = localStorage.getItem('accessToken');
     const [selectedClient,setSelectedClient] = useState() ;
     const [selectedSession,setSelectedSession] = useState() ;
@@ -106,25 +110,25 @@ const Viewmanageform = () =>{
              <div className="create-section">
                        <ul className="create-list">
                             <li>
-                                <div className="create-list-box"><Link to={(selectedSession === "null")? "" : "/bankform"} className={(selectedSession === "null")? "deactivate" : ""}>Download Fill-in PDF Blank Forms</Link></div>
+                                <div className="create-list-box"><Link to={(selectedSession === "null")? "" : "/bankform"} className={(selectedSession === "null")? "deactivate" : ""}>{ t('Download-Fill-in-PDF-Blank-Forms')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(forms.length == 0 || selectedClient === "null")? "": "/upload/client/form"} className={(forms.length == 0 || selectedClient === "null")? "deactivate": ""}>Upload Completed Client Forms</Link></div>
+                                <div className="create-list-box"><Link to={(forms.length == 0 || selectedClient === "null")? "": "/upload/client/form"} className={(forms.length == 0 || selectedClient === "null")? "deactivate": ""}>{ t('Upload-Completed-Client-Forms')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(trainerforms.length == 0 || selectedClient === "null" || selectedSession === "null")? "" : "/upload/trainner/form"} className={(trainerforms.length == 0 || selectedClient === "null" || selectedSession === "null")? "deactivate": ""}>Upload Completed Trainer Forms</Link></div>
+                                <div className="create-list-box"><Link to={(trainerforms.length == 0 || selectedClient === "null" || selectedSession === "null")? "" : "/upload/trainner/form"} className={(trainerforms.length == 0 || selectedClient === "null" || selectedSession === "null")? "deactivate": ""}>{ t('Upload-Completed-Trainer-Forms')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(selectedSession === "null")? "" : "/view/uploaded/client/form"} className={(selectedSession === "null")? "deactivate" : ""} >View Completed Client Forms</Link></div>
+                                <div className="create-list-box"><Link to={(selectedSession === "null")? "" : "/view/uploaded/client/form"} className={(selectedSession === "null")? "deactivate" : ""} >{ t('View-Completed-Client-Forms')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(selectedSession === "null")? "" : "/view/uploaded/trainer/form"} className={(selectedSession === "null")? "deactivate" : ""}>View Completed Trainer Forms</Link></div>
+                                <div className="create-list-box"><Link to={(selectedSession === "null")? "" : "/view/uploaded/trainer/form"} className={(selectedSession === "null")? "deactivate" : ""}>{ t('View-Completed-Trainer-Forms')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(selectedClient === "null" || selectedSession === "null")? "" : "/view/completed/client/work"} className={(selectedClient === "null" || selectedSession === "null")? "deactivate" : ""}>View Homework Assignment</Link></div>
+                                <div className="create-list-box"><Link to={(selectedClient === "null" || selectedSession === "null")? "" : "/view/completed/client/work"} className={(selectedClient === "null" || selectedSession === "null")? "deactivate" : ""}>{ t('View-Homework-Assignment')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(selectedClient === "null" || selectedSession === "null")? "" : "/upload/homework/asignment"} className={(selectedClient === "null" || selectedSession === "null")? "deactivate" : ""}>Upload Homework Assignment</Link></div>
+                                <div className="create-list-box"><Link to={(selectedClient === "null" || selectedSession === "null")? "" : "/upload/homework/asignment"} className={(selectedClient === "null" || selectedSession === "null")? "deactivate" : ""}>{ t('Upload-Homework-Assignment')}</Link></div>
                             </li>
 
                        </ul>

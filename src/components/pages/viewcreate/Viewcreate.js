@@ -1,34 +1,37 @@
-import React from "react";
-import {BrowserRouter, Routes ,Route, Link,} from 'react-router-dom';
+import React, {useEffect,useState} from "react";
+import {Link,useParams} from 'react-router-dom';
+import i18n from "i18next";
+import { useTranslation, initReactI18next } from "react-i18next";
 import Header from '../../component/Header';
 import Sidebar from '../../component/Sidebar';
 
 const Viewcreate = () =>{
+    const { t } = useTranslation();
     
     const Viewcreatelist = [
         {
-           links:"/client/information", displayViewcreatelist: "New Client"
+           links:"/addclient", displayViewcreatelist: t('New-Client')
         },
         {
-            links:"/list/client", displayViewcreatelist: "Edit Client"
+            links:"/list/client", displayViewcreatelist: t('Edit-Client')
         },
         {
-            links:"/trainer/information",displayViewcreatelist: "New Trainer"
+            links:"/add/trainer",displayViewcreatelist: t('New-Trainer')
         },
         {
-            links:"/edit/trainer",displayViewcreatelist: "Edit Trainer"
+            links:"/edit/trainer",displayViewcreatelist: t('Edit-Trainer')
         },
         {
-            links:"/group/information",displayViewcreatelist: "New Group"
+            links:"/group/information",displayViewcreatelist: t('New-Group')
         },
         {
-            links:"/edit/group",displayViewcreatelist: "Edit Group"
+            links:"/edit/group",displayViewcreatelist: t('Edit-Group')
         },
         {
-            links:"/edit/profile", displayViewcreatelist: "Edit My Profile"
+            links:"/edit/profile", displayViewcreatelist: t('Edit-My-Profile')
         },
         {
-            links:"/hardware/profile",displayViewcreatelist: "View/Edit Hardware Profile"
+            links:"/hardware/profile",displayViewcreatelist: t('View/Edit-Hardware-Profile')
         }
         
     ]

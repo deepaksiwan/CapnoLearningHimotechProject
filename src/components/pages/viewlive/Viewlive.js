@@ -1,10 +1,14 @@
 import React, {useEffect,useState} from "react";
 import {Link,useParams, Router} from 'react-router-dom';
+import i18n from "i18next";
+import { useTranslation, initReactI18next } from "react-i18next";
 import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
 
 const Viewlive = () => {
+
+    const { t } = useTranslation();
     const accessToken = localStorage.getItem('accessToken');
     const sessionid = localStorage.getItem('selectedSession');
     const [sessions, setsessions] = useState([]);
@@ -109,7 +113,10 @@ const Viewlive = () => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     console.log("result", resp);
-                    setsession(resp.session[0].link);
+                    if(resp.session.length >0){
+                        setsession(resp.session[0].link);
+
+                    }
                     // let len = session.length;
                     //   console.warn(len);
                    
@@ -144,25 +151,25 @@ const Viewlive = () => {
                     <div className="create-section">
                         <ul className="create-list">
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null")? "deactivate" : ""} >View Live Session Notes</a></div>
+                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null")? "deactivate" : ""} >{t('View-Live-Session-Notes')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null")? "deactivate" : ""}>Download Live Session Notes</a></div>
+                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null")? "deactivate" : ""}>{t('Download-Live-Session-Notes')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null")? "deactivate" : ""}>View Live Session Images</a></div>
+                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null")? "deactivate" : ""}>{t('View-Live-Session-Images')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null")? "deactivate" : ""}>Download Live Session Images</a></div>
+                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null")? "deactivate" : ""}>{t('Download-Live-Session-Images')}</a></div>
                             </li>
                             <li>
                                 <div className="create-list-box" >
                                     {/* {session} */}
                                     {
                                        ( session == null || selectedSession === "null") ?
-                                        <a href="#" data-toggle="modal" data-target="#viewModal"  >View/Link Zoom Recordings</a>
+                                        <a href="#" data-toggle="modal" data-target="#viewModal"  >{t('View/Link-Zoom-Recordings')}</a>
                                         :
-                                        <a href="#" data-toggle="modal" data-target="#viewleModal1"  >View/Link Zoom Recordings</a>
+                                        <a href="#" data-toggle="modal" data-target="#viewleModal1"  >{t('View/Link-Zoom-Recordings')}</a>
 
                                     }   
                                     </div>

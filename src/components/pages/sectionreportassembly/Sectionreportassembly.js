@@ -1,16 +1,20 @@
-import React from "react";
+import React, {useEffect,useState} from "react";
+import {Link,useParams} from 'react-router-dom';
+import i18n from "i18next";
+import { useTranslation, initReactI18next } from "react-i18next";
 import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
 
 const Sectionreportassembly = () =>{
-    
+
+    const { t } = useTranslation();
     const Reportassemblylist = [
         {
-            displayAssemblylist: "Create Session Report"
+            displayAssemblylist: t('Create-Session-Report')
         },
         {
-            displayAssemblylist: "View/Edit/Delete/Download Session Report"
+            displayAssemblylist: t('View/Edit/Delete/Download-Session-Report')
         },
        
         

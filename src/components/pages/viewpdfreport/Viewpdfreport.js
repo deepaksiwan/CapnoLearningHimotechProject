@@ -1,9 +1,13 @@
 import React, {useEffect,useState} from "react";
 import {Link,useParams, Router} from 'react-router-dom';
+import i18n from "i18next";
+import { useTranslation, initReactI18next } from "react-i18next";
 import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
 const Viewpdfreport = () =>{
+
+    const { t } = useTranslation();
     const accessToken = localStorage.getItem('accessToken');
     const [pdfs, setpdfs] = useState([]);
     const sessionid = localStorage.getItem('selectedSession');
@@ -112,19 +116,19 @@ const Viewpdfreport = () =>{
                        <ul className="create-list">
                             <li>
                             
-                                <div className="create-list-box"><Link to={(pdfs.length == 0 || selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null" ) ? "": "/pdf/session/data/report/single" } className={(pdfs.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "deactivate": "" }>Session Data Reports</Link></div>
+                                <div className="create-list-box"><Link to={(pdfs.length == 0 || selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null" ) ? "": "/pdf/session/data/report/single" } className={(pdfs.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "deactivate": "" }> {t('pdf-Session-Data-Reports')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(pdfs.length == 0 || selectedClient === "null" || selectedGroup === "true" || selectedSession !== "null") ? "": "/pdf/session/data/report/multi" } className={(pdfs.length == 0 || selectedClient === "null" || selectedGroup === "true" || selectedSession !== "null") ? "deactivate": "" }>Multi session Data Reports</Link></div>
+                                <div className="create-list-box"><Link to={(pdfs.length == 0 || selectedClient === "null" || selectedGroup === "true" || selectedSession !== "null") ? "": "/pdf/session/data/report/multi" } className={(pdfs.length == 0 || selectedClient === "null" || selectedGroup === "true" || selectedSession !== "null") ? "deactivate": "" }>{t('pdf-Multi-session-Data-Reports')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(pdfs.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" ) ? "": "/pdf/session/data/report/group" } className={(pdfs.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" ) ? "deactivate": "" }>Group Session Data Reports</Link></div>
+                                <div className="create-list-box"><Link to={(pdfs.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" ) ? "": "/pdf/session/data/report/group" } className={(pdfs.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" ) ? "deactivate": "" }> {t('pdf-Group-Session-Data-Reports')} </Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(pdfs.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "": "/pdf/session/data/report/homework" } className={(pdfs.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "deactivate": "" }>Client Homework Data Session</Link></div>
+                                <div className="create-list-box"><Link to={(pdfs.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "": "/pdf/session/data/report/homework" } className={(pdfs.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "deactivate": "" }>{t('Client-Homework-Data-Session')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(pdfs.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "": "/pdf/sessetion/report/notes" } className={(pdfs.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "deactivate": "" }>Session Report Notes</Link></div>
+                                <div className="create-list-box"><Link to={(pdfs.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "": "/pdf/sessetion/report/notes" } className={(pdfs.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "deactivate": "" }>{t('Session-Report-Notes')}</Link></div>
                             </li>
                        </ul>
                    </div>

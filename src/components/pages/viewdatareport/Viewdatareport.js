@@ -1,9 +1,12 @@
 import React, {useEffect,useState} from "react";
 import {Link,useParams, Router} from 'react-router-dom';
+import i18n from "i18next";
+import { useTranslation, initReactI18next } from "react-i18next";
 import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
 const Viewdatareport = () =>{
+    const { t } = useTranslation();
     const accessToken = localStorage.getItem('accessToken');
     const [reports, setviewreports] = useState(['reports']);
     const sessionid = localStorage.getItem('selectedSession');
@@ -111,16 +114,16 @@ const Viewdatareport = () =>{
                        <ul className="create-list">
                             <li>
                             
-                                <div className="create-list-box"><Link to={(reports.length == 0 || selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null" ) ? "": "/session/data/report/single" } className={(reports.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "deactivate": "" }>Session Data Reports</Link></div>
+                                <div className="create-list-box"><Link to={(reports.length == 0 || selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null" ) ? "": "/session/data/report/single" } className={(reports.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "deactivate": "" }>{t('Session-Data-Reports')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(reports.length == 0 || selectedClient === "null" || selectedGroup === "true" || selectedSession !== "null") ? "": "/session/data/report/multi" } className={(reports.length == 0 || selectedClient === "null" || selectedGroup === "true" || selectedSession !== "null") ? "deactivate": "" }>Multi session Data Reports</Link></div>
+                                <div className="create-list-box"><Link to={(reports.length == 0 || selectedClient === "null" || selectedGroup === "true" || selectedSession !== "null") ? "": "/session/data/report/multi" } className={(reports.length == 0 || selectedClient === "null" || selectedGroup === "true" || selectedSession !== "null") ? "deactivate": "" }>{t('Multi-session-Data-Reports')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(reports.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" ) ? "": "/session/data/report/group" }className={(reports.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" ) ? "deactivate": "" }>Group Session Data Reports</Link></div>
+                                <div className="create-list-box"><Link to={(reports.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" ) ? "": "/session/data/report/group" } className={(reports.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" ) ? "deactivate": "" }>{t('Group-Session-Data-Reports')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(reports.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "": "/session/data/report/homework" } className={(reports.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "deactivate": "" }>Client Homework Data Reports</Link></div>
+                                <div className="create-list-box"><Link to={(reports.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "": "/session/data/report/homework" } className={(reports.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "deactivate": "" }>{t('Client-Homework-Data-Reports')}</Link></div>
                             </li>
                        </ul>
                    </div>

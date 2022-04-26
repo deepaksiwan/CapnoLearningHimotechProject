@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useRef, useState } from "react";
 import { Button, Modal, ModalHeader, ModalBody, Row } from 'reactstrap';
 import { Link, useParams, Router, NavLink } from 'react-router-dom';
+import i18n from "i18next";
+import { useTranslation, initReactI18next } from "react-i18next";
 import '../css/style.css'
-import '../css/style2.scss'
+// import '../css/style2.scss'
 import '../css/responsive.css'
 import $ from "jquery";
 import sidebarmenu1 from '../images/sidebarmenu1.png'
@@ -19,21 +21,16 @@ import burger from '../images/burger.png';
 import connect from '../images/connect.png';
 import gcircle from '../images/gcircle.png';
 import crosss from '../images/crosss.png';
-
-
-class Header extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        };
-
-    }
-
-
-    componentDidMount = () => {
+import Multilanguage from '../component/Multilanguage'
 
 
 
+
+const Header = () => {
+
+    const { t } = useTranslation();
+
+    useEffect(() => {
         changePickupStoreMenu();
 
         function changePickupStoreMenu() {
@@ -61,96 +58,92 @@ class Header extends Component {
             });
 
         }
+    }, [])
 
+    const tabArray = [
+        {
+          links: "/", tabDisplay: "Create Data Report", "tabimg": sidebarmenu1
+        },
+        {
+          links: "/view/data/report", tabDisplay: "View & Edit Data Report", "tabimg": sidebarmenu2
+        },
+        {
+          links: "/view/pdf/report", tabDisplay: "View PDF Report", "tabimg": sidebarmenu3
+        },
+        {
+          links: "/view/live", tabDisplay: "View Live Session Info", "tabimg": sidebarmenu4
+        },
+        {
+          links: "/view/manageform", tabDisplay: "View/Manage Forms", "tabimg": sidebarmenu1
+        },
+        {
+          links: "/viewcreate", tabDisplay: "View, Create, Edit Profile", "tabimg": sidebarmenu5
+        },
+        {
+          links: "/section/report/assembly", tabDisplay: "Session Report Assembly", "tabimg": sidebarmenu6
+        },
+        {
+          links: "/recording", tabDisplay: "Recording by Distributors", "tabimg": sidebarmenu7
+        },
+        {
+          links: "/subscription/management", tabDisplay: "Subscription Management", "tabimg": sidebarmenu8
+        },
+    
+    
+    
+      ];
+    const auth = localStorage.getItem('user');
 
+    const logout = () => {
+        localStorage.clear();
+        alert("You Logout successful")
     }
-
-
-    render() {
-
-        const tabArray = [
-            {
-              links: "/", tabDisplay: "Create Data Report", "tabimg": sidebarmenu1
-            },
-            {
-              links: "/view/data/report", tabDisplay: "View & Edit Data Report", "tabimg": sidebarmenu2
-            },
-            {
-              links: "/view/pdf/report", tabDisplay: "View PDF Report", "tabimg": sidebarmenu3
-            },
-            {
-              links: "/view/live", tabDisplay: "View Live Session Info", "tabimg": sidebarmenu4
-            },
-            {
-              links: "/view/manageform", tabDisplay: "View/Manage Forms", "tabimg": sidebarmenu1
-            },
-            {
-              links: "/viewcreate", tabDisplay: "View, Create, Edit Profile", "tabimg": sidebarmenu5
-            },
-            {
-              links: "/section/report/assembly", tabDisplay: "Session Report Assembly", "tabimg": sidebarmenu6
-            },
-            {
-              links: "/recording", tabDisplay: "Recording by Distributors", "tabimg": sidebarmenu7
-            },
-            {
-              links: "/subscription/management", tabDisplay: "Subscription Management", "tabimg": sidebarmenu8
-            },
-        
-        
-        
-          ];
-        const auth = localStorage.getItem('user');
-
-        const logout = () => {
-            localStorage.clear();
-            alert("You Logout successful")
-        }
-        return (
-            <div className="border-b">
-                <div className="container-fluid">
-                    <div className="header-box">
-                        <div className="header-c1">
-                            <div className="header-child1">
-                                <h3>Dashboard</h3>
-                            </div>
+    return (
+        <div className="border-b">
+            <div className="container-fluid">
+                <div className="header-box">
+                    <div className="header-c1">
+                        <div className="header-child1">
+                            <h3>Dashboard</h3>
                         </div>
-
-                        <div className="header-c2">
-
-                            <div className="burger-area">
-                                <a href="#" className="burgers toggle-slide-right"> <img src={burger} /></a>
-                            </div>
-                        </div>
-
                     </div>
 
-                    <div className="menu slide-menu-right menu-list-wrp">
-                        <button class="close-menu"><img src={crosss} className="img-close" /></button>
-                        <ul className="sidebar-list">
-                            {
-                                tabArray.map(function (v, i) {
-                                    return (
-                                        <li><NavLink to={v.links} className="close-menu" ><img src={v.tabimg} />{v.tabDisplay}</NavLink></li>
-                                    )
-                                }
-
-                                )
-                            }
-                            <li>{
-                                auth ? <Link to="/login" onClick={logout} className="tabs close-menu"><img src={sidebarmenu9} />Logout</Link> : null
-                            }</li>
-
-
-                        </ul>
+                    <div className="header-c2">
+                    <div className="multi-langueage-wrp">
+                        <Multilanguage />
+                        </div>
+                        <div className="burger-area">
+                            <a href="#" className="burgers toggle-slide-right"> <img src={burger} /></a>
+                        </div>
+                        
                     </div>
 
                 </div>
-            </div>
-        );
-    }
-}
 
+                <div className="menu slide-menu-right menu-list-wrp">
+                    <button class="close-menu"><img src={crosss} className="img-close" /></button>
+                    <ul className="sidebar-list">
+                        {
+                            tabArray.map(function (v, i) {
+                                return (
+                                    <li><NavLink to={v.links} className="close-menu" ><div className="sidebar-icon-img"><img src={v.tabimg} /></div><p>{v.tabDisplay}</p></NavLink></li>
+                                )
+                            }
+
+                            )
+                        }
+                        <li>{
+                            auth ? <Link to="/login" onClick={logout} className="tabs close-menu"><div className="sidebar-icon-img"><img src={sidebarmenu9} /></div> <p>Logout</p></Link> : null
+                        }</li>
+
+
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    );
+}
 
 export default Header;
 

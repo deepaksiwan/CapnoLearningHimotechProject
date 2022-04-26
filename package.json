@@ -19,12 +19,14 @@
     "axios": "^0.24.0",
     "bootstrap": "^4.6.0",
     "d3": "^7.3.0",
+    "i18next": "^21.6.11",
     "increase-memory-limit": "^1.0.7",
     "install": "^0.13.0",
     "jquery": "^3.6.0",
+    "jspdf": "^2.5.1",
     "material-table": "^1.69.3",
+    "md5": "^2.3.0",
     "moment": "^2.29.1",
-    "node-sass": "^6.0.1",
     "plotly.js": "^2.8.3",
     "react": "^17.0.2",
     "react-alice-carousel": "^2.4.0",
@@ -34,6 +36,7 @@
     "react-browser-storage": "^0.1.0",
     "react-countdown": "^2.3.1",
     "react-dom": "^17.0.2",
+    "react-i18next": "^11.15.4",
     "react-input-color": "^4.0.0",
     "react-minimal-side-navigation": "^1.9.2",
     "react-number-format": "^4.8.0",
@@ -64,7 +67,8 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "@types/reactstrap": "^6.4.0"
+    "@types/reactstrap": "^6.4.0",
+    "sass": "^1.49.10"
   },
   "browserslist": {
     "production": [

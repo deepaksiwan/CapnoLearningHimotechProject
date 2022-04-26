@@ -10,7 +10,7 @@ import Dashboard from './components/pages/dashboard/Dashboard.js';
 import Demodatareport from './components/pages/demodatareport/Demodatareport.js';
 import Uploadclientform from './components/pages/Uploadclientform/Uploadclientform.js';
 import Bankform from './components/pages/bankform/Bankform.js';
-import Editprofile from './components/pages/editprofile/Editprofile.js';
+// import Editprofile from './components/pages/editprofile/Editprofile.js';
 import Hardwareprofile from './components/pages/hardwareprofile/Hardwareprofile.js';
 import Clientinformation from './components/pages/clientinformation/Clientinformation.js';
 import Trainerinformation from './components/pages/trainerinformation/Trainerinformation.js';
@@ -33,6 +33,7 @@ import Viewcompletedclientwork from './components/pages/viewcompletedclientwork/
 import Editclient from './components/pages/clientinformation/Editclient';
 import Edittrainer from './components/pages/trainerinformation/Edittrainer';
 import Groupinformation from './components/pages/groupinformation/Groupinformation';
+import Editgroupinformation from './components/pages/groupinformation/Editgroupinformation';
 import Editgroup from './components/pages/groupinformation/Editgroup';
 import Creategroupsessetionreport from './components/pages/viewdatareport/Creategroupsessetionreport.js';
 import Createmultisession from './components/pages/viewdatareport/Createmultisession';
@@ -50,29 +51,34 @@ import PdfsessetionreportNotes from './components/pages/viewpdfreport/Pdfsesseti
 import Assemblyreport from './components/pages/sectionreportassembly/Assemblyreport';
 import Privateroutelogin from './components/component/Privateroutelogin';
 import Uploadhomeworkasignment from './components/pages/viewmanageform/Uploadhomeworkasignment';
+import Addclient from './components/pages/clientinformation/Addclient';
+import Addtrainer from './components/pages/trainerinformation/Addtrainer';
+import Multilanguage from './components/component/Multilanguage';
+import SubscriptionRenewal from './components/pages/subscriptionmanagement/SubscriptionRenewal';
+import Chooseemail from './components/pages/choose/Chooseemail';
+import List from './components/pages/list/List';
 
 function App(){
 	return(
 		<BrowserRouter>			
 			<Routes>
-				<Route path="" element={<Privateroute />}>
-				<Route  path="/signup" element={<Signup />} />
+				 <Route path="" element={<Privateroute />}>
+			{/*	<Route  path="/signup" element={<Signup />} />
 				<Route  path="/configure" element={<Configure />} />
 				<Route  path="/dashboard" element={<Dashboard />} />
 				<Route  path="/demodatareport" element={<Demodatareport />} />
 				<Route  path="/upload/client/form" element={<Uploadclientform />} />
 				<Route  path="/bankform" element={<Bankform />} />
-				<Route  path="/edit/profile" element={<Editprofile />} />
 				<Route  path="/hardware/profile" element={<Hardwareprofile />} />
 				<Route  path="/edit/client/:id" element={<Clientinformation />} />
-				<Route  path="/trainer/information" element={<Trainerinformation />} />
-				<Route  path="/" element={<Createdata />} />
+				<Route  path="/edit/trainer/:trainerid" element={<Trainerinformation />} />
 				<Route path="/choose/report/config" element={<CreatesaveDatasession />} />
 				<Route  path="/view/pdf/report" element={<Viewpdfreport />} />
 				<Route  path="/view/data/report" element={<Viewdatareport />} />
 				<Route  path="/view/live" element={<Viewlive />} />
 				<Route  path="/view/manageform" element={<Viewmanageform />} />
 				<Route  path="/viewcreate" element={<Viewcreate />} />
+				<Route  path="/addclient" element={<Addclient />} />
 				<Route  path="/section/report/assembly" element={<Sectionreportassembly />} />
 				<Route  path="/subscription/management" element={<Subscriptionmanagement />} />
 				<Route  path="/dropdown" element={<Dropdown />} />
@@ -84,6 +90,7 @@ function App(){
 				<Route  path="/list/client" element={<Editclient />} />
 				<Route  path="/edit/trainer" element={<Edittrainer />} />
 				<Route  path="/group/information" element={<Groupinformation />} />
+				<Route  path="/edit/group/information/:groupid" element={<Editgroupinformation />} />
 				<Route  path="/edit/group" element={<Editgroup />} />
 				<Route  path="/createmultisession" element={<Createmultisession />} />
 				<Route  path="/creategroupsessetionreport" element={<Creategroupsessetionreport />} />
@@ -100,11 +107,19 @@ function App(){
 				<Route path="/pdf/sessetion/report/notes" element={<PdfsessetionreportNotes />} />
 				<Route path="/assemblyreport" element={<Assemblyreport />} />
 				<Route path="/upload/homework/asignment" element={<Uploadhomeworkasignment />} />
-				
-				</Route>
+				<Route path="/add/trainer" element={<Addtrainer />} />
+				<Route path="/multilanguage" element={<Multilanguage />} />*/}
+				{/* <Route  path="/" element={<Createdata />} /> */}
+
+				<Route path="/add/list" element={<Chooseemail />} />
+				<Route path="/" element={<List />} />
+				</Route> 
+				<Route path="/subscription/renew/:userid" element={<SubscriptionRenewal />} />
 				
 
-				<Route path="" element={<Privateroutelogin />}>
+
+				{/* <Route  path="/edit/profile" element={<Editprofile />} /> */} 
+			 	<Route path="" element={<Privateroutelogin />}>
 				<Route path="/login" element={<Login />} />
 				</Route>
 				

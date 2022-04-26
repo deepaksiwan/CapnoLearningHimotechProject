@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {useEffect,useRef,useState} from 'react';
 import {Link,useParams, Router} from 'react-router-dom';
+import i18n from "i18next";
+import { useTranslation, initReactI18next } from "react-i18next";
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
@@ -7,26 +9,79 @@ import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 
 const Recording = () => {
+    
+    const { t } = useTranslation();
+    const accessToken = localStorage.getItem('accessToken');
+    const [recordings, setrecordings] = useState([]);
+    const [data, setData] = useState([]);
 
-    const data =[
-        {
-            recordingname: "Test",recordingtype: "Zoom Link", status: "active", action: <p> <a href='#' className="downloadimg"><img src={preveiw} /></a></p>
-        },
+
+    useEffect(() =>{
+        Recordings();
+
+    },[]);
+
+    const Recordings = () =>{
+
+        fetch("https://capno-api.herokuapp.com/api/recording/distributor",
         
-    ]
+               {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+               }
+        
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    console.warn("result", resp);
+                    let _temp = [];
+                    resp.recordings.map((v,i) => {
+                        _temp.push({
+                            recordingname: v.recording_name,
+                            recordingtype: v.recording_type,
+                            status: v.status == 1 ? "Active" : "Inactive",
+                            action : <p> <a href='#' className="downloadimg"><img src={preveiw} /></a></p>
+                        })
+                    })
+                    setData(_temp);
+                   
 
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+
+
+    }
+
+    const logout = () => {
+        localStorage.clear();
+        window.location.reload();
+    }
+
+    
     const columns =[
         {
-            title: "Recording Name", field: "recordingname"
+            title: t('Recording-Name'), field: "recordingname"
         },
         {
-            title: "Recording Type", field: "recordingtype"
+            title: t('Recording-Type'), field: "recordingtype"
         },
         {
-            title: "Status", field: "status"
+            title: t('Status'), field: "status"
         },
         {
-            title: <span className="text-right">Actions</span>, field: "action"
+            title: <span className="text-right">{t('Actions')}</span>, field: "action"
         }
     ]
 
@@ -40,7 +95,7 @@ const Recording = () => {
                </div>
                <div className="right-section">
                 <div className="head-demoreport">
-                    <h3>Recordings</h3>
+                    <h3>{ t('Recordings')}</h3>
                 </div>
                 <div className="wrp-bankform">
                     <div style={{ maxWidth: '100%' }}>

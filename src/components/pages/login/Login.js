@@ -1,10 +1,12 @@
 import { removeData } from 'jquery';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import i18n from "i18next";
+import { useTranslation, initReactI18next } from "react-i18next";
 import user from '../../images/user.png'
 
 const Login = () => {
-
+    const { t } = useTranslation();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [alerts, setalerts] = useState(false)
@@ -34,6 +36,8 @@ const Login = () => {
 
         if (data.status) {
             localStorage.setItem('user_id', data.user_id);
+            localStorage.setItem('associated_practioner', data.associated_practioner);
+            localStorage.setItem('associated_owner', data.associated_owner);
             localStorage.setItem('session_id', data.user_id);
             localStorage.setItem('client_id', data.user_id);
             localStorage.setItem('accessToken', data.accessToken);
@@ -44,7 +48,9 @@ const Login = () => {
             localStorage.setItem('selectedclientInactive', false);
             localStorage.setItem('selectedHomework', false);
             localStorage.setItem('selectedTrainer', null);
+            localStorage.setItem('selectedTrainerGroup', null);
             localStorage.setItem('selectedClient', data.user_id);
+            localStorage.setItem('selectLanguage', null);
             // localStorage.setItem('selectedGroup', false);
             localStorage.setItem('userType', data.user_type);
             if (data.user_type == 1 || data.user_type == 2) {
@@ -74,14 +80,14 @@ const Login = () => {
                 <form onSubmit={loginUser}>
                     <div className="login-content">
                         <div className="login-database">
-                            <p>Login to CapnoTrainer® Cloud Database</p>
+                            <p>{ t('Login-to-CapnoTrainer-Cloud-Database')}</p>
                         </div>
                         <div className="user-img">
                             <img src={user} alt="user-img" />
                         </div>
 
                         <div className="wrp-label">
-                            <label>Email Address</label>
+                            <label>{t('Email-Address')}</label>
                             <input
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}

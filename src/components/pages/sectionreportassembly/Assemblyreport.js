@@ -1,9 +1,14 @@
-import React from "react";
+import React, {useEffect,useState} from "react";
+import {Link,useParams} from 'react-router-dom';
+import i18n from "i18next";
+import { useTranslation, initReactI18next } from "react-i18next";
 import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
 
 const Assemblyreport = () => {
+
+    const { t } = useTranslation();
 
     const Viewlivelist = [
         {
@@ -31,13 +36,8 @@ const Assemblyreport = () => {
                 </div>
                 <div className="right-section">
                     <div className="assembly-content">
-                        <h3>Session Assembly Reports</h3>
-                        <p>
-                            You may choose to assemble a SESSION REPORT consisting of any or all of the OPTIONS listed below.
-                          Check off the options you wish to include in the Report by clicking on the box in front of each option.
-                          These options will appear in the Report in the order shown below. If you do not place a check mark 
-                          in the box in front of an option, it will not appear in the Report. You may choose to write additional
-                          notes in the Report as follows:</p>
+                        <h3>{ t('Session-Assembly-Reports')}</h3>
+                        <p> {t('assembly-report-p')}</p>
                     </div>
                 </div>
             </div>
