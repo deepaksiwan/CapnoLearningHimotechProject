@@ -57,6 +57,7 @@ import Multilanguage from './components/component/Multilanguage';
 import SubscriptionRenewal from './components/pages/subscriptionmanagement/SubscriptionRenewal';
 import Chooseemail from './components/pages/choose/Chooseemail';
 import List from './components/pages/list/List';
+import SubscriptionRenewalGroup from './components/pages/subscriptionmanagement/SubscriptionRenewalGroup';
 
 function App(){
 	return(
@@ -115,6 +116,7 @@ function App(){
 				<Route path="/" element={<List />} />
 				</Route> 
 				<Route path="/subscription/renew/:userid" element={<SubscriptionRenewal />} />
+				<Route path="/subscription/renew/group/:userid" element={<SubscriptionRenewalGroup />} />
 				
 
 

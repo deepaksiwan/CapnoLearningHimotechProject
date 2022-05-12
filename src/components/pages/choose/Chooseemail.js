@@ -28,8 +28,21 @@ const Chooseemail = (props) => {
 
 
     const showList = ()=>{
+        
+        // alert(currentEmail);
+        if(currentEmail == "" || currentEmail == null){
+            alert("Please enter/choose an email.");
+            return false;
+        }
         let _temp = emailList ; 
+        if(_temp.includes('all')){
+            alert("You have selected all emails by default.");
+            return false;
+        }
         setAddlist(false);
+
+
+        
 
         if(!_temp.includes(currentEmail)){
 
@@ -55,12 +68,19 @@ const Chooseemail = (props) => {
     }
 
     const getList = () => {
-        setDomainFetched(true)
         getEmails() ; 
     }
 
     const createGroup = () => {
         let _data  ;
+        if(emailList.length < 2){
+            alert("Please choose/add at least one member.")
+            return false;
+        }
+        if(price == 0 || price == "" || price == null){
+            alert("Please enter a valid number greater than 0.")
+            return false;
+        }
         let primaryEmail = emailList[0] ; 
         let _emailString = emailList.shift() ;
          _emailString =  emailList.join(",") ; 
@@ -92,7 +112,7 @@ const Chooseemail = (props) => {
                 setCurrentEmail(null);
                 setPrice(null);
                 setmessageHead("Thank you!")
-                setmessage("Emails have been added to group. You will now be redirected to list page.") ;
+                setmessage("Emails have been added to group. You will now be redirected to list page 10s.") ;
                 messageToggle();
                 setTimeout(() => {
                     window.location.replace('/')
@@ -117,6 +137,10 @@ const Chooseemail = (props) => {
     }
 
     const getEmails = () => {
+        if(domain == null || domain == ""){
+            alert("Please enter a valid domain.");
+            return false;
+        }
         fetch(API_URL+"/emails/" + domain,
             {
                 method: 'GET',
@@ -130,6 +154,8 @@ const Chooseemail = (props) => {
                 const resp = await response.json() ; 
                 if(resp.success){
                     setEmails(resp.data);
+        setDomainFetched(true)
+
                 }
                 else{
                 alert("no emails found")        
@@ -260,7 +286,7 @@ const Chooseemail = (props) => {
                                 {
                                     emailList.length > 0 && emailList.map((v,i) => {
                                         return (
-                                            <li>{v} {i == 0 ? " - Primary Email" : null} </li>
+                                            <li>{v == "all" ? "All emails by default" : v} {i == 0 ? " - Primary Email" : null} </li>
 
                                         )
                                     }) 

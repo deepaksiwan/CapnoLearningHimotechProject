@@ -20,6 +20,51 @@ const List = () => {
     const EditToggleModal = () => setEditModal(!editModal);
     const [emailList, setEmailList] = useState([]);
 
+  
+
+
+
+    
+    const getEmailsList = (_domain) => {
+        fetch(API_URL+"/get/group/list/"+_domain,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then(async (response) => {
+            if (response.status == 200 ) {
+                const resp = await response.json() ; 
+                if(resp.success){
+                    let _data = {} ;
+                    let _list = [] ; 
+                     resp.data.map((v,i) => {
+                        _list.push(v.email);
+                    })
+                   
+
+                    setEmailList(_list)
+                    EditToggleModal()
+                    // console.log(_data)
+                }
+                else{
+                // alert("no emails found")        
+                }
+            
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+    }
+
 
     const showList = (_list) => {
         // alert(_list);
@@ -50,9 +95,8 @@ const List = () => {
                         let _emails = v.email ; 
                         let _emailCount = v.email.split(',');
                         _emailCount = _emailCount.length ; 
-                        _data['action'] = (v.email == "all"  ? null : <p>
-                             <a onClick={() => showList(_emails)} className="downloadimg"><img src={listicon} /></a>
-                             </p>) ;
+                        let _domain  = v.primaryEmail.split("@") ;
+                        _data['action'] =  _emails == "all" ? <a onClick={() => getEmailsList(_domain[1])} className="downloadimg"><img src={listicon} /></a> : <a onClick={() => showList(_emails)} className="downloadimg"><img src={listicon} /></a>  ;
                         _data['email'] = v.email == "all" ? "All emails by default" : _emailCount ; 
 
                         _dataAray.push(_data) ; 
@@ -142,7 +186,7 @@ const List = () => {
                </div>
              </div>
              <Modal isOpen={editModal} toggle={EditToggleModal} className="connect-box" centered={true}>
-                    <ModalHeader toggle={EditToggleModal}><span className="ml-1 roititle font-weight-bold">Members</span></ModalHeader>
+                    <ModalHeader toggle={EditToggleModal}><span className="ml-1 roititle font-weight-bold">Members ({emailList.length})</span></ModalHeader>
                     <ModalBody>
                         <div className="modal-p">
                             {/* <h4>Edit</h4> */}
