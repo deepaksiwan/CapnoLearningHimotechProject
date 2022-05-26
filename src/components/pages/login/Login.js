@@ -2,6 +2,7 @@ import { removeData } from 'jquery';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import i18n from "i18next";
+import { API_URL } from '../../../config';
 import { useTranslation, initReactI18next } from "react-i18next";
 import user from '../../images/user.png'
 
@@ -18,7 +19,7 @@ const Login = () => {
         setalerts(false)
         setLoader(true)
 
-        const response = await fetch('https://capno-api.herokuapp.com/api/login', {
+        const response = await fetch(API_URL+'/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -45,6 +45,9 @@ const Sidebar = () => {
     // {
     //   links: "/subscription/management", tabDisplay: t('Subscription-Management'), "tabimg": sidebarmenu8
     // },
+    {
+      links: "/subscribe/user", tabDisplay: t('Subscribed Users'), "tabimg": sidebarmenu8
+    },
 
   {
       links: "/", tabDisplay: t('Group-Subscription-Management'), "tabimg": sidebarmenu8

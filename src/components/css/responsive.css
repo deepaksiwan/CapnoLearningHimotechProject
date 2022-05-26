@@ -209,6 +209,13 @@
     
 }
 @media(max-width: 767px){
+    .expridate-filter > select {
+        font-size: 14px;
+        margin-top: 20px;
+    }
+    .add-btn-wrp{
+        display: inherit;
+    }
     .radio-btn > input[type=radio] {
         width: 13px;
         height: 13px;

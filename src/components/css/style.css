@@ -1916,3 +1916,15 @@ sub {
   background-color: #800080;
 }
 /* list page css closed here */
+
+
+.expridate-filter > select{
+  outline: none;
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 4px;
+  color: rgba(0, 0, 0, 0.87);
+  border: 2px solid #c867c6;
+  box-shadow: 1px 1px 8px 1px #00000052! important;
+  font-size: 15px;
+}
