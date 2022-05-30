@@ -18,40 +18,40 @@ const Sidebar = () => {
   const { t } = useTranslation();
 
   const tabArray = [
-    // {
-    //   links: "/", tabDisplay: t('Create-Data-Report'), "tabimg": sidebarmenu1
-    // },
-    // {
-    //   links: "/view/data/report", tabDisplay: t('View-&-Edit-Data-Report'), "tabimg": sidebarmenu2
-    // },
-    // {
-    //   links: "/view/pdf/report", tabDisplay: t('View-PDF-Report'), "tabimg": sidebarmenu3
-    // },
-    // {
-    //   links: "/view/live", tabDisplay: t('View-Live-Session-Info'), "tabimg": sidebarmenu4
-    // },
-    // {
-    //   links: "/view/manageform", tabDisplay: t('View/Manage-Forms'), "tabimg": sidebarmenu1
-    // },
-    // {
-    //   links: "/viewcreate", tabDisplay: t('View-Create-Edit-Profile'), "tabimg": sidebarmenu5
-    // },
-    // {
-    //   links: "/section/report/assembly", tabDisplay: t('Session-Report-Assembly'), "tabimg": sidebarmenu6
-    // },
-    // {
-    //   links: "/recording", tabDisplay: t('Recording-by-Distributors'), "tabimg": sidebarmenu7
-    // },
-    // {
-    //   links: "/subscription/management", tabDisplay: t('Subscription-Management'), "tabimg": sidebarmenu8
-    // },
     {
-      links: "/subscribe/user", tabDisplay: t('Subscribed Users'), "tabimg": sidebarmenu8
+      links: "/", tabDisplay: t('Create-Data-Report'), "tabimg": sidebarmenu1
     },
+    {
+      links: "/view/data/report", tabDisplay: t('View-&-Edit-Data-Report'), "tabimg": sidebarmenu2
+    },
+    {
+      links: "/view/pdf/report", tabDisplay: t('View-PDF-Report'), "tabimg": sidebarmenu3
+    },
+    {
+      links: "/view/live", tabDisplay: t('View-Live-Session-Info'), "tabimg": sidebarmenu4
+    },
+    {
+      links: "/view/manageform", tabDisplay: t('View/Manage-Forms'), "tabimg": sidebarmenu1
+    },
+    {
+      links: "/viewcreate", tabDisplay: t('View-Create-Edit-Profile'), "tabimg": sidebarmenu5
+    },
+    {
+      links: "/section/report/assembly", tabDisplay: t('Session-Report-Assembly'), "tabimg": sidebarmenu6
+    },
+    {
+      links: "/recording", tabDisplay: t('Recording-by-Distributors'), "tabimg": sidebarmenu7
+    },
+    {
+      links: "/subscription/management", tabDisplay: t('Subscription-Management'), "tabimg": sidebarmenu8
+    },
+  //   {
+  //     links: "/subscribe/user", tabDisplay: t('Subscribed Users'), "tabimg": sidebarmenu8
+  //   },
 
-  {
-      links: "/", tabDisplay: t('Group-Subscription-Management'), "tabimg": sidebarmenu8
-    },
+  // {
+  //     links: "/", tabDisplay: t('Group-Subscription-Management'), "tabimg": sidebarmenu8
+  //   },
 
   ];
 

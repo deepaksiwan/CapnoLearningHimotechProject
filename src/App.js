@@ -65,7 +65,7 @@ function App(){
 		<BrowserRouter>			
 			<Routes>
 				 <Route path="" element={<Privateroute />}>
-			{/*	<Route  path="/signup" element={<Signup />} />
+				<Route  path="/signup" element={<Signup />} />
 				<Route  path="/configure" element={<Configure />} />
 				<Route  path="/dashboard" element={<Dashboard />} />
 				<Route  path="/demodatareport" element={<Demodatareport />} />
@@ -110,13 +110,13 @@ function App(){
 				<Route path="/assemblyreport" element={<Assemblyreport />} />
 				<Route path="/upload/homework/asignment" element={<Uploadhomeworkasignment />} />
 				<Route path="/add/trainer" element={<Addtrainer />} />
-				<Route path="/multilanguage" element={<Multilanguage />} />*/}
-				{/* <Route  path="/" element={<Createdata />} /> */}
-
+				<Route path="/multilanguage" element={<Multilanguage />} />
+			  <Route  path="/" element={<Createdata />} />
+{/* 
 				<Route path="/add/list" element={<Chooseemail />} />
 				<Route path="/" element={<List />} />
 				<Route path="/subscribe/user" element={<SubscribedUsers />} />
-				
+				 */}
 				</Route> 
 				<Route path="/subscription/renew/:userid" element={<SubscriptionRenewal />} />
 				<Route path="/subscription/renew/group/:userid" element={<SubscriptionRenewalGroup />} />
