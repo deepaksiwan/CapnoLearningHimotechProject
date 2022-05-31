@@ -1,5 +1,6 @@
 import React, { Component, useEffect, useRef, useState } from 'react';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
+import { Radio } from 'antd';
 
 import { Link, useParams, Router } from 'react-router-dom';
 import Plot from 'react-plotly.js';
@@ -11,11 +12,12 @@ import InputColor from 'react-input-color';
 import { trim } from 'jquery';
 
 const Chart = (props) => {
+    console.log("props",props)
     const session = localStorage.getItem('selectedSession');
     const [xAxis, setXaxis] = useState([]);
-    const [xAxisMin, setXaxisMin] = useState(props.xmin);
+    const [xAxisMin, setXaxisMin] = useState(props.xmin); 
     const [xAxisMax, setXaxisMax] = useState(props.xmax);
-    const [yAxisMin, setYaxisMin] = useState(props.ymin);
+    const [yAxisMin, setYaxisMin] = useState(props.ymin);  
     const [yAxisMax, setYaxisMax] = useState(props.ymax);
     const unit = useRef(0);
     const [color, setColor] = useState(props.color);
@@ -23,7 +25,8 @@ const Chart = (props) => {
     const [type, setType] = useState(props.type);
     const [yAxis, setYaxis] = useState([]);
     const accessToken = localStorage.getItem('accessToken');
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(4); 
+    const [thresholdvalue ,setThresholdvalue] = useState(4)
     const [point, setPoint] = useState(25);
  
     const [taskMarkers,setTaskMarkers] = useState([]) ; 
@@ -45,6 +48,23 @@ const Chart = (props) => {
     const [annotationtModal, setannotationtModal] = useState(false);
     const toggleannotationtModal = () => setannotationtModal(!annotationtModal);
     const [play, setPlay] = useState(false);
+    const [modal,setModal] = useState({
+        range:'',
+        units:'mmHg',
+        annotation: 1,
+        grid: 1,
+        invert: 2,
+        position: 1,
+        showGrid : true
+    })
+    const [signalModalData,setSignalModalData] = useState({
+        signalType:2,
+        disabledType : false,
+        signal : 1
+    })
+    const [signalLinetype , setSignalLinetype] = useState("")
+    const [hideThresholdLine,setHideThresholdLine] = useState(1)
+
   
     let playTimer ; 
 
@@ -266,7 +286,9 @@ const Chart = (props) => {
                                             fillcolor: colorCodes[v[3]] ,
                                             opacity: 0.5,
                                             line: {
-                                                width: 1
+                                                color: 'rgb(255, 0, 0)',
+                                                width: 3,
+                                                dash:'dot'
                                             },
                                             name: v.z,
                                             
@@ -589,6 +611,8 @@ const moveGraph = () => {
       
  
 }
+
+console.log("xAxis",xAxisMax)
     
 const handlePlay = () => {
   
@@ -608,20 +632,140 @@ const handleUnitChange = () => {
     console.log(unit);
 }
 
+const handleAnnotations = e => {
+    let {value = "" } = e.target || {}
+    setModal(prevState=>({
+        ...prevState,
+        annotation : value
+    }))
+}
 
+const handleGridLine = e => {
+    let {value = "" } = e.target || {}
+    if(value == 1){
+        setModal(prevState=>({
+            ...prevState,
+            showGrid : true,
+            grid : value
+        }))
+    }else{
+        setModal(prevState=>({
+            ...prevState,
+            showGrid : false,
+            grid : value
+        }))
+    }
+    
+}
+
+const handleInvert = e => {
+    let {value = "" } = e.target || {}
+    if(value===1){
+        setYaxisMax(yAxisMin)
+        setYaxisMin(yAxisMax)
+    }else{
+        setYaxisMin(yAxisMax)
+        setYaxisMax(yAxisMin)
+    } 
+    setModal(prevState=>({
+        ...prevState,
+        invert : value
+    }))    
+}
+
+const handleYaxisPosition = e => {
+    let {value = "" } = e.target || {}   
+    if(value == 1){
+        setXaxisMax(xAxisMin)
+        setXaxisMin(xAxisMax)
+    }else{
+        setXaxisMin(xAxisMax)
+        setXaxisMax(xAxisMin)
+    } 
+
+    setModal(prevState=>({
+        ...prevState,
+        position : value
+    })) 
+}
+
+const xAxisRange = (event) =>{
+    let {value = ""} = event.target || {}
+    let _deviation = value*60000
+    let xAxisMilisecond = new Date(xAxisMin).getTime() + _deviation
+    setXaxisMax(new Date(xAxisMilisecond))
+}
+
+const handleSignalType = e => {
+    let {value = ""} = e.target || {}
+    if(value == 2){
+        setSignalModalData(prevState=>({
+            ...prevState,
+            disabledType : false,
+            signalType : value
+        }))   
+        setType("bar")
+    }else{
+        setSignalModalData(prevState=>({
+            ...prevState,
+            disabledType : true,
+            signalType : value
+        }))  
+        setType("lines")
+    }
+}
+const handleLine = (e) => {
+    let {value = ""} = e.target || {}
+
+    if(value == 1){
+        setSignalModalData(prevState=>({
+            ...prevState,
+            signal : value
+        })) 
+        setSignalLinetype("solid")
+    }else if (value == 2){
+        setSignalModalData(prevState=>({
+            ...prevState,
+            signal : value
+        }))
+        setSignalLinetype("dot")
+    }else if(value == 3){
+        setSignalModalData(prevState=>({
+            ...prevState,
+            signal : value
+        }))
+        setSignalLinetype("dashdot")
+    }
+}
+ 
+
+const hideThreshold = event => {
+    let {value = "" } = event.target || {}
+    setHideThresholdLine(value)
+}
+
+  
     return (
         <div>
            
-            {
-                
+            {   
                 xAxis.length > 0 && yAxis.length > 0 &&
                 <>
                 <ul className="top-filter">
                     <li><a  onClick={toggleGraphModal}><i class="fa fa-line-chart" aria-hidden="true"></i></a></li>
                     <li><a   onClick={toggleSignalModal}><i class="fa fa-signal" aria-hidden="true"></i></a></li>
                     <li><a   onClick={toggletrehSoldModal}><i class="fa fa-area-chart" aria-hidden="true"></i></a></li>
+                 <li><a onClick={zoomIn}><i class="fa fa-search-plus"></i></a></li>
+                    <li><a onClick={zoomOut}><i class="fa fa-search-minus"></i></a></li>
+                    <li><a onClick={moveForward}><i class="fa fa-arrow-right"></i></a></li>
+                    <li><a onClick={moveBackward}><i class="fa fa-arrow-left"></i></a></li>
+                    <li><a onClick={handlePlay}><i class="fa fa-play"></i></a></li>
+                    <li><a onClick={handlePause}><i class="fa fa-pause"></i></a></li>
+                    <li><a onClick={reset}><i class="fa fa-undo"></i></a></li>
+                    {/* <li><a  onClick={toggleunitModal}><i class="fa fa-thermometer-full" aria-hidden="true"></i></a></li>
+                    <li><a  onClick={toggleannotationtModal}><i class="fa fa-comment"></i></a></li> */}
                 </ul>
-
+{/* 
                 <ul className="right-filter">
                     <li><a onClick={zoomIn}><i class="fa fa-search-plus"></i></a></li>
                     <li><a onClick={zoomOut}><i class="fa fa-search-minus"></i></a></li>
@@ -632,7 +776,7 @@ const handleUnitChange = () => {
                     <li><a onClick={reset}><i class="fa fa-undo"></i></a></li>
                     <li><a  onClick={toggleunitModal}><i class="fa fa-thermometer-full" aria-hidden="true"></i></a></li>
                     <li><a  onClick={toggleannotationtModal}><i class="fa fa-comment"></i></a></li>
-                </ul>
+                </ul> */}
 
                 {/* unit modal */}
                
@@ -642,46 +786,44 @@ const handleUnitChange = () => {
                 //  onUpdate={handleRelayout}
                  onInitialized={handleInitial}
                     data={[
-                        {
-                            
+                        {  
                             x: xAxis,
                             y: yAxis,
                             marker: { color:  color },
-                            type:  type
-
+                            type:  type,
+                            line: {
+                                dash: signalLinetype,
+                                width: value
+                            }  
                         },
-                        // { type: (props.type)  },
-
                     ]}
                     layout={{
                         revision : 0,
                         yaxis: {rangemode: 'tozero'},
                         xaxis: {rangemode: 'tozero'},
-				hovermode: true,
-				dragmode: true, 
-                shapes: taskMarkers,
-                xaxis :{
-                    type: "date",
-					tickformat: "%M:%S",
-					ticktext: ["-", "tick", "tick", "-"],
-                    range: [
-						 xAxisMin,
-                         xAxisMax ,
-					],
-					ticks: "outside",
-					tickcolor: "#000",
-					zeroline: false,
-                    
-
-                },
-                yaxis : {
-                    range: [
-                        yAxisMin,
-                        yAxisMax ,
-					],
-                    fixedrange: true
-                },
-                annotations:textAnnotations,
+                        hovermode: true,
+                        dragmode: true, 
+                        shapes: hideThresholdLine === "2" && taskMarkers,
+                        xaxis :{
+                            type: "date",
+                            tickformat: "%M:%S",
+                            ticktext: ["-", "tick", "tick", "-"],
+                            range: [
+                                xAxisMin,
+                                xAxisMax ,
+                            ],
+                            ticks: "outside",
+                            tickcolor: "#000",
+                            zeroline: false, 
+                            // visible : false
+                        },
+                        yaxis : {
+                            range: modal.units === "mmHg" ? [yAxisMin, yAxisMax] : [yAxisMin,yAxisMax*0.13],
+                            fixedrange: false,
+                            showgrid: modal.showGrid,
+                            side : modal.position == "1" ? "left" : "right"
+                        },
+                        annotations: modal.annotation === 1 ? textAnnotations : [],
                 // autosize: true,
                         margin: {
                             l: 30,
@@ -768,7 +910,7 @@ const handleUnitChange = () => {
                                         <p>Name</p>
                                     </div>
                                     <div className="range-c-child2">
-                                        <div className="raw-pcos"><p>Threshold</p></div>
+                                        <div className="raw-pcos"><p>{props && props.signal}</p></div>
                                     </div>
                                 </div>
                             </li>
@@ -778,7 +920,6 @@ const handleUnitChange = () => {
                                         <p>Value</p>
                                     </div>
                                     <div className="range-c-child2">
-
                                         <input placeholder='50' type="text" />
                                     </div>
 
@@ -790,7 +931,12 @@ const handleUnitChange = () => {
                                         <p>Hide Threshold</p>
                                     </div>
                                     <div className="range-c-child2">
-                                        <p><input type="radio" id="yes" name="selector" /><label for="yes">Yes</label> <input type="radio" className="mrl-input" id="no" name="selector" /><label for="no">No</label></p>
+                                        <p>
+                                            <input type="radio" id="yes" name="selector" value="1" onChange={hideThreshold}/>
+                                            <label for="yes">Yes</label> 
+                                            <input type="radio" className="mrl-input" id="no" name="selector" value="2" onChange={hideThreshold}/>
+                                            <label for="no">No</label>
+                                        </p>
                                     </div>
                                 </div>
                             </li>
@@ -804,8 +950,10 @@ const handleUnitChange = () => {
                                     </div>
                                     <div className="range-c-child2">
                                         <RangeSlider
-                                            value={value}
-                                            onChange={changeEvent => setValue(changeEvent.target.value)}
+                                            min={1}
+                                            max={10}
+                                            value={thresholdvalue}
+                                            onChange={changeEvent => setThresholdvalue(changeEvent.target.value)}
                                         />
                                     </div>
                                 </div>
@@ -857,12 +1005,12 @@ const handleUnitChange = () => {
                                         <p>Name</p>
                                     </div>
                                     <div className="range-c-child2">
-                                        <div className="raw-pcos"><p>Raw PCO2</p></div>
+                                        <div className="raw-pcos"><p>{props && props.signal}</p></div>
                                     </div>
                                 </div>
                             </li>
 
-                            <li>
+                            {/* <li>
                                 <div className="range-content-wrp">
                                     <div className="range-c-child1">
                                         <p>Hide Signal</p>
@@ -881,43 +1029,60 @@ const handleUnitChange = () => {
                                         <p><input type="radio" id="yes" name="selector" /><label for="yes">Yes</label> <input type="radio" className="mrl-input" id="no" name="selector" /><label for="no">No</label></p>
                                     </div>
                                 </div>
-                            </li>
+                            </li> */}
                             <li>
-                                <div className="range-content-wrp">
-                                    <div className="range-c-child1">
-                                        <p>Signal Type</p>
-                                    </div>
-                                    <div className="range-c-child2">
-                                        <p><input type="radio" id="yes" name="selector" /><label for="yes">Sample Points</label> <input type="radio" className="mrl-input" id="no" name="selector" /><label for="no">Line</label> <input type="radio" className="mrl-input" id="no" name="selector" /><label for="no">Line & Simple Points</label></p>
-                                    </div>
-                                </div>
+                                <Row justify="space-between">
+                                    <Col lg={6} xl={6}>
+                                        <span>Signal Type</span>
+                                    </Col>
+                                    <Col lg={6} xl={6}>
+                                        <Row style={{display : "flex",justifyContent:"center",alignItems:"center"}}>
+                                            <Radio.Group
+                                                onChange={handleSignalType}
+                                                value={signalModalData.signalType}
+                                            >
+                                                <Radio value={1}>Line</Radio>
+                                                <Radio style={{marginLeft : "20px"}} value={2}>Bar</Radio>
+                                            </Radio.Group>
+                                        </Row>
+                                    </Col>
+                                </Row>
                             </li>
-                            <li>
-                                <div className="range-content-wrp">
-                                    <div className="range-c-child1">
-                                        <p>Type of Line</p>
-                                    </div>
-                                    <div className="range-c-child2">
-
-                                        <input placeholder='Solid Line' type="number" />
-                                    </div>
-
-                                </div>
-                            </li>
-                            <li>
+                            {signalModalData.disabledType && <li>
+                                <Row justify="space-between">
+                                    <Col lg={6} xl={6}>
+                                        <span>Signal Lines Type</span>
+                                    </Col>
+                                    <Col lg={6} xl={6}>
+                                        <Row style={{display : "flex",justifyContent:"center",alignItems:"center"}}>
+                                            <Radio.Group
+                                                onChange={handleLine}
+                                                value={signalModalData.signal}
+                                            >
+                                                <Radio value={1} style={{marginLeft : "-5px"}}>Solid </Radio>
+                                                <Radio value={2} style={{marginLeft : "20px"}}>Dotted </Radio>
+                                                <Radio value={3} style={{marginLeft : "10px"}}>Dashed </Radio>
+                                            </Radio.Group>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </li>}
+                            {signalModalData.disabledType && <li>
                                 <div className="range-content-wrp">
                                     <div className="range-c-child1">
                                         <p>Line Width</p>
                                     </div>
                                     <div className="range-c-child2">
                                         <RangeSlider
+                                            min={1}
+                                            max={10}
                                             value={value}
                                             onChange={changeEvent => setValue(changeEvent.target.value)}
                                         />
                                     </div>
                                 </div>
-                            </li>
-                            <li>
+                            </li>}         
+                            {/* {signalModalData.disabledType && <li>
                                 <div className="range-content-wrp">
                                     <div className="range-c-child1">
                                         <p>Sample Point Size</p>
@@ -929,7 +1094,7 @@ const handleUnitChange = () => {
                                         />
                                     </div>
                                 </div>
-                            </li>
+                            </li>}    */}
                             <li>
                                 <div className="range-content-wrp">
                                     <div className="range-c-child1">
@@ -960,66 +1125,122 @@ const handleUnitChange = () => {
                             <li>
                                 <div className="range-content-wrp">
                                     <div className="range-c-child1">
-                                        <p>X -axis Range</p>
+                                        <span>X -axis Range</span>
                                     </div>
                                     <div className="range-c-child2">
-                                        <input placeholder='1 Minute' type="number" />
+                                        <select 
+                                            style={{width:"100%"}}
+                                            onChange={e => xAxisRange(e)}
+                                            
+                                        >
+                                            <option value="1">1 Minute</option>
+                                            <option value="2">2 Minute</option>
+                                            <option value="5">5 Minute</option>
+                                            <option value="10">10 Minute</option>
+                                        </select>
                                     </div>
                                 </div>
                             </li>
                             <li>
                                 <div className="range-content-wrp">
                                     <div className="range-c-child1">
-                                        <p>Units</p>
+                                        <span>Units</span>
                                     </div>
                                     <div className="range-c-child2">
-                                        <input placeholder='mmHg' type="number" />
+                                        <select
+                                        style={{width:"100%"}}
+                                        onChange={(e)=>{
+                                           let {value=""}=e.target||{}
+                                                setModal(prevState =>({
+                                                  ...prevState,
+                                                    units:value 
+                                                }))
+
+                                        }}
+                                        value={modal.units}
+                                        >
+
+                                            <option value="mmHg">mmHg</option>
+                                            <option value="kPa">kPa</option>
+                                        </select>
                                     </div>
+
                                 </div>
+                            </li>
+                            <li>
+                                <Row justify="space-between">
+                                    <Col lg={6} xl={6}>
+                                        <span>Show Annotations</span>
+                                    </Col>
+                                    <Col lg={6} xl={6}>
+                                        <Row style={{display : "flex",justifyContent:"center",alignItems:"center"}}>
+                                            <Radio.Group
+                                                onChange={handleAnnotations}
+                                                value={modal.annotation}
+                                            >
+                                                <Radio value={1}>yes</Radio>
+                                                <Radio style={{marginLeft : "20px"}} value={2}>No</Radio>
+                                            </Radio.Group>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </li> 
+                            <li>
+                                 <Row justify="space-between">
+                                    <Col lg={6} xl={6}>
+                                        <span>Show Grid Lines</span>
+                                    </Col>
+                                    <Col lg={6} xl={6}>
+                                        <Row style={{display : "flex",justifyContent:"center",alignItems:"center"}}>
+                                            <Radio.Group 
+                                                onChange={handleGridLine}
+                                                value={modal.grid}
+                                            >
+                                                <Radio value={1}>yes</Radio>
+                                                <Radio style={{marginLeft : "20px"}} value={2}>No</Radio>
+                                            </Radio.Group>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </li>
+                            <li>
+                                <Row justify="space-between">
+                                    <Col lg={6} xl={6}>
+                                        <span>Invert Y-Axis</span>
+                                    </Col> 
+                                    <Col lg={6} xl={6}>
+                                        <Row style={{display : "flex",justifyContent:"center",alignItems:"center"}}>
+                                            <Radio.Group
+                                                onChange={handleInvert}
+                                                value={modal.invert}
+                    
+                                            >
+                                                <Radio value={1}>yes</Radio>
+                                                <Radio style={{marginLeft : "20px"}} value={2}>No</Radio>
+                                            </Radio.Group>
+                                        </Row>
+                                    </Col>
+                                </Row>
                             </li>
                             <li>
                                 <div className="range-content-wrp">
                                     <div className="range-c-child1">
-                                        <p>Show Annotations</p>
-                                    </div>
-                                    <div className="range-c-child2">
-                                        <p><input type="radio" id="yes" name="selector" /><label for="yes">Yes</label> <input type="radio" className="mrl-input" id="no" name="selector" /><label for="no">No</label></p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="range-content-wrp">
-                                    <div className="range-c-child1">
-                                        <p>Show Grid Lines</p>
-                                    </div>
-                                    <div className="range-c-child2">
-                                        <p><input type="radio" id="yes" name="selector" /><label for="yes">Yes</label> <input type="radio" className="mrl-input" id="no" name="selector" /><label for="no">No</label></p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="range-content-wrp">
-                                    <div className="range-c-child1">
-                                        <p>Invert Y-Axis</p>
-                                    </div>
-                                    <div className="range-c-child2">
-                                        <p><input type="radio" id="yes" name="selector" /><label for="yes">Yes</label> <input type="radio" className="mrl-input" id="no" name="selector" /><label for="no">No</label></p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="range-content-wrp">
-                                    <div className="range-c-child1">
-                                        <p>Min/Max Y-Axis</p>
+                                        <span>Min/Max Y-Axis</span>
                                     </div>
                                     <div className="range-c-child2">
                                         <div className="wrp-axis">
                                             <div className='min-axis'>
-                                                <input placeholder='0' />
+                                                <input placeholder='0' onChange={(e) => {
+                                                    let {value = ""} = e.target
+                                                    setYaxisMin(value)
+                                                }}/>
                                                 <span>Min</span>
                                             </div>
                                             <div className='max-axis'>
-                                                <input placeholder='0' />
+                                                <input placeholder='0' onChange={(e) => {
+                                                    let {value = ""} = e.target
+                                                    setYaxisMax(value)
+                                                }}/>
                                                 <span>Max</span>
                                             </div>
                                         </div>
@@ -1027,19 +1248,30 @@ const handleUnitChange = () => {
                                 </div>
                             </li>
                             <li>
-                                <div className="range-content-wrp">
-                                    <div className="range-c-child1">
-                                        <p>Y-Axis Position</p>
-                                    </div>
-                                    <div className="range-c-child2">
-                                        <p><input type="radio" id="yes" name="selector" /><label for="yes">Left</label> <input type="radio" className="mrl-input" id="no" name="selector" /><label for="no">Right</label></p>
-                                    </div>
-                                </div>
+                                <Row justify="space-between">
+                                    <Col lg={6} xl={6}>
+                                        <span>Y-Axis Position</span>
+                                    </Col>
+                                    <Col lg={6} xl={6}>
+                                        <Row style={{display : "flex",justifyContent:"center",alignItems:"center"}}>
+                                            <Radio.Group
+                                                onChange={handleYaxisPosition}
+                                                value={modal.position}
+                                            >
+                                                <Radio value={1}>Left</Radio>
+                                                <Radio style={{marginLeft : "20px"}} value={2}>Right</Radio>
+                                            </Radio.Group>
+                                        </Row>
+                                    </Col>
+                                </Row>
                             </li>
                         </ul>
                     </ModalBody>
+                </Modal> 
 
-                </Modal>
+                {/* <Modal>
+                    
+                </Modal> */}
                 </>
             }
             {
