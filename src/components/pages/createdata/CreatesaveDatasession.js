@@ -6,6 +6,8 @@ import Header from '../../component/Header';
 
 const CreatesaveDatasession = () => {
     const accessToken = localStorage.getItem('accessToken');
+    const session = localStorage.getItem('selectedSession');
+ 
     const [sessions, setsessions] = useState([]);
 
     useEffect(() => {
@@ -63,7 +65,7 @@ const CreatesaveDatasession = () => {
                             sessions.map((sessions) =>
                                 {
                                     return(
-                                        <li><a href={"/create/report/" + sessions.id}>{sessions.name}</a></li>
+                                        <li><a href={"/create/report/" + sessions.id + "/" + session + "/all" } >{sessions.name}</a></li>
                                     )
                                 }
                             )

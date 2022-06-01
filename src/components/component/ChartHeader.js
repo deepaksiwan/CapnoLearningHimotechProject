@@ -6,10 +6,11 @@ const ChartHeader = (props) => {
     const [sessions, setsessions] = useState([]);
     const sessionid = localStorage.getItem('selectedSession');
     const [records, setrecords] = useState([]);
-    const [session, setsession] = useState([]);
-     const reportconfig = useRef();
+    const [sessioninfo, setsessioninfo] = useState([]);
+    const reportconfig = useRef();
+    const { config, session , record } = useParams();
      
-    const {config} = useParams();
+ 
      
 
     useEffect(() => {
@@ -89,7 +90,7 @@ const ChartHeader = (props) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     console.warn("result", resp);
-                    setsession(resp.session)
+                    setsessioninfo(resp.session)
 
                 });
             }
@@ -164,13 +165,13 @@ const ChartHeader = (props) => {
                             </select>
                         </div>
                         <div className="select-row">
-                            <select>
-                                <option>All Records</option>
+                            <select value={record} onChange={(e) => window.location.href = e.target.value}>
+                                <option value={'all'}   >All Records</option>
 
                                 {
                                     records.map((records) => {
                                         return (
-                                            <option>{records.name}</option>
+                                            <option value={records.number}>{records.name}</option>
                                         )
                                     })
                                 }
@@ -181,20 +182,20 @@ const ChartHeader = (props) => {
                 </div>
                 <div className="chart-header-c3">
                     <ul className="username-list">
-                        {session.map((clientName)=>{
+                        {sessioninfo.map((clientName)=>{
                             return(
                                 <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i>{clientName.client_firstname}{clientName.client_lastname}</a></li>
                             )
                         }
                         )}
-                         {session.map((trainerName)=>{
+                         {sessioninfo.map((trainerName)=>{
                             return(
                                 <li><a href="#"><i class="fa fa-user-md" aria-hidden="true"></i> {trainerName.trainer_firstname} {trainerName.trainer_lastname}</a></li>
                             )
                         }
                         )}
                        
-                       {session.map((sessionName)=>{
+                       {sessioninfo.map((sessionName)=>{
                             return(
                                 <li><a href="#"><i class="fa fa-calendar" aria-hidden="true"></i> {sessionName.name}</a></li>
                             )

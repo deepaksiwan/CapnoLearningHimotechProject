@@ -1574,6 +1574,12 @@ box-shadow: 1px 1px 8px 1px #00000052;
   background-color: #ccc !important;
     cursor: no-drop!important;
 }
+.colorsqr{
+  height: 15px;
+  width: 15px;
+  border-radius: 5px;
+  margin-top: 4px;
+}
 .chart-w{
     border: 2px solid #ce67cc;
     border-radius: 4px;
@@ -1584,6 +1590,26 @@ box-shadow: 1px 1px 8px 1px #00000052;
 .chart-w > div{
   height: 100%! important;
 }
+.top-filter-left{
+  position: absolute! important;
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  top: 1px;
+  left: 8px;
+  z-index: 10;
+  display: flex;
+}
+.top-filter-left > li > span{
+  display: inline-block;
+  font-size: 14px;
+  padding: 2px 2px;
+  height: 15px;
+  border-radius: 4px;
+  margin-left: 6px;
+  margin-bottom: 15px;
+}
+ 
 .top-filter{
   position: absolute! important;
   margin: 0px;
@@ -1609,10 +1635,11 @@ box-shadow: 1px 1px 8px 1px #00000052;
     top: -7px;
 }
 .chart-w > div > div{
-  height: 100%! important;
+  height: 89%! important;
 }
 .plot-charts{
   width: 100%! important;
+  padding-top: 30px!important;
 }
  
 .MuiIconButton-root:hover{
@@ -1927,4 +1954,208 @@ sub {
   border: 2px solid #c867c6;
   box-shadow: 1px 1px 8px 1px #00000052! important;
   font-size: 15px;
+}
+
+
+.wrp-chart-loader {
+  display: flex;
+  justify-content: center;
+  border: 1px solid #00f 33;
+}
+.loading {
+  height: 120px;
+  padding: 0px;
+  width: 160px;
+  margin-top: 30px;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  padding: 10px;
+  box-sizing: border-box;
+}
+@keyframes loading {
+  0% {
+    background-color: #cd0a00;
+ }
+  30% {
+    background-color: #fa8a00;
+ }
+  50% {
+    height: 100px;
+    margin-top: 0px;
+ }
+  80% {
+    background-color: #91d700;
+ }
+  100% {
+    background-color: #cd0a00;
+ }
+}
+/*@-moz-keyframes loading {
+  50% {
+    height: 100px;
+    margin-top: 0px;
+ }
+}
+@-o-keyframes loading {
+  50% {
+    height: 100px;
+    margin-top: 0px;
+ }
+}
+@keyframes loading {
+  50% {
+    height: 100px;
+    margin-top: 0px;
+ }
+}
+*/
+.loading .loading-1 {
+  height: 10px;
+  width: 30px;
+  background-color: #fff;
+  display: inline-block;
+  margin-top: 90px;
+  -webkit-animation: loading 2.5s infinite;
+  -moz-animation: loading 2.5s infinite;
+  -o-animation: loading 2.5s infinite;
+  animation: loading 2.5s infinite;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  -webkit-animation-delay: 0.25s;
+  animation-delay: 0.25s;
+}
+.loading .loading-2 {
+  height: 10px;
+  width: 30px;
+  background-color: #fff;
+  display: inline-block;
+  margin-top: 90px;
+  -webkit-animation: loading 2.5s infinite;
+  -moz-animation: loading 2.5s infinite;
+  -o-animation: loading 2.5s infinite;
+  animation: loading 2.5s infinite;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  -webkit-animation-delay: 0.5s;
+  animation-delay: 0.5s;
+}
+.loading .loading-3 {
+  height: 10px;
+  width: 30px;
+  background-color: #fff;
+  display: inline-block;
+  margin-top: 90px;
+  -webkit-animation: loading 2.5s infinite;
+  -moz-animation: loading 2.5s infinite;
+  -o-animation: loading 2.5s infinite;
+  animation: loading 2.5s infinite;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  -webkit-animation-delay: 0.75s;
+  animation-delay: 0.75s;
+}
+.loading .loading-4 {
+  height: 10px;
+  width: 30px;
+  background-color: #fff;
+  display: inline-block;
+  margin-top: 90px;
+  -webkit-animation: loading 2.5s infinite;
+  -moz-animation: loading 2.5s infinite;
+  -o-animation: loading 2.5s infinite;
+  animation: loading 2.5s infinite;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  -webkit-animation-delay: 1s;
+  animation-delay: 1s;
+}
+.loading .loading-5 {
+  height: 10px;
+  width: 30px;
+  background-color: #fff;
+  display: inline-block;
+  margin-top: 90px;
+  -webkit-animation: loading 2.5s infinite;
+  -moz-animation: loading 2.5s infinite;
+  -o-animation: loading 2.5s infinite;
+  animation: loading 2.5s infinite;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  -webkit-animation-delay: 1.25s;
+  animation-delay: 1.25s;
+}
+.loading .loading-6 {
+  height: 10px;
+  width: 30px;
+  background-color: #fff;
+  display: inline-block;
+  margin-top: 90px;
+  -webkit-animation: loading 2.5s infinite;
+  -moz-animation: loading 2.5s infinite;
+  -o-animation: loading 2.5s infinite;
+  animation: loading 2.5s infinite;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  -webkit-animation-delay: 1.5s;
+  animation-delay: 1.5s;
+}
+.loading .loading-7 {
+  height: 10px;
+  width: 30px;
+  background-color: #fff;
+  display: inline-block;
+  margin-top: 90px;
+  -webkit-animation: loading 2.5s infinite;
+  -moz-animation: loading 2.5s infinite;
+  -o-animation: loading 2.5s infinite;
+  animation: loading 2.5s infinite;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  -webkit-animation-delay: 1.75s;
+  animation-delay: 1.75s;
+}
+.loading .loading-8 {
+  height: 10px;
+  width: 30px;
+  background-color: #fff;
+  display: inline-block;
+  margin-top: 90px;
+  -webkit-animation: loading 2.5s infinite;
+  -moz-animation: loading 2.5s infinite;
+  -o-animation: loading 2.5s infinite;
+  animation: loading 2.5s infinite;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  -webkit-animation-delay: 2s;
+  animation-delay: 2s;
+}
+.loading .loading-9 {
+  height: 10px;
+  width: 30px;
+  background-color: #fff;
+  display: inline-block;
+  margin-top: 90px;
+  -webkit-animation: loading 2.5s infinite;
+  -moz-animation: loading 2.5s infinite;
+  -o-animation: loading 2.5s infinite;
+  animation: loading 2.5s infinite;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  -webkit-animation-delay: 2.25s;
+  animation-delay: 2.25s;
+}
+.loading .loading-10 {
+  height: 10px;
+  width: 30px;
+  background-color: #fff;
+  display: inline-block;
+  margin-top: 90px;
+  -webkit-animation: loading 2.5s infinite;
+  -moz-animation: loading 2.5s infinite;
+  -o-animation: loading 2.5s infinite;
+  animation: loading 2.5s infinite;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  -webkit-animation-delay: 2.5s;
+  animation-delay: 2.5s;
 }

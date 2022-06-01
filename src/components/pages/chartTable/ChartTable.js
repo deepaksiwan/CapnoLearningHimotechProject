@@ -11,7 +11,7 @@ import Chart from './Chart';
 
 const ChartTable = () => {
     const accessToken = localStorage.getItem('accessToken');
-    const { config } = useParams();
+    const { config, session  , record} = useParams();
     const [graphs, setgraphs] = useState([]);
     const [value, setValue] = useState(0);
     const [point, setPoint] = useState(25);
@@ -70,7 +70,7 @@ const ChartTable = () => {
                                 console.log(d);
                                 return (
                                     <div className="chart-w" style={{ width:  (eval(d.col) * 100) + "%" , maxWidth: (eval(d.col) * 100) + "%", height: (eval(d.row) * 84) + "vh" }}>
-                                        <Chart signal={d.signal_name} xmax={d.xmax} xmin={d.ymin}  ymin={d.ymin} ymax={d.ymax}  type={d.type} color={d.color} />
+                                        <Chart record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.ymin}  ymin={d.ymin} ymax={d.ymax}  type={d.type} color={d.color} />
                                         </div>
 
                                 )
