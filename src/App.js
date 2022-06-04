@@ -98,7 +98,7 @@ function App(){
 				<Route  path="/creategroupsessetionreport" element={<Creategroupsessetionreport />} />
 				<Route  path="/group/session/data/report" element={<Groupsessiondatareport />} />
 				<Route  path="/chart" element={<Chart />} />
-				<Route  path="/create/report/:config" element={<ChartTable />} />
+				<Route  path="/create/report/:config/:session/:record" element={<ChartTable />} />
 				<Route  path="/session/data/report/:type" element={<SessiondataReport />} />
 				<Route path="/multidata/report" element={<MultidataReport />} />
 				<Route path="/client/homework/datareport" element={<Clienthomeworkdatareport />} />
@@ -111,7 +111,7 @@ function App(){
 				<Route path="/upload/homework/asignment" element={<Uploadhomeworkasignment />} />
 				<Route path="/add/trainer" element={<Addtrainer />} />
 				<Route path="/multilanguage" element={<Multilanguage />} />
-			  <Route  path="/" element={<Createdata />} />
+			    <Route  path="/" element={<Createdata />} />
 {/* 
 				<Route path="/add/list" element={<Chooseemail />} />
 				<Route path="/" element={<List />} />
