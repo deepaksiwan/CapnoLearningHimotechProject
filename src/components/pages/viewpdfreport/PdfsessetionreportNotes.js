@@ -1,8 +1,10 @@
 import React, {useEffect,useState} from "react";
 import {Link,useParams, Router} from 'react-router-dom';
 import Sidebar from '../../component/Sidebar';
+import { jsPDF } from "jspdf";
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
+import { API_URL } from "../../../config";
 import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 
@@ -16,6 +18,129 @@ const PdfsessetionreportNotes = () => {
         
 
     }, []);
+
+
+    const pdfdata = () => {
+
+      
+
+        fetch(API_URL + "/get/pdfnotes/list/" + sessionid,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                   
+                    let _clientName = resp.firstname + " " + resp.lastname ;
+                    let _trainerName = resp.data[0].firstname+ " " + resp.data[0].lastname ;
+                    let _sessionDate = resp.sessionDate;
+                    downloadpdf(_clientName , _trainerName , resp.result,_sessionDate)
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+
+       
+    }
+
+    const downloadpdf = (_clientName,_trainerName, _notes,_sessionDate)=>{
+     
+        const doc = new jsPDF();
+        doc.setTextColor(0, 0, 0);
+        doc.text('Capnolearning Report', 10, 10,
+            {styles:{ fontSize: 20,fontWeight: 'bold'}}) 
+       
+        doc.setDrawColor(0, 0, 0);
+        doc.line(10, 15, 600, 15);
+        doc.setFontSize(10)
+        doc.text(_sessionDate ,35,25)
+        doc.text( _clientName,23,30);
+        doc.text( _trainerName,25,35);
+        doc.setFont(undefined, 'bold');
+        doc.text("Session Date:" ,10,25)
+        doc.text("Client:" ,10,30);
+        doc.text("Trainer:",10,35);
+        doc.setFont(undefined, 'normal');
+        doc.text(_notes, 10,52);
+        doc.setFontSize(13)
+        doc.text('Session Report Notes', 10, 45, {styles:{ fontSize: 13,fontWeight: 'bold'}})
+        doc.line(10, 47, 55, 47);
+        doc.save(_notes +".pdf");
+    }
+
+    const viewpdfdata = () => {
+
+      
+
+        fetch(API_URL + "/get/pdfnotes/list/" + sessionid,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                   
+                    let _clientName = resp.firstname + " " + resp.lastname ;
+                    let _trainerName = resp.data[0].firstname+ " " + resp.data[0].lastname ;
+                    let _sessionDate = resp.sessionDate;
+                    viewpdf(_clientName , _trainerName , resp.result,_sessionDate)
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+
+       
+    }
+
+    const viewpdf = (_clientName,_trainerName, _notes,_sessionDate)=>{
+     
+        const doc = new jsPDF();
+        doc.setTextColor(0, 0, 0);
+        doc.text('Capnolearning Report', 10, 10,
+            {styles:{ fontSize: 20,fontWeight: 'bold'}}) 
+       
+        doc.setDrawColor(0, 0, 0);
+        doc.line(10, 15, 600, 15);
+        doc.setFontSize(10)
+        doc.text(_sessionDate ,35,25)
+        doc.text( _clientName,23,30);
+        doc.text( _trainerName,25,35);
+        doc.setFont(undefined, 'bold');
+        doc.text("Session Date:" ,10,25)
+        doc.text("Client:" ,10,30);
+        doc.text("Trainer:",10,35);
+        doc.setFont(undefined, 'normal');
+        doc.text(_notes, 10,52);
+        doc.setFontSize(13)
+        doc.text('Session Report Notes', 10, 45, {styles:{ fontSize: 13,fontWeight: 'bold'}})
+        doc.line(10, 47, 55, 47);
+        window.open(doc.output('bloburl'))
+    }
 
     const pdfReportNote = () => {
         fetch("https://capno-api.herokuapp.com/api/report/notes?session_id=" + sessionid,
@@ -32,10 +157,11 @@ const PdfsessetionreportNotes = () => {
                     console.warn("result", resp);
                     let _temp = [] ;
                     resp.notes.map((v,i) => {
+                        
                         _temp.push({
                             notes : v.notes,
                            
-                            actions : <p><a href='#' className="downloadimg"><img src={preveiw} /></a></p>
+                            actions : <p><a href='#' onClick={() => viewpdfdata()} className="downloadimg"><img src={preveiw} /></a>,<a href='javascript:void' onClick={() => pdfdata()} className="downloadimg"><img src={download} /></a></p>
                         })
                     })
                     setData(_temp);
