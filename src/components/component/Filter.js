@@ -333,7 +333,6 @@ const Filter = () => {
                             <div className="checkbox-wrp">
                                 <div class="custom-radios">
                                     <input type="checkbox" id="active" onChange={getTrainers} ref={trainerActive} defaultChecked={(selectedtrainerActive === "true" ? true : false)}
-
                                     />
                                     <label for="active">
                                         <span className="redious">
@@ -357,7 +356,6 @@ const Filter = () => {
                             </div>
                         </div>
                         <div className="select-client">
-
                             <select ref={trainerSelected} onChange={updateSelectTrainer}  >
                                 <option>{t('Choose-a-trainer')}</option>
                                 <option value={"all"}>All trainers</option>
@@ -367,8 +365,6 @@ const Filter = () => {
                                             {items.firstname} {items.lastname}
                                         </option>)
                                 }
-
-
 
                             </select>
                         </div>

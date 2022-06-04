@@ -26,14 +26,14 @@ const Createdata = () => {
         {
             to: "/demodatareport", displayCreateDatalist: "PRACTICE: Creating Data Reports (Demo Data Only)"
         }
+       
     ]
-
     useEffect(() => {
     setInterval(() => {
         setSelectedClient(localStorage.getItem('selectedClient'));
         setSelectedSession(localStorage.getItem('selectedSession'));
         setselectedGroup(localStorage.getItem('selectedGroup'));
-    //    console.log(selectedSession);
+       //console.log(selectedSession);
        setUserType(localStorage.getItem('userType'));
     }, 1000);
         
@@ -67,9 +67,15 @@ const Createdata = () => {
                             <li>
                                 <div className="create-list-box"><Link to="/demodatareport" >{t('PRACTICE:-Creating-Data-Reports-(Demo Data Only)')}</Link></div>
                             </li>
+                            <li>
+                              
+                                <div className="create-list-box"><Link to="/choose/exported/file/config" >{t('Create report using exported session files')}</Link></div>
+                                
+                            </li>
+
+                            
                         </ul>
                     </div>
-
 
                 </div>
             </div>

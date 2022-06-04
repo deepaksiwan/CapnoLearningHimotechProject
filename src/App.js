@@ -17,6 +17,7 @@ import Trainerinformation from './components/pages/trainerinformation/Trainerinf
 import Createdata from './components/pages/createdata/Createdata';
 import Privateroute from './components/component/Privateroute.js';
 import CreatesaveDatasession from './components/pages/createdata/CreatesaveDatasession';
+import CreatesaveFilesession from './components/pages/createdatafile/Createdatafile';
 import Viewpdfreport from './components/pages/viewpdfreport/Viewpdfreport';
 import Viewdatareport from './components/pages/viewdatareport/Viewdatareport';
 import Viewlive from './components/pages/viewlive/Viewlive';
@@ -39,7 +40,9 @@ import Creategroupsessetionreport from './components/pages/viewdatareport/Create
 import Createmultisession from './components/pages/viewdatareport/Createmultisession';
 import Groupsessiondatareport from './components/pages/createdata/Groupsessiondatareport.js';
 import Chart from './components/pages/chart/Chart';
+import ExportChart from './components/pages/exportedchart/ExportedChart';
 import ChartTable from './components/pages/chartTable/ChartTable';
+import ChartExportedTable from './components/pages/chartexportedTable/ExportchartTable';
 import SessiondataReport from './components/pages/viewdatareport/SessiondataReport';
 import MultidataReport from './components/pages/viewdatareport/MultidataReport';
 import Clienthomeworkdatareport from './components/pages/viewdatareport/Clienthomeworkdatareport';
@@ -69,12 +72,14 @@ function App(){
 				<Route  path="/configure" element={<Configure />} />
 				<Route  path="/dashboard" element={<Dashboard />} />
 				<Route  path="/demodatareport" element={<Demodatareport />} />
+				{/* <Route  path="/demodatafile" element={<Demodatafile />} /> */}
 				<Route  path="/upload/client/form" element={<Uploadclientform />} />
 				<Route  path="/bankform" element={<Bankform />} />
 				<Route  path="/hardware/profile" element={<Hardwareprofile />} />
 				<Route  path="/edit/client/:id" element={<Clientinformation />} />
 				<Route  path="/edit/trainer/:trainerid" element={<Trainerinformation />} />
 				<Route path="/choose/report/config" element={<CreatesaveDatasession />} />
+				<Route path="/choose/exported/file/config" element={<CreatesaveFilesession />} />
 				<Route  path="/view/pdf/report" element={<Viewpdfreport />} />
 				<Route  path="/view/data/report" element={<Viewdatareport />} />
 				<Route  path="/view/live" element={<Viewlive />} />
@@ -98,7 +103,9 @@ function App(){
 				<Route  path="/creategroupsessetionreport" element={<Creategroupsessetionreport />} />
 				<Route  path="/group/session/data/report" element={<Groupsessiondatareport />} />
 				<Route  path="/chart" element={<Chart />} />
+				<Route  path="/exportchart" element={<ExportChart />} />
 				<Route  path="/create/report/:config/:session/:record" element={<ChartTable />} />
+				<Route  path="/create/exported/report/:config" element={<ChartExportedTable/>} />
 				<Route  path="/session/data/report/:type" element={<SessiondataReport />} />
 				<Route path="/multidata/report" element={<MultidataReport />} />
 				<Route path="/client/homework/datareport" element={<Clienthomeworkdatareport />} />

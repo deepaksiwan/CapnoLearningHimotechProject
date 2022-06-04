@@ -56,7 +56,6 @@ const Sidebar = () => {
   ];
 
   const auth = localStorage.getItem('user_id');
-
   const logout = () => {
     localStorage.clear();
     window.location.reload();
@@ -74,8 +73,9 @@ const Sidebar = () => {
               )
             }
 
-            )
+           )
           }
+          
           <li>{
             auth ? <Link to="/login" onClick={logout} className="tabs"><div className="sidebar-icon-img"><img src={sidebarmenu9} /></div><p>{t('Logout')}</p></Link> : null
           }</li>

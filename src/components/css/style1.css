@@ -1,0 +1,25 @@
+
+/* .ex-chart{
+    text-align: center;
+    color: #800080;
+    margin-top: 10rem;
+ 
+} */
+
+.uploadfile{
+    text-align: center;
+    margin-top: 5rem;
+    height: 10px;
+    
+}
+.action-list2{
+    margin-left: 10px;
+    margin:auto;
+    justify-content: space-between;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    display: flex;
+    justify-content: left;
+
+}

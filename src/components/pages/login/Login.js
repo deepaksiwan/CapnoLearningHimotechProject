@@ -29,11 +29,14 @@ const Login = () => {
                 password,
             }),
         })
-
+       
+       
+            
 
 
         const data = await response.json()
         setLoader(false)
+        console.log( "sddssdddsf",data)
 
         if (data.status) {
             localStorage.setItem('user_id', data.user_id);
@@ -63,7 +66,6 @@ const Login = () => {
                 localStorage.setItem('selectedClient', data.user_id);
             }
             navigate("/");
-
 
         } else {
             setalerts(true)
