@@ -1418,11 +1418,11 @@ const ExportedChart = (props) => {
             {
                 !fileLoaded &&
                 <div className="wrp-chart-loader">
-                    <div className="uploadfile " >
-                        <div className=''>
-                            <p className="ex-chart" style={{ color: "#800080" }} >Please choose file {props && fileName[props.signal]} to visualise data for <span dangerouslySetInnerHTML={{__html:  props && signalName[props.signal]} }></span>   signal. </p>
+                    <div className="uploadfile" >
+                        <div className='uploadheader'>
+                            <p className="ex-chart " style={{ color: "#800080" }} >Please choose file {props && fileName[props.signal]} to visualise data for <span dangerouslySetInnerHTML={{__html:  props && signalName[props.signal]} }></span>   signal. </p>
                         </div>
-                        <div className="form-group files">
+                        <div className="form-group files mb-10">
                             <p><input className="form-control" multiple="" type="file" id="file" onChange={fileupload} upload /></p>
                         </div>
                     </div>
