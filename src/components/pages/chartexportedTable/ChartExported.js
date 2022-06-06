@@ -106,7 +106,7 @@ const ExportedChart = (props) => {
     })
 
     const [fileName, setFileName] = useState({
-        pco2wave: "signalB.csv",
+        pco2wave: "signal_rawco2.csv",
         petco2: "signal_petco2_avg.csv",
         bpmhistory: "signal_breath_min_avg.csv",
         pco2b2b: "signal_breaths.csv",
