@@ -804,7 +804,7 @@ const hideThreshold = event => {
                         <span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]}} ></span>
                         </li>
                   </ul>
-                <ul className="top-filter">
+                <ul className="top-filter" data-html2canvas-ignore="true">
                     <li><a  onClick={toggleGraphModal}><i class="fa fa-line-chart" aria-hidden="true"></i></a></li>
                     <li><a   onClick={toggleSignalModal}><i class="fa fa-signal" aria-hidden="true"></i></a></li>
                     {/* <li><a   onClick={toggletrehSoldModal}><i class="fa fa-area-chart" aria-hidden="true"></i></a></li> */}

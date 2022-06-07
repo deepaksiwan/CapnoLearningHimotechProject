@@ -1,5 +1,8 @@
 import React, { Component, useEffect, useRef, useState } from 'react';
 import { Link, useParams, Router } from 'react-router-dom';
+import html2canvas from 'html2canvas';
+import { jsPDF } from "jspdf";
+import { API_URL } from '../../config';
 
 const ChartHeader = (props) => {
     const accessToken = localStorage.getItem('accessToken');
@@ -19,6 +22,70 @@ const ChartHeader = (props) => {
         clientnameUpdate();
 
     }, []);
+
+
+    const getScreenshort = () =>{
+            fetch(API_URL + "/get/screenshort/" + session,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                  
+                    let _clientName = resp.firstname + " " + resp.lastname ;
+                    let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname ;
+                    let _sessionDate = resp.sessionDate;
+                    
+                    downloadliveimg(_clientName , _trainerName ,_sessionDate)
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+
+        
+    }
+
+    const downloadliveimg = (_clientName,_trainerName, _sessionDate,)=>{
+        html2canvas(document.getElementById("chart-table")).then(function (canvas) {
+            let dataimg = canvas.toDataURL('image/png')
+        const doc = new jsPDF();
+
+        for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
+            doc.setPage(pageNumber)
+        doc.setTextColor(0, 0, 0);
+        doc.text('Capnolearning Report', 10, 10,
+            {styles:{ fontSize: 20,fontWeight: 'bold'}})
+        doc.setDrawColor(0, 0, 0);
+        doc.line(10, 15, 600, 15);
+        doc.setFontSize(10)
+        
+        doc.text(_sessionDate ,35,25)
+        doc.text( _clientName,23,30);
+        doc.text( _trainerName,25,35);
+        doc.setFont(undefined, 'bold');
+        doc.text("Session Date:" ,10,25)
+        doc.text("Client:" ,10,30);
+        doc.text("Trainer:",10,35);
+        // doc.setFont(undefined, 'bold')
+        doc.addImage(dataimg, 5, 45,200,110);
+        }
+        doc.save("a4.pdf");
+
+    })
+    }
 
 
     const getRcord = () => {
@@ -124,7 +191,7 @@ const ChartHeader = (props) => {
                             <ul className='action-list'>
                                 <li><a href="#"><i class="fa fa-upload" aria-hidden="true"></i></a></li>
                                 <li><a href="#"><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
+                                <li><a href="#" onClick={getScreenshort}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 <li><a href="#"><i class="fa fa-sliders" aria-hidden="true"></i></a></li>
                                 <li><a href="#"><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
                             </ul>
