@@ -62,7 +62,7 @@ const ChartTable = () => {
     return (
         <div>
             <ChartHeader config={config} />
-            <div className="wrp-charttable">
+            <div className="wrp-charttable" id="chart-table">
                 <div className="container-fluid">
                     <div className="row">
                         {

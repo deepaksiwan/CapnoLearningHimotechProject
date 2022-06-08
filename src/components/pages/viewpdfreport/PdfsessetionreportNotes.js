@@ -78,7 +78,7 @@ const PdfsessetionreportNotes = () => {
         doc.setFontSize(13)
         doc.text('Session Report Notes', 10, 45, {styles:{ fontSize: 13,fontWeight: 'bold'}})
         doc.line(10, 47, 55, 47);
-        doc.save(_notes +".pdf");
+        doc.save(_sessionDate +".pdf");
     }
 
     const viewpdfdata = () => {
