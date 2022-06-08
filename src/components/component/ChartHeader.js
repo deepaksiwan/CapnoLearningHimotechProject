@@ -10,12 +10,14 @@ const ChartHeader = (props) => {
     const sessionid = localStorage.getItem('selectedSession');
     const [records, setrecords] = useState([]);
     const [sessionDate, setsessionDate] = useState([]);
+    const [clientName, setClientName] = useState([]);
+    const [trainerName, setTrainerName] = useState([]);
     const [sessioninfo, setsessioninfo] = useState([]);
     const reportconfig = useRef();
-    const { config, session , record } = useParams();
-     
- 
-    
+    const { config, session, record } = useParams();
+
+
+
 
     useEffect(() => {
         Report();
@@ -25,7 +27,7 @@ const ChartHeader = (props) => {
 
     }, []);
 
-    const SaveScreenshort = () =>{
+    const SaveScreenshort = () => {
         html2canvas(document.getElementById("chart-table")).then(function (canvas) {
 
             let session_id = session;
@@ -35,22 +37,35 @@ const ChartHeader = (props) => {
             let dataimg = canvas.toDataURL('image/png')
             const doc = new jsPDF();
 
-            doc.setTextColor(0, 0, 255);
-            doc.setFontSize(16)
-            // doc.text("User id:" + " " + stringUid,10,10);
-            // doc.text("User name:" + " " + username,10,4);
-            doc.addImage(dataimg, 10, 15,200,115);
-          
-            doc.save("a4.pdf");
+            for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
+                doc.setPage(pageNumber)
+                doc.setTextColor(0, 0, 0);
+                doc.text('Capnolearning Report', 10, 10,
+                    { styles: { fontSize: 20, fontWeight: 'bold' } })
+                doc.setDrawColor(0, 0, 0);
+                doc.line(10, 15, 600, 15);
+                doc.setFontSize(10)
+
+                doc.text(sessionDate, 35, 25)
+                doc.text(clientName, 23, 30);
+                doc.text(trainerName, 25, 35);
+                doc.setFont(undefined, 'bold');
+                doc.text("Session Date:", 10, 25)
+                doc.text("Client:", 10, 30);
+                doc.text("Trainer:", 10, 35);
+                // doc.setFont(undefined, 'bold')
+                doc.addImage(dataimg, 5, 45, 200, 110);
+            }
+            doc.save(sessionDate + ".pdf");
 
 
             let formData = new FormData();
             formData.append('data', dataimg);
             formData.append('type', type);
             formData.append('status', status);
-            formData.append('session_id',session_id);
-            formData.append('pdf_name',sessionDate);
-            
+            formData.append('session_id', session_id);
+            formData.append('pdf_name', sessionDate);
+
 
             fetch(API_URL + "/save/screenshort", {
                 method: 'POST',
@@ -60,7 +75,7 @@ const ChartHeader = (props) => {
                 body: formData
             }).then((result) => {
                 result.json().then((resp) => {
-                   
+
 
                 })
             })
@@ -70,38 +85,11 @@ const ChartHeader = (props) => {
 
     }
 
-    // const downloadliveimg = (_clientName,_trainerName, _sessionDate,)=>{
-    //     html2canvas(document.getElementById("chart-table")).then(function (canvas) {
-    //         let dataimg = canvas.toDataURL('image/png')
-    //     const doc = new jsPDF();
-
-    //     for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
-    //         doc.setPage(pageNumber)
-    //     doc.setTextColor(0, 0, 0);
-    //     doc.text('Capnolearning Report', 10, 10,
-    //         {styles:{ fontSize: 20,fontWeight: 'bold'}})
-    //     doc.setDrawColor(0, 0, 0);
-    //     doc.line(10, 15, 600, 15);
-    //     doc.setFontSize(10)
-        
-    //     doc.text(_sessionDate ,35,25)
-    //     doc.text( _clientName,23,30);
-    //     doc.text( _trainerName,25,35);
-    //     doc.setFont(undefined, 'bold');
-    //     doc.text("Session Date:" ,10,25)
-    //     doc.text("Client:" ,10,30);
-    //     doc.text("Trainer:",10,35);
-    //     // doc.setFont(undefined, 'bold')
-    //     doc.addImage(dataimg, 5, 45,200,110);
-    //     }
-    //     doc.save( _sessionDate +".pdf");
-
-    // })
-    // }
+ 
 
 
-    const getScreenshort = () =>{
-            fetch(API_URL + "/get/screenshort/" + session,
+    const getScreenshort = () => {
+        fetch(API_URL + "/get/screenshort/" + session,
             {
                 method: 'GET',
                 headers: {
@@ -112,10 +100,9 @@ const ChartHeader = (props) => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                  
-                   setsessionDate(resp.sessionDate)
-                    
-                   
+                    setsessionDate(resp.sessionDate)
+                    setClientName(resp.firstname + " " + resp.lastname)
+                    setTrainerName(resp.data[0].firstname + " " + resp.data[0].lastname)
 
                 });
             }
@@ -129,39 +116,10 @@ const ChartHeader = (props) => {
 
         })
 
-        
+
     }
 
-    // const downloadliveimg = (_clientName,_trainerName, _sessionDate,)=>{
-    //     html2canvas(document.getElementById("chart-table")).then(function (canvas) {
-    //         let dataimg = canvas.toDataURL('image/png')
-    //     const doc = new jsPDF();
-
-    //     for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
-    //         doc.setPage(pageNumber)
-    //     doc.setTextColor(0, 0, 0);
-    //     doc.text('Capnolearning Report', 10, 10,
-    //         {styles:{ fontSize: 20,fontWeight: 'bold'}})
-    //     doc.setDrawColor(0, 0, 0);
-    //     doc.line(10, 15, 600, 15);
-    //     doc.setFontSize(10)
-        
-    //     doc.text(_sessionDate ,35,25)
-    //     doc.text( _clientName,23,30);
-    //     doc.text( _trainerName,25,35);
-    //     doc.setFont(undefined, 'bold');
-    //     doc.text("Session Date:" ,10,25)
-    //     doc.text("Client:" ,10,30);
-    //     doc.text("Trainer:",10,35);
-    //     // doc.setFont(undefined, 'bold')
-    //     doc.addImage(dataimg, 5, 45,200,110);
-    //     }
-    //     doc.save( _sessionDate +".pdf");
-
-    // })
-    // }
-
-
+  
     const getRcord = () => {
         fetch("https://capno-api.herokuapp.com/api/session/record?session_id=" + sessionid,
             {
@@ -246,11 +204,11 @@ const ChartHeader = (props) => {
         })
     }
 
-    const reportconfigupdate =()=>{
+    const reportconfigupdate = () => {
         let _configId = reportconfig.current.value;
-        window.location.href="/create/report/" + _configId
+        window.location.href = "/create/report/" + _configId
     }
-    
+
     const logout = () => {
         localStorage.clear();
         window.location.reload();
@@ -323,21 +281,21 @@ const ChartHeader = (props) => {
                 </div>
                 <div className="chart-header-c3">
                     <ul className="username-list">
-                        {sessioninfo.map((clientName)=>{
-                            return(
+                        {sessioninfo.map((clientName) => {
+                            return (
                                 <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i>{clientName.client_firstname}{clientName.client_lastname}</a></li>
                             )
                         }
                         )}
-                         {sessioninfo.map((trainerName)=>{
-                            return(
+                        {sessioninfo.map((trainerName) => {
+                            return (
                                 <li><a href="#"><i class="fa fa-user-md" aria-hidden="true"></i> {trainerName.trainer_firstname} {trainerName.trainer_lastname}</a></li>
                             )
                         }
                         )}
-                       
-                       {sessioninfo.map((sessionName)=>{
-                            return(
+
+                        {sessioninfo.map((sessionName) => {
+                            return (
                                 <li><a href="#"><i class="fa fa-calendar" aria-hidden="true"></i> {sessionName.name}</a></li>
                             )
                         }
