@@ -199,7 +199,7 @@ const Viewlive = () => {
         // doc.setFont(undefined, 'bold')
         doc.addImage(_image, 5, 45,200,110);
         }
-        doc.save(_pdfname +".pdf");
+        doc.save(_sessionDate +".pdf");
     }
 
 
@@ -326,7 +326,7 @@ const Viewlive = () => {
         doc.setFontSize(13)
         doc.text('Session Report Notes', 10, 45, {styles:{ fontSize: 13,fontWeight: 'bold'}})
         doc.line(10, 47, 55, 47);
-        doc.save(_notes +".pdf");
+        doc.save(_sessionDate +".pdf");
     }
 
 

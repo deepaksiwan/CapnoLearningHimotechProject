@@ -9,19 +9,95 @@ const ChartHeader = (props) => {
     const [sessions, setsessions] = useState([]);
     const sessionid = localStorage.getItem('selectedSession');
     const [records, setrecords] = useState([]);
+    const [sessionDate, setsessionDate] = useState([]);
     const [sessioninfo, setsessioninfo] = useState([]);
     const reportconfig = useRef();
     const { config, session , record } = useParams();
      
  
-     
+    
 
     useEffect(() => {
         Report();
         getRcord();
         clientnameUpdate();
+        getScreenshort();
 
     }, []);
+
+    const SaveScreenshort = () =>{
+        html2canvas(document.getElementById("chart-table")).then(function (canvas) {
+
+            let session_id = session;
+            let type = 0;
+            let status = 1;
+
+            let dataimg = canvas.toDataURL('image/png')
+            const doc = new jsPDF();
+
+            doc.setTextColor(0, 0, 255);
+            doc.setFontSize(16)
+            // doc.text("User id:" + " " + stringUid,10,10);
+            // doc.text("User name:" + " " + username,10,4);
+            doc.addImage(dataimg, 10, 15,200,115);
+          
+            doc.save("a4.pdf");
+
+
+            let formData = new FormData();
+            formData.append('data', dataimg);
+            formData.append('type', type);
+            formData.append('status', status);
+            formData.append('session_id',session_id);
+            formData.append('pdf_name',sessionDate);
+            
+
+            fetch(API_URL + "/save/screenshort", {
+                method: 'POST',
+                headers: {
+
+                },
+                body: formData
+            }).then((result) => {
+                result.json().then((resp) => {
+                   
+
+                })
+            })
+
+
+        });
+
+    }
+
+    // const downloadliveimg = (_clientName,_trainerName, _sessionDate,)=>{
+    //     html2canvas(document.getElementById("chart-table")).then(function (canvas) {
+    //         let dataimg = canvas.toDataURL('image/png')
+    //     const doc = new jsPDF();
+
+    //     for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
+    //         doc.setPage(pageNumber)
+    //     doc.setTextColor(0, 0, 0);
+    //     doc.text('Capnolearning Report', 10, 10,
+    //         {styles:{ fontSize: 20,fontWeight: 'bold'}})
+    //     doc.setDrawColor(0, 0, 0);
+    //     doc.line(10, 15, 600, 15);
+    //     doc.setFontSize(10)
+        
+    //     doc.text(_sessionDate ,35,25)
+    //     doc.text( _clientName,23,30);
+    //     doc.text( _trainerName,25,35);
+    //     doc.setFont(undefined, 'bold');
+    //     doc.text("Session Date:" ,10,25)
+    //     doc.text("Client:" ,10,30);
+    //     doc.text("Trainer:",10,35);
+    //     // doc.setFont(undefined, 'bold')
+    //     doc.addImage(dataimg, 5, 45,200,110);
+    //     }
+    //     doc.save( _sessionDate +".pdf");
+
+    // })
+    // }
 
 
     const getScreenshort = () =>{
@@ -37,11 +113,9 @@ const ChartHeader = (props) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                   
-                    let _clientName = resp.firstname + " " + resp.lastname ;
-                    let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname ;
-                    let _sessionDate = resp.sessionDate;
+                   setsessionDate(resp.sessionDate)
                     
-                    downloadliveimg(_clientName , _trainerName ,_sessionDate)
+                   
 
                 });
             }
@@ -58,34 +132,34 @@ const ChartHeader = (props) => {
         
     }
 
-    const downloadliveimg = (_clientName,_trainerName, _sessionDate,)=>{
-        html2canvas(document.getElementById("chart-table")).then(function (canvas) {
-            let dataimg = canvas.toDataURL('image/png')
-        const doc = new jsPDF();
+    // const downloadliveimg = (_clientName,_trainerName, _sessionDate,)=>{
+    //     html2canvas(document.getElementById("chart-table")).then(function (canvas) {
+    //         let dataimg = canvas.toDataURL('image/png')
+    //     const doc = new jsPDF();
 
-        for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
-            doc.setPage(pageNumber)
-        doc.setTextColor(0, 0, 0);
-        doc.text('Capnolearning Report', 10, 10,
-            {styles:{ fontSize: 20,fontWeight: 'bold'}})
-        doc.setDrawColor(0, 0, 0);
-        doc.line(10, 15, 600, 15);
-        doc.setFontSize(10)
+    //     for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
+    //         doc.setPage(pageNumber)
+    //     doc.setTextColor(0, 0, 0);
+    //     doc.text('Capnolearning Report', 10, 10,
+    //         {styles:{ fontSize: 20,fontWeight: 'bold'}})
+    //     doc.setDrawColor(0, 0, 0);
+    //     doc.line(10, 15, 600, 15);
+    //     doc.setFontSize(10)
         
-        doc.text(_sessionDate ,35,25)
-        doc.text( _clientName,23,30);
-        doc.text( _trainerName,25,35);
-        doc.setFont(undefined, 'bold');
-        doc.text("Session Date:" ,10,25)
-        doc.text("Client:" ,10,30);
-        doc.text("Trainer:",10,35);
-        // doc.setFont(undefined, 'bold')
-        doc.addImage(dataimg, 5, 45,200,110);
-        }
-        doc.save("a4.pdf");
+    //     doc.text(_sessionDate ,35,25)
+    //     doc.text( _clientName,23,30);
+    //     doc.text( _trainerName,25,35);
+    //     doc.setFont(undefined, 'bold');
+    //     doc.text("Session Date:" ,10,25)
+    //     doc.text("Client:" ,10,30);
+    //     doc.text("Trainer:",10,35);
+    //     // doc.setFont(undefined, 'bold')
+    //     doc.addImage(dataimg, 5, 45,200,110);
+    //     }
+    //     doc.save( _sessionDate +".pdf");
 
-    })
-    }
+    // })
+    // }
 
 
     const getRcord = () => {
@@ -191,7 +265,7 @@ const ChartHeader = (props) => {
                             <ul className='action-list'>
                                 <li><a href="#"><i class="fa fa-upload" aria-hidden="true"></i></a></li>
                                 <li><a href="#"><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li>
-                                <li><a href="#" onClick={getScreenshort}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
+                                <li><a href="#" onClick={SaveScreenshort}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 <li><a href="#"><i class="fa fa-sliders" aria-hidden="true"></i></a></li>
                                 <li><a href="#"><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
                             </ul>
