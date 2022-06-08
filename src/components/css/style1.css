@@ -33,5 +33,15 @@
 
 
 }
+.create-list-box1 {
+    display: inline-block;
+    width: 100%;
+    color: #000;
+    font-size: 14px;
+    border: 2px solid #c867c6;
+    border-radius: 8px;
+    padding: 10px 15px;
+    box-shadow: 1px 1px 8px 1px #00000029;
+}
 
 

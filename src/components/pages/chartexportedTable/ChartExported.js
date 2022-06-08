@@ -106,7 +106,7 @@ const ExportedChart = (props) => {
     })
 
     const [fileName, setFileName] = useState({
-        pco2wave: "signal_rawco2.csv",
+        pco2wave: "signal_raw_co2.csv",
         petco2: "signal_petco2_avg.csv",
         bpmhistory: "signal_breath_min_avg.csv",
         pco2b2b: "signal_breaths.csv",
@@ -140,7 +140,7 @@ const ExportedChart = (props) => {
         emg4_wave: "signal_raw_emg_4.csv"
 
     })
-    const [file, setfile] = useState("")
+    //const [file, setfile] = useState("")
     const fileupload = (event) => {
         setfileLoaded(true)
       

@@ -88,7 +88,6 @@ const Login = () => {
                         <div className="user-img">
                             <img src={user} alt="user-img" />
                         </div>
-
                         <div className="wrp-label">
                             <label>{t('Email-Address')}</label>
                             <input
