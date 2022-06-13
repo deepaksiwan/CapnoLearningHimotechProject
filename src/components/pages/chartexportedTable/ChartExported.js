@@ -11,13 +11,13 @@ import Header from '../../component/Header';
 import RangeSlider from 'react-bootstrap-range-slider';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import InputColor from 'react-input-color';
-import { trim } from 'jquery';
+import { map, trim } from 'jquery';
 
 const ExportedChart = (props) => {
-    console.log("props", props)
+    //console.log(" exportedchart props", props)
     // const session = props.session;
     // const record = props.record;
-    const record = 'all' ; 
+    const record = 'all';
     const [xAxis, setXaxis] = useState([]);
     const [xAxisMin, setXaxisMin] = useState(props.xmin);
     const [xAxisMax, setXaxisMax] = useState(props.xmax);
@@ -106,7 +106,7 @@ const ExportedChart = (props) => {
     })
 
     const [fileName, setFileName] = useState({
-        pco2wave: "signal_raw_co2.csv",
+        pco2wave: "signalB.csv",
         petco2: "signal_petco2_avg.csv",
         bpmhistory: "signal_breath_min_avg.csv",
         pco2b2b: "signal_breaths.csv",
@@ -140,23 +140,22 @@ const ExportedChart = (props) => {
         emg4_wave: "signal_raw_emg_4.csv"
 
     })
-    //const [file, setfile] = useState("")
+    //console.log( "fileName",fileName);
+    const [file, setfile] = useState("")
     const fileupload = (event) => {
         setfileLoaded(true)
-      
         var file = event.target.files[0];
         var reader = new FileReader();
-        // console.log(reader)
         // getData(reader.result)
         reader.readAsDataURL(file);
         reader.onload = e => {
             getData(e.target.result);
+
         };
-        console.log(event.target.files)
+        console.log("deepak event", event.target.files)
     }
 
     let playTimer;
-
     let zommDeviation = 0.02
     const [length, setLength] = useState(0)
     let colorCodes = {};
@@ -174,8 +173,56 @@ const ExportedChart = (props) => {
         // super(props);
         clearInterval(playTimer);
         // getAlldata();
+        loadFile();
 
     }, [])
+
+
+    const loadFile = () => {
+        var reader = new FileReader();
+        // getData(reader.result)
+        // get file name by signal from fileName constant. fileName[props.signal]
+
+        //loop props.datafile
+        // find filename
+        //check if it matches the above filenmae and get it's index
+
+        let fileToLoad = fileName[props.signal];
+        console.log(" result of fileToLoad", fileToLoad)
+        // console.log("count array data", props.dataFile)
+        let _index = false;
+        let _files = props.dataFile;
+        _files = Array.from(_files);
+        console.log("final file var", _files)
+        _files.length > 0 && _files.map(function (v, i) {
+            console.log("show data fknfdkfjfkdf", v)
+
+            // var  v1 = fileToLoad.length - 1
+            console.log("result of name", v.name)
+
+            if (v.name == fileToLoad) {
+                _index = i;
+            }
+            console.log("i result", _index);
+
+            // console.log("show datafile", v.fileName)
+            // if (fileToLoad == _index) {
+
+            // }
+
+
+        })
+
+        if(_index){
+            reader.readAsDataURL(_files[_index]);
+            reader.onload = e => {
+                getData(e.target.result);
+    
+            };
+        }
+
+
+    }
 
     // const getCsv = () => {
     //     fetch("https://capno-api.herokuapp.com/api/session/data?session_id=" + session + "&signal_name=" + props.signal,
@@ -250,6 +297,7 @@ const ExportedChart = (props) => {
         localStorage.clear();
         window.location.reload();
     }
+
     async function getData(_csvFile) {
         let _x = [];
         let _y = [];
@@ -264,9 +312,9 @@ const ExportedChart = (props) => {
         let _allTasks = [];
         let _allAnnotation = [];
         let lastTask;
-          console.log(_csvFile);
+        console.log(_csvFile);
         csv(_csvFile).then(data => {
-             console.log(data);
+            console.log(data);
             // let _tasks = {} ; 
             let _temptask = [];
             let _taskArray = [];
@@ -284,7 +332,7 @@ const ExportedChart = (props) => {
                     }
                     let xData = new Date(parseInt((((v.x) - data[0].x) + (userTimeOffset)) - _pauseTime))
                     _length = parseInt(v.x - data[0].x - _pauseTime);
-                     console.log(_length)
+                    console.log(_length)
                     _x.push(xData);
                     // console.log()
                     _y.push(parseFloat(v.y));
@@ -403,7 +451,7 @@ const ExportedChart = (props) => {
                     })
 
                     _allAnnotation.map((v, i) => {
-                         console.log(v)
+                        console.log(v)
                         if (v[3] == "Paused") {
                             _tempAnnotation.push(
                                 {
@@ -707,7 +755,6 @@ const ExportedChart = (props) => {
     // console.log("xAxis",xAxisMax)
 
     const handlePlay = () => {
-
         setPlay(true);
 
     }
@@ -1403,7 +1450,7 @@ const ExportedChart = (props) => {
                 </>
             }
             {
-                (xAxis.length == 0 || yAxis.length == 0) &&fileLoaded &&
+                (xAxis.length == 0 || yAxis.length == 0)  &&
 
                 <div className="wrp-chart-loader">
                     <div class="loading">
@@ -1411,28 +1458,14 @@ const ExportedChart = (props) => {
                         <div class="loading-2"></div>
                         <div class="loading-3"></div>
                         <div class="loading-4"></div>
+
                     </div>
 
                 </div>
             }
-            {
-                !fileLoaded &&
-                <div className="wrp-chart-loader">
-                    <div className="uploadfile" >
-                        <div className='uploadheader'>
-                            <p className="ex-chart " style={{ color: "#800080" }} >Please choose file {props && fileName[props.signal]} to visualise data for <span dangerouslySetInnerHTML={{__html:  props && signalName[props.signal]} }></span>   signal. </p>
-                        </div>
-                        <div className="form-group files mb-10">
-                            <p><input className="form-control" multiple="" type="file" id="file" onChange={fileupload} upload /></p>
-                        </div>
-                    </div>
-
-                </div>
-
-            }
+           
         </div>
 
     )
 }
-
 export default ExportedChart;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import i18n from "i18next";
 import { useTranslation, initReactI18next } from "react-i18next";
-import { ModalHeader, Modal, ModalBody } from "reactstrap";
+//import { ModalHeader, Modal, ModalBody } from "reactstrap";
 import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
@@ -14,11 +14,11 @@ const Createdata = (props) => {
     const [selectedSession, setSelectedSession] = useState();
     const [selectedGroup, setselectedGroup] = useState();
     const [userType, setUserType] = useState();
-    const [graphModal, setgraphModal] = useState(false);
-    const toggleGraphModal = () => setgraphModal(!graphModal);
-    const [selectfolder, setselectfolder] = useState(false)
-    const [Showfiles, setShowfiles] = useState(false)
-    const [selectedfiles, setselectedfiles] = useState([])
+    //const [graphModal, setgraphModal] = useState(false);
+   // const toggleGraphModal = () => setgraphModal(!graphModal);
+    // const [selectfolder, setselectfolder] = useState(false)
+    // const [Showfiles, setShowfiles] = useState(false)
+    // const [selectedfiles, setselectedfiles] = useState([])
 
 
     const CreateDatalist = [
@@ -47,29 +47,26 @@ const Createdata = (props) => {
 
     }, [])
 
-    const choosefolder = (event) => {
-        setselectfolder(true)
-        setShowfiles(true)
-        setselectedfiles([])
-        var files = event.target.files;
-        var temp = [];
-        for (var i = 0; i < files.length; i++) {
-            temp.push(files[i].webkitRelativePath);
-            console.log("array result", temp);
-
-        };
-        setselectedfiles(temp);
-    };
-
-    // var choosefolder = document.getElementById("folder").addEventListener("change", function (event) {
-    //     var output = document.querySelector("ul");
+    // const choosefolder = (event) => {
+    //     setselectfolder(true)
+    //     setShowfiles(true)
+    //     setselectedfiles([])
     //     var files = event.target.files;
+    //     console.log("files result", files)
+    //     var temp = [];
     //     for (var i = 0; i < files.length; i++) {
-    //         var item = document.createElement("li");
-    //         item.innerHTML = files[i].webkitRelativePath;
-    //         output.appendChild(item);
+    //         //temp.push(files[i].webkitRelativePath);
+    //         temp.push(files[i].name);
+    //         console.log("array result", temp);
+
     //     };
-    // }, false);
+    //     // var i = 0
+    //     // temp.push(files[i].name)
+    //     // console.log("array result", temp);
+    //     // temp.push(files.length.name)
+    //     // console.log(temp)
+    //     setselectedfiles(temp);
+    // };
 
     return (
         <div>
@@ -99,51 +96,48 @@ const Createdata = (props) => {
                             <li>
                                 <div className="create-list-box"><Link to="/demodatareport" >{t('PRACTICE:-Creating-Data-Reports-(Demo Data Only)')}</Link></div>
                             </li>
-                            {/* <li>
+                            <li>
                               
                                 <div className="create-list-box"><Link to="/choose/exported/file/config" >{t('Create report using exported session files')}</Link></div>
                                 
-                            </li> */}
-
-                            <li>
-                                <div className="create-list-box1" onClick={toggleGraphModal}>{t('Create report using exported session files')}</div>
                             </li>
 
+                            {/* <li>
+                                <div className="create-list-box1" onClick={toggleGraphModal}>{t('Create report using exported session files')}</div>
+                            </li> */}
+
                         </ul>
-                        <Modal isOpen={graphModal} toggle={toggleGraphModal} className="modal-box-wrp" centered={true}>
+                        {/* <Modal isOpen={graphModal} toggle={toggleGraphModal} className="modal-box-wrp" centered={true}>
                             <ModalHeader toggle={toggleGraphModal}><span className="ml-1 modal-head roititle">please choose folder </span></ModalHeader>
                             <ModalBody>
                                 <div className="form-group files mb-10">
-                                    <p><input className="form-control" onChange={choosefolder} multiple="" name="filelist" id="folder" type="file" webkitdirectory="true" directory
-
+                                   
+                                    <p><input className="form-control" onChange={choosefolder} type="file" webkitdirectory="true" directory
                                     /></p>
-
                                     <div className="">
                                         {selectedfiles.length > 0 ? (
                                             <div>
                                                 <p>select file:
-                                                    
                                                     {
                                                         selectedfiles.map((v, i) => {
                                                             return (
-                                                                
-                                                            <li>{v}</li>
-                                                                
+
+                                                                <p>{v}</p>
+
+
                                                             )
                                                         })
                                                     }
-                                                    
+
                                                 </p>
                                             </div>
                                         ) : (
                                             <p>Select a folder to show files</p>
                                         )}
                                     </div>
-
                                 </div>
-
                             </ModalBody>
-                        </Modal>
+                        </Modal> */}
 
                     </div>
 
