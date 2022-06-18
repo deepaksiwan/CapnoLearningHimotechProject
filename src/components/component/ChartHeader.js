@@ -85,9 +85,6 @@ const ChartHeader = (props) => {
 
     }
 
- 
-
-
     const getScreenshort = () => {
         fetch(API_URL + "/get/screenshort/" + session,
             {
