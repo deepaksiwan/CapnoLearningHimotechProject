@@ -1475,6 +1475,10 @@ box-shadow: 1px 1px 8px 1px #00000052;
   color: #fff;
   font-size: 11px;
 }
+.action-list > li > span > a {
+  color: #fff;
+  font-size: 11px;
+}
 .action-opt > p{
   font-weight: 600;
   font-size: 11px;
@@ -1634,12 +1638,11 @@ box-shadow: 1px 1px 8px 1px #00000052;
     position: relative;
     top: -7px;
 }
-.chart-w > div > div{
-  height: 89%! important;
-}
+ 
 .plot-charts{
   width: 100%! important;
   padding-top: 30px!important;
+  height: 100%;
 }
  
 .MuiIconButton-root:hover{
@@ -2160,3 +2163,25 @@ sub {
   animation-delay: 2.5s;
 }
 
+.lightbtn{
+  background-color: #fff;
+  color: #800080;
+  border: 1px solid #800080 ;
+
+}
+.darktbtn{
+  background-color: #800080;
+  color: #fff;
+  border: 1px solid #800080 ;
+
+}
+.statTable td {
+  padding: 5px 10px;
+}
+.statTable th {
+  padding: 5px 10px;
+}
+
+.statTable {
+  font-size: 14px;
+}

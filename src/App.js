@@ -104,7 +104,7 @@ function App(){
 				<Route  path="/group/session/data/report" element={<Groupsessiondatareport />} />
 				<Route  path="/chart" element={<Chart />} />
 				<Route  path="/exportchart" element={<ExportChart />} />
-				<Route  path="/create/report/:config/:session/:record" element={<ChartTable />} />
+				<Route  path="/create/report/:config/:session/:record/:currentConfig" element={<ChartTable />} />
 				<Route  path="/create/exported/report/:config" element={<ChartExportedTable/>} />
 				<Route  path="/session/data/report/:type" element={<SessiondataReport />} />
 				<Route path="/multidata/report" element={<MultidataReport />} />

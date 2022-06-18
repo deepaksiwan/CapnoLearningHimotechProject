@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useRef, useState } from 'react';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import { Radio } from 'antd';
+import ReactTooltip from 'react-tooltip';
 
 import { Link, useParams, Router } from 'react-router-dom';
 import Plot from 'react-plotly.js';
@@ -10,28 +11,48 @@ import RangeSlider from 'react-bootstrap-range-slider';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import InputColor from 'react-input-color';
 import { trim } from 'jquery';
+import { setTextRange } from 'typescript';
+import { API_URL } from '../../../config';
 
 const Chart = (props) => {
     console.log("props",props)
     const session = props.session;
     const record = props.record;
     const [xAxis, setXaxis] = useState([]);
-    const [xAxisMin, setXaxisMin] = useState(props.xmin); 
-    const [xAxisMax, setXaxisMax] = useState(props.xmax);
+    const [statistics,setStatistics] = useState([]);
+    // alert(new Date(parseInt(props.xmin)));
+    const [xAxisMin, setXaxisMin] = useState(props.xmin == 0 ? props.xmin :  new Date(parseInt(props.xmin))); 
+    const [xAxisMax, setXaxisMax] = useState(props.xmax == "full" ? props.xmax :  new Date(parseInt(props.xmax))); 
     const [yAxisMin, setYaxisMin] = useState(props.ymin);  
     const [yAxisMax, setYaxisMax] = useState(props.ymax);
     const unit = useRef(0);
     const [color, setColor] = useState(props.color);
+    const [reportComment,setReportComment] = useState(null);
     // alert(props.color)
     const [type, setType] = useState(props.type);
+    const showActualTime = props.showActualTime ; 
+    console.log("other" , JSON.parse(props.otherConfig))
+    const otherConfig = props.otherConfig ? JSON.parse(props.otherConfig) : {
+        xrange: 0, 
+        units: "mmHg",
+        annotation: 1,
+        grid: 1,
+        inverty: 2,
+        yposition: 1,
+        lineType: "solid"
+    };
     const [yAxis, setYaxis] = useState([]);
     const accessToken = localStorage.getItem('accessToken');
-    const [value, setValue] = useState(1); 
+    const [value, setValue] = useState(props.thick); 
     const [thresholdvalue ,setThresholdvalue] = useState(4)
     const [point, setPoint] = useState(25);
+    const [xrange, setXRange] = useState(otherConfig.xrange);
     const [rowHeight, setRowHeight] = useState("30px")
     const [taskMarkers,setTaskMarkers] = useState([]) ; 
     const [textAnnotations,setTextAnnotations] = useState([]) ; 
+    const [currentPoint,setCurrentPoint] = useState(null) ; 
+    const [currentAnnotation,setCurrentAnnotation] = useState(null) ; 
+    
     // const [liveAnnotation,setLiveAnnotation] = useState([]) ; 
     let  liveAnnotation = [] ; 
     const [graphModal, setgraphModal] = useState(false);
@@ -45,27 +66,38 @@ const Chart = (props) => {
 
     const [unitModal, setunitModal] = useState(false);
     const toggleunitModal = () => setunitModal(!unitModal);
+    
+    const [commentModal, setCommentModal] = useState(false);
+    const toggleCommentModal = () => setCommentModal(!commentModal);
+
+    const [updateCommentModal, setUpdateCommentModal] = useState(false);
+    const toggleUpdateCommentModal = () => setUpdateCommentModal(!updateCommentModal);
+    const showSignalStat = props.showSignalStat ; 
 
     const [annotationtModal, setannotationtModal] = useState(false);
     const toggleannotationtModal = () => setannotationtModal(!annotationtModal);
     const [play, setPlay] = useState(false);
     const [modal,setModal] = useState({
-        range:'',
-        units:'mmHg',
-        annotation: 1,
-        grid: 1,
-        invert: 2,
-        position: 1,
+        range:otherConfig.xrange,
+        units:otherConfig.units,
+        annotation: otherConfig.annotation,
+        grid: otherConfig.grid,
+        invert: otherConfig.inverty,
+        position: otherConfig.yposition,
         showGrid : true
     })
     const [signalModalData,setSignalModalData] = useState({
-        signalType:2,
-        disabledType : false,
+        signalType:props.type == "line" ? 1 : 2,
+        disabledType : props.type == "line" ? true :  false,
         signal : 1
     })
-    const [signalLinetype , setSignalLinetype] = useState("")
+    const [average,setAverage] = useState(30)
+    const [comment,setComment] = useState([])
+    const [signalLinetype , setSignalLinetype] = useState(otherConfig.lineType)
     const [hideThresholdLine,setHideThresholdLine] = useState(1)
-
+    const setConfig = props.setConfig ; 
+    const setStats = props.setStats ; 
+    
     const [signalName, setSignalName] = useState({
         pco2wave : "PCO<sub>2</sub> Waveform",
         petco2 :  "PetCO<sub>2</sub> History",
@@ -112,19 +144,48 @@ const Chart = (props) => {
     colorCodes['Paused'] = "#FF0000"
     useEffect(() => {
         // super(props);
+        // console.log("max" ,xAxisMax)
+      
+    }, [xAxis, yAxis,textAnnotations])
 
+    useEffect(() => {
+        let _temp = {
+            color : color.hex  ? color.hex : color,
+            type : type,
+            avg : average,
+            xmin : new Date(xAxisMin).getTime(),
+            thick : value,
+            xextreme : new Date(xAxis[xAxis.length-1]).getTime(),
+            xmax : xAxisMax == "full" ? xAxisMax : new Date(xAxisMax).getTime(),
+            ymin : yAxisMin,
+            ymax : yAxisMax,
+            record : record,
+            graph_order : props.graph_order,
+            comment : comment,
+            row : props.row,
+            clientSerial : null,
+            col : props.col,
+            xrange: xrange, 
+            units: modal.units,
+            annotation: modal.annotation,
+            grid: modal.grid,
+            inverty: modal.invert,
+            yposition: modal.position,
+            lineType: signalLinetype
 
-    }, [xAxis, yAxis])
+        }
+        setConfig(props.signal,_temp)
+    },[color,type,average,xAxisMin,value,xAxisMax,yAxisMin,yAxisMax,record,comment,signalLinetype,modal]);
 
     useEffect(() => {
         // super(props);
         clearInterval(playTimer);
         getAlldata();
-
+       
     }, [])
 
     const getCsv = () => {
-        fetch("https://capno-api.herokuapp.com/api/session/data?session_id=" + session + "&signal_name=" + props.signal,
+        fetch(API_URL+"/session/data?session_id=" + session + "&signal_name=" + props.signal,
             {
                 method: 'GET',
                 headers: {
@@ -155,7 +216,7 @@ const Chart = (props) => {
     }
 
     const getAlldata = () => {
-        fetch("https://capno-api.herokuapp.com/api/session/data/type?session_id=" + session + "&type=2",
+        fetch(API_URL+"/session/data/type?session_id=" + session + "&type=2",
         {
             method: 'GET',
             headers: {
@@ -200,12 +261,17 @@ const Chart = (props) => {
     async function getData(_csvFile) {
         let _x = [];
         let _y = [];
+        let _tempStats = [] ;
+
         let _npauseTime = 0 ; 
         let _length = 0 ;
         let _pauseTime = 0 ; 
         let userTimeOffset = new Date().getTimezoneOffset() ; 
+        
+            userTimeOffset = userTimeOffset*60*1000 ; 
+ 
+        
     //    alert(userTimeOffset);
-          userTimeOffset = userTimeOffset*60*1000 ; 
           let _allTasks = [] ; 
           let _allAnnotation = [] ; 
           let lastTask  ; 
@@ -215,7 +281,6 @@ const Chart = (props) => {
             // let _tasks = {} ; 
             let _temptask = [] ; 
             let _taskArray = [] ; 
-
             let _tempAnnotation = [] ; 
             let lastRecord = data[0].x ; 
         // console.log(data[0]);
@@ -227,12 +292,25 @@ const Chart = (props) => {
                 if(_npauseTime > 0){
                     _pauseTime  += _npauseTime ; 
                 }
-                    let xData = new Date(parseInt((((v.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ))
+                let xData = new Date(parseInt((((v.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ))
+                if(showActualTime){
+                     xData = new Date(parseInt((((v.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ))
+                }
                     _length = parseInt(v.x - data[0].x - _pauseTime) ;
                     // console.log(_length)
                     _x.push(xData);
                     // console.log()
                     _y.push(parseFloat(v.y));
+
+                    _tempStats.push({
+                        x : xData.getHours()+":"+xData.getMinutes()+":"+xData.getSeconds()+":"+xData.getMilliseconds(),
+                        y : parseFloat(v.y),
+                        mean : 0,
+                        median : 0,
+                        sd : 0,
+                    }) 
+                
+                    
                     if(v.rname != "Normal"){
                         
                         if(lastTask != data[i+1].text && _taskArray.length > 0){
@@ -264,12 +342,13 @@ const Chart = (props) => {
                         _ptasks = [] ;
                 }
                 _npauseTime = 0 ; 
+               
 
                 }
                 else if(v.z == 0 && _x.length > 0){
                     _npauseTime  = parseInt(v.x) -  parseInt(lastRecord) ; 
                 }
-                
+              
                 
                 if (i == (data.length - 1)) {
                     // alert("here");
@@ -434,7 +513,9 @@ const Chart = (props) => {
                     setLength(_length);
                     setXaxis(_x);
                     setYaxis(_y);
-                  
+                    console.log("signal data",_tempStats)
+                    setStats(props.signal,_tempStats)
+                    setStatistics(_tempStats)
                     // plotGraph(_x,_y);
 
                 }
@@ -450,10 +531,31 @@ const Chart = (props) => {
     }
 
     const handleInitial = (e) => {
-        console.log(e);
+        reset();
+//         console.log(e);
+//     let userTimeOffset = new Date().getTimezoneOffset() ; 
+//     // //    alert(userTimeOffset);
+//     userTimeOffset = userTimeOffset*60*1000 ; 
+//         if(xAxisMin == 0 ){
+//             setXaxisMin(new Date(e.layout.xaxis.range[0]))
+//         }  
+//         else{
+            
+//             setXaxisMin(new Date(parseFloat(xAxisMin)))
+//             // alert(parseFloat(xAxisMin+userTimeOffset));
+//             // alert(new Date(xAxisMin))
 
-            setXaxisMin(new Date(e.layout.xaxis.range[0]))
-            setXaxisMax(new Date(e.layout.xaxis.range[1]))
+//         }
+
+//         if(xAxisMax == "full" ){
+//             setXaxisMax(new Date(e.layout.xaxis.range[1]))
+//         }
+//         else{
+//             setXaxisMax(new Date(xAxisMax+userTimeOffset))
+
+//         }
+
+
          
 
        
@@ -488,7 +590,7 @@ const zoomIn = () => {
     let _deviation = zommDeviation*length ; 
     console.log(_deviation);
     console.log(length);
-    console.log(new Date(xAxisMin))
+    console.log(xAxisMin)
     
     // let userTimeOffset = new Date().getTimezoneOffset() ; 
     // //    alert(userTimeOffset);
@@ -676,6 +778,13 @@ const handleAnnotations = e => {
         annotation : value
     }))
 }
+const handleXaxisWiindow = e => {
+    let {value = "" } = e.target || {}
+    setModal(prevState=>({
+        ...prevState,
+        xwindow : value
+    }))
+}
 
 const handleGridLine = e => {
     let {value = "" } = e.target || {}
@@ -756,7 +865,7 @@ const handleSignalType = e => {
             disabledType : true,
             signalType : value
         }))  
-        setType("lines")
+        setType("line")
     }
 }
 const handleLine = (e) => {
@@ -789,13 +898,117 @@ const hideThreshold = event => {
     setHideThresholdLine(value)
 }
 
-  
+const handleClick = event => {
+      
+    setReportComment(null);
+    // setCurrentPoint(event)
+    setCommentModal(true);
+    setCurrentPoint(event.points[0])
+    // console.log("clicked", event.points)
+}
+
+const addComment = () => {
+    
+    let _tempAnnotation = 
+        {
+            xref: 'x',
+            yref: 'y',
+            x: currentPoint.x ,
+            y: currentPoint.y,  
+            textangle: 270,
+            text: reportComment,
+            font: {
+                color: '#ffffff'
+              },
+            showarrow: true,
+            bgcolor: "#FF0000",
+            arrowcolor: "#FF0000", 
+            arrowhead: 10,
+            ax: 30, 
+            ay: 0,
+            captureevents: true
+
+        };
+        
+
+   let _oldAnnotation = textAnnotations ; 
+   _oldAnnotation.push(_tempAnnotation) ; 
+   setTextAnnotations(_oldAnnotation) ; 
+   setCommentModal(false)
+   setComment(_oldAnnotation)
+
+}
+
+const handleAnnotationClick = (e) => {
+    console.log(e)
+    setCurrentAnnotation(e);
+    setUpdateCommentModal(true)
+    setReportComment(e.annotation.text)
+
+}
+
+
+
+const updateComment = () => {
+    let _oldAnnotation = textAnnotations ; 
+
+    _oldAnnotation.splice(currentAnnotation.index, 1); // 2nd parameter means remove one item only
+    setTextAnnotations(_oldAnnotation) ; 
+    setUpdateCommentModal(false)
+
+
+    let _tempAnnotation = 
+        {
+            xref: 'x',
+            yref: 'y',
+            x: new Date(currentAnnotation.annotation.x) ,
+            y: currentAnnotation.annotation.y,  
+            textangle: 270,
+            text: reportComment,
+            font: {
+                color: '#ffffff'
+              },
+            showarrow: true,
+            bgcolor: "#FF0000",
+            arrowcolor: "#FF0000", 
+            arrowhead: 10,
+            ax: 30, 
+            ay: 0,
+            captureevents: true
+
+        };
+        
+ 
+   _oldAnnotation.push(_tempAnnotation)  ; 
+   console.log("new" , _oldAnnotation) ;
+   setTextAnnotations(_oldAnnotation) ; 
+   setComment(_oldAnnotation)
+ 
+
+}
+
+const deleteComment = () => {
+
+   let _oldAnnotation = textAnnotations ; 
+
+   _oldAnnotation.splice(currentAnnotation.index, 1); // 2nd parameter means remove one item only
+ 
+   setComment(_oldAnnotation)
+   setTextAnnotations(_oldAnnotation) ; 
+   setUpdateCommentModal(false)
+
+}
+
+
     return (
         <div>
+                                <ReactTooltip />
+        
            
             {   
                 xAxis.length > 0 && yAxis.length > 0 &&
-                <>
+             <> 
+                <div style={{ width:  "99%" , maxWidth:"100%", height:  (eval(props.row) * 74) + "vh"  } }>
                   <ul className="top-filter-left">
                         <li>
                             <div className='colorsqr' style={{backgroundColor: color}}></div>
@@ -832,10 +1045,11 @@ const hideThreshold = event => {
                 </ul> */}
 
                 {/* unit modal */}
-               
+               {console.log(xAxisMin)}
                 <Plot className="plot-charts"
-                 
+                 onClick={handleClick}
                  onRelayout={handleRelayout}
+                 onClickAnnotation={handleAnnotationClick}
                 //  onUpdate={handleRelayout}
                  onInitialized={handleInitial}
                     data={[
@@ -855,11 +1069,11 @@ const hideThreshold = event => {
                         yaxis: {rangemode: 'tozero'},
                         xaxis: {rangemode: 'tozero'},
                         hovermode: true,
-                        dragmode: true, 
+                        dragmode: false, 
                         shapes: modal.annotation === 1 ? taskMarkers : [],
                         xaxis :{
                             type: "date",
-                            tickformat: "%M:%S",
+                            tickformat: "%H:%M:%S",
                             ticktext: ["-", "tick", "tick", "-"],
                             range: [
                                 xAxisMin,
@@ -891,7 +1105,8 @@ const hideThreshold = event => {
                     }}
                     config={{
 			        	displayModeBar: false,  
-                        scrollZoom: true,
+                        scrollZoom: false,
+                        doubleClick:false,
                         transition: {
                             duration: 50,
                             easing: 'cubic-in-out'
@@ -900,6 +1115,9 @@ const hideThreshold = event => {
 
                 />
                 {/* {xAxis[0]} */}
+
+          
+
                  <Modal isOpen={unitModal} toggle={toggleunitModal} className="modal-box-wrp" centered={true}>
                     <ModalHeader toggle={toggleunitModal}><span className="ml-1 roititle modal-head">Change Y-Scale Unit for <span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]}} ></span></span></ModalHeader>
                     <ModalBody>
@@ -1062,7 +1280,7 @@ const hideThreshold = event => {
                                         <span>Name</span>
                                         </Col>
                                     <Col lg={7} xl={7}>
-                                        <div className="raw-pcos"><p>{props && signalName[props.signal]}</p></div>
+                                        <div className="raw-pcos"><p dangerouslySetInnerHTML={{__html : props && signalName[props.signal]}}></p></div>
                                         </Col>
                                 </Row>
                             </li>
@@ -1108,7 +1326,7 @@ const hideThreshold = event => {
                             {signalModalData.disabledType && <li>
                                 <Row justify="space-between" style={{height: rowHeight}}>
                                     <Col lg={5} xl={5}>
-                                        <span>Signal Lines Type</span>
+                                        <span>Signal Line Type</span>
                                     </Col>
                                     <Col lg={7} xl={7}>
                                   
@@ -1198,12 +1416,13 @@ const hideThreshold = event => {
                                                        ...prevState,
                                                          range:value 
                                                      }))
+                                                     setXRange(value)
      
                                              }}
-                                             value={modal.range}
+                                             value={xrange}
 
                                         >
-                                            <option value="">Full Length</option>
+                                            <option value="0">Full Length</option>
                                             <option value="1">1 Minute</option>
                                             <option value="2">2 Minute</option>
                                             <option value="5">5 Minute</option>
@@ -1261,7 +1480,7 @@ const hideThreshold = event => {
                             <li>
                                  <Row justify="space-between">
                                     <Col lg={5} xl={5}>
-                                        <span>Show Grid Lines</span>
+                                        <span>Show Grid Line</span>
                                     </Col>
                                     <Col lg={7} xl={7}>
                                          
@@ -1342,9 +1561,79 @@ const hideThreshold = event => {
                     </ModalBody>
                 </Modal> 
 
+                {/* comment modal start */}                              
+                <Modal isOpen={commentModal} toggle={toggleCommentModal} className="modal-box-wrp" centered={true}>
+                <ModalHeader toggle={toggleCommentModal}><span className="ml-1 roititle modal-head">Add Comment</span></ModalHeader>
+                        <ModalBody>
+                           <textarea rows="8" style={{width: "100%"}} value={reportComment} onChange={(e) => setReportComment(e.target.value) } ></textarea>
+                           
+                        <div className='d-flex justify-content-around mt-3'>
+                            <button className='lightbtn w-100'  onClick={toggleCommentModal} >Cancel</button>
+                            <button className='darktbtn w-100 ml-1'  onClick={addComment} >Add Comment</button>
+                        </div>
+                        </ModalBody>
+                            
+                    </Modal>
+                {/* comment modal end*/}                              
+
+
+                      {/* update comment modal start */}                              
+                      <Modal isOpen={updateCommentModal} toggle={toggleUpdateCommentModal} className="modal-box-wrp" centered={true}>
+                <ModalHeader toggle={toggleUpdateCommentModal}><span className="ml-1 roititle modal-head">Update Comment</span></ModalHeader>
+                        <ModalBody>
+                           <textarea rows="8" style={{width: "100%"}} value={reportComment} onChange={(e) => setReportComment(e.target.value) } ></textarea>
+                           
+                        <div className='d-flex justify-content-around mt-3'>
+                            <button className='lightbtn w-100'  onClick={deleteComment} >Delete Comment</button>
+                            <button className='darktbtn w-100 ml-1'  onClick={updateComment} >Update Comment</button>
+                        </div>
+                        </ModalBody>
+                            
+                    </Modal>
+                {/* update comment modal end*/}                              
+
+
                 {/* <Modal>
                     
                 </Modal> */}
+
+                </div>
+                {
+                    props.signal != "pco2wave"  ?
+                          <table className='table table-resposnive table-hover statTable mt-5' style={{display: showSignalStat  ? "" : "none" }} >
+                                        <thead className='thead-dark'>
+                                            <tr>
+                                                <th>X</th>
+                                                <th>Y</th>
+                                                <th>Mean</th>
+                                                <th>Median</th>
+                                                <th>SD <span data-tip="Standard Deviation"><i className='fa fa-info-circle'  ></i></span></th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                
+                
+                                            {
+                                                 statistics.length > 0 && statistics.map((v,i) => {
+                                                    return (
+                                                        <tr>
+                                                        <td>{v.x}</td>
+                                                        <td>{v.y}</td>
+                                                        <td>{v.mean}</td>
+                                                        <td>{v.median}</td>
+                                                        <td>{v.sd}</td>            
+                                                        </tr>
+                            
+                                                    )
+                
+                                                })
+                                            }
+                                        </tbody>
+                
+                                    </table>
+                                    :null
+                }
                 </>
             }
             {
