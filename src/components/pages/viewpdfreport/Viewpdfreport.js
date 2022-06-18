@@ -52,10 +52,7 @@ const Viewpdfreport = () =>{
                 response.json().then((resp) => {
                     // console.warn("result", resp);
                     setpdfs(resp.pdfs);
-                    // let len = pdfs.length;
-                    //   console.warn(len);
                    
-
                 });
             }
             else if (response.status == 401) {

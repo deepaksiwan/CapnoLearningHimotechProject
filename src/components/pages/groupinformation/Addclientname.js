@@ -27,8 +27,7 @@ const Addclientname = (props) => {
                 <div className="col-lg-6">
                     <div className="client-input">
                         <p>CapnoTrainer Serial Number</p>
-                        <input placeholder="Write Serial Number" ref={serialNumber}  onChange={handleChange} />
-                            
+                        <input placeholder="Write Serial Number" ref={serialNumber}  onChange={handleChange} />   
                         
                     </div>
                 </div>

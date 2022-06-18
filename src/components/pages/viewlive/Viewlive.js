@@ -22,7 +22,7 @@ const Viewlive = () => {
 
 
     useEffect(() => {
-
+        
         setInterval(() => {
             setSelectedSession(localStorage.getItem('selectedSession'));
       

@@ -52,6 +52,7 @@ import GroupsesstionReport from './components/pages/viewpdfreport/GroupsesstionR
 import PdfclienthomeworkReport from './components/pages/viewpdfreport/PdfclienthomeworkReport';
 import PdfsessetionreportNotes from './components/pages/viewpdfreport/PdfsessetionreportNotes';
 import Assemblyreport from './components/pages/sectionreportassembly/Assemblyreport';
+import Viewassemblyreport from './components/pages/sectionreportassembly/Viewassemblyreport';
 import Privateroutelogin from './components/component/Privateroutelogin';
 import Uploadhomeworkasignment from './components/pages/viewmanageform/Uploadhomeworkasignment';
 import Addclient from './components/pages/clientinformation/Addclient';
@@ -62,6 +63,7 @@ import Chooseemail from './components/pages/choose/Chooseemail';
 import List from './components/pages/list/List';
 import SubscriptionRenewalGroup from './components/pages/subscriptionmanagement/SubscriptionRenewalGroup';
 import SubscribedUsers from './components/pages/subscribedusers/SubscribedUsers';
+import Editassemblyreport from './components/pages/sectionreportassembly/Editassemblyreport';
 
 function App(){
 	return(
@@ -115,6 +117,7 @@ function App(){
 				<Route path="/pdf/client/homework/report" element={<PdfclienthomeworkReport />} />
 				<Route path="/pdf/sessetion/report/notes" element={<PdfsessetionreportNotes />} />
 				<Route path="/assemblyreport" element={<Assemblyreport />} />
+				<Route path="/view/assembly" element={<Viewassemblyreport />} />
 				<Route path="/upload/homework/asignment" element={<Uploadhomeworkasignment />} />
 				<Route path="/add/trainer" element={<Addtrainer />} />
 				<Route path="/multilanguage" element={<Multilanguage />} />
@@ -127,8 +130,8 @@ function App(){
 				</Route> 
 				<Route path="/subscription/renew/:userid" element={<SubscriptionRenewal />} />
 				<Route path="/subscription/renew/group/:userid" element={<SubscriptionRenewalGroup />} />
+				<Route path="/edit/assembly/report" element={<Editassemblyreport />} />
 				
-
 
 				{/* <Route  path="/edit/profile" element={<Editprofile />} /> */} 
 			 	<Route path="" element={<Privateroutelogin />}>
