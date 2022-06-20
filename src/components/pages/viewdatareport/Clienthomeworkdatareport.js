@@ -5,6 +5,7 @@ import Header from '../../component/Header';
 import MaterialTable from 'material-table';
 import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
+import { API_URL } from "../../../config";
 
 const Clienthomeworkdatareport = () => {
 
@@ -21,7 +22,7 @@ const Clienthomeworkdatareport = () => {
 
 
     const Singlesession = () => {
-        fetch("https://capno-api.herokuapp.com/api/report/single?session_id=" + sessionid,
+        fetch(API_URL+"/report/single?session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {

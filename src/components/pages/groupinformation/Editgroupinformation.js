@@ -7,6 +7,8 @@ import right from '../../images/right.png';
 import Addclientname from './Addclientname';
 import EditgroupProfile from '../groupinformation/EditgroupProfile';
 import md5 from 'md5';
+import { API_URL } from '../../../config';
+
 const Editgroupinformation = () => {
     const accessToken = localStorage.getItem('accessToken');
     const [trainers, setTrainer] = useState([]);
@@ -55,7 +57,7 @@ const Editgroupinformation = () => {
         // console.log(data)
 
 
-        fetch("https://capno-api.herokuapp.com/api/group/update/" + groupid, {
+        fetch(API_URL+"/group/update/" + groupid, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -85,7 +87,7 @@ const Editgroupinformation = () => {
     }
 
     const getGroup = () => {
-        fetch("https://capno-api.herokuapp.com/api/group/" + groupid,
+        fetch(API_URL+"/group/" + groupid,
             {
                 method: 'GET',
                 headers: {
@@ -116,7 +118,7 @@ const Editgroupinformation = () => {
 
     }
     const getProfileGroup = () => {
-        fetch("https://capno-api.herokuapp.com/api/group/profile/" + groupid,
+        fetch(API_URL+"/group/profile/" + groupid,
             {
                 method: 'GET',
                 headers: {
@@ -149,7 +151,7 @@ const Editgroupinformation = () => {
     }
 
     const getTrainer = () => {
-        fetch("https://capno-api.herokuapp.com/api/trainers?user_id=" + userId,
+        fetch(API_URL+"/trainers?user_id=" + userId,
             {
                 method: 'GET',
                 headers: {

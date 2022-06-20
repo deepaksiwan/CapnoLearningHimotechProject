@@ -6,6 +6,7 @@ import MaterialTable from 'material-table';
 import download from '../../images/download.png';
 import preveiw from '../../images/preveiw.png';
 import { jsPDF } from "jspdf";
+import { API_URL } from "../../../config";
 
 const Bankform = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -31,7 +32,7 @@ const Bankform = () => {
     ]
 
     const PdfbankForm = () => {
-        fetch("https://capno-api.herokuapp.com/api/forms/blank",
+        fetch(API_URL+"/forms/blank",
             {
                 method: 'GET',
                 headers: {

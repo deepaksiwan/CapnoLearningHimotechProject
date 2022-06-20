@@ -6,14 +6,16 @@ import { API_URL } from '../../config';
 import ReactTooltip from 'react-tooltip';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import ReactExport from "react-export-excel";
+import { group } from 'd3';
 
 
-const ChartHeader = (props) => {
+const ViewChartHeader = (props) => {
     const accessToken = localStorage.getItem('accessToken');
     const [sessions, setsessions] = useState([]);
     const sessionid = localStorage.getItem('selectedSession');
     const clientId = localStorage.getItem('selectedClient');
     
+    const [reportDetails, setReportDetails] = useState([]);
     const [records, setrecords] = useState([]);
     const [sessionDate, setsessionDate] = useState([]);
     const [clientName, setClientName] = useState([]);
@@ -21,12 +23,11 @@ const ChartHeader = (props) => {
     const [sessioninfo, setsessioninfo] = useState([]);
     const setSessionDate = props.setSessionDate ; 
     const [alternate, setAlternate] = useState([]);
-    const group = props.group;
+    const group = props.group ; 
     const reportconfig = useRef();
     const alternateconfig = useRef();
-    const reportRecord = useRef();
-    
-    const { config, session, record ,currentConfig } = useParams();
+    const { session , reportId , record} = useParams();
+
     const [notesModal, setNotesModal] = useState(false);
     const notesModalToggle = () => setNotesModal(!notesModal);
 
@@ -73,8 +74,8 @@ const ChartHeader = (props) => {
         getRcord();
         clientnameUpdate();
         getLiveNotes() ; 
-        getAlternate() ;
-  
+        // getAlternate() ;
+        getReportDetails();
 
         
         // getZoomRecording() ; 
@@ -304,11 +305,7 @@ const ChartHeader = (props) => {
     }
 
     const Report = () => {
-        let url = API_URL+"/configured/report?type=1" ; 
-        if(group){
-            url = API_URL+"/configured/report?type=2" ;
-        }
-        fetch(url,
+        fetch(API_URL+"/configured/report?type=1",
             {
                 method: 'GET',
                 headers: {
@@ -372,28 +369,9 @@ const ChartHeader = (props) => {
 
     const reportconfigalternateupdate = () => {
         let _configId = alternateconfig.current.value;
-        if(group){
-            window.location.href = "/create/group/report/" + config + "/" + session + "/" + record + "/" + _configId ; 
-        }
-        else{
-            window.location.href = "/create/report/" + config + "/" + session + "/" + record + "/" + _configId ; 
-
-        }
+        window.location.href = "/create/report/" + config + "/" + session + "/" + record + "/" + _configId ; 
 
     }
-    const reportrecordupdate = () => {
-        let _configId = reportconfig.current.value;
-        let _reportRecord = reportRecord.current.value;
-        if(group){
-            window.location.href = "/create/group/report/" + _configId + "/" + session + "/" + _reportRecord + "/" + _configId ; 
-        }
-        else{
-        window.location.href = "/create/report/" + _configId + "/" + session + "/" + _reportRecord + "/" + currentConfig ; 
-
-        }
-
-    }
-    
 
     const logout = () => {
         localStorage.clear();
@@ -445,6 +423,26 @@ const ChartHeader = (props) => {
           
     }
 
+    const getReportDetails = () => {
+      
+            fetch(API_URL + "/view/report/details?id="+reportId,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': accessToken,
+            },
+        }
+    ).then((response) => {
+        if (response.status == 200) {
+            response.json().then((resp) => {
+                setReportDetails(resp.details);
+                setNotes(resp.details[0].notes)
+            })
+        }
+    })
+    }
+
     const getPreviousSessionPDF = () => {
         setrequestProcessingModal(true);
 
@@ -457,7 +455,7 @@ const ChartHeader = (props) => {
                 },
             }
         ).then((response) => {
-            if (response.success) {
+            if (response.status == 200) {
                 response.json().then((resp) => {
 
                     if(resp.data.length > 0 ){
@@ -500,11 +498,13 @@ const ChartHeader = (props) => {
 
                 });
             }
-           
+            else if (response.status == 401) {
+                logout()
+            }
             else {
         setrequestProcessingModal(false);
-        alert("No PDF found for previous session")
 
+                alert("network error")
             }
 
 
@@ -553,7 +553,7 @@ const ChartHeader = (props) => {
             else {
         setrequestProcessingModal(false) ;
 
-                alert("No live session images found.")
+                alert("network error")
             }
 
 
@@ -605,11 +605,12 @@ const ChartHeader = (props) => {
                         <div className="action-opt" style={{width: "38%"}}>
                             <p>Actions Options</p>
                             <ul className='action-list'>
-                          
-                                 {
-                                  !group &&  sessioninfo.length > 0 &&
-                                   
+                            {
+                                    !group &&
                                 <li>
+                                 {
+                                    sessioninfo.length > 0 &&
+                                   
                                 <ExcelFile filename={"Statistics - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname  } element={<a href="javascript:void" onClick={exportExcel} data-tip="Export session data as Excel Sheet."   ><i class="fa fa-upload" aria-hidden="true"></i></a>}>
                                
                                     {
@@ -630,19 +631,17 @@ const ChartHeader = (props) => {
               
                 
             </ExcelFile>
-            </li>
  
+}
+                                </li>
 }
                                 <li><a href="javascript:void" onClick={takeNotesToggle} data-tip="Take report notes."><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li>
                                 <li><a href="javascript:void" data-tip="Export report as PDF." onClick={saveScreenshot}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
-                                {
-                                !group && 
-                                <li><a href="javascript:void" onClick={saveReportConfig} data-tip="Save as alternate configuration."><i class="fa fa-sliders" aria-hidden="true"></i></a></li>
-}
+                                {/* <li><a href="javascript:void" onClick={saveReportConfig} data-tip="Save as alternate configuration."><i class="fa fa-sliders" aria-hidden="true"></i></a></li> */}
                                 <li><a href="javascript:void" onClick={saveReport} data-tip="Save as report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
                             </ul>
                         </div>
-                        <div className="view-opt" style={{width: "50%"}}>
+                        <div className="view-opt" style={{width: "55%"}}>
                             <p>Viewing Options</p>
                             <ul className='action-list'>
                                 <li><a href="javascript:void" onClick={notesModalToggle} data-tip="View session notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
@@ -650,10 +649,10 @@ const ChartHeader = (props) => {
                                 <li><a href="javascript:void" onClick={zoomModalToggle} data-tip="View zoom recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
                                 <li><a href="javascript:void" onClick={getPreviousSessionPDF} data-tip="View PDF of previous session"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li>
                                 <li><a href="javascript:void" onClick={ViewlivesessionImage} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
-                               {
-                                !group && 
-                                <li><a href="javascript:void" onClick={() => setShowSignalStat(!showSignalStat)} data-tip="View all signal statistics"><i class="fa fa-table"></i></a></li>
-                               }
+                                {
+                                    !group &&
+                                    <li><a href="javascript:void" onClick={() => setShowSignalStat(!showSignalStat)} data-tip="View all signal statistics"><i class="fa fa-table"></i></a></li>
+                                }
                                 <li><a href="javascript:void" onClick={viewManual} data-tip="View help document"><i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="javascript:void" onClick={() => setShowActualTime(!showActualTime)}  data-tip='Switch time format' data-tog><i class="fa fa-clock-o" aria-hidden="true"></i></a></li> */}
                             </ul>
@@ -662,7 +661,7 @@ const ChartHeader = (props) => {
                 </div>
                 <div className="chart-header-c2">
                     <div className="wrp-select-row">
-                        <div className="select-row">
+                        {/* <div className="select-row">
                             <select className="selected-raw-c" onChange={reportconfigupdate} ref={reportconfig}>
 
                                 {
@@ -675,12 +674,9 @@ const ChartHeader = (props) => {
                                 }
 
                             </select>
-                        </div>
-                        {
-                            !group &&
-                           
-                        <div className="select-row">
-                            <select onChange={reportconfigalternateupdate} ref={alternateconfig}>
+                        </div> */}
+                        {/* <div className="select-row">
+                            <select onChange={reportconfigalternateupdate} ref={alternateconfig}>>
                                 <option value={config} selected={config == currentConfig ? "selected" : "" } >Default</option>
                                 {
                                     alternate.length > 0 && alternate.map((v,i) => {
@@ -690,11 +686,9 @@ const ChartHeader = (props) => {
                                     })
                                 }
                             </select>
-                        </div>
-                         
-                        }
+                        </div> */}
                         <div className="select-row">
-                            <select value={record} onChange={reportrecordupdate} ref={reportRecord}>
+                            <select value={record} onChange={(e) => window.location.href = e.target.value}>
                                 <option value={'all'}   >All Records</option>
 
                                 {
@@ -711,6 +705,14 @@ const ChartHeader = (props) => {
                 </div>
                 <div className="chart-header-c3">
                     <ul className="username-list">
+                    <li data-tip="Name of report">
+                        {reportDetails.map((repoprtName) => {
+                            return (
+                                <a href="javascript:void"><i class="fa fa-file" aria-hidden="true"></i>{repoprtName.name}</a>
+                            )
+                        }
+                        )}
+                        </li>
                     <li data-tip="Name of client">
                         {sessioninfo.map((clientName) => {
                             return (
@@ -790,5 +792,5 @@ const ChartHeader = (props) => {
     )
 }
 
-export default ChartHeader
+export default ViewChartHeader
 

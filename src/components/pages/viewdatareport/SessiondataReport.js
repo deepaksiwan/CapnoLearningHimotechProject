@@ -5,6 +5,7 @@ import Header from '../../component/Header';
 import MaterialTable from 'material-table';
 import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
+import { API_URL } from "../../../config";
 
 const SessiondataReport = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -25,11 +26,11 @@ const SessiondataReport = () => {
         }
         
 
-    }, []);
+    }, [sessionid,Clientid]);
 
 
     const Singlesession = () => {
-        fetch("https://capno-api.herokuapp.com/api/report/single?session_id=" + sessionid,
+        fetch(API_URL+"/report/single?session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {
@@ -46,13 +47,13 @@ const SessiondataReport = () => {
                         _temp.push({
                             report : v.name,
                             Createdate : new Date(v.added_on).toLocaleString(),
-                            actions : <p><a href='#' className="downloadimg"><img src={preveiw} /></a></p>
+                            actions : <p><a href={type == 'single' ? '/view/report/'+sessionid+"/"+v.id+'/all' : '/view/group/report/'+sessionid+"/"+v.id+'/all'} className="downloadimg"><img src={preveiw} /></a></p>
                         })
                     })
                     setData(_temp);
 
                     // let len = reports.length;
-                      console.warn(len);
+                    //   console.warn(len);
                    
 
                 });
@@ -69,7 +70,7 @@ const SessiondataReport = () => {
     }
 
     const Multisession = () => {
-        fetch("https://capno-api.herokuapp.com/api/report/multiple?client_id=" + Clientid,
+        fetch(API_URL+"/report/multiple?client_id=" + Clientid,
             {
                 method: 'GET',
                 headers: {

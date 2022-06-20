@@ -8,13 +8,15 @@ import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import InputColor from 'react-input-color';
 import Plots from 'react-plotly.js';
 import { csv } from 'd3';
-import ChartHeader from '../../component/ChartHeader';
+import ViewChartHeader from '../../component/ViewChartHeader';
 import Chart from './Chart';
 import { API_URL } from '../../../config';
 
-const ChartTable = () => {
+const ViewGroupChartTable = () => {
     const accessToken = localStorage.getItem('accessToken');
-    const { config, session  , record,currentConfig} = useParams();
+    const { session , reportId , record} = useParams();
+    const [currentConfig ,setCurrentConfig] = useState()
+    
     const [graphs, setgraphs] = useState([]);
     const [notes,setNotes] = useState(null) ; 
     const [reportName,setReportName] = useState(null) ; 
@@ -29,6 +31,7 @@ const ChartTable = () => {
     const [signalConfig , setSignalConfig] = useState({})
     const [signalStat , setSignalStat] = useState({})
     const [showSignalStat , setShowSignalStat] = useState(false)
+    const [groupProfile, setGroupProfile] = useState([]);
     
     const [requestProcessingModal, setrequestProcessingModal] = useState(false);
     const requestProcessingModalToggle = () => setrequestProcessingModal(!requestProcessingModal);
@@ -99,12 +102,17 @@ const ChartTable = () => {
 
     useEffect(() => {
         reportChart();
-
-
+     
+ ;
     }, []);
 
+
+    
+ 
+
     const reportChart = () => {
-        fetch(API_URL+"/report/config?report_id=" + currentConfig,
+        fetch(API_URL+"/view/report/config?report_id=" + reportId,
+ 
             {
                 method: 'GET',
                 headers: {
@@ -146,69 +154,15 @@ const ChartTable = () => {
 
   const saveReport = () => {
     setrequestProcessingModal(true)
-    
-        html2canvas(document.getElementById("chart-table")).then(function (canvas) {
-
-            let session_id = session;
-            let type = 0;
-            let status = 1;
-
-            let dataimg = canvas.toDataURL('image/png')
-            // const doc = new jsPDF();
-
-            // for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
-            //     doc.setPage(pageNumber)
-            //     doc.setTextColor(0, 0, 0);
-            //     doc.text('Capnolearning Report', 10, 10,
-            //         { styles: { fontSize: 20, fontWeight: 'bold' } })
-            //     doc.setDrawColor(0, 0, 0);
-            //     doc.line(10, 15, 600, 15);
-            //     doc.setFontSize(10)
-
-            //     doc.text(sessionDate, 35, 25)
-            //     doc.text(clientName, 23, 30);
-            //     doc.text(trainerName, 25, 35);
-            //     doc.setFont(undefined, 'bold');
-            //     doc.text("Session Date:", 10, 25)
-            //     doc.text("Client:", 10, 30);
-            //     doc.text("Trainer:", 10, 35);
-            //     // doc.setFont(undefined, 'bold')
-            //     doc.addImage(dataimg, 5, 45, 200, 110);
-            // }
-            // doc.save(sessionDate + ".pdf");
-
- 
-            let formData = {    
-                'data':  dataimg,
-                'type': type,
-                'status': status,
-                'session_id': session_id    
-                } ;
-
-            fetch(API_URL + "/save/screenshot", {
-                method: 'POST',
-                headers: {  
-                     'Content-Type': 'application/json',
-                     'x-access-token': accessToken,
-                },
-                body: JSON.stringify(formData),
-            }).then((result) => {
-                result.json().then((resp) => {
-
-
-                })
-
+     
                 let timezone = new Date().getTimezoneOffset() ; 
                 let formDataReport = {    
-                    'pid':  currentConfig,
-                    'session_id': session,
-                    'name': reportName,
+                    'rid':  reportId,
                     'notes': notes,
-                    'status' : 1,
                     'timezone' : timezone   
                     } ;
                     
-                    fetch(API_URL + "/save/single/report", {
+                    fetch(API_URL + "/update/single/report", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -217,12 +171,12 @@ const ChartTable = () => {
                         body: JSON.stringify(formDataReport),
                     }).then(async (result) => {
                         let _res = await result.json() ;
-                        let reportId = _res.reports.insertId ;
+                        
             
                         graphs.map((v,i) => {
-                                let _config = signalConfig[v.signal_name] ; 
+                                let _config = signalConfig[v.clientSerial] ; 
                                 // console.log(_config) ;
-                                fetch(API_URL + "/save/single/report/graph", {
+                                fetch(API_URL + "/update/group/report/graph", {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json',
@@ -231,7 +185,7 @@ const ChartTable = () => {
                                     body: JSON.stringify({
                                         reportId,
                                         _config,
-                                        signal_name: v.signal_name
+                                        clientSerial: v.clientSerial
                                     }),
                                 }).then(async (result) => {
                                     let _res = await result.json() ;
@@ -251,14 +205,7 @@ const ChartTable = () => {
                     })
 
                     
-            })
-
- 
-
-
-           
-
-        });
+            
     }
 
     const saveReportConfig = () => {
@@ -325,7 +272,7 @@ const ChartTable = () => {
         <div>
             {
                 graphs.length > 0  && showHeader &&
-                <ChartHeader group={false} setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={config} />
+                <ViewChartHeader group={true} setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={currentConfig} />
             }
 
           
@@ -335,12 +282,11 @@ const ChartTable = () => {
                     <div className="row">
                         {
                            graphs.length > 0 &&  graphs.map(function (d, i) {
-                           
-                               
+                            
                                 return (
                                   
                                         <div className="chart-w" style={{ width:  (eval(d.col) * 100) + "%" , maxWidth: (eval(d.col) * 100) + "%", height: "auto" , minHeight:  (eval(d.row) * 84) + "vh"  }}>
-                                        <Chart group={false} showActualTime={showActualTime} showSignalStat={showSignalStat} setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
+                                        <Chart group={true} index={i+1} clientSerial={d.clientSerial} showActualTime={showActualTime} showSignalStat={showSignalStat} comment={d.comment} setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
                                         </div>
                                    
 
@@ -418,14 +364,7 @@ const ChartTable = () => {
                     <Modal isOpen={savingReportConfirmation} toggle={savingReportConfirmationToggle} className="modal-box-wrp" centered={true}>
                     <ModalHeader toggle={savingReportConfirmationToggle}><span className="ml-1 roititle modal-head">Confirm request.</span></ModalHeader>
                     <ModalBody>
-                        <p className=''>Please enter the name of report you want to save.</p>
-                        <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-     <span class="input-group-text" id="basic-addon1">{sessionDate}</span>
-  </div>
-  <input type="text" class="form-control" value={reportName} onChange={(e) => setReportName(e.target.value)} placeholder="Report Name" aria-label="Report Name" aria-describedby="basic-addon1" />
-</div>
-
+                        <p className='text-center'>Are you sure you want to save the changes to report?</p>
                         <div className='d-flex justify-content-around mt-3'>
                             <button className='lightbtn w-100'  onClick={savingReportConfirmationToggle} >Cancel</button>
                             <button className='darktbtn w-100 ml-1'  onClick={saveReport} >Save</button>
@@ -440,4 +379,4 @@ const ChartTable = () => {
     )
 }
 
-export default ChartTable;
+export default ViewGroupChartTable;

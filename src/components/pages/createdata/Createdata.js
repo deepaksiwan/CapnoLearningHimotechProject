@@ -29,7 +29,7 @@ const Createdata = (props) => {
             to: "/createmultisession", displayCreateDatalist: "Create & Save a Multisession Report"
         },
         {
-            to: "/creategroupsessetionreport", displayCreateDatalist: "Create & Save a Group Session Report"
+            to: "/create/group/session/report", displayCreateDatalist: "Create & Save a Group Session Report"
         },
         {
             to: "/demodatareport", displayCreateDatalist: "PRACTICE: Creating Data Reports (Demo Data Only)"
@@ -91,7 +91,7 @@ const Createdata = (props) => {
 
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={selectedSession === "null" || selectedGroup === "false" ? "" : "/creategroupsessetionreport"} className={selectedSession === "null" || selectedGroup === "false" ? "deactivate" : ""}>{t('Create-&-Save-a-Group-Session-Report')}</Link></div>
+                                <div className="create-list-box"><Link to={selectedSession === "null" || selectedGroup === "false" ? "" : "/create/group/session/report"} className={selectedSession === "null" || selectedGroup === "false" ? "deactivate" : ""}>{t('Create-&-Save-a-Group-Session-Report')}</Link></div>
                             </li>
                             <li>
                                 <div className="create-list-box"><Link to="/demodatareport" >{t('PRACTICE:-Creating-Data-Reports-(Demo Data Only)')}</Link></div>

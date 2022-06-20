@@ -8,6 +8,7 @@ import Delete from '../../images/delete.png'
 import edit from '../../images/edit.png';
 import right from '../../images/right.png';
 import closeicon from '../../images/closeicon.png';
+import { API_URL } from '../../../config';
 
 const Hardwareprofile = () => {
 
@@ -57,7 +58,7 @@ const Hardwareprofile = () => {
        
 
 
-        fetch("https://capno-api.herokuapp.com/api/device/five/register", {
+        fetch(API_URL+"/device/five/register", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -86,7 +87,7 @@ const Hardwareprofile = () => {
        
     }
     const get5Device = () => {
-        fetch("https://capno-api.herokuapp.com/api/device/five/profile/" + userId,
+        fetch(API_URL+"/device/five/profile/" + userId,
             {
                 method: 'GET',
                 headers: {
@@ -123,7 +124,7 @@ const Hardwareprofile = () => {
         })
     }
     const get6Device = () => {
-        fetch("https://capno-api.herokuapp.com/api/device/six/profile/" + userId,
+        fetch(API_URL+"/device/six/profile/" + userId,
             {
                 method: 'GET',
                 headers: {
@@ -173,7 +174,7 @@ const Hardwareprofile = () => {
     }
     const delete5device = () => {
         let id = itemId ; 
-        fetch("https://capno-api.herokuapp.com/api/device/five/delete/" + id,
+        fetch(API_URL+"/device/five/delete/" + id,
             {
                 method: 'POST',
                 headers: {

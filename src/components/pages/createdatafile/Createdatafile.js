@@ -2,6 +2,7 @@ import React, { Component, useEffect, useRef, useState } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
+import { API_URL } from "../../../config";
 
 
 const CreatesaveFilesession = () => {
@@ -19,7 +20,7 @@ const CreatesaveFilesession = () => {
 
 
     const Exportedfile = () => {
-        fetch("https://capno-api.herokuapp.com/api/configured/report?type=1",
+        fetch(API_URL+"/configured/report?type=1",
             {
                 method: 'GET',
                 headers: {

@@ -3,6 +3,7 @@ import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody
 import { Link, useParams } from 'react-router-dom';
 import Header from '../../component/Header';
 import Sidebar from '../../component/Sidebar';
+import { API_URL } from "../../../config";
 
 const Uploadhomeworkasignment = () => {
     const [clients, setinclients] = useState([]);
@@ -61,7 +62,7 @@ const Uploadhomeworkasignment = () => {
         }
         formFile.current.value = "";
 
-        fetch("https://capno-api.herokuapp.com/api/homework/client/upload", {
+        fetch(API_URL+"/homework/client/upload", {
             method: 'POST',
             headers: {
                 'x-access-token': accessToken,
@@ -112,19 +113,19 @@ const Uploadhomeworkasignment = () => {
             localStorage.setItem('selectedclientInactive', false);
 
         }
-        let url = "https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&status=2&trainer=" + _trainer + "&user_type=" + _userType;
+        let url = API_URL+"/clients?user_id=" + _userId + "&status=2&trainer=" + _trainer + "&user_type=" + _userType;
         let _clientActive = clientActive.current.checked;
         let _clientInactive = clientInactive.current.checked;
 
 
         if (_clientActive && !_clientInactive) {
-            url = "https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&status=1&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL+"/clients?user_id=" + _userId + "&status=1&trainer=" + _trainer + "&user_type=" + _userType;
         }
         else if (!_clientActive && _clientInactive) {
-            url = "https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&status=0&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL+"/clients?user_id=" + _userId + "&status=0&trainer=" + _trainer + "&user_type=" + _userType;
         }
         else if (_clientActive && _clientInactive) {
-            url = "https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL+"/clients?user_id=" + _userId + "&trainer=" + _trainer + "&user_type=" + _userType;
         }
 
 
@@ -169,7 +170,7 @@ const Uploadhomeworkasignment = () => {
 
         let _hw = 0;
 
-        let url = "https://capno-api.herokuapp.com/api/sessions?cid=" + _cid + "&hw=" + _hw;
+        let url = API_URL+"/sessions?cid=" + _cid + "&hw=" + _hw;
 
 
         fetch(url,

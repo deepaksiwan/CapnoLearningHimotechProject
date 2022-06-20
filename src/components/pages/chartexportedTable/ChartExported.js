@@ -1,3 +1,4 @@
+
 import React, { Component, useEffect, useRef, useState } from 'react';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import { Radio } from 'antd';
@@ -166,63 +167,47 @@ const ExportedChart = (props) => {
     useEffect(() => {
         // super(props);
 
-
     }, [xAxis, yAxis])
 
     useEffect(() => {
         // super(props);
         clearInterval(playTimer);
         // getAlldata();
-        loadFile();
-
+         loadFile();
+         
+        
     }, [])
-
 
     const loadFile = () => {
         var reader = new FileReader();
-        // getData(reader.result)
-        // get file name by signal from fileName constant. fileName[props.signal]
-
-        //loop props.datafile
-        // find filename
-        //check if it matches the above filenmae and get it's index
-
         let fileToLoad = fileName[props.signal];
-        console.log(" result of fileToLoad", fileToLoad)
-        // console.log("count array data", props.dataFile)
+        //console.log(" result of fileToLoad", fileToLoad)
         let _index = false;
         let _files = props.dataFile;
-        _files = Array.from(_files);
-        console.log("final file var", _files)
+        _files = Array.from(_files);    
+       // console.log("final file var", _files)
         _files.length > 0 && _files.map(function (v, i) {
-            console.log("show data fknfdkfjfkdf", v)
-
-            // var  v1 = fileToLoad.length - 1
-            console.log("result of name", v.name)
+            // console.log("show data fknfdkfjfkdf", v)
+            // console.log("result of name", v.name)
 
             if (v.name == fileToLoad) {
                 _index = i;
             }
-            console.log("i result", _index);
-
-            // console.log("show datafile", v.fileName)
-            // if (fileToLoad == _index) {
-
-            // }
+           // console.log("i result", _index);
 
 
         })
-
         if(_index){
             reader.readAsDataURL(_files[_index]);
             reader.onload = e => {
                 getData(e.target.result);
-    
+
             };
         }
-
-
     }
+
+   
+
 
     // const getCsv = () => {
     //     fetch("https://capno-api.herokuapp.com/api/session/data?session_id=" + session + "&signal_name=" + props.signal,
@@ -244,6 +229,7 @@ const ExportedChart = (props) => {
 
     //             });
     //         }
+    
     //         else if (response.status == 401) {
     //             logout()
     //         }
@@ -449,7 +435,6 @@ const ExportedChart = (props) => {
 
 
                     })
-
                     _allAnnotation.map((v, i) => {
                         console.log(v)
                         if (v[3] == "Paused") {
@@ -1450,22 +1435,34 @@ const ExportedChart = (props) => {
                 </>
             }
             {
-                (xAxis.length == 0 || yAxis.length == 0)  &&
+                (xAxis.length == 0 || yAxis.length == 0) &&
 
-                <div className="wrp-chart-loader">
-                    <div class="loading">
-                        <div class="loading-1"></div>
-                        <div class="loading-2"></div>
-                        <div class="loading-3"></div>
-                        <div class="loading-4"></div>
-
-                    </div>
+            < div className="wrp-chart-loader">
+                <div class="loading">
+                    <div class="loading-1"></div>
+                    <div class="loading-2"></div>
+                    <div class="loading-3"></div>
+                    <div class="loading-4"></div>
 
                 </div>
+
+            </div>
             }
-           
-        </div>
+            {/* {
+                !fileLoaded &&
+                < div className="wrp-chart-loader">
+                  
+                 <p className="" style={{color:"#c867c6"}}> Please choose file to vivisualise data for<span dangerouslySetInnerHTML={{ __html: props && signalName[props.signal] }} ></span></p>
+                <p><input className="form-control" multiple type="file" id="file" onChange={fileupload} webkitdirectory="true"
+
+                /></p>
+                </div>
+
+            } */}
+
+        </div >
 
     )
 }
 export default ExportedChart;
+ 

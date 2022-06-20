@@ -5,6 +5,7 @@ import { useTranslation, initReactI18next } from "react-i18next";
 import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
+import { API_URL } from "../../../config";
 
 const Viewmanageform = () =>{
 
@@ -35,7 +36,7 @@ const Viewmanageform = () =>{
     },[selectedClient,selectedSession])
 
     const uploadedClientform = () => {
-        fetch("https://capno-api.herokuapp.com/api/forms/client?client_id=" + Clientid,
+        fetch(API_URL+"/forms/client?client_id=" + Clientid,
             {
                 method: 'GET',
                 headers: {
@@ -64,7 +65,7 @@ const Viewmanageform = () =>{
         })
     }
     const uploadedtrainerform = () => {
-        fetch("https://capno-api.herokuapp.com/api/forms/client?client_id=" + Clientid + "&session_id=" + sessionid,
+        fetch(API_URL+"/forms/client?client_id=" + Clientid + "&session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {

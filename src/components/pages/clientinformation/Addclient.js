@@ -4,6 +4,7 @@ import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import right from '../../images/right.png'
+import { API_URL } from '../../../config';
 
 const Addclient = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -41,7 +42,7 @@ const Addclient = () => {
     }, [])
 
     const getCountry = () => {
-        fetch("https://capno-api.herokuapp.com/api/countries",
+        fetch(API_URL+"/countries",
             {
                 method: 'GET',
                 headers: {
@@ -70,7 +71,7 @@ const Addclient = () => {
     const getState = (countryid) => {
 
 
-        fetch("https://capno-api.herokuapp.com/api/states?country_id=" + countryid,
+        fetch(API_URL+"/states?country_id=" + countryid,
             {
                 method: 'GET',
                 headers: {
@@ -124,7 +125,7 @@ const Addclient = () => {
         data['associated_owner'] = associated_owner;
 
         console.log(data);
-        fetch("https://capno-api.herokuapp.com/api/client/create", {
+        fetch(API_URL+"/client/create", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

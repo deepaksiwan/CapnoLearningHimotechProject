@@ -12,7 +12,7 @@ import ChartHeader from '../../component/ChartHeader';
 import Chart from './Chart';
 import { API_URL } from '../../../config';
 
-const ChartTable = () => {
+const GroupChartTable = () => {
     const accessToken = localStorage.getItem('accessToken');
     const { config, session  , record,currentConfig} = useParams();
     const [graphs, setgraphs] = useState([]);
@@ -22,10 +22,11 @@ const ChartTable = () => {
     const [sessionDate,setSessionDate] = useState(null) ; 
     const userId = localStorage.getItem('user_id');
     const [showActualTime,setShowActualTime] =  useState(true) ; 
+    const selectedClient = localStorage.getItem('selectedClient');
     
     // const [value, setValue] = useState(0);
     // const [point, setPoint] = useState(25);
-    // const [color, setColor] = useState();
+    const [groupProfile, setGroupProfile] = useState([]);
     const [signalConfig , setSignalConfig] = useState({})
     const [signalStat , setSignalStat] = useState({})
     const [showSignalStat , setShowSignalStat] = useState(false)
@@ -48,6 +49,7 @@ const ChartTable = () => {
         let _temp = signalConfig ; 
         _temp[_signal] = {
             color : data.color,
+            signal: data.signal,
             type : data.type,
             avg : data.avg,
             xmin : data.xmin/1e3,
@@ -99,7 +101,7 @@ const ChartTable = () => {
 
     useEffect(() => {
         reportChart();
-
+        getGroupProfile();
 
     }, []);
 
@@ -143,6 +145,22 @@ const ChartTable = () => {
 
     }
 
+const getGroupProfile = () => {
+    // alert("here")
+    fetch(API_URL + "/group/profile/"+selectedClient, {
+        method: 'GET',
+        headers: {  
+             'Content-Type': 'application/json',
+             'x-access-token': accessToken,
+        }, 
+    }).then((result) => {
+        result.json().then((resp) => {
+            setGroupProfile(resp.groupProfile);
+
+        })
+    })
+
+}
 
   const saveReport = () => {
     setrequestProcessingModal(true)
@@ -218,11 +236,13 @@ const ChartTable = () => {
                     }).then(async (result) => {
                         let _res = await result.json() ;
                         let reportId = _res.reports.insertId ;
-            
+                        
+                            groupProfile.length > 0 &&  groupProfile.map(function (v, j) {
+                                let _serial = v.name;
                         graphs.map((v,i) => {
-                                let _config = signalConfig[v.signal_name] ; 
+                                let _config = signalConfig[_serial] ; 
                                 // console.log(_config) ;
-                                fetch(API_URL + "/save/single/report/graph", {
+                                fetch(API_URL + "/save/group/report/graph", {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json',
@@ -231,7 +251,7 @@ const ChartTable = () => {
                                     body: JSON.stringify({
                                         reportId,
                                         _config,
-                                        signal_name: v.signal_name
+                                        serial: _serial
                                     }),
                                 }).then(async (result) => {
                                     let _res = await result.json() ;
@@ -249,6 +269,7 @@ const ChartTable = () => {
                         
             
                     })
+                })
 
                     
             })
@@ -325,7 +346,7 @@ const ChartTable = () => {
         <div>
             {
                 graphs.length > 0  && showHeader &&
-                <ChartHeader group={false} setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={config} />
+                <ChartHeader group={true} setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={config} />
             }
 
           
@@ -333,20 +354,44 @@ const ChartTable = () => {
             <div className="wrp-charttable" id="chart-table">
                 <div className="container-fluid">
                     <div className="row">
+                        {/* {groupProfile.length} */}
                         {
-                           graphs.length > 0 &&  graphs.map(function (d, i) {
-                           
+                            groupProfile.length > 0 &&  groupProfile.map(function (v, j) {
                                
                                 return (
+                                   
+                           graphs.length > 0 &&  graphs.map(function (d, i) {
+                            let col = d.col ;
+                            let row = d.row ; 
+                            if(col == "dynamic"){
+                                if(groupProfile.length > 4){
+                                    col = 1/3
+                                }
+                                else{
+                                    col = 1/2 ; 
+                                }
+                            }
+                            if(row == "dynamic"){
+                                if(groupProfile.length > 4){
+                                    row = 1/3
+                                }
+                                else{
+                                    row = 1/2 ; 
+                                }
+                            }
+                                return (
                                   
-                                        <div className="chart-w" style={{ width:  (eval(d.col) * 100) + "%" , maxWidth: (eval(d.col) * 100) + "%", height: "auto" , minHeight:  (eval(d.row) * 84) + "vh"  }}>
-                                        <Chart group={false} showActualTime={showActualTime} showSignalStat={showSignalStat} setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
+                                        <div className="chart-w" style={{ width:  (eval(col) * 100) + "%" , maxWidth: (eval(col) * 100) + "%", height: "auto" , minHeight:  (eval(row) * 84) + "vh"  }}>
+                                        <Chart group={true} profile={v} index={j} showActualTime={showActualTime} showSignalStat={showSignalStat} setStats={setStats} col={col} row={row} setConfig={setConfig} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
                                         </div>
                                    
 
-                                )
+                                ) 
 
                             })
+                             
+                            )
+                        }) 
                         }
 
             
@@ -440,4 +485,4 @@ const ChartTable = () => {
     )
 }
 
-export default ChartTable;
+export default GroupChartTable;

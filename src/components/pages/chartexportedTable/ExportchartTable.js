@@ -1,12 +1,17 @@
+
 import React, { Component, useCallback, useEffect, useState } from 'react';
 import { Link, useParams, Router } from 'react-router-dom';
 import RangeSlider from 'react-bootstrap-range-slider';
+import { ModalHeader, Modal, ModalBody } from "reactstrap";
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import InputColor from 'react-input-color';
 import Plots from 'react-plotly.js';
 import { csv } from 'd3';
+import { jsPDF } from "jspdf";
 import ChartExportedHeader from '../../component/ChartExportedHeader';
 import ExportChart from './ChartExported';
+// import folderimage from '../../images/choosefile.png'
+import { red } from '@material-ui/core/colors';
 
 
 const ChartTable = (props) => {
@@ -20,20 +25,26 @@ const ChartTable = (props) => {
     const [color, setColor] = useState();
     const [child, setchild] = useState('')
     const [setfileLoaded, setsetfileLoaded] = useState('')
-    const [getData, setgetData] = useState(props.getData)
+    const [HelpModal, setHelpModal] = useState(false);
+    const toggleHelpModal = () => setHelpModal(!HelpModal);
     const [fileSelected, setfileSelected] = useState(null)
 
 
-    //const getData = props.getData;
-    console.log("getData", getData)
+
+    const getData = props.getData;
+    //console.log("getData", getData)
     const fileLoaded = props.fileLoaded;
-    console.log("fileLoaded", fileLoaded);
+    //console.log("fileLoaded", fileLoaded);
+
+
 
 
 
 
     useEffect(() => {
         exportChart();
+        
+
     }, []);
 
     const exportChart = () => {
@@ -66,31 +77,83 @@ const ChartTable = (props) => {
         localStorage.clear();
         window.location.reload();
     }
-
-
     const fileupload = (event) => {
         //setfileLoaded(true)
         var file = event.target.files[0];
-        console.log(event.target)
+        //console.log(event.target)
         var reader = new FileReader();
-        // console.log("deepak file",file)
-        //  console.log("deepak reader",reader)
-        // getData(reader.result)
         reader.readAsDataURL(event.target.files[0]);
         reader.onload = event => {
-
             const dataContent = event.target.result;
-            console.log("deepak dataContent", dataContent);
+
+
         };
-        // reader.readAsText(e.target.files[0]);
-        console.log("check event", event.target.files)
         setfileSelected(event.target.files);
     }
 
+    const downloadImage = () => {
+        let _image = Array.from(fileSelected)
+        let _imageArray = [];
+        _image.length > 0 && _image.map(function (v, i) {
+            if (v.name.includes(".png")) {
+                _imageArray.push(v)
+
+            }
+            if (i == (_image.length - 1)) {
+                SaveImage(_imageArray)
+            }
+        })
+        // console.log("png image jdfsdj", _imageArray)
+    }
+    const SaveImage = (_imageArray) => {
+        const doc = new jsPDF();
+        //const pages = doc.internal.getNumberOfPages();
+        //console.log("pages", pages)
+        console.log("doc",doc)
+        console.log("pdf result", doc.getNumberOfPages())
+        for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
+            //console.log("pagenumber",pageNumber)
+            doc.setPage(pageNumber)
+            doc.setTextColor(2, 4, 7);
+            doc.text('Capnolearning Report', 10, 10,
+            { styles: { fontSize: 20, fontWeight: 'bold' } })
+            doc.setDrawColor(0, 0, 0);
+            doc.line(10, 15, 600, 15);
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'bold');
+            
+            doc.text("Session Date:", 10, 25)
+            doc.text("Client:", 10, 30);
+            doc.text("Trainer:", 10, 35);
+            _imageArray.length > 0 && _imageArray.map((v, i) => {
+                let reader = new FileReader();
+                console.log("result of v", v)
+                if (v) {
+                    console.log("v result", v)
+                    reader.readAsDataURL(v);
+                    reader.onload = event => {
+                        let dataimage = event.target.result;
+                        //doc.addImage(dataimage, 7, 50, 200, 90)
+                        doc.addImage(dataimage, 7, 100*(1+i), 200, 100);
+                
+                        // doc.addImage(dataimage, 7, 60*(4+i), 200, 90);
+                        // doc.addImage(dataimage, 7, 60*(5+i), 200, 90);
+                        doc.setPage(i + 1);
+                      
+                    };
+                }
+            })
+           
+        }
+        setTimeout(() => {
+            doc.save("Image.pdf");
+           
+        }, _imageArray.length  * 3000);
+    }
     return (
         <div>
-            <ChartExportedHeader fileupload={fileupload} config={config} />
-            <div className="wrp-charttable">
+            <ChartExportedHeader downloadImage={downloadImage} fileupload={fileupload} config={config} />
+            <div className="wrp-charttable" id="exported-chart">
                 <div className="container-fluid">
                     <div className="row">
                         {
@@ -98,7 +161,7 @@ const ChartTable = (props) => {
                                 console.log("graph show", d);
                                 return (
                                     <div className="chart-w" style={{ width: (eval(d.col) * 100) + "%", maxWidth: (eval(d.col) * 100) + "%", height: (eval(d.row) * 84) + "vh" }}>
-                                        <ExportChart  getData={getData} index={i} dataFile={fileSelected} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.ymin} ymin={d.ymin} ymax={d.ymax} type={d.type} color={d.color} />
+                                        <ExportChart getData={getData} index={i} dataFile={fileSelected} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.ymin} ymin={d.ymin} ymax={d.ymax} type={d.type} color={d.color} />
                                     </div>
 
                                 )
@@ -110,15 +173,51 @@ const ChartTable = (props) => {
                             <div className="wrp-chart-loader">
                                 <div className="uploadfile" >
                                     <div className='uploadheader'>
-                                        <p className="ex-chart " style={{ color: "#800080", marginLeft:'45rem'}} >Please choose file  to visualise data for   signal. </p>
+                                        <p style={{ color: "#800080", marginLeft: "35rem", fontSize: "17px" }} >Please choose folder to visualise signal data in the selected report template. </p>
                                     </div>
-                                   
+                                    <div className='files'>
+                                        <label id="Choosefolder">
+                                            <button className="buttonstyle d-flex" style={{ border: "1 px solid", background: "white", borderRadius: "5px" }}>
+                                                {/* <label><img style={{ marginRight: "10px", marginTop: "3px" }} src={folderimage}></img></label> */}
+                                                <h6 style={{ color: "#800080", marginTop: "5px" }}>Choose Folder</h6>
+                                            </button>
+                                        </label>
+                                        <input id="ChooseFolder" multiple type="file" style={{ opacity: "0", position: "obsolute", marginLeft: "-190px", borderRadius: 'none' }} onChange={fileupload} webkitdirectory="true"
+                                        />
+                                    </div>
+                                    <div className="" style={{ marginLeft: "34rem", color: "#800080" }}>
+                                        <a onClick={toggleHelpModal}>
+
+                                            <span>Need help</span>
+                                            <span><i class="fa fa-question-circle need-" aria-hidden="true"></i></span>
+
+                                        </a>
+
+                                    </div>
+
                                 </div>
+                                <Modal isOpen={HelpModal} toggle={toggleHelpModal} className="modal-box-wrp" centered={true}>
+                                    <ModalHeader toggle={toggleHelpModal}><span className="ml-1 roititle modal-head">You Need to Help.... </span></ModalHeader>
+                                    <ModalBody>
+                                        <ul className="range-list">
+                                            <h5>
+                                                hdjshdkdsdkshd
+                                                jdfsdkfs
+                                                dsjsdjfa-spinjdfsdjfd
+                                                kfkfs
+                                            </h5>
+                                        </ul>
+                                    </ModalBody>
+
+                                </Modal>
+
 
                             </div>
 
                         }
                     </div>
+
+
                 </div>
             </div>
 

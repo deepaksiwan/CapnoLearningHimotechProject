@@ -3,6 +3,7 @@ import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody
 import { Link, useParams } from 'react-router-dom';
 import Header from '../../component/Header';
 import Sidebar from '../../component/Sidebar';
+import { API_URL } from "../../../config";
 
 const Uploadclientform = () => {
     const [clients, setinclients] = useState([]);
@@ -67,7 +68,7 @@ const Uploadclientform = () => {
         }
         formFile.current.value = "";
         
-        fetch("https://capno-api.herokuapp.com/api/forms/client/upload", {
+        fetch(API_URL+"/forms/client/upload", {
             method: 'POST',
             headers: {
                 'x-access-token': accessToken,
@@ -88,7 +89,7 @@ const Uploadclientform = () => {
     }
 
     const blankForm = () => {
-        fetch("https://capno-api.herokuapp.com/api/forms/blank",
+        fetch(API_URL+"/forms/blank",
             {
                 method: 'GET',
                 headers: {
@@ -122,7 +123,7 @@ const Uploadclientform = () => {
 
     const getTrainers = () => {
 
-        let url = "https://capno-api.herokuapp.com/api/trainers?user_id=" + userId + "&status=2";
+        let url = API_URL+"/trainers?user_id=" + userId + "&status=2";
         // console.log(trainerActive);
         let _trainerActive = trainerActive.current.checked;
         let _trainerInactive = trainerInactive.current.checked;
@@ -143,13 +144,13 @@ const Uploadclientform = () => {
         }
 
         if (_trainerActive && !_trainerInactive) {
-            url = "https://capno-api.herokuapp.com/api/trainers?user_id=" + userId + "&status=1";;
+            url = API_URL+"/trainers?user_id=" + userId + "&status=1";;
         }
         else if (!_trainerActive && _trainerInactive) {
-            url = "https://capno-api.herokuapp.com/api/trainers?user_id=" + userId + "&status=0";
+            url = API_URL+"/trainers?user_id=" + userId + "&status=0";
         }
         else if (_trainerActive && _trainerInactive) {
-            url = "https://capno-api.herokuapp.com/api/trainers?user_id=" + userId;
+            url = API_URL+"/trainers?user_id=" + userId;
         }
         fetch(url,
             {
@@ -220,19 +221,19 @@ const Uploadclientform = () => {
             localStorage.setItem('selectedclientInactive', false);
 
         }
-        let url = "https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&status=2&trainer=" + _trainer + "&user_type=" + _userType;
+        let url = API_URL+"/clients?user_id=" + _userId + "&status=2&trainer=" + _trainer + "&user_type=" + _userType;
         let _clientActive = clientActive.current.checked;
         let _clientInactive = clientInactive.current.checked;
 
 
         if (_clientActive && !_clientInactive) {
-            url = "https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&status=1&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL+"/clients?user_id=" + _userId + "&status=1&trainer=" + _trainer + "&user_type=" + _userType;
         }
         else if (!_clientActive && _clientInactive) {
-            url = "https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&status=0&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL+"/clients?user_id=" + _userId + "&status=0&trainer=" + _trainer + "&user_type=" + _userType;
         }
         else if (_clientActive && _clientInactive) {
-            url = "https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL+"/clients?user_id=" + _userId + "&trainer=" + _trainer + "&user_type=" + _userType;
         }
 
 

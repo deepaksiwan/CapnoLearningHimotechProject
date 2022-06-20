@@ -64,6 +64,9 @@ import List from './components/pages/list/List';
 import SubscriptionRenewalGroup from './components/pages/subscriptionmanagement/SubscriptionRenewalGroup';
 import SubscribedUsers from './components/pages/subscribedusers/SubscribedUsers';
 import Editassemblyreport from './components/pages/sectionreportassembly/Editassemblyreport';
+import ViewChartTable from './components/pages/chartTable/ViewChartTable';
+import GroupChartTable from './components/pages/chartTable/GroupChartTable';
+import ViewGroupChartTable from './components/pages/chartTable/ViewGroupChartTable';
 
 function App(){
 	return(
@@ -102,11 +105,15 @@ function App(){
 				<Route  path="/edit/group/information/:groupid" element={<Editgroupinformation />} />
 				<Route  path="/edit/group" element={<Editgroup />} />
 				<Route  path="/createmultisession" element={<Createmultisession />} />
-				<Route  path="/creategroupsessetionreport" element={<Creategroupsessetionreport />} />
+				<Route  path="/create/group/session/report" element={<Creategroupsessetionreport />} />
 				<Route  path="/group/session/data/report" element={<Groupsessiondatareport />} />
 				<Route  path="/chart" element={<Chart />} />
 				<Route  path="/exportchart" element={<ExportChart />} />
+				<Route  path="/create/group/report/:config/:session/:record/:currentConfig" element={<GroupChartTable />} />
+
 				<Route  path="/create/report/:config/:session/:record/:currentConfig" element={<ChartTable />} />
+				<Route  path="/view/report/:session/:reportId/:record" element={<ViewChartTable />} />
+				<Route  path="/view/group/report/:session/:reportId/:record" element={<ViewGroupChartTable />} />
 				<Route  path="/create/exported/report/:config" element={<ChartExportedTable/>} />
 				<Route  path="/session/data/report/:type" element={<SessiondataReport />} />
 				<Route path="/multidata/report" element={<MultidataReport />} />

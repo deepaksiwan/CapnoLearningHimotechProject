@@ -9,6 +9,7 @@ import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 
 import Multilanguage from '../../component/Multilanguage'
+import { API_URL } from "../../../config";
 
 
 const Editprofile = () => {
@@ -136,7 +137,7 @@ const Editprofile = () => {
 
 
 
-        fetch("https://capno-api.herokuapp.com/api/owner/update/" + userId, {
+        fetch(API_URL+"/owner/update/" + userId, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -164,7 +165,7 @@ const Editprofile = () => {
     }
 
     const getOwnerProfile = () => {
-        fetch("https://capno-api.herokuapp.com/api/owner/profile/" + userId,
+        fetch(API_URL+"/owner/profile/" + userId,
             {
                 method: 'GET',
                 headers: {
@@ -192,7 +193,7 @@ const Editprofile = () => {
         })
     }
     const getCountry = () => {
-        fetch("https://capno-api.herokuapp.com/api/countries",
+        fetch(API_URL+"/countries",
             {
                 method: 'GET',
                 headers: {
@@ -223,7 +224,7 @@ const Editprofile = () => {
 
 <<<<<<< HEAD
 
-        fetch("https://capno-api.herokuapp.com/api/states?country_id=" + countryid,
+        fetch(API_URL+"/states?country_id=" + countryid,
             {
                 method: 'GET',
                 headers: {
@@ -251,7 +252,7 @@ const Editprofile = () => {
 
 =======
 
-        fetch("https://capno-api.herokuapp.com/api/states?country_id=" + countryid,
+        fetch(API_URL+"/states?country_id=" + countryid,
             {
                 method: 'GET',
                 headers: {

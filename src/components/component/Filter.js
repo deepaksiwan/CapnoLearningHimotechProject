@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import i18n from "i18next";
 import { useTranslation, initReactI18next } from "react-i18next";
 import sidebarmenu1 from '../images/sidebarmenu1.png'
+import { API_URL } from "../../config";
+
 const Filter = () => {
 
     // const [trainerActive, setTrainerActive] = useState(true);
@@ -59,7 +61,7 @@ const Filter = () => {
     const getTrainers = () => {
         setinclients([])
 
-        let url = "https://capno-api.herokuapp.com/api/trainers?user_id=" + userId + "&status=2";
+        let url = API_URL+"/trainers?user_id=" + userId + "&status=2";
         // console.log(trainerActive);
         let _trainerActive = trainerActive.current.checked;
         let _trainerInactive = trainerInactive.current.checked;
@@ -80,13 +82,13 @@ const Filter = () => {
                 }
         
         if (_trainerActive && !_trainerInactive) {
-            url = "https://capno-api.herokuapp.com/api/trainers?user_id=" + userId + "&status=1";;
+            url = API_URL+"/trainers?user_id=" + userId + "&status=1";;
         }
         else if (!_trainerActive && _trainerInactive) {
-            url = "https://capno-api.herokuapp.com/api/trainers?user_id=" + userId + "&status=0";
+            url = API_URL+"/trainers?user_id=" + userId + "&status=0";
         }
         else if (_trainerActive && _trainerInactive) {
-            url = "https://capno-api.herokuapp.com/api/trainers?user_id=" + userId;
+            url = API_URL+"/trainers?user_id=" + userId;
         }
         fetch(url,
             {
@@ -161,20 +163,20 @@ const Filter = () => {
                 localStorage.setItem('selectedclientInactive', false);
         
                 }
-        let url = "https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&status=2&trainer=" + _trainer + "&user_type=" + _userType;
+        let url = API_URL+"/clients?user_id=" + _userId + "&status=2&trainer=" + _trainer + "&user_type=" + _userType;
     
         let _clientActive = clientActive.current.checked;
         let _clientInactive = clientInactive.current.checked;
 
 
         if (_clientActive && !_clientInactive) {
-            url = "https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&status=1&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL+"/clients?user_id=" + _userId + "&status=1&trainer=" + _trainer + "&user_type=" + _userType;
         }
         else if (!_clientActive && _clientInactive) {
-            url = "https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&status=0&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL+"/clients?user_id=" + _userId + "&status=0&trainer=" + _trainer + "&user_type=" + _userType;
         }
         else if (_clientActive && _clientInactive) {
-            url = "https://capno-api.herokuapp.com/api/clients?user_id=" + _userId + "&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL+"/clients?user_id=" + _userId + "&trainer=" + _trainer + "&user_type=" + _userType;
         }
 
 
@@ -230,7 +232,7 @@ const Filter = () => {
             localStorage.setItem('selectedHomework', false);
     
             }
-        let url = "https://capno-api.herokuapp.com/api/sessions?cid=" + _cid + "&hw=" + _hw;
+        let url = API_URL+"/sessions?cid=" + _cid + "&hw=" + _hw;
 
 
         fetch(url,

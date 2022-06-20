@@ -5,10 +5,14 @@ import { useTranslation, initReactI18next } from "react-i18next";
 import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
+import { API_URL } from "../../../config";
+
 const Viewdatareport = () =>{
     const { t } = useTranslation();
     const accessToken = localStorage.getItem('accessToken');
-    const [reports, setviewreports] = useState(['reports']);
+    const [sreports, setviewsreports] = useState([]);
+    const [mreports, setviewmreports] = useState([]);
+ 
     const sessionid = localStorage.getItem('selectedSession');
     const Clientid = localStorage.getItem('selectedClient');
     const [selectedClient,setSelectedClient] = useState() ;
@@ -35,10 +39,10 @@ const Viewdatareport = () =>{
     useEffect(() => {
         Singlesession();
         Multisession();
-    },[selectedSession,selectedClient,selectedGroup,selectedHomework])
+    },[])
       
     const Singlesession = () => {
-        fetch("https://capno-api.herokuapp.com/api/report/single?session_id=" + sessionid,
+        fetch(API_URL+"/report/single?session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {
@@ -50,9 +54,8 @@ const Viewdatareport = () =>{
             if (response.status == 200) {
                 response.json().then((resp) => {
                     // console.warn("result", resp);
-                    setviewreports(resp.reports);
-                    let len = reports.length;
-                      console.warn(len);
+                    setviewsreports(resp.reports);
+                 
                    
 
                 });
@@ -68,7 +71,7 @@ const Viewdatareport = () =>{
         })
     }
     const Multisession = () => {
-        fetch("https://capno-api.herokuapp.com/api/report/multiple?client_id=" + Clientid,
+        fetch(API_URL+"/report/multiple?client_id=" + Clientid,
             {
                 method: 'GET',
                 headers: {
@@ -80,7 +83,7 @@ const Viewdatareport = () =>{
             if (response.status == 200) {
                 response.json().then((resp) => {
                     // console.warn("result", resp);
-                    setviewreports(resp.reports);
+                    setviewmreports(resp.reports);
                    
 
                 });
@@ -114,16 +117,16 @@ const Viewdatareport = () =>{
                        <ul className="create-list">
                             <li>
                             
-                                <div className="create-list-box"><Link to={(reports.length == 0 || selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null" ) ? "": "/session/data/report/single" } className={(reports.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "deactivate": "" }>{t('Session-Data-Reports')}</Link></div>
+                                <div className="create-list-box"><Link to={(sreports.length == 0 || selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null" ) ? "": "/session/data/report/single" } className={(sreports.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "deactivate": "" }>{t('Session-Data-Reports')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(reports.length == 0 || selectedClient === "null" || selectedGroup === "true" || selectedSession !== "null") ? "": "/session/data/report/multi" } className={(reports.length == 0 || selectedClient === "null" || selectedGroup === "true" || selectedSession !== "null") ? "deactivate": "" }>{t('Multi-session-Data-Reports')}</Link></div>
+                                <div className="create-list-box"><Link to={(mreports.length == 0 || selectedClient === "null" || selectedGroup === "true" || selectedSession !== "null") ? "": "/session/data/report/multi" } className={(mreports.length == 0 || selectedClient === "null" || selectedGroup === "true" || selectedSession !== "null") ? "deactivate": "" }>{t('Multi-session-Data-Reports')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(reports.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" ) ? "": "/session/data/report/group" } className={(reports.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" ) ? "deactivate": "" }>{t('Group-Session-Data-Reports')}</Link></div>
+                                <div className="create-list-box"><Link to={(sreports.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" ) ? "": "/session/data/report/group" } className={(sreports.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" ) ? "deactivate": "" }>{t('Group-Session-Data-Reports')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(reports.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "": "/session/data/report/homework" } className={(reports.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "deactivate": "" }>{t('Client-Homework-Data-Reports')}</Link></div>
+                                <div className="create-list-box"><Link to={(sreports.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "": "/session/data/report/homework" } className={(sreports.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "deactivate": "" }>{t('Client-Homework-Data-Reports')}</Link></div>
                             </li>
                        </ul>
                    </div>

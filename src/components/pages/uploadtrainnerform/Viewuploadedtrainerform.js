@@ -8,6 +8,7 @@ import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
+import { API_URL } from "../../../config";
 
 const Viewuploadedtrainerform = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -24,7 +25,7 @@ const Viewuploadedtrainerform = () => {
 
     const deleteuploadtrainerform = () => {
         let id = itemId ; 
-        fetch("https://capno-api.herokuapp.com/api/forms/trainer/delete/" + id,
+        fetch(API_URL+"/forms/trainer/delete/" + id,
             {
                 method: 'POST',
                 headers: {
@@ -67,7 +68,7 @@ const Viewuploadedtrainerform = () => {
         }
     ]
     const viewtrainerform = () => {
-        fetch("https://capno-api.herokuapp.com/api/forms/client?type=2&client_id=" + selectedClient,
+        fetch(API_URL+"/forms/client?type=2&client_id=" + selectedClient,
             {
                 method: 'GET',
                 headers: {

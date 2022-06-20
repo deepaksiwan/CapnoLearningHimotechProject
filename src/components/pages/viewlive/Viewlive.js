@@ -41,7 +41,7 @@ const Viewlive = () => {
     const livesessionNote = () => {
 
        
-        fetch("https://capno-api.herokuapp.com/api/session/data/type?type=3&session_id=" + sessionid,
+        fetch(API_URL+"/session/data/type?type=3&session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {
@@ -74,7 +74,7 @@ const Viewlive = () => {
     const livesessionImage = () => {
 
        
-        fetch("https://capno-api.herokuapp.com/api/session/data/type?type=4&session_id=" + sessionid,
+        fetch(API_URL+"/session/data/type?type=4&session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {
@@ -106,7 +106,7 @@ const Viewlive = () => {
     const zoomRecording = () => {
 
        
-        fetch("https://capno-api.herokuapp.com/api/session/info?session_id=" + sessionid,
+        fetch(API_URL+"/session/info?session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {

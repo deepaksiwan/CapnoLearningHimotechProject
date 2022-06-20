@@ -165,7 +165,7 @@ const PdfsessionReport = () => {
     const Singlesession = () => {
 
         
-        fetch("https://capno-api.herokuapp.com/api/report/single/pdf?session_id=" + sessionid,
+        fetch(API_URL+"/report/single/pdf?session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {
@@ -206,7 +206,7 @@ const PdfsessionReport = () => {
     }
 
     const Multisession = () => {
-        fetch("https://capno-api.herokuapp.com/api/report/multiple/pdf?client_id=" + Clientid,
+        fetch(API_URL+"/report/multiple/pdf?client_id=" + Clientid,
             {
                 method: 'GET',
                 headers: {

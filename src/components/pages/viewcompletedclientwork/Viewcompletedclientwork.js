@@ -8,6 +8,7 @@ import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
+import { API_URL } from "../../../config";
 
 const Viewcompletedclientwork = () => {
 
@@ -38,7 +39,7 @@ const Viewcompletedclientwork = () => {
 
     const deletehomeworkasignment = () => {
         let id = itemId ; 
-        fetch("https://capno-api.herokuapp.com/api/homework/client/delete/" + id,
+        fetch(API_URL+"/homework/client/delete/" + id,
             {
                 method: 'POST',
                 headers: {
@@ -67,7 +68,7 @@ const Viewcompletedclientwork = () => {
         setdeleteModal(!deleteModal)
     }
     const Homeworklist = () => {
-        fetch("https://capno-api.herokuapp.com/api/homework/client?session_id=" + Sessionid,
+        fetch(API_URL+"/homework/client?session_id=" + Sessionid,
             {
                 method: 'GET',
                 headers: {

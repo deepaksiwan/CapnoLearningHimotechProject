@@ -5,6 +5,8 @@ import { useTranslation, initReactI18next } from "react-i18next";
 import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
+import { API_URL } from "../../../config";
+
 const Viewpdfreport = () =>{
 
     const { t } = useTranslation();
@@ -39,7 +41,7 @@ const Viewpdfreport = () =>{
     },[selectedSession,selectedClient,selectedGroup,selectedHomework])
       
     const Singlesession = () => {
-        fetch("https://capno-api.herokuapp.com/api/report/single/pdf?session_id=" + sessionid,
+        fetch(API_URL+"/report/single/pdf?session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {
@@ -66,7 +68,7 @@ const Viewpdfreport = () =>{
         })
     }
     const Multisession = () => {
-        fetch("https://capno-api.herokuapp.com/api/report/multiple/pdf?client_id=" + Clientid,
+        fetch(API_URL+"/report/multiple/pdf?client_id=" + Clientid,
             {
                 method: 'GET',
                 headers: {

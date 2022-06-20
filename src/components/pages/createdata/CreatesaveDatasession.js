@@ -2,6 +2,7 @@ import React, { Component, useEffect, useRef, useState } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
+import { API_URL } from "../../../config";
 
 
 const CreatesaveDatasession = () => {
@@ -18,7 +19,7 @@ const CreatesaveDatasession = () => {
 
 
     const Report = () => {
-        fetch("https://capno-api.herokuapp.com/api/configured/report?type=1",
+        fetch(API_URL+"/configured/report?type=1",
             {
                 method: 'GET',
                 headers: {
@@ -57,7 +58,7 @@ const CreatesaveDatasession = () => {
                 </div>
                 <div className="right-section">
                     <div className="groupreport-list-head">
-                        <h3>Preconfigured Group Reports</h3>
+                        <h3>Pre-configured Group Reports</h3>
                     </div>
                     <ul className="groupreport-list">
 
@@ -65,7 +66,7 @@ const CreatesaveDatasession = () => {
                             sessions.map((sessions) =>
                                 {
                                     return(
-                                        <li><a href={"/create/report/" + sessions.id + "/" + session + "/all" } >{sessions.name}</a></li>
+                                        <li><a href={"/create/report/" + sessions.id + "/" + session + "/all/" + sessions.id}   >{sessions.name}</a></li>
                                     )
                                 }
                             )

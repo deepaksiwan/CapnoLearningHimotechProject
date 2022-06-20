@@ -5,6 +5,7 @@ import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import Addclientname from './Addclientname';
 import right from '../../images/right.png';
+import { API_URL } from '../../../config';
 
 const Groupinformation = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -49,7 +50,7 @@ const Groupinformation = () => {
         // console.log(data)
 
 
-        fetch("https://capno-api.herokuapp.com/api/group/create", {
+        fetch(API_URL+"/group/create", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -79,7 +80,7 @@ const Groupinformation = () => {
     }
 
     const getTrainer = () => {
-        fetch("https://capno-api.herokuapp.com/api/trainers?user_id=" + userId,
+        fetch(API_URL+"/trainers?user_id=" + userId,
             {
                 method: 'GET',
                 headers: {

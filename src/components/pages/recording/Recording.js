@@ -7,6 +7,7 @@ import Header from '../../component/Header';
 import MaterialTable from 'material-table';
 import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
+import { API_URL } from '../../../config';
 
 const Recording = () => {
     
@@ -23,7 +24,7 @@ const Recording = () => {
 
     const Recordings = () =>{
 
-        fetch("https://capno-api.herokuapp.com/api/recording/distributor",
+        fetch(API_URL+"/recording/distributor",
         
                {
                 method: 'GET',

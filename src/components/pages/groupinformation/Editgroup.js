@@ -8,6 +8,7 @@ import edit from '../../images/edit.png'
 import checks from '../../images/checks.png'
 import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
+import { API_URL } from '../../../config';
 
 const Editgroup = () => {
 
@@ -31,7 +32,7 @@ const Editgroup = () => {
 
     const deleteGroup = () => {
         let id = itemId ; 
-        fetch("https://capno-api.herokuapp.com/api/group/delete/" + id,
+        fetch(API_URL+"/group/delete/" + id,
             {
                 method: 'POST',
                 headers: {
@@ -62,7 +63,7 @@ const Editgroup = () => {
 
 
 
-        fetch("https://capno-api.herokuapp.com/api/clients?user_id=" + selectedTrainer + "&trainer=" + _trainer + "&user_type=4",
+        fetch(API_URL+"/clients?user_id=" + selectedTrainer + "&trainer=" + _trainer + "&user_type=4",
 
             {
                 method: 'GET',

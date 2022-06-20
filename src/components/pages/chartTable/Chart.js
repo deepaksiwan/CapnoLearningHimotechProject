@@ -21,12 +21,20 @@ const Chart = (props) => {
     const [xAxis, setXaxis] = useState([]);
     const [statistics,setStatistics] = useState([]);
     // alert(new Date(parseInt(props.xmin)));
-    const [xAxisMin, setXaxisMin] = useState(props.xmin == 0 ? props.xmin :  new Date(parseInt(props.xmin))); 
-    const [xAxisMax, setXaxisMax] = useState(props.xmax == "full" ? props.xmax :  new Date(parseInt(props.xmax))); 
+    let Utz = new Date().getTimezoneOffset() ; 
+    // Utz = Utz*60*1000 ; 
+ 
+    const [xAxisMin, setXaxisMin] = useState(props.xmin == 0 ? props.xmin :  new Date(parseInt(props.xmin*1e3))); 
+    if(props.signal == "pco2wave"  ){
+        console.log("newMin", new Date(parseInt(props.xmin*1e3)));
+    }
+    const [xAxisMax, setXaxisMax] = useState(props.xmax == "full" ? props.xmax :  new Date(parseInt(props.xmax*1e3))); 
     const [yAxisMin, setYaxisMin] = useState(props.ymin);  
     const [yAxisMax, setYaxisMax] = useState(props.ymax);
     const unit = useRef(0);
     const [color, setColor] = useState(props.color);
+    const group = props.group;
+    const clientSerial = props.clientSerial;
     const [reportComment,setReportComment] = useState(null);
     // alert(props.color)
     const [type, setType] = useState(props.type);
@@ -49,7 +57,7 @@ const Chart = (props) => {
     const [xrange, setXRange] = useState(otherConfig.xrange);
     const [rowHeight, setRowHeight] = useState("30px")
     const [taskMarkers,setTaskMarkers] = useState([]) ; 
-    const [textAnnotations,setTextAnnotations] = useState([]) ; 
+    const [textAnnotations,setTextAnnotations] = useState((props.comment == "{}" || props.comment == "[]" || props.comment == null ? [] :  JSON.parse(props.comment))) ; 
     const [currentPoint,setCurrentPoint] = useState(null) ; 
     const [currentAnnotation,setCurrentAnnotation] = useState(null) ; 
     
@@ -92,7 +100,7 @@ const Chart = (props) => {
         signal : 1
     })
     const [average,setAverage] = useState(30)
-    const [comment,setComment] = useState([])
+    const [comment,setComment] = useState((props.comment == "{}" || props.comment == "[]" || props.comment == null ? [] :JSON.parse(props.comment)))
     const [signalLinetype , setSignalLinetype] = useState(otherConfig.lineType)
     const [hideThresholdLine,setHideThresholdLine] = useState(1)
     const setConfig = props.setConfig ; 
@@ -152,11 +160,12 @@ const Chart = (props) => {
         let _temp = {
             color : color.hex  ? color.hex : color,
             type : type,
+            signal: props.signal,
             avg : average,
             xmin : new Date(xAxisMin).getTime(),
             thick : value,
             xextreme : new Date(xAxis[xAxis.length-1]).getTime(),
-            xmax : xAxisMax == "full" ? xAxisMax : new Date(xAxisMax).getTime(),
+            xmax : xAxisMax == "full" ? new Date(xAxis[xAxis.length-1]).getTime() : new Date(xAxisMax).getTime(),
             ymin : yAxisMin,
             ymax : yAxisMax,
             record : record,
@@ -174,7 +183,7 @@ const Chart = (props) => {
             lineType: signalLinetype
 
         }
-        setConfig(props.signal,_temp)
+        group  ? clientSerial ?  setConfig(clientSerial,_temp) : setConfig(props.profile.name,_temp) : setConfig(props.Signal,_temp)
     },[color,type,average,xAxisMin,value,xAxisMax,yAxisMin,yAxisMax,record,comment,signalLinetype,modal]);
 
     useEffect(() => {
@@ -281,7 +290,7 @@ const Chart = (props) => {
             // let _tasks = {} ; 
             let _temptask = [] ; 
             let _taskArray = [] ; 
-            let _tempAnnotation = [] ; 
+            let _tempAnnotation = textAnnotations ; 
             let lastRecord = data[0].x ; 
         // console.log(data[0]);
             data.map((v, i) => {
@@ -300,7 +309,14 @@ const Chart = (props) => {
                     // console.log(_length)
                     _x.push(xData);
                     // console.log()
-                    _y.push(parseFloat(v.y));
+                    if(group){
+                        console.log('which y', v['y'+(props.index+1)])
+                        _y.push(parseFloat(v['y'+(props.index+1)]));
+
+                    }
+                    else{
+                        _y.push(parseFloat(v.y));
+                    }
 
                     _tempStats.push({
                         x : xData.getHours()+":"+xData.getMinutes()+":"+xData.getSeconds()+":"+xData.getMilliseconds(),
@@ -500,8 +516,8 @@ const Chart = (props) => {
                                 );
 
                                if(i == (liveAnnotation.length - 1)){
-                                   console.log(_tempAnnotation);
-                                setTextAnnotations(_tempAnnotation);
+                                 
+                                   setTextAnnotations(_tempAnnotation);                                 
                                }
 
                             })
@@ -531,14 +547,14 @@ const Chart = (props) => {
     }
 
     const handleInitial = (e) => {
-        reset();
+        // reset();
 //         console.log(e);
 //     let userTimeOffset = new Date().getTimezoneOffset() ; 
 //     // //    alert(userTimeOffset);
 //     userTimeOffset = userTimeOffset*60*1000 ; 
-//         if(xAxisMin == 0 ){
-//             setXaxisMin(new Date(e.layout.xaxis.range[0]))
-//         }  
+        if(props.xmin == 0 ){
+            setXaxisMin(new Date(e.layout.xaxis.range[0]))
+        }  
 //         else{
             
 //             setXaxisMin(new Date(parseFloat(xAxisMin)))
@@ -547,9 +563,9 @@ const Chart = (props) => {
 
 //         }
 
-//         if(xAxisMax == "full" ){
-//             setXaxisMax(new Date(e.layout.xaxis.range[1]))
-//         }
+        if(props.xmax == "full" ){
+            setXaxisMax(new Date(e.layout.xaxis.range[1]))
+        }
 //         else{
 //             setXaxisMax(new Date(xAxisMax+userTimeOffset))
 
@@ -563,7 +579,7 @@ const Chart = (props) => {
 
     const handleRelayout = (e) => {
         console.log(e);
-        console.log(xAxisMin)
+        console.log("relayout",xAxisMin)
   
         
         if(new Date(e['xaxis.range[0]']) < new Date(xAxis[0].getTime())){
@@ -1008,26 +1024,34 @@ const deleteComment = () => {
             {   
                 xAxis.length > 0 && yAxis.length > 0 &&
              <> 
-                <div style={{ width:  "99%" , maxWidth:"100%", height:  (eval(props.row) * 74) + "vh"  } }>
+                <div style={{ width:  "99%" , maxWidth:"100%", height:  (eval(props.row) * 68) + "vh"  } }>
                   <ul className="top-filter-left">
                         <li>
                             <div className='colorsqr' style={{backgroundColor: color}}></div>
                         </li>
                         <li>
                         <span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]}} ></span>
+                        {
+                            group &&
+                           
+                          <span data-tip="Client name" dangerouslySetInnerHTML={{__html : props && "- " + (clientSerial ? clientSerial : props.profile['name'] ) }} ></span>
+                         
+
+
+                        }
                         </li>
                   </ul>
                 <ul className="top-filter" data-html2canvas-ignore="true">
-                    <li><a  onClick={toggleGraphModal}><i class="fa fa-line-chart" aria-hidden="true"></i></a></li>
-                    <li><a   onClick={toggleSignalModal}><i class="fa fa-signal" aria-hidden="true"></i></a></li>
+                    <li data-tip="Open Graph Setting"><a  onClick={toggleGraphModal}><i class="fa fa-line-chart" aria-hidden="true"></i></a></li>
+                    <li data-tip="Open Signal Setting"><a   onClick={toggleSignalModal}><i class="fa fa-signal" aria-hidden="true"></i></a></li>
                     {/* <li><a   onClick={toggletrehSoldModal}><i class="fa fa-area-chart" aria-hidden="true"></i></a></li> */}
-                 <li><a onClick={zoomIn}><i class="fa fa-search-plus"></i></a></li>
-                    <li><a onClick={zoomOut}><i class="fa fa-search-minus"></i></a></li>
-                    <li><a onClick={moveForward}><i class="fa fa-arrow-right"></i></a></li>
-                    <li><a onClick={moveBackward}><i class="fa fa-arrow-left"></i></a></li>
-                    <li><a onClick={handlePlay}><i class="fa fa-play"></i></a></li>
-                    <li><a onClick={handlePause}><i class="fa fa-pause"></i></a></li>
-                    <li><a onClick={reset}><i class="fa fa-undo"></i></a></li>
+                 <li data-tip="Zoom in"><a onClick={zoomIn}><i class="fa fa-search-plus"></i></a></li>
+                    <li data-tip="Zoom out"><a onClick={zoomOut}><i class="fa fa-search-minus"></i></a></li>
+                    <li data-tip="Move Forward"><a onClick={moveForward}><i class="fa fa-arrow-right"></i></a></li>
+                    <li data-tip="Move Backward"><a onClick={moveBackward}><i class="fa fa-arrow-left"></i></a></li>
+                    <li data-tip="Play"><a onClick={handlePlay}><i class="fa fa-play"></i></a></li>
+                    <li data-tip="Pause"><a onClick={handlePause}><i class="fa fa-pause"></i></a></li>
+                    <li data-tip="Reset Graph"><a onClick={reset}><i class="fa fa-undo"></i></a></li>
                     {/* <li><a  onClick={toggleunitModal}><i class="fa fa-thermometer-full" aria-hidden="true"></i></a></li>
                     <li><a  onClick={toggleannotationtModal}><i class="fa fa-comment"></i></a></li> */}
                 </ul>
@@ -1077,7 +1101,7 @@ const deleteComment = () => {
                             ticktext: ["-", "tick", "tick", "-"],
                             range: [
                                 xAxisMin,
-                                xAxisMax ,
+                                xAxisMax  ,
                             ],
                             ticks: "outside",
                             tickcolor: "#000",

@@ -4,6 +4,7 @@ import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import right from '../../images/right.png'
+import { API_URL } from '../../../config';
 
 const Addtrainer = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -36,7 +37,7 @@ const Addtrainer = () => {
     }, [])
 
     const getCountry = () => {
-        fetch("https://capno-api.herokuapp.com/api/countries",
+        fetch(API_URL+"/countries",
             {
                 method: 'GET',
                 headers: {
@@ -66,7 +67,7 @@ const Addtrainer = () => {
 
     let countryid = country.current.value;
 
-        fetch("https://capno-api.herokuapp.com/api/states?country_id=" + countryid,
+        fetch(API_URL+"/states?country_id=" + countryid,
             {
                 method: 'GET',
                 headers: {
@@ -117,7 +118,7 @@ const Addtrainer = () => {
         data['associated_owner'] = associated_owner;
      
 
-        fetch("https://capno-api.herokuapp.com/api/trainer/create", {
+        fetch(API_URL+"/trainer/create", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

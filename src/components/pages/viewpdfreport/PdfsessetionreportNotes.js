@@ -143,7 +143,7 @@ const PdfsessetionreportNotes = () => {
     }
 
     const pdfReportNote = () => {
-        fetch("https://capno-api.herokuapp.com/api/report/notes?session_id=" + sessionid,
+        fetch(API_URL+"/report/notes?session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {

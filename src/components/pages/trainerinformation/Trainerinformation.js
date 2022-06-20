@@ -4,6 +4,7 @@ import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import right from '../../images/right.png';
+import { API_URL } from '../../../config';
 
 const Trainerinformation = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -40,7 +41,7 @@ const Trainerinformation = () => {
 
 
     const gettrainer = () => {
-        fetch("https://capno-api.herokuapp.com/api/trainer/profile/" + trainerid,
+        fetch(API_URL+"/trainer/profile/" + trainerid,
             {
                 method: 'GET',
                 headers: {
@@ -91,7 +92,7 @@ const Trainerinformation = () => {
         data['associated_owner'] = associated_owner;
       
         console.log(data)
-        fetch("https://capno-api.herokuapp.com/api/trainer/update/"+trainerid,{
+        fetch(API_URL+"/trainer/update/"+trainerid,{
             method:'POST',
             headers:{
                 'Content-Type': 'application/json',
@@ -119,7 +120,7 @@ const Trainerinformation = () => {
             successToggleModal();
     }
     const getCountry = () => {
-        fetch("https://capno-api.herokuapp.com/api/countries",
+        fetch(API_URL+"/countries",
             {
                 method: 'GET',
                 headers: {
@@ -149,7 +150,7 @@ const Trainerinformation = () => {
 
         
 
-        fetch("https://capno-api.herokuapp.com/api/states?country_id=" + countryid,
+        fetch(API_URL+"/states?country_id=" + countryid,
             {
                 method: 'GET',
                 headers: {
