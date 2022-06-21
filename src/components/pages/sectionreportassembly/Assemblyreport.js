@@ -144,8 +144,7 @@ const Assemblyreport = () => {
                 if (response.status == 200) {
                     response.json().then((resp) => {
                         console.log("results", resp);
-                        localStorage.setItem("assemblydata",JSON.stringify(resp))
-                        navigate("/edit/assembly/report")
+                        navigate("/edit/assembly/report/" + resp.id)
                     });
                 }
                 else {

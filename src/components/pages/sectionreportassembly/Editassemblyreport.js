@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
 import i18n from "i18next";
+import html2canvas from 'html2canvas';
+import { jsPDF } from "jspdf";
 import { useTranslation, initReactI18next } from "react-i18next";
 import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
 import report from '../../images/report.png'
 import { API_URL } from "../../../config";
+import { map } from "jquery";
 
 const Editassemblyreport = () => {
 
@@ -29,10 +32,17 @@ const Editassemblyreport = () => {
     const [sessionDate, setSessionDate] = useState([]);
     const [completeForm, setCompleteForm] = useState([]);
     const pdfUrl = "https://capnolearning.com/webroot/client_forms/";
-    const [pdfDis, setPdfDis] = useState();
     const [dataPdf, setDataPdf] = useState([]);
+    const [liveImg, setLiveImg] = useState([]);
+    const [assemblydata, setAssemblydata] = useState([]);
+    const [PdfArrays, setPdfArrays] = useState([]);
+    const [livesessectionArray, setLivesessectionArray] = useState([]);
 
- 
+    
+
+    const reportName = useRef();
+    const summaryReportDes = useRef();
+    const { id } = useParams();
 
     useEffect(() => {
         getNames();
@@ -41,21 +51,86 @@ const Editassemblyreport = () => {
         livesessionImages();
         reportsesionnotes();
         getCompleteforms();
+        listAssemblyReportbyid()
+
+
 
     }, []);
 
-    const id = JSON.parse(localStorage.getItem('assemblydata')).id;
 
-    const handlepdfDescription = (e)=>{
+    const listAssemblyReportbyid = () => {
 
-        setPdfDis(e.target.value)
+        fetch(API_URL + "/assembly/list/by/" + id,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+
+                    setAssemblydata(resp.data[0]);
+
+                    const pdfdatareport = resp.data[0].report_desc;
+                    if(pdfdatareport != null){
+                        const pdfArray = JSON.parse(pdfdatareport);
+                        setPdfArrays(pdfArray)
+                    }
+
+                    const liveSessionreport = resp.data[0].session_image_desc;
+                    if(liveSessionreport != null){
+                        const liveSessionreportArra = JSON.parse(liveSessionreport);
+                        setLivesessectionArray(liveSessionreportArra)
+                    }
+                   
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
     }
 
-    const saveAssemblyreport = ()=>{
-        const newpdfData = pdfDis;
-        setDataPdf([...dataPdf,newpdfData])
-       console.log(dataPdf);
+
+
+
+
+    // if(pdfArray.length = 0){
+    //     for (var index = 0; index < pdfArray.length; index++) {
+    //         setPdfArray(pdfArray[index]);
+    //      }
+    // }
+
+
+
+
+    const handlepdfDescription = index => e => {
+
+        console.log('index: ' + index);
+        console.log('property name: ' + e.target.value);
+        let newArr = [...dataPdf];
+        newArr[index] = e.target.value;
+        setDataPdf(newArr);
     }
+
+    const handleLiveDescription = index => e => {
+
+        console.log('index: ' + index);
+        console.log('property name: ' + e.target.value);
+        let newArr = [...liveImg];
+        newArr[index] = e.target.value;
+        setLiveImg(newArr);
+    }
+
+
 
     const getNames = () => {
 
@@ -63,7 +138,7 @@ const Editassemblyreport = () => {
             {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
+
                     'x-access-token': accessToken,
                 },
             }
@@ -96,8 +171,8 @@ const Editassemblyreport = () => {
             {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': accessToken,
+                    'Content-Type': 'application/json'
+
                 },
             }
         ).then((response) => {
@@ -105,8 +180,6 @@ const Editassemblyreport = () => {
                 response.json().then((resp) => {
 
                     setPdfReport(resp.data);
-
-
 
                 });
             }
@@ -246,6 +319,42 @@ const Editassemblyreport = () => {
     }
 
 
+    const UpdateAssemblyreport = () => {
+
+        let data = {};
+
+        data['name'] = reportName.current.value;
+        data['summary'] = summaryReportDes.current.value;
+        data['report_desc'] = dataPdf;
+        data['session_image_desc'] = liveImg;
+
+
+        fetch(API_URL + "/update/assembly/report/" + id, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+            body: JSON.stringify(data)
+        }).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    console.log("results", resp);
+
+                });
+            }
+            else {
+                alert("Network Error")
+            }
+
+        })
+
+
+
+    }
+
+
+
     const logout = () => {
         localStorage.clear();
         alert("You Logout successful")
@@ -260,7 +369,8 @@ const Editassemblyreport = () => {
                     <Sidebar />
                 </div>
                 <div className="right-section">
-                    <div className="assembly-box">
+
+                    <div className="assembly-box" id="takescreenassembly">
                         <div className="client-names-wrp">
                             <div className="cients-name-content">
                                 <p><i class="fa fa-user" aria-hidden="true"></i> <span>Client:</span> {clientName}</p>
@@ -274,25 +384,33 @@ const Editassemblyreport = () => {
                         </div>
                         <div className="report-input">
                             <label>Name of Report</label>
-                            <input placeholder="Name of Report" />
+                            <input placeholder="Name of Report" defaultValue={assemblydata.name} ref={reportName} />
                         </div>
                         <div className="text-areat-report">
                             <label>Summary of Report</label>
-                            <textarea></textarea>
+                            <textarea ref={summaryReportDes} defaultValue={assemblydata.summary} ></textarea>
                         </div>
 
                         {
+
+
                             PdfReport.length > 0 && PdfReport.map((pdfV, index) => {
+
+
+
                                 return (
                                     <>
                                         <div className="live-section-img">
                                             <label>PDF Report ({index + 1})</label>
                                             <img src={pdfV.data} />
                                         </div>
+
                                         <div className="text-areat-report">
                                             <label>PDF Report Description ({index + 1})</label>
-                                            <textarea  key={index} value={pdfDis} onChange={handlepdfDescription}></textarea>
+                                            <textarea key={index} defaultValue={(PdfArrays[index]? PdfArrays[index] : "")} onChange={handlepdfDescription(index)}></textarea>
+                                            
                                         </div>
+
                                     </>
                                 )
                             })
@@ -322,7 +440,8 @@ const Editassemblyreport = () => {
                                         </div>
                                         <div className="text-areat-report">
                                             <label>Live Session Image Description ({index + 1})</label>
-                                            <textarea></textarea>
+                                            <textarea key={index} defaultValue={(livesessectionArray[index]? livesessectionArray[index] : "")} onChange={handleLiveDescription(index)}></textarea>
+                                            
                                         </div>
                                     </>
                                 )
@@ -342,7 +461,7 @@ const Editassemblyreport = () => {
                             })
                         }
 
-                        
+
                         <p className="complete-forms"><b>Completed Forms</b></p>
 
                         {
@@ -362,7 +481,7 @@ const Editassemblyreport = () => {
                         }
 
                         <div className="assembly-btn-wrp assembly-btn-wrp2">
-                            <div className="assembly-btn"><a href="#" onclick={saveAssemblyreport}>SAVE REPORT</a></div>
+                            <div className="assembly-btn"><a href="#" onClick={UpdateAssemblyreport} >SAVE REPORT</a></div>
                             <div className="assembly-btn ml-assembly"><a href="#">SAVE & DOWNLOAD PDF</a></div>
                             <div className="assembly-btn ml-assembly"><a href="#">GO TO REPORTS LIST</a></div>
 
