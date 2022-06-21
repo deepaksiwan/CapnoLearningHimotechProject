@@ -87,7 +87,7 @@ const SessiondataReport = () => {
                         _temp.push({
                             report : v.name,
                             Createdate : new Date(v.added_on).toLocaleString(),
-                            actions : <p><a href='#' className="downloadimg"><img src={preveiw} /></a></p>
+                            actions : <p><a href={"/view/multi/report/"+v.rid} className="downloadimg"><img src={preveiw} /></a></p>
                         })
                     })
                     setData(_temp);                  

@@ -55,6 +55,7 @@ const ViewGroupChartTable = () => {
             avg : data.avg,
             xmin : data.xmin/1e3,
             thick : data.thick,
+            signal: data.signal,
             xextreme : data.xextreme/1e3,
             xmax : data.xmax/1e3,
             ymin : data.ymin,

@@ -39,7 +39,7 @@ const Chart = (props) => {
     // alert(props.color)
     const [type, setType] = useState(props.type);
     const showActualTime = props.showActualTime ; 
-    console.log("other" , JSON.parse(props.otherConfig))
+    // console.log("other" , JSON.parse(props.otherConfig))
     const otherConfig = props.otherConfig ? JSON.parse(props.otherConfig) : {
         xrange: 0, 
         units: "mmHg",
@@ -183,7 +183,7 @@ const Chart = (props) => {
             lineType: signalLinetype
 
         }
-        group  ? clientSerial ?  setConfig(clientSerial,_temp) : setConfig(props.profile.name,_temp) : setConfig(props.Signal,_temp)
+        group  ? clientSerial ?  setConfig(clientSerial,_temp) : setConfig(props.profile.name,_temp) : props.multi ?  setConfig(props.signal+"_"+props.session,_temp) : setConfig(props.signal,_temp)
     },[color,type,average,xAxisMin,value,xAxisMax,yAxisMin,yAxisMax,record,comment,signalLinetype,modal]);
 
     useEffect(() => {

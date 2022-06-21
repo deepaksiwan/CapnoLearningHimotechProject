@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import { Link, useParams, Router } from 'react-router-dom';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
@@ -9,10 +10,69 @@ const Createmultisession = () => {
     const homework = localStorage.getItem('selectedHomework');
     const accessToken = localStorage.getItem('accessToken');
     const [session, setSession] = useState([]);
+    const [signals, setSignals] = useState([]);
+    const [selectedSignals, setSelectedSignals] = useState([]);
+    // const selectedSignals = useRef() ; 
+    const [selectedSessions, setSelectedSessions] = useState([]);
+    // const selectedSessions =  useRef();
+    const [requestProcessingModal, setrequestProcessingModal] = useState(false);
+    const requestProcessingModalToggle = () => setrequestProcessingModal(!requestProcessingModal);
+    const [requestProcessedModal, setrequestProcesedModal] = useState(false);
+    const requestProcessedModalToggle = () => setrequestProcesedModal(!requestProcessedModal);
 
+
+ 
     useEffect(() => {
-        getSession()
+        getSession();
+        getSignals(); 
     },[])
+
+    
+    const getSignals = () => {
+        let url = API_URL+"/configured/signals";
+        fetch(url,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((result) => {
+                    // console.log(result.sesstion)
+                    if (result.status) {
+                        setSignals(result.signals)
+                        // console.log(setsesstion)
+                    }
+
+
+                    else {
+                        alert("no data error")
+                    }
+
+                })
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        }).catch(err => {
+            // console.log(err)
+
+        })
+    }
+ 
+const logout = () => {
+    localStorage.clear();
+    window.location.reload();
+} 
 
     const getSession = () => {
         let _hw = 0;
@@ -63,6 +123,97 @@ const Createmultisession = () => {
         })
     }
 
+    const createMultiSession = () => {
+       setrequestProcessingModal(true);
+        let data = {
+            signals: selectedSignals,
+            session: selectedSessions
+        };
+        fetch(API_URL+"/create/multi/session",
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+                body: JSON.stringify(data)
+            }
+
+        ).then((response) => {
+       setrequestProcessingModal(false);
+
+            if (response.status == 200) {
+
+                response.json().then((result) => {
+      
+              
+                    if (result.status) {
+                        setrequestProcesedModal(true)
+                        window.location.replace("/view/multi/report/"+result.rid)
+                    }
+
+
+                    else {
+                        alert("no data error")
+                    }
+
+                })
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        }).catch(err => {
+            
+
+        })
+    }
+
+    const handleSignalChange = (e) => {
+        let _temp = selectedSignals ;
+        if(e.target.checked){
+            if(_temp.length == 3){
+                alert("You can choose maximum 3 signals");
+                return false;
+            }
+            else{
+                if(!_temp.includes(e.target.value)){
+                    _temp.push(e.target.value)
+                }
+            }
+           
+        } 
+        else{
+            if(_temp.includes(e.target.value)){
+                let _index = _temp.indexOf(e.target.value);
+                 _temp.splice(_index,1);
+
+            }
+        }
+        setSelectedSignals(_temp);
+    }
+
+    const handleSessionChange = (e) => {
+        let _temp = selectedSessions ;
+        if(e.target.checked){
+            if(!_temp.includes(e.target.value)){
+                _temp.push(e.target.value)
+            }
+        } 
+        else{
+            if(_temp.includes(e.target.value)){
+                let _index = _temp.indexOf(e.target.value);
+                 _temp.splice(_index,1);
+
+            }
+        }
+        setSelectedSessions(_temp);
+    }
+
     return (
         <div className="demodata-bg">
             <Header />
@@ -77,82 +228,27 @@ const Createmultisession = () => {
                     <ul className="signals-list">
                         <li>
                             <div className="wrp-signal-content">
-                                <div className="signal-c-child">
-                                    <div class="custom-radios">
-                                        <input type="checkbox" id="1" />
-                                        <label for="1">
-                                            <span className="redious">
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div className="caption-signal">
-                                        <p>Raw PCO2</p>
-                                    </div>
-                                </div>
-                                <div className="signal-c-child">
-                                    <div class="custom-radios">
-                                        <input type="checkbox" id="2" />
-                                        <label for="2" >
-                                            <span className="redious">
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div className="caption-signal">
-                                        <p>PetCO2</p>
-                                    </div>
-                                </div>
-                                <div className="signal-c-child">
-                                    <div class="custom-radios">
-                                        <input type="checkbox" id="3" />
-                                        <label for="3">
-                                            <span className="redious">
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div className="caption-signal">
-                                        <p>Capnia Index</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div className="wrp-signal-content">
-                                <div className="signal-c-child">
-                                    <div class="custom-radios">
-                                        <input type="checkbox" id="Breaths" />
-                                        <label for="Breaths">
-                                            <span className="redious">
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div className="caption-signal">
-                                        <p>Breaths per minute</p>
-                                    </div>
-                                </div>
-                                <div className="signal-c-child">
-                                    <div class="custom-radios">
-                                        <input type="checkbox" id="Beat" />
-                                        <label for="Beat" >
-                                            <span className="redious">
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div className="caption-signal">
-                                        <p>Beat to Beat Heartrate</p>
-                                    </div>
-                                </div>
-                                <div className="signal-c-child">
-                                    <div class="custom-radios">
-                                        <input type="checkbox" id="RSA" />
-                                        <label for="RSA">
-                                            <span className="redious">
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div className="caption-signal">
-                                        <p>RSA amplitude</p>
-                                    </div>
-                                </div>
+                                {
+                                    signals.length > 0 && signals.map((v,i) => {
+                                        return (
+                                            <div className="signal-c-child">
+                                            <div class="custom-radios">
+                                                <input type="checkbox"  onChange={handleSignalChange} id={v.signal_code}   value={v.signal_code} />
+                                                <label for={v.signal_code}>
+                                                    <span className="redious">
+                                                    </span>
+                                                </label>
+                                            </div>
+                                            <div className="caption-signal">
+                                                <p dangerouslySetInnerHTML={{__html: v.signal_name}}></p>
+                                            </div>
+                                        </div>
+                                        )
+                                    })
+                                }
+                             
+                              
+                                
                             </div>
                         </li>
                     </ul>
@@ -168,14 +264,14 @@ const Createmultisession = () => {
                                         return (
                                             <div className="col-md-3">
                                             <div class="custom-radios">
-                                                <input type="checkbox" id="4" />
-                                                <label for="4">
+                                                <input type="checkbox" onChange={handleSessionChange} id={v.id} value={v.id}  />
+                                                <label for={v.id} >
                                                     <span className="redious">
                                                     </span>
                                                 </label>
                                             </div>
                                             <div className="caption-signal">
-                                                <p>{v.name}</p>
+                                                <p dangerouslySetInnerHTML={{__html: v.name }}></p>
                                             </div>
                                         </div>
                                         )
@@ -190,13 +286,47 @@ const Createmultisession = () => {
                         session.length > 0 &&
                     <div className='d-flex justify-content-around mt-3'>
                             {/* <button className='lightbtn w-100'   >Cancel</button> */}
-                            <button className='darktbtn w-100 ml-1'    >Save</button>
+                            <button className='darktbtn w-100 ml-1'  onClick={createMultiSession}   >Create</button>
                         </div>
                     }
 
                 </div>
             </div>
 
+
+                    {/* request processing modal */}
+
+                    <Modal isOpen={requestProcessingModal} toggle={requestProcessingModalToggle} className="modal-box-wrp" centered={true}>
+                    <ModalHeader toggle={requestProcessingModalToggle}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                    <ModalBody>
+                        <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                    <div class="loading">
+                        <div class="loading-1"></div>
+                        <div class="loading-2"></div>
+                        <div class="loading-3"></div>
+                        <div class="loading-4"></div>
+                    </div>
+                </div>
+                    </ModalBody>
+
+                </Modal>
+
+                {/* request processing modal  */}
+
+                
+                    {/* request processed modal */}
+
+                    <Modal isOpen={requestProcessedModal} toggle={requestProcessedModalToggle} className="modal-box-wrp" centered={true}>
+                    <ModalHeader toggle={requestProcessedModalToggle}><span className="ml-1 roititle modal-head">Request processed.</span></ModalHeader>
+                    <ModalBody>
+                        <p className='text-center'>Your request has been processed succesfully.</p>
+                        
+                    </ModalBody>
+
+                </Modal>
+
+                {/* request processed modal  */}
         </div>
     )
 }

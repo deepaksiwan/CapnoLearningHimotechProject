@@ -67,6 +67,7 @@ import Editassemblyreport from './components/pages/sectionreportassembly/Editass
 import ViewChartTable from './components/pages/chartTable/ViewChartTable';
 import GroupChartTable from './components/pages/chartTable/GroupChartTable';
 import ViewGroupChartTable from './components/pages/chartTable/ViewGroupChartTable';
+import MultiChartTable from './components/pages/chartTable/MultiChartTable';
 
 function App(){
 	return(
@@ -109,6 +110,7 @@ function App(){
 				<Route  path="/group/session/data/report" element={<Groupsessiondatareport />} />
 				<Route  path="/chart" element={<Chart />} />
 				<Route  path="/exportchart" element={<ExportChart />} />
+				<Route  path="/view/multi/report/:reportId" element={<MultiChartTable />} />
 				<Route  path="/create/group/report/:config/:session/:record/:currentConfig" element={<GroupChartTable />} />
 
 				<Route  path="/create/report/:config/:session/:record/:currentConfig" element={<ChartTable />} />

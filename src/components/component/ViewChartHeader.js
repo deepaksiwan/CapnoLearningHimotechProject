@@ -113,13 +113,16 @@ const ViewChartHeader = (props) => {
                 doc.setDrawColor(0, 0, 0);
                 doc.line(10, 15, 600, 15);
                 doc.setFontSize(10)
-
-                doc.text(sessioninfo[0].name, 35, 25)
+                if(!props.multi){
+                    doc.text(sessioninfo[0].name, 35, 25)
+                }
                 doc.text(sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_firstname, 23, 30);
                 doc.text(sessioninfo[0].trainer_firstname+ " " + sessioninfo[0].trainer_lastname, 25, 35);
                 // doc.text(trainerName, 25, 35);
                 doc.setFont(undefined, 'bold');
+                if(!props.multi){
                 doc.text("Session Date:", 10, 25)
+                }
                 doc.text("Client:", 10, 30);
                 doc.text("Trainer:", 10, 35);
                 // doc.setFont(undefined, 'bold')
@@ -127,7 +130,13 @@ const ViewChartHeader = (props) => {
             }
     
            setTimeout(() => {
-            doc.save("PDF Report - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname + ".pdf");
+            if(!props.multi){
+                doc.save("PDF Report - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname + ".pdf");
+            }
+            else{
+            doc.save("PDF Report - " + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname + ".pdf");
+
+            }
             setrequestProcessingModal(false) ; 
             // () ;
             setrequestProcesedModal(true) ;
@@ -333,7 +342,11 @@ const ViewChartHeader = (props) => {
     }
 
     const clientnameUpdate = () => {
-        fetch(API_URL+"/session/info?session_id=" + sessionid,
+        let url = API_URL+"/session/info?session_id=" + sessionid ; 
+        if(props.multi){
+             url = API_URL+"/client/info?cid=" + clientId ; 
+        }
+        fetch(url,
             {
                 method: 'GET',
                 headers: {
@@ -345,9 +358,15 @@ const ViewChartHeader = (props) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     console.warn("recording", resp);
-                    setsessioninfo(resp.session)
-                    setSessionDate(resp.session[0].name)
-                    setZoomRecording(resp.session[0].zoom_link)
+                    if(resp.session[0]){
+                        setsessioninfo(resp.session)
+                        if(!props.multi){
+                            setSessionDate(resp.session[0].name)
+                            setZoomRecording(resp.session[0].zoom_link)
+                        }
+
+                    }
+                  
 
                 });
             }
@@ -424,8 +443,11 @@ const ViewChartHeader = (props) => {
     }
 
     const getReportDetails = () => {
-      
-            fetch(API_URL + "/view/report/details?id="+reportId,
+        let url = API_URL + "/view/report/details?id="+reportId ; 
+        if(props.multi){
+            url = API_URL + "/view/multi/report/details?id="+reportId
+        }
+            fetch(url,
         {
             method: 'GET',
             headers: {
@@ -436,8 +458,11 @@ const ViewChartHeader = (props) => {
     ).then((response) => {
         if (response.status == 200) {
             response.json().then((resp) => {
-                setReportDetails(resp.details);
-                setNotes(resp.details[0].notes)
+                if(resp.details[0]){
+                    setReportDetails(resp.details);
+                    
+                    setNotes(resp.details[0].notes) ;
+                }
             })
         }
     })
@@ -606,7 +631,7 @@ const ViewChartHeader = (props) => {
                             <p>Actions Options</p>
                             <ul className='action-list'>
                             {
-                                    !group &&
+                                  !props.multi &&  !group &&
                                 <li>
                                  {
                                     sessioninfo.length > 0 &&
@@ -644,10 +669,16 @@ const ViewChartHeader = (props) => {
                         <div className="view-opt" style={{width: "55%"}}>
                             <p>Viewing Options</p>
                             <ul className='action-list'>
-                                <li><a href="javascript:void" onClick={notesModalToggle} data-tip="View session notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
+                                 
+                                    <li><a href="javascript:void" onClick={notesModalToggle} data-tip="View session notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
                                 </li>
+
+ 
                                 <li><a href="javascript:void" onClick={zoomModalToggle} data-tip="View zoom recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
+                                {
+                                    !props.multi &&
                                 <li><a href="javascript:void" onClick={getPreviousSessionPDF} data-tip="View PDF of previous session"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li>
+                                }
                                 <li><a href="javascript:void" onClick={ViewlivesessionImage} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
                                 {
                                     !group &&
@@ -687,6 +718,8 @@ const ViewChartHeader = (props) => {
                                 }
                             </select>
                         </div> */}
+                        {
+                            !props.multi &&
                         <div className="select-row">
                             <select value={record} onChange={(e) => window.location.href = e.target.value}>
                                 <option value={'all'}   >All Records</option>
@@ -701,6 +734,8 @@ const ViewChartHeader = (props) => {
 
                             </select>
                         </div>
+                        }
+
                     </div>
                 </div>
                 <div className="chart-header-c3">
@@ -730,7 +765,7 @@ const ViewChartHeader = (props) => {
                         )}
                         </li>
                      <li data-tip="Session date">
-                        {sessioninfo.map((sessionName) => {
+                        {!props.multi && sessioninfo.map((sessionName) => {
                             return (
                                <a href="javascript:void"><i class="fa fa-calendar" aria-hidden="true"></i> {sessionName.name}</a>
                             )
