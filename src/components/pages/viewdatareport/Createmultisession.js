@@ -262,7 +262,7 @@ const logout = () => {
                                 {
                                     session.length > 0 &&  session.map((v,i) => {
                                         return (
-                                            <div className="col-md-3">
+                                            <div className="col-md-3 custom-flexs">
                                             <div class="custom-radios">
                                                 <input type="checkbox" onChange={handleSessionChange} id={v.id} value={v.id}  />
                                                 <label for={v.id} >
