@@ -137,7 +137,7 @@ function App(){
 				</Route> 
 				<Route path="/subscription/renew/:userid" element={<SubscriptionRenewal />} />
 				<Route path="/subscription/renew/group/:userid" element={<SubscriptionRenewalGroup />} />
-				<Route path="/edit/assembly/report" element={<Editassemblyreport />} />
+				<Route path="/edit/assembly/report/:id" element={<Editassemblyreport />} />
 				
 
 				{/* <Route  path="/edit/profile" element={<Editprofile />} /> */} 
