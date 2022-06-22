@@ -19,6 +19,7 @@ const Chart = (props) => {
     const session = props.session;
     const record = props.record;
     const [xAxis, setXaxis] = useState([]);
+    const [textTooltip, setTextTooltip] = useState([]);
     const [statistics,setStatistics] = useState([]);
     // alert(new Date(parseInt(props.xmin)));
     let Utz = new Date().getTimezoneOffset() ; 
@@ -308,6 +309,7 @@ const [unitArray, setunitArray] = useState({
     }
     async function getData(_csvFile) {
         let _x = [];
+        let _toolText=[];
         let _y = [];
         let _tempY = []; 
         let _tempStats = [] ;
@@ -348,6 +350,7 @@ const [unitArray, setunitArray] = useState({
                     _length = parseInt(v.x - data[0].x - _pauseTime) ;
                     // console.log(_length)
                     _x.push(xData);
+                    _toolText.push(signalName[props.signal])
                     // console.log()
                     if(group){
                         console.log('which y', v['y'+(props.index+1)])
@@ -405,7 +408,23 @@ const [unitArray, setunitArray] = useState({
                     if(v.rname != "Normal" ){
                         
                       
-                            if(lastTask != data[i+1].text && _taskArray.length > 0){
+                        if( _taskArray.length > 0 ){
+                            // console.log(v);
+                            if(data[i+1]){
+                                if(lastTask != data[i+1].text){
+                                    _taskArray[0] = xData;
+                                    _taskArray.push(xData)
+                                    _taskArray.push(lastTask)
+                                    _taskArray.push(lastTask)
+                                    // console.log("task",_taskArray);
+        
+                                    // _tasks[] = _taskArray
+                                    _allTasks.push(_taskArray);
+                                    _allAnnotation.push(_taskArray);
+                                    _taskArray = [] ; 
+                                }
+                            }
+                           else  if(i == data.length - 1 ){
                             // console.log(v);
                             _taskArray[0] = xData;
                             _taskArray.push(xData)
@@ -418,7 +437,7 @@ const [unitArray, setunitArray] = useState({
                             _allAnnotation.push(_taskArray);
                             _taskArray = [] ; 
                             }
-                       
+                        }
                         else if(v.z > 1 && _taskArray.length == 0){
                             lastTask =  v.text ; 
                             _taskArray.push(xData)
@@ -651,6 +670,7 @@ const [unitArray, setunitArray] = useState({
 
                     setLength(_length);
                     setXaxis(_x);
+                    setTextTooltip(_toolText);
                  
                     setYaxis(_tempY);
                     setYAxisOg(_y);
@@ -1240,7 +1260,9 @@ const deleteComment = () => {
                         {  
                             x: xAxis,
                             y: yAxis,
+                            text: textTooltip,
                             marker: { color:  color },
+                            textposition: "none",
                             type:  type,
                             line: {
                                 dash: signalLinetype,
@@ -1787,7 +1809,7 @@ const deleteComment = () => {
 
                 </div>
                 {
-                    props.signal != "pco2wave"  ?
+                    props.signal != "pco2wave"  || props.signal != "pco2b2b"  || props.signal != "capin" || props.signal != "b2b2hr" || props.signal != "b2brsa"  ?
                           <table className='table table-resposnive table-hover statTable mt-5' style={{display: showSignalStat  ? "" : "none" }} >
                                         <thead className='thead-dark'>
                                             <tr>

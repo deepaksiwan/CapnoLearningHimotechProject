@@ -641,6 +641,7 @@ const ViewChartHeader = (props) => {
                                     {
                                        graphs.map((v,i) => {
                                         //   console.log("excel data",v);
+                                        if( v.signal_name != "pco2wave"  && v.signal_name != "pco2b2b"  && v.signal_name != "capin" && v.signal_name != "b2b2hr" && v.signal_name != "b2brsa" ){
                                           return (
 
                                     <ExcelSheet data={signalStat[v.signal_name] ? signalStat[v.signal_name] : [] } name={v.signal_name}>
@@ -650,7 +651,7 @@ const ViewChartHeader = (props) => {
                                         <ExcelColumn label="Median" value="mean"/>
                                         <ExcelColumn label="Standard Deviation" value="sd"/>
                                     </ExcelSheet>                                          )
-                                        
+                                        }
                                       })
                                     }
               
