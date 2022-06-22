@@ -1,39 +1,16 @@
 
-/* .ex-chart{
-    text-align: center;
-    color: #800080;
-    margin-top: 10rem;
- 
-} */
 
-.uploadfile{
-    text-align: center;
-    margin-top: 5rem;
-    height: 10px;
-    
-}
 .action-list2{
     margin: 0px;
     padding: 0px;
     list-style: none;
     display: flex;
     justify-content: space-between;
-    margin-left: 15px;
-    margin-right: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
     
-}
-
-.fa-upload,.fa-file-pdf-o,.fa-table,.fa-question-circle,.fa-clock-o{
-    color: #fff !important;
-}
-.files {
-    margin: 10px;
-    width:50%; 
-    margin-left: 8rem;
-
-
-}
-.create-list-box1 {
+  }
+  .create-list-box1 {
     display: inline-block;
     width: 100%;
     color: #000;
@@ -42,6 +19,70 @@
     border-radius: 8px;
     padding: 10px 15px;
     box-shadow: 1px 1px 8px 1px #00000029;
+  }
+
+.fa-upload,
+.fa-file-pdf-o,
+.fa-table,
+.fa-question-circle,
+.fa-clock-o,
+.fa-download,
+.fa-file-text {
+    color: #fff !important;
 }
+
+.buttonstyle{
+    margin-bottom: 2rem;
+    border: 1 px solid;
+    background: white;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid #800080;
+}
+
+.bag-1{text-align: center;padding: 50px 0;}
+.content1{
+    color: #c867c6;
+    padding-bottom: 30px;
+}
+.bag-100{color: #fff;}
+.content3 {
+    padding-right: 120px;
+    padding-top: -20px;
+    
+    
+    
+}
+.bag-200{
+    color: #800080 !important;
+    padding-left: 15px;
+}
+
+.bag-10{
+    display: inline-block;
+    color: #800080;
+}
+
+
+@media (max-width: 575.98px) { 
+    .content1{
+        font-size: 14px;
+    }
+    .content3{
+       padding: 0px !important;
+    
+    }
+}
+@media (max-width: 767.98px) { 
+    .bag-2{
+        width: 80% !important;
+        margin: auto;
+
+    }
+    
+ }
+
+
+
 
 
