@@ -60,6 +60,7 @@ const ChartHeader = (props) => {
     const notes = props.notes ; 
     const exportExcel = props.exportExcel ; 
     const graphs = props.graphs ; 
+    const showHeader = props.showHeader ; 
 
     const signalStat = props.signalStat ; 
     const saveReportConfig = props.saveReportConfig; 
@@ -607,17 +608,18 @@ const ChartHeader = (props) => {
                             <ul className='action-list'>
                           
                                  {
-                                  !group &&  sessioninfo.length > 0 &&
+                                  !group &&  sessioninfo.length >  0 && showHeader &&
                                    
                                 <li>
                                 <ExcelFile filename={"Statistics - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname  } element={<a href="javascript:void" onClick={exportExcel} data-tip="Export session data as Excel Sheet."   ><i class="fa fa-upload" aria-hidden="true"></i></a>}>
                                
                                     {
                                        graphs.map((v,i) => {
-                                        //   console.log("excel data",v);
+                                            //   console.log("excel data "+v.signal_name );
+
                                           return (
 
-                                    <ExcelSheet data={signalStat[v.signal_name]} name={v.signal_name}>
+                                    <ExcelSheet data={signalStat[v.signal_name] ? signalStat[v.signal_name] : [] } name={v.signal_name}>
                                         <ExcelColumn label="X" value="x"/>
                                         <ExcelColumn label="Y" value="y"/>
                                         <ExcelColumn label="Mean" value="mean"/>

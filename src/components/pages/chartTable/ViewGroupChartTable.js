@@ -98,7 +98,7 @@ const ViewGroupChartTable = () => {
         setSignalStat(_temp)
         setTimeout(() => {
             setShowHeader(true);
-        }, 2000);
+        }, 1000*graphs.length);
     }
 
     useEffect(() => {
@@ -286,7 +286,7 @@ const ViewGroupChartTable = () => {
                             
                                 return (
                                   
-                                        <div className="chart-w" style={{ width:  (eval(d.col) * 100) + "%" , maxWidth: (eval(d.col) * 100) + "%", height: "auto" , minHeight:  (eval(d.row) * 84) + "vh"  }}>
+                                        <div className="chart-w" style={{ width:  (d.col != "1/1" ? (eval((d.col)) * 99 )+ "%" : (eval(d.col) * 100) + "%") , maxWidth: (eval(d.col) * 100) + "%", height: "auto" , minHeight:  (eval(d.row) * 84) + "vh"  }}>
                                         <Chart group={true} index={i+1} clientSerial={d.clientSerial} showActualTime={showActualTime} showSignalStat={showSignalStat} comment={d.comment} setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
                                         </div>
                                    

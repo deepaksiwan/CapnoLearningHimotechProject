@@ -23,7 +23,43 @@ const Chart = (props) => {
     // alert(new Date(parseInt(props.xmin)));
     let Utz = new Date().getTimezoneOffset() ; 
     // Utz = Utz*60*1000 ; 
- 
+    
+    
+const [unitArray, setunitArray] = useState({
+    pco2wave : ["mmHg", "kPa" , "%" ],
+    petco2 : ["mmHg", "kPa" , "%" ],
+    bpmhistory : [],
+    pco2b2b : ["mmHg", "kPa" , "%" ],
+    capin : ["mmHg", "kPa" , "%" ],
+    capnia : ["mmHg", "kPa" , "%" ],
+    gpmhistory : [],
+    aborted_expmhistory : [],
+    bholdpmhistory : [],
+    relativevpm : [],
+    aborted_expm : [],
+    bhpm : [],
+    b2b2hr : ["bpm"],
+    hrhistory : ["bpm"],
+    rsahistory : ["bpm"],
+    b2brsa : ["bpm"],
+    bpm : [],
+    hf_avg : ["ms"],
+    b2brr_wave : ["ms"],
+    arousal_avg : ["ms"],
+    tone_avg : ["%"] , 
+    reserve_avg : ["%"],
+    vlf_avg : ["%"],
+    lf_avg : ["%"],
+    emg1_avg : ["uV"],
+    emg2_avg : ["uV"],
+    emg3_avg : ["uV"],
+    emg4_avg : ["uV"],
+    emg1_wave : ["uV"],
+    emg2_wave : ["uV"],
+    emg3_wave : ["uV"],
+    emg4_wave : ["uV"]
+});
+
     const [xAxisMin, setXaxisMin] = useState(props.xmin == 0 ? props.xmin :  new Date(parseInt(props.xmin*1e3))); 
     if(props.signal == "pco2wave"  ){
         console.log("newMin", new Date(parseInt(props.xmin*1e3)));
@@ -42,14 +78,16 @@ const Chart = (props) => {
     // console.log("other" , JSON.parse(props.otherConfig))
     const otherConfig = props.otherConfig ? JSON.parse(props.otherConfig) : {
         xrange: 0, 
-        units: "mmHg",
-        annotation: 1,
+        units: (unitArray[props.signal][0] ? unitArray[props.signal][0] : ""),
+        annotation: (props.signal == "pco2wave" ? 1 :2),
         grid: 1,
         inverty: 2,
         yposition: 1,
         lineType: "solid"
     };
     const [yAxis, setYaxis] = useState([]);
+    const [yAxisOg, setYAxisOg] = useState([]);
+    
     const accessToken = localStorage.getItem('accessToken');
     const [value, setValue] = useState(props.thick); 
     const [thresholdvalue ,setThresholdvalue] = useState(4)
@@ -119,7 +157,7 @@ const Chart = (props) => {
         relativevpm : "Relative Volume/per min History",
         aborted_expm : "Aborted exhales/min History",
         bhpm : "Breath-holds/min",
-        b2b2hr : "Beat to beat heart rate",
+        b2b2hr : "Breath to breath heart rate",
         hrhistory : "Heart rate History",
         rsahistory : "RSA History",
         b2brsa : "Beat to Beat RSA",
@@ -140,7 +178,8 @@ const Chart = (props) => {
         emg3_wave : "EMG 3 Raw Wave",
         emg4_wave : "EMG 4 Raw Wave"
 })
-  
+   
+
     let playTimer ; 
 
     let zommDeviation = 0.02
@@ -270,6 +309,7 @@ const Chart = (props) => {
     async function getData(_csvFile) {
         let _x = [];
         let _y = [];
+        let _tempY = []; 
         let _tempStats = [] ;
 
         let _npauseTime = 0 ; 
@@ -312,26 +352,62 @@ const Chart = (props) => {
                     if(group){
                         console.log('which y', v['y'+(props.index+1)])
                         _y.push(parseFloat(v['y'+(props.index+1)]));
+                        let yt = parseFloat(v['y'+(props.index+1)]) ; 
+                     
+                        if(otherConfig.units == "kPa"){
+                            _tempY.push(yt*0.133322);
+                        }
+                        else if(otherConfig.units == "%"){
+                            _tempY.push(yt/100);
+            
+                        }
+                        else if(otherConfig.units == "mmHg"){
+                            _tempY.push(yt);
+            
+                        }
+                        else {
+                            _tempY.push(yt);
+            
+                        }
+
 
                     }
                     else{
-                        _y.push(parseFloat(v.y));
+                        let yt = parseFloat(v.y) ; 
+                    
+                        if(otherConfig.units == "kPa"){
+                            _tempY.push(yt*0.133322);
+                        }
+                        else if(otherConfig.units == "%"){
+                            _tempY.push(yt/100);
+            
+                        }
+                        else if(otherConfig.units == "mmHg"){
+                            _tempY.push(yt);
+            
+                        }
+                        else {
+                            _tempY.push(yt);
+            
+                        }
+                        _y.push(yt);
                     }
 
                     _tempStats.push({
                         x : xData.getHours()+":"+xData.getMinutes()+":"+xData.getSeconds()+":"+xData.getMilliseconds(),
                         y : parseFloat(v.y),
-                        mean : 0,
-                        median : 0,
-                        sd : 0,
+                        mean : parseFloat(v.y),
+                        median : parseFloat(v.median),
+                        sd : parseFloat(v.std),
                     }) 
                 
                     
-                    if(v.rname != "Normal"){
+                    if(v.rname != "Normal" ){
                         
-                        if(lastTask != data[i+1].text && _taskArray.length > 0){
+                      
+                            if(lastTask != data[i+1].text && _taskArray.length > 0){
                             // console.log(v);
-
+                            _taskArray[0] = xData;
                             _taskArray.push(xData)
                             _taskArray.push(lastTask)
                             _taskArray.push(lastTask)
@@ -341,13 +417,17 @@ const Chart = (props) => {
                             _allTasks.push(_taskArray);
                             _allAnnotation.push(_taskArray);
                             _taskArray = [] ; 
-                        }
+                            }
+                       
                         else if(v.z > 1 && _taskArray.length == 0){
                             lastTask =  v.text ; 
-                            // console.log(lastTask);
                             _taskArray.push(xData)
+
+                            // console.log(lastTask);
+                            // _taskArray.push(xData)
                              
                         }
+                       
                     }
                 if(_npauseTime > 0){
                         // let xpData = new Date(parseInt((((v.x) - data[0].x - 2000) + (userTimeOffset) ) - _pauseTime  ))
@@ -370,37 +450,63 @@ const Chart = (props) => {
                     // alert("here");
                 // console.log(_x.length)
                     _allTasks.map((v,i) => {
-                        console.log(v)
-
-                        _temptask.push(
-                            {
-                                type: 'rect',
-                                // x-reference is assigned to the x-values
-                                xref: 'x',
-                                // y-reference is assigned to the plot paper [0,1]
-                                yref: 'paper',
-                                x0: v[0] ,
-                                y0: 0,
-                                x1: v[1] ,
-                                y1: 3,
-                                fillcolor: colorCodes[v[3]] ,
-                                opacity: 0.5,
-                                line: {
-                                    width: 1
-                                },
-						        name: v[2],
-
-                            }
-                        );
+                        console.log(props.signal,v[2],v)
+                        if(v[3] == "Paused" ){
+                            _temptask.push(
+                                {
+                                    type: 'rect',
+                                    // x-reference is assigned to the x-values
+                                    xref: 'x',
+                                    // y-reference is assigned to the plot paper [0,1]
+                                    yref: 'paper',
+                                    x0: v[0] ,
+                                    y0: 0,
+                                    x1: v[1] ,
+                                    y1: 3,
+                                    opacity: 0.5,
+                                    line: {
+                                        width: 0.5
+                                    },
+                                    name: v[2],
+    
+                                }
+                            );
+                        }
+                        else{
+                            _temptask.push(
+                                {
+                                    type: 'rect',
+                                    // x-reference is assigned to the x-values
+                                    xref: 'x',
+                                    // y-reference is assigned to the plot paper [0,1]
+                                    yref: 'paper',
+                                    x0: v[0] ,
+                                    y0: 0,
+                                    x1: v[1] ,
+                                    y1: 3,
+                                    opacity: 0.5,
+                                    line: {
+                                        width: 1
+                                    },
+                                    name: v[2],
+    
+                                }
+                            );
+                        }
+                        
 
 
 
 
                         if(i == (_allTasks.length - 1)){
+                            if(liveAnnotation.length == 0){
+                                setTaskMarkers(_temptask);
 
+                            }
                             liveAnnotation.map((v,i) => {
                               
-                                let xAnnTime = new Date(parseInt(((parseInt(v.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ))
+                                let xAnnTime = new Date(parseInt(((parseInt(v.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ));
+                                console.log("I ma here")
                                     // console.log(parseInt(((parseInt(annData.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ));
                                     _temptask.push(
                                         {
@@ -413,12 +519,11 @@ const Chart = (props) => {
                                             y0: 0,
                                             x1: xAnnTime ,
                                             y1: 3,
-                                            fillcolor: colorCodes[v[3]] ,
                                             // fillcolor: "#000" ,
-                                            opacity: 0.5,
+                                            opacity: 1,
                                             line: {
                                                 color: 'rgb(255, 0, 0)',
-                                                width: 3,
+                                                width: 1,
                                                 dash:'dot'
                                             },
                                             name: v.z,
@@ -441,16 +546,32 @@ const Chart = (props) => {
                 
 
                     } )
+                    let ymax= Math.max(..._y) ;
+
+                    if(yAxisMax == 0){
+                        
+                        if(ymax == 0){
+                            setYaxisMax(5)
+
+                        }
+                        else{
+                        ymax += ymax*0.25 ;
+                        setYaxisMax(ymax)
+
+                        }
+
+                    }
 
                     _allAnnotation.map((v,i) => {
                         // console.log(v)
                         if(v[3] == "Paused" ){
+                            
                             _tempAnnotation.push(
                                 {
                                     xref: 'x',
                                     yref: 'y',
                                     x: v[0] ,
-                                    y: 45,  
+                                    y: ymax-(ymax*0.1),  
                                     textangle: 0,
                                     text: v[2],
                                     showarrow: true,
@@ -469,15 +590,17 @@ const Chart = (props) => {
                                     xref: 'x',
                                     yref: 'y',
                                     x: v[0] ,
-                                    y: 45,  
+                                    y:  (ymax == 0 ? 2 : ymax-(ymax*0.6)),  
                                     textangle: 270,
                                     text: v[2],
-                                    showarrow: true,
+                                    showarrow: false,
                                     arrowhead: 0,
                                     ax: 5,
-                                    bgcolor: "#fff",
+                                    bgcolor: "#000000",
                                     arrowcolor: "#FF0000", 
-                                    
+                                    font:  {
+                                        color: "#fff" ,
+                                    },
                                     ay:5
                         
                                 }
@@ -500,7 +623,7 @@ const Chart = (props) => {
                                         xref: 'x',
                                         yref: 'y',
                                         x: xAnnTime ,
-                                        y: 45,  
+                                        y: 40,  
                                         textangle: 270,
                                         text: v.z,
                                         showarrow: true,
@@ -528,8 +651,19 @@ const Chart = (props) => {
 
                     setLength(_length);
                     setXaxis(_x);
-                    setYaxis(_y);
-                    console.log("signal data",_tempStats)
+                 
+                    setYaxis(_tempY);
+                    setYAxisOg(_y);
+                    if(props.signal == "capin"){
+                        
+                        let ymin= Math.min(..._y) ;
+                     
+                            ymin -= ymin*0.25 ;
+                            setYaxisMin(ymin)
+ 
+
+                    }
+                    console.log("signal x:"+props.signal,_x)
                     setStats(props.signal,_tempStats)
                     setStatistics(_tempStats)
                     // plotGraph(_x,_y);
@@ -783,8 +917,33 @@ const handlePause = () => {
 }  
  
 
-const handleUnitChange = () => {
-    // console.log(unit);
+const handleUnitChange = (e) => {
+ 
+        let {value=""}=e.target||{}
+             setModal(prevState =>({
+               ...prevState,
+                 units:value 
+             }))
+             let _temp = [] ; 
+        yAxisOg.map((v,i) => {
+            if(value == "kPa"){
+                _temp.push(v*0.133322);
+            }
+            else if(value == "%"){
+                _temp.push(v/100);
+
+            }
+            else if(value == "mmHg"){
+                _temp.push(v);
+
+            }
+
+            if(i == (yAxisOg.length -1) ){
+                setYaxis(_temp);
+            }
+
+        })
+  
 }
 
 const handleAnnotations = e => {
@@ -1024,14 +1183,15 @@ const deleteComment = () => {
             {   
                 xAxis.length > 0 && yAxis.length > 0 &&
              <> 
-                <div style={{ width:  "99%" , maxWidth:"100%", height:  (eval(props.row) * 68) + "vh"  } }>
+                <div style={{ width:  "100%" , maxWidth:"100%", height:  (props.row == '1/2' ? (eval(props.row) * 70 + "vh") : (eval(props.row) * 66 + "vh") )  } }>
                   <ul className="top-filter-left">
                         <li>
                             <div className='colorsqr' style={{backgroundColor: color}}></div>
                         </li>
                         <li>
-                        <span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]}} ></span>
-                        {
+                        <span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]  }} ></span>{modal.units != "" &&
+                        <span style={{fontSize : "11px"}} dangerouslySetInnerHTML={{__html : props && modal.units }} ></span>
+                        }{
                             group &&
                            
                           <span data-tip="Client name" dangerouslySetInnerHTML={{__html : props && "- " + (clientSerial ? clientSerial : props.profile['name'] ) }} ></span>
@@ -1109,17 +1269,18 @@ const deleteComment = () => {
                             // visible : false
                         },
                         yaxis : {
-                            range: modal.units === "mmHg" ? [yAxisMin, yAxisMax] : [yAxisMin,yAxisMax*0.13],
+                            range: (modal.units === "mmHg" || modal.units === "") ? [yAxisMin, yAxisMax] : [yAxisMin,yAxisMax*0.13],
                             fixedrange: false,
                             showgrid: modal.showGrid,
                             side : modal.position == "1" ? "left" : "right"
                         },
+                        bargap: 0,
                         annotations: modal.annotation === 1 ? textAnnotations : [],
                 // autosize: true,
                         margin: {
                             l: 30,
-                            r: 20,
-                            b: 30,
+                            r: 5,
+                            b: 20,
                             t: 0,
                             pad: 0
                         },
@@ -1457,6 +1618,8 @@ const deleteComment = () => {
                                     </Col>
                                     </Row>
                             </li>
+                            {
+                            unitArray[props.signal].length > 0 &&
                             <li>
                             <Row justify="space-between">
                                     <Col lg={5} xl={5}>
@@ -1465,24 +1628,25 @@ const deleteComment = () => {
                                     <Col lg={7} xl={7}>
                                         <select
                                         style={{width:"100%"}}
-                                        onChange={(e)=>{
-                                           let {value=""}=e.target||{}
-                                                setModal(prevState =>({
-                                                  ...prevState,
-                                                    units:value 
-                                                }))
-
-                                        }}
+                                        onChange={handleUnitChange}
                                         value={modal.units}
                                         >
+                                            {
+                                                unitArray[props.signal].map((v,i) => {
+                                                    return (
+                                                        <option value={v}>{v}</option>
 
-                                            <option value="mmHg">mmHg</option>
-                                            <option value="kPa">kPa</option>
+                                                        )
+                                                })
+                                              
+                                            }
+                                           
                                         </select>
                                        
                                         </Col>
                                     </Row>
                             </li>
+}
                             <li>
                                 <Row justify="space-between">
                                     <Col lg={5} xl={5}>

@@ -643,7 +643,7 @@ const ViewChartHeader = (props) => {
                                         //   console.log("excel data",v);
                                           return (
 
-                                    <ExcelSheet data={signalStat[v.signal_name]} name={v.signal_name}>
+                                    <ExcelSheet data={signalStat[v.signal_name] ? signalStat[v.signal_name] : [] } name={v.signal_name}>
                                         <ExcelColumn label="X" value="x"/>
                                         <ExcelColumn label="Y" value="y"/>
                                         <ExcelColumn label="Mean" value="mean"/>

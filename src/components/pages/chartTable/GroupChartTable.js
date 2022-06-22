@@ -96,7 +96,7 @@ const GroupChartTable = () => {
         setSignalStat(_temp)
         setTimeout(() => {
             setShowHeader(true);
-        }, 2000);
+        }, 1000*graphs.length);
     }
 
     useEffect(() => {
@@ -381,7 +381,7 @@ const getGroupProfile = () => {
                             }
                                 return (
                                   
-                                        <div className="chart-w" style={{ width:  (eval(col) * 100) + "%" , maxWidth: (eval(col) * 100) + "%", height: "auto" , minHeight:  (eval(row) * 84) + "vh"  }}>
+                                        <div className="chart-w" style={{ width:  (d.col != "1/1" ? (eval((d.col)) * 99 )+ "%" : (eval(d.col) * 100) + "%") , maxWidth: (eval(col) * 100) + "%", height: "auto" , minHeight:  (eval(row) * 84) + "vh"  }}>
                                         <Chart group={true} profile={v} index={j} showActualTime={showActualTime} showSignalStat={showSignalStat} setStats={setStats} col={col} row={row} setConfig={setConfig} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
                                         </div>
                                    
