@@ -296,7 +296,7 @@ const Chart = (props) => {
             data.map((v, i) => {
 
                 // _x.push(new Date(v.x));
-                if(v.z > 0 && (record == 'all' || record == v.r) ){
+                if(v.z > 0 && (record == 'all' || record == v.r) && v.x > 0 ){
                 lastRecord = v.x ; 
                 if(_npauseTime > 0){
                     _pauseTime  += _npauseTime ; 
