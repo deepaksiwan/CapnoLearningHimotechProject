@@ -1,13 +1,26 @@
 
 
 .action-list2{
-    margin: 0px;
-    padding: 0px;
+    margin: 0px ;
+    padding: 0px ;
     list-style: none;
     display: flex;
     justify-content: space-between;
-    margin-left: 10px;
-    margin-right: 10px;
+    font-size: 13px;
+    /* margin-left: 10px;
+    margin-right: 10px; */
+    
+  }
+
+  .action-list3{
+    margin: 0px ;
+    padding: 0px ;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+     margin-left: 0px;
+    margin-right: -33px; 
     
   }
   .create-list-box1 {

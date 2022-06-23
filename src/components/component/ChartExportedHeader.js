@@ -129,7 +129,7 @@ const ChartExportedHeader = (props) => {
             <div className="wrp-chart-header">
                 <div className="chart-header-c1">
                     <div className="wrp-action">
-                        <div className="action-opt">
+                        <div className="action-opt" >
                             <p>Actions Options</p>
                             <ul className='action-list2' >
                                 <li><a href="#"><i class="fa fa-upload" aria-hidden="true"></i></a></li>
@@ -147,9 +147,9 @@ const ChartExportedHeader = (props) => {
                                 {/* <li><a href="#"><i class="fa fa-bookmark" aria-hidden="true"></i></a></li> */}
                             </ul>
                         </div>
-                        <div className="view-opt">
+                        <div className="view-opt" >
                             <p>Viewing Options</p>
-                            <ul className='action-list2'>
+                            <ul className='action-list3'>
                                 <li><a href="#" onClick={downloadImage}><i class="fa fa-file-text" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="#"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
                                 <li><a href="#"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li> */}

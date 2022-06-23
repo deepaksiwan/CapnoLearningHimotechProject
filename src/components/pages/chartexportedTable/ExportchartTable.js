@@ -173,7 +173,7 @@ const ChartTable = (props) => {
                            !fileSelected &&
                            <div className='col-md-12'>
                            <div className="bag-1">
-                               <div className="uploadfile ">
+                               <div className="uploadfile text-center">
                                    <div className=' content1'>
                                        <p className='bag-10'>Please choose folder to visualise signal data in the selected report template. </p>
                                    </div>
