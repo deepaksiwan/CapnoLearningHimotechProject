@@ -28,7 +28,9 @@ const ChartTable = (props) => {
     const [HelpModal, setHelpModal] = useState(false);
     const toggleHelpModal = () => setHelpModal(!HelpModal);
     const [fileSelected, setfileSelected] = useState(null)
-
+    const [showHeader,setShowHeader] = useState(false) ; 
+    const [signalStat , setSignalStat] = useState({})
+    const [showSignalStat , setShowSignalStat] = useState(false)
 
 
     const getData = props.getData;
@@ -105,6 +107,30 @@ const ChartTable = (props) => {
         })
         // console.log("png image jdfsdj", _imageArray)
     }
+
+    
+    const setStats = (_signal,data) => {
+        
+        // console.log("signal data",data)
+        let _temp = signalStat ; 
+        let _tempData = [] ;
+            data.map((v,i) => {
+                _tempData.push({
+                    x : v.x,
+                    y : v.y,
+                    mean : v.mean,
+                    median : v.median,
+                    sd : v.sd,
+                })
+            })
+            _temp[_signal] = _tempData ; 
+            console.log("signal data 1"+_signal,_temp);
+            setSignalStat(_temp)
+            setTimeout(() => {
+                setShowHeader(true);
+            }, 1000*graphs.length);
+        }
+
     const SaveImage = (_imageArray) => {
         const doc = new jsPDF();
         for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
@@ -156,13 +182,13 @@ const ChartTable = (props) => {
             <ChartExportedHeader downloadImage={downloadImage} fileupload={fileupload} config={config} />
             <div className="wrp-charttable" id="exported-chart">
                 <div className="container-fluid">
-                    <div className="row">
+                    <div className="row justify-content-between">
                         {
                             fileSelected && graphs && graphs.map(function (d, i) {
                                 console.log("graph show", d);
                                 return (
-                                    <div className="chart-w" style={{ width: (eval(d.col) * 100) + "%", maxWidth: (eval(d.col) * 100) + "%", height: (eval(d.row) * 84) + "vh" }}>
-                                        <ExportChart getData={getData} index={i} dataFile={fileSelected} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.ymin} ymin={d.ymin} ymax={d.ymax} type={d.type} color={d.color} />
+                                    <div className="chart-w" style={{ width: (d.col != "1/1" ? (eval((d.col)) * 99 )+ "%" : (eval(d.col) * 100) + "%") , maxWidth: (eval(d.col) * 100) + "%", height: "auto" , minHeight:  (eval(d.row) * 82) + "vh"  }}>
+                                        <ExportChart getData={getData} setStats={setStats} index={i} dataFile={fileSelected} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.ymin} ymin={d.ymin} ymax={d.ymax} type={d.type} color={d.color} col={d.col} row={d.row} />
                                     </div>
 
                                 )
@@ -175,13 +201,13 @@ const ChartTable = (props) => {
                            <div className="bag-1">
                                <div className="uploadfile">
                                    <div className='content1'>
-                                       <p className='bag-10'>Please choose folder to visualise signal data in the selected report template. </p>
+                                       <p className='bag-10'>Please choose session folder to visualise signal data in the selected report template.<br /> You can find session folder inside <b>Client Name folder</b> under <b>Capno Offline</b> folder on your desktop. </p>
                                    </div>
                                    <div className='content2 '>
                                        <div className='bag-2'>
                                            <button className="buttonstyle" >
                                                <label><img style={{ marginRight: "10px", marginTop: "3px" }} src={folderimage}></img></label>
-                                               <h6 style={{ color: "#800080", marginTop: "5px", display: "inline-block" }}>Choose Folder</h6>
+                                               <h6 style={{ color: "#800080", marginTop: "5px", display: "inline-block" }}>Choose Session Folder</h6>
                                            </button>
                                            <input id="ChooseFolder" multiple type="file"  onChange={fileupload} webkitdirectory="true"
                                        />
@@ -199,16 +225,18 @@ const ChartTable = (props) => {
 
                                </div>
                                <Modal isOpen={HelpModal} toggle={toggleHelpModal} className="modal-box-wrp" centered={true}>
-                                   <ModalHeader toggle={toggleHelpModal}><span className="ml-1 roititle modal-head">You Need to Help.... </span></ModalHeader>
+                                   <ModalHeader toggle={toggleHelpModal}><span className="ml-1 roititle modal-head">Instructions to load session files for visulaization </span></ModalHeader>
                                    <ModalBody>
-                                       <ul className="range-list">
-                                           <h5>
-                                               hdjshdkdsdkshd
-                                               jdfsdkfs
-                                               dsjsdjfa-spinjdfsdjfd
-                                               kfkfs
-                                           </h5>
-                                       </ul>
+                                       
+                                            <ol>
+                                            <li>Click on <b>Choose Session Folder</b> button. It will open a file picker dialog box.</li>
+                                            <li>On the dialog box open <b>Desktop</b>.</li>
+                                            <li>Then open folder, <b>Capno Offline.</b></li>
+                                            <li>Double click on the <b>client name folder</b>, e,g John Smith.</li>
+                                            <li>Double click on the <b>session date folder</b>, which you want to load for visualization, e.g 2022-6-18-19-10.</li>
+
+                                            </ol>
+                                           
                                    </ModalBody>
 
                                </Modal>

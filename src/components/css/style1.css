@@ -34,15 +34,14 @@
     box-shadow: 1px 1px 8px 1px #00000029;
   }
 
-.fa-upload,
-.fa-file-pdf-o,
-.fa-table,
-.fa-question-circle,
-.fa-clock-o,
-.fa-download,
-.fa-file-text {
+.whiteicon > li > a > i {
     color: #fff !important;
 }
+
+.whiteicon  {
+    color: #fff !important;
+}
+
 
 .buttonstyle{
     margin-bottom: 2rem;
@@ -54,7 +53,7 @@
 }
 .buttonstyle{
     display: block;
-    width: 170px;
+    width: 250px;
     margin: auto;
 }
 .bag-2 > input{

@@ -131,14 +131,14 @@ const ChartExportedHeader = (props) => {
                     <div className="wrp-action">
                         <div className="action-opt" >
                             <p>Actions Options</p>
-                            <ul className='action-list2' >
+                            <ul className='action-list2 whiteicon' >
                                 <li><a href="#"><i class="fa fa-upload" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="#"><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li> */}
                                 <li><a href="#"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="#" for="file"><i class="fa fa-download" aria-hidden="true"></i></a>
                                 </li> */}
                                 <li>
-                                    <label for="icon"><i class="fa fa-download" aria-hidden="true"></i>
+                                    <label for="icon"><i class="fa fa-download whiteicon" aria-hidden="true"></i>
                                     </label>
                                     <input type="file" id="icon" name=" " style={{ display: "none" }} onChange={fileupload} webkitdirectory="true"
                                     />
@@ -149,8 +149,8 @@ const ChartExportedHeader = (props) => {
                         </div>
                         <div className="view-opt" >
                             <p>Viewing Options</p>
-                            <ul className='action-list3'>
-                                <li><a href="#" onClick={downloadImage}><i class="fa fa-file-text" aria-hidden="true"></i></a></li>
+                            <ul className='action-list3 whiteicon'>
+                                <li><a href="#" onClick={downloadImage}><i class="fa fa-image" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="#"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
                                 <li><a href="#"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li> */}
                                 <li><a href="#"><i class="fa fa-table"></i></a></li>
