@@ -173,8 +173,8 @@ const ChartTable = (props) => {
                            !fileSelected &&
                            <div className='col-md-12'>
                            <div className="bag-1">
-                               <div className="uploadfile text-center">
-                                   <div className=' content1'>
+                               <div className="uploadfile">
+                                   <div className='content1'>
                                        <p className='bag-10'>Please choose folder to visualise signal data in the selected report template. </p>
                                    </div>
                                    <div className='content2 '>
@@ -183,7 +183,7 @@ const ChartTable = (props) => {
                                                <label><img style={{ marginRight: "10px", marginTop: "3px" }} src={folderimage}></img></label>
                                                <h6 style={{ color: "#800080", marginTop: "5px", display: "inline-block" }}>Choose Folder</h6>
                                            </button>
-                                           <input id="ChooseFolder" multiple type="file" style={{ opacity: "0", position: "obsolute", marginLeft: "-190px", borderRadius: 'none' }} onChange={fileupload} webkitdirectory="true"
+                                           <input id="ChooseFolder" multiple type="file"  onChange={fileupload} webkitdirectory="true"
                                        />
                                        </div>
 

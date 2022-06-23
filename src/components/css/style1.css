@@ -52,23 +52,40 @@
     text-align: center;
     border: 1px solid #800080;
 }
+.buttonstyle{
+    display: block;
+    width: 170px;
+    margin: auto;
+}
+.bag-2 > input{
+    position: relative;
+    z-index: 1000;
+    margin: auto;
+    top: -32px;
+    width: 170px;
+    opacity: 0;
+    border-radius: none;
+}
+.bag-2{
+    margin-top: 25px;
+}
 
 .bag-1{text-align: center;padding: 50px 0;}
-.content1{
-    color: #c867c6;
-    padding-bottom: 30px;
+
+.uploadfile{
+    border: 2px solid #c867c6;
+    border-radius: 8px;
+    display: inline-block;
+    padding: 20px 15px;
+    box-shadow: 1px 1px 8px 1px #00000029;
+    margin-bottom: 30px;
+    text-align: center;
 }
 .bag-100{color: #fff;}
-.content3 {
-    padding-right: 120px;
-    padding-top: -20px;
-    
-    
-    
-}
+
 .bag-200{
     color: #800080 !important;
-    padding-left: 15px;
+    padding-left: 10px;
 }
 
 .bag-10{
