@@ -101,8 +101,9 @@ const [unitArray, setunitArray] = useState({
     const [currentPoint,setCurrentPoint] = useState(null) ; 
     const [currentAnnotation,setCurrentAnnotation] = useState(null) ; 
     
-    // const [liveAnnotation,setLiveAnnotation] = useState([]) ; 
-    let  liveAnnotation = [] ; 
+    const [liveAnnotation,setLiveAnnotation] = useState(props.sessioninfo.annotations[props.signal]) ; 
+    console.log(props.sessioninfo.annotations[props.signal])
+    // let  liveAnnotation = [] ; 
     const [graphModal, setgraphModal] = useState(false);
     const toggleGraphModal = () => setgraphModal(!graphModal);
 
@@ -438,10 +439,10 @@ const [unitArray, setunitArray] = useState({
 
                     _tempStats.push({
                         x : xData.getHours()+":"+xData.getMinutes()+":"+xData.getSeconds()+":"+xData.getMilliseconds(),
-                        y : parseFloat(v.y),
-                        mean : parseFloat(v.y),
-                        median : parseFloat(v.median),
-                        sd : parseFloat(v.std),
+                        y : parseFloat(v.y).toFixed(2),
+                        mean : parseFloat(v.y).toFixed(2),
+                        median : parseFloat(v.median).toFixed(2),
+                        sd : parseFloat(v.std).toFixed(2),
                     }) 
                 
                     
@@ -563,9 +564,9 @@ const [unitArray, setunitArray] = useState({
 
                             }
                             liveAnnotation.map((v,i) => {
-                              
+                                v = JSON.parse(v);
                                 let xAnnTime = new Date(parseInt(((parseInt(v.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ));
-                                console.log("I ma here")
+                                console.log("I ma here", xAnnTime)
                                     // console.log(parseInt(((parseInt(annData.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ));
                                     _temptask.push(
                                         {
@@ -674,6 +675,7 @@ const [unitArray, setunitArray] = useState({
                                                 //   console.log("annotation",_tempAnnotation);
                                                 // alert(liveAnnotation.length)
                             liveAnnotation.map((v,i) => {
+                                v = JSON.parse(v);
                               
                             let xAnnTime = new Date(parseInt(((parseInt(v.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ))
                                 // console.log(parseInt(((parseInt(annData.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ));
@@ -724,8 +726,11 @@ const [unitArray, setunitArray] = useState({
 
                     }
                     console.log("signal x:"+props.signal,_x)
-                    setStats(props.signal,_tempStats)
+                    if( props.signal != "pco2wave"  && props.signal != "pco2b2b"  && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa" ){
+                        setStats(props.signal,_tempStats)
                     setStatistics(_tempStats)
+
+                    }
                     // plotGraph(_x,_y);
 
                 }
@@ -1849,7 +1854,7 @@ const deleteComment = () => {
 
                 </div>
                 {
-                    props.signal != "pco2wave"  || props.signal != "pco2b2b"  || props.signal != "capin" || props.signal != "b2b2hr" || props.signal != "b2brsa"  ?
+                    props.signal != "pco2wave"  && props.signal != "pco2b2b"  && props.signal != "capin"  && props.signal != "b2b2hr"  && props.signal != "b2brsa"  ?
                           <table className='table table-resposnive table-hover statTable mt-5' style={{display: showSignalStat  ? "" : "none" }} >
                                         <thead className='thead-dark'>
                                             <tr>

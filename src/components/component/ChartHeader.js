@@ -616,17 +616,17 @@ const ChartHeader = (props) => {
                                     {
                                        graphs.map((v,i) => {
                                             //   console.log("excel data "+v.signal_name );
-                                        if( v.signal_name != "pco2wave"  && v.signal_name != "pco2b2b"  && v.signal_name != "capin" && v.signal_name != "b2b2hr" && v.signal_name != "b2brsa" ){
+                                   
                                           return (
 
                                     <ExcelSheet data={signalStat[v.signal_name] ? signalStat[v.signal_name] : [] } name={v.signal_name}>
                                         <ExcelColumn label="X" value="x"/>
                                         <ExcelColumn label="Y" value="y"/>
                                         <ExcelColumn label="Mean" value="mean"/>
-                                        <ExcelColumn label="Median" value="mean"/>
+                                        <ExcelColumn label="Median" value="median"/>
                                         <ExcelColumn label="Standard Deviation" value="sd"/>
                                     </ExcelSheet>                                          )
-                                        }
+                                  
                                         
                                       })
                                     }

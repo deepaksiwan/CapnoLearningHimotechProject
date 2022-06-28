@@ -398,10 +398,10 @@ const [unitArray, setunitArray] = useState({
 
                     _tempStats.push({
                         x : xData.getHours()+":"+xData.getMinutes()+":"+xData.getSeconds()+":"+xData.getMilliseconds(),
-                        y : parseFloat(v.y),
-                        mean : parseFloat(v.y),
-                        median : parseFloat(v.median),
-                        sd : parseFloat(v.std),
+                        y : parseFloat(v.y).toFixed(2),
+                        mean : parseFloat(v.y).toFixed(2),
+                        median : parseFloat(v.median).toFixed(2),
+                        sd : parseFloat(v.std).toFixed(2),
                     }) 
                 
                     
@@ -684,8 +684,14 @@ const [unitArray, setunitArray] = useState({
 
                     }
                     console.log("signal x:"+props.signal,_x)
-                    setStats(props.signal,_tempStats)
+                     
+                    if( props.signal != "pco2wave"  && props.signal != "pco2b2b"  && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa" ){
+                        setStats(props.signal,_tempStats)
                     setStatistics(_tempStats)
+
+                    }
+
+                  
                     // plotGraph(_x,_y);
 
                 }

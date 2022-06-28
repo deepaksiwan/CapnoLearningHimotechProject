@@ -636,22 +636,22 @@ const ViewChartHeader = (props) => {
                                  {
                                     sessioninfo.length > 0 &&
                                    
-                                <ExcelFile filename={"Statistics - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname  } element={<a href="javascript:void" onClick={exportExcel} data-tip="Export session data as Excel Sheet."   ><i class="fa fa-upload" aria-hidden="true"></i></a>}>
+                                <ExcelFile filename={"Statistics - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname  } element={<a href="javascript:void" onClick={exportExcel} data-tip="Export session data as Excel Sheet."   ><i class="fa fa-upload whiteicon" aria-hidden="true"></i></a>}>
                                
                                     {
                                        graphs.map((v,i) => {
                                         //   console.log("excel data",v);
-                                        if( v.signal_name != "pco2wave"  && v.signal_name != "pco2b2b"  && v.signal_name != "capin" && v.signal_name != "b2b2hr" && v.signal_name != "b2brsa" ){
+                                       
                                           return (
 
                                     <ExcelSheet data={signalStat[v.signal_name] ? signalStat[v.signal_name] : [] } name={v.signal_name}>
                                         <ExcelColumn label="X" value="x"/>
                                         <ExcelColumn label="Y" value="y"/>
                                         <ExcelColumn label="Mean" value="mean"/>
-                                        <ExcelColumn label="Median" value="mean"/>
+                                        <ExcelColumn label="Median" value="median"/>
                                         <ExcelColumn label="Standard Deviation" value="sd"/>
                                     </ExcelSheet>                                          )
-                                        }
+                                   
                                       })
                                     }
               

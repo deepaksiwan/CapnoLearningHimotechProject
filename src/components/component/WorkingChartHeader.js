@@ -599,7 +599,7 @@ const ChartHeader = (props) => {
                                         <ExcelColumn label="X" value="x"/>
                                         <ExcelColumn label="Y" value="y"/>
                                         <ExcelColumn label="Mean" value="mean"/>
-                                        <ExcelColumn label="Median" value="mean"/>
+                                        <ExcelColumn label="Median" value="median"/>
                                         <ExcelColumn label="Standard Deviation" value="sd"/>
                                     </ExcelSheet>                                          )
                                         
