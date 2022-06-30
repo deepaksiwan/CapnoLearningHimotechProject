@@ -23,6 +23,7 @@ const Chart = (props) => {
     const [statistics,setStatistics] = useState([]);
     // alert(new Date(parseInt(props.xmin)));
     let Utz = new Date().getTimezoneOffset() ; 
+    const [tableView , setTableView] = useState(false); 
     // Utz = Utz*60*1000 ; 
     
     
@@ -111,15 +112,16 @@ const [unitArray, setunitArray] = useState({
     const [signalModal, setsignalModal] = useState(false);
     const toggleSignalModal = () => setsignalModal(!signalModal);
 
-    const [unitModal, setunitModal] = useState(false);
-    const toggleunitModal = () => setunitModal(!unitModal);
+    const [tableModal, setTableModal] = useState(false);
+    const toggleTableModal = () => setTableModal(!tableModal);
     
     const [commentModal, setCommentModal] = useState(false);
     const toggleCommentModal = () => setCommentModal(!commentModal);
 
     const [updateCommentModal, setUpdateCommentModal] = useState(false);
     const toggleUpdateCommentModal = () => setUpdateCommentModal(!updateCommentModal);
-    const showSignalStat = props.showSignalStat ; 
+    // const [showSignalStat ,setShowSignalStat ] = useState(props.showSignalStat) ; 
+    const showSignalStat  = props.showSignalStat ; 
 
     const [annotationtModal, setannotationtModal] = useState(false);
     const toggleannotationtModal = () => setannotationtModal(!annotationtModal);
@@ -233,6 +235,15 @@ const [unitArray, setunitArray] = useState({
        
     }, [])
 
+    const getMax = (arr) => {
+        let len = arr.length;
+        let max = -Infinity;
+    
+        while (len--) {
+            max = arr[len] > max ? arr[len] : max;
+        }
+        return max;
+    }
     const getCsv = () => {
         fetch(API_URL+"/session/data?session_id=" + session + "&signal_name=" + props.signal,
             {
@@ -333,21 +344,34 @@ const [unitArray, setunitArray] = useState({
             let _temptask = [] ; 
             let _taskArray = [] ; 
             let _tempAnnotation = textAnnotations ; 
-            let lastRecord = data[0].x ; 
+            let lastRecord  ; 
+            let firstRecord = 0   ; 
         // console.log(data[0]);
             data.map((v, i) => {
 
                 // _x.push(new Date(v.x));
                 if(v.z > 0 && (record == 'all' || record == v.r) && v.x > 0 ){
                 lastRecord = v.x ; 
+                if(firstRecord == 0){
+                    firstRecord = v.x ; 
+                    console.log("First Data "+props.signal , data[0].x)
+                    console.log("First Record show"+props.signal , new Date(parseInt((((v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  )))
+
+                }
                 if(_npauseTime > 0){
                     _pauseTime  += _npauseTime ; 
                 }
-                let xData = new Date(parseInt((((v.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ))
+
+                let xData = new Date(parseInt((((v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ))
+
+                 
+                // console.log("First Data "+props.signal , firstRecord)
+                // console.log("First Record "+props.signal , firstRecord)
                 if(showActualTime){
-                     xData = new Date(parseInt((((v.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ))
+                  xData = new Date(parseInt((((v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ))
+                    
                 }
-                    _length = parseInt(v.x - data[0].x - _pauseTime) ;
+                    _length = parseInt(v.x - firstRecord - _pauseTime) ;
                     // console.log(_length)
                     _x.push(xData);
                     _toolText.push(signalName[props.signal])
@@ -449,7 +473,7 @@ const [unitArray, setunitArray] = useState({
                        
                     }
                 if(_npauseTime > 0){
-                        // let xpData = new Date(parseInt((((v.x) - data[0].x - 2000) + (userTimeOffset) ) - _pauseTime  ))
+                        // let xpData = new Date(parseInt((((v.x) - firstRecord - 2000) + (userTimeOffset) ) - _pauseTime  ))
                         let _pTime = parseInt(_npauseTime/1000) ; 
                         let _ptasks = [xData,xData,_pTime+"s Pause","Paused"]
                         _allAnnotation.push(_ptasks);
@@ -524,9 +548,9 @@ const [unitArray, setunitArray] = useState({
                             }
                             liveAnnotation.map((v,i) => {
                               
-                                let xAnnTime = new Date(parseInt(((parseInt(v.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ));
+                                let xAnnTime = new Date(parseInt(((parseInt(v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
                                 console.log("I ma here")
-                                    // console.log(parseInt(((parseInt(annData.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ));
+                                    // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
                                     _temptask.push(
                                         {
                                             type: 'rect',
@@ -565,7 +589,7 @@ const [unitArray, setunitArray] = useState({
                 
 
                     } )
-                    let ymax= Math.max(..._y) ;
+                    let ymax= getMax(_y) ;
 
                     if(yAxisMax == 0){
                         
@@ -635,8 +659,8 @@ const [unitArray, setunitArray] = useState({
                                                 // alert(liveAnnotation.length)
                             liveAnnotation.map((v,i) => {
                               
-                            let xAnnTime = new Date(parseInt(((parseInt(v.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ))
-                                // console.log(parseInt(((parseInt(annData.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ));
+                            let xAnnTime = new Date(parseInt(((parseInt(v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ))
+                                // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
                                 _tempAnnotation.push(
                                     {
                                         xref: 'x',
@@ -706,14 +730,23 @@ const [unitArray, setunitArray] = useState({
             console.log(e);
     }
 
+
+    const toogleTableView = () => {
+        // setShowSignalStat(!showSignalStat);
+        setTableView(!tableView)
+}
+    
+
     const handleInitial = (e) => {
         // reset();
 //         console.log(e);
 //     let userTimeOffset = new Date().getTimezoneOffset() ; 
 //     // //    alert(userTimeOffset);
 //     userTimeOffset = userTimeOffset*60*1000 ; 
+// console.log("initial" , new Date(e.layout.xaxis.range[0]))
+// console.log("initial" , new Date(e.layout.xaxis.range[1]))
         if(props.xmin == 0 ){
-            setXaxisMin(new Date(e.layout.xaxis.range[0]))
+            setXaxisMin(new Date(xAxis[0]))
         }  
 //         else{
             
@@ -724,7 +757,7 @@ const [unitArray, setunitArray] = useState({
 //         }
 
         if(props.xmax == "full" ){
-            setXaxisMax(new Date(e.layout.xaxis.range[1]))
+            setXaxisMax(new Date(new Date(xAxis[xAxis.length - 1])));
         }
 //         else{
 //             setXaxisMax(new Date(xAxisMax+userTimeOffset))
@@ -740,22 +773,21 @@ const [unitArray, setunitArray] = useState({
     const handleRelayout = (e) => {
         console.log(e);
         console.log("relayout",xAxisMin)
+        console.log("relayout",xAxisMax)
+        setXaxisMin(new Date(e['xaxis.range[0]']))
   
+        setXaxisMax(new Date(e['xaxis.range[1]']))
         
-        if(new Date(e['xaxis.range[0]']) < new Date(xAxis[0].getTime())){
+        if(new Date(e['xaxis.range[0]']) < new Date(xAxis[0])){
             setXaxisMin(new Date(xAxis[0]))
-            setXaxisMax(new Date(e['xaxis.range[1]']))
 
         }
-        else if(new Date(e['xaxis.range[1]']) > new Date(xAxis[xAxis.length-1].getTime())){
-            setXaxisMin(new Date(e['xaxis.range[0]']))
+        
+        if(new Date(e['xaxis.range[1]']) > new Date(xAxis[xAxis.length-1])){
             setXaxisMax(new Date(xAxis[xAxis.length-1]))
 
         }
-        else{
-            console.log("limit")
-
-        }
+        
 }
 
 useEffect(() => {    
@@ -1038,7 +1070,7 @@ const handleYaxisPosition = e => {
 
 const xAxisRange = (event) =>{
     let {value = ""} = event.target || {}
-    if(value == ""){
+    if(value == "0"){
            
     setXaxisMin(new Date(xAxis[0]))
     setXaxisMax(new Date(xAxis[xAxis.length - 1]))
@@ -1238,8 +1270,12 @@ const deleteComment = () => {
                     <li data-tip="Play"><a onClick={handlePlay}><i class="fa fa-play"></i></a></li>
                     <li data-tip="Pause"><a onClick={handlePause}><i class="fa fa-pause"></i></a></li>
                     <li data-tip="Reset Graph"><a onClick={reset}><i class="fa fa-undo"></i></a></li>
-                    {/* <li><a  onClick={toggleunitModal}><i class="fa fa-thermometer-full" aria-hidden="true"></i></a></li>
-                    <li><a  onClick={toggleannotationtModal}><i class="fa fa-comment"></i></a></li> */}
+                    {
+                         props.signal != "pco2wave"  && props.signal != "pco2b2b"  && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa" &&
+                         <li data-tip="Toggle Table"><a  onClick={toogleTableView }><i class="fa fa-table" aria-hidden="true"></i></a></li>
+
+                    }
+                   {/*   <li><a  onClick={toggleannotationtModal}><i class="fa fa-comment"></i></a></li> */}
                 </ul>
 {/* 
                 <ul className="right-filter">
@@ -1250,7 +1286,7 @@ const deleteComment = () => {
                     <li><a onClick={handlePlay}><i class="fa fa-play"></i></a></li>
                     <li><a onClick={handlePause}><i class="fa fa-pause"></i></a></li>
                     <li><a onClick={reset}><i class="fa fa-undo"></i></a></li>
-                    <li><a  onClick={toggleunitModal}><i class="fa fa-thermometer-full" aria-hidden="true"></i></a></li>
+                    <li><a  onClick={toggleTableModal}><i class="fa fa-thermometer-full" aria-hidden="true"></i></a></li>
                     <li><a  onClick={toggleannotationtModal}><i class="fa fa-comment"></i></a></li>
                 </ul> */}
 
@@ -1281,7 +1317,7 @@ const deleteComment = () => {
                         yaxis: {rangemode: 'tozero'},
                         xaxis: {rangemode: 'tozero'},
                         hovermode: true,
-                        dragmode: false, 
+                        dragmode: true, 
                         shapes: modal.annotation === 1 ? taskMarkers : [],
                         xaxis :{
                             type: "date",
@@ -1294,11 +1330,13 @@ const deleteComment = () => {
                             ticks: "outside",
                             tickcolor: "#000",
                             zeroline: false, 
+                            showgrid: modal.showGrid,
+
                             // visible : false
                         },
                         yaxis : {
                             range: (modal.units === "mmHg" || modal.units === "") ? [yAxisMin, yAxisMax] : [yAxisMin,yAxisMax*0.13],
-                            fixedrange: false,
+                            fixedrange: true,
                             showgrid: modal.showGrid,
                             side : modal.position == "1" ? "left" : "right"
                         },
@@ -1318,7 +1356,7 @@ const deleteComment = () => {
                     }}
                     config={{
 			        	displayModeBar: false,  
-                        scrollZoom: false,
+                        scrollZoom: true,
                         doubleClick:false,
                         transition: {
                             duration: 50,
@@ -1331,8 +1369,8 @@ const deleteComment = () => {
 
           
 
-                 <Modal isOpen={unitModal} toggle={toggleunitModal} className="modal-box-wrp" centered={true}>
-                    <ModalHeader toggle={toggleunitModal}><span className="ml-1 roititle modal-head">Change Y-Scale Unit for <span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]}} ></span></span></ModalHeader>
+                 <Modal isOpen={tableModal} toggle={toggleTableModal} className="modal-box-wrp" centered={true}>
+                    <ModalHeader toggle={toggleTableModal}><span className="ml-1 roititle modal-head">Change Y-Scale Unit for <span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]}} ></span></span></ModalHeader>
                     <ModalBody>
                         <ul className="range-list">
                             <li>
@@ -1815,8 +1853,8 @@ const deleteComment = () => {
 
                 </div>
                 {
-                    props.signal != "pco2wave"  || props.signal != "pco2b2b"  || props.signal != "capin" || props.signal != "b2b2hr" || props.signal != "b2brsa"  ?
-                          <table className='table table-resposnive table-hover statTable mt-5' style={{display: showSignalStat  ? "" : "none" }} >
+                  (  props.signal != "pco2wave"  && props.signal != "pco2b2b"  && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa") && ( showSignalStat || tableView)  ?
+                          <table className='table table-resposnive table-hover statTable mt-5' style={{display: (showSignalStat || tableView)  ? "" : "none" }} >
                                         <thead className='thead-dark'>
                                             <tr>
                                                 <th>X</th>

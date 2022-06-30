@@ -153,7 +153,7 @@ const ChartTable = () => {
             let type = 0;
             let status = 1;
 
-            let dataimg = canvas.toDataURL('image/png')
+            // let dataimg = canvas.toDataURL('image/png')
             // const doc = new jsPDF();
 
             // for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
@@ -178,25 +178,25 @@ const ChartTable = () => {
             // doc.save(sessionDate + ".pdf");
 
  
-            let formData = {    
-                'data':  dataimg,
-                'type': type,
-                'status': status,
-                'session_id': session_id    
-                } ;
+            // let formData = {    
+            //     'data':  dataimg,
+            //     'type': type,
+            //     'status': status,
+            //     'session_id': session_id    
+            //     } ;
 
-            fetch(API_URL + "/save/screenshot", {
-                method: 'POST',
-                headers: {  
-                     'Content-Type': 'application/json',
-                     'x-access-token': accessToken,
-                },
-                body: JSON.stringify(formData),
-            }).then((result) => {
-                result.json().then((resp) => {
+            // fetch(API_URL + "/save/screenshot", {
+            //     method: 'POST',
+            //     headers: {  
+            //          'Content-Type': 'application/json',
+            //          'x-access-token': accessToken,
+            //     },
+            //     body: JSON.stringify(formData),
+            // }).then((result) => {
+            //     result.json().then((resp) => {
 
 
-                })
+            //     })
 
                 let timezone = new Date().getTimezoneOffset() ; 
                 let formDataReport = {    
@@ -251,7 +251,7 @@ const ChartTable = () => {
                     })
 
                     
-            })
+            // })
 
  
 

@@ -309,7 +309,7 @@ const ChartExportedHeader = (props) => {
                                 <li data-tip="View session images PDF"><a href="javascript:void" onClick={downloadImage}><i class="fa fa-image" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="#"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
                                 <li><a href="#"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li> */}
-                                <li data-tip="View signals satistics"><a href="javascript:void" onClick={() => setShowSignalStat(!showSignalStat)}><i class="fa fa-table"></i></a></li>
+                                <li data-tip="Toogle signals satistics"><a href="javascript:void" onClick={() => setShowSignalStat(!showSignalStat)}><i class="fa fa-table"></i></a></li>
                                 <li data-tip="View help documenyt"><a href="javascript:void"  onClick={viewManual}><i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="javascript:void"><i class="fa fa-clock-o" aria-hidden="true"></i></a></li> */}
                             </ul>

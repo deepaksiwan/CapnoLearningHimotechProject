@@ -21,6 +21,8 @@ const ChartHeader = (props) => {
     const [sessioninfo, setsessioninfo] = useState([]);
     const setSessionDate = props.setSessionDate ; 
     const [alternate, setAlternate] = useState([]);
+    const [pdfReportName, setPdfReportName] = useState(null);
+    
     const group = props.group;
     const reportconfig = useRef();
     const alternateconfig = useRef();
@@ -34,6 +36,10 @@ const ChartHeader = (props) => {
 
     const [zoomModal, setZoomModal] = useState(false);
     const zoomModalToggle = () => setZoomModal(!zoomModal);
+
+    
+    const [savePdfModal, setSavePdfModal] = useState(false);
+    const savePdfModalToggle = () => setSavePdfModal(!savePdfModal);
 
     const [zoomRecording,setZoomRecording] = useState(null) ; 
 
@@ -93,6 +99,75 @@ const ChartHeader = (props) => {
         window.open('https://capnolearning.com/manualpdf/Operating%20Manual%20P6.0%20-%20April%2026.pdf','Manual','height=768,width=500');
     }
 
+    
+
+    const saveScreenshotPDF = () => {
+        // console.log(sessioninfo);
+        setrequestProcessingModal(true) ; 
+        html2canvas(document.getElementById("chart-table")).then(function (canvas) {
+
+            let session_id = session;
+            let type = 0;
+            let status = 1;
+
+            let dataimg = canvas.toDataURL('image/png')
+            const doc = new jsPDF();
+
+            for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
+                doc.setPage(pageNumber)
+                doc.setTextColor(0, 0, 0);
+                doc.text('Capnolearning Report', 10, 10,
+                    { styles: { fontSize: 20, fontWeight: 'bold' } })
+                doc.setDrawColor(0, 0, 0);
+                doc.line(10, 15, 600, 15);
+                doc.setFontSize(10)
+
+                doc.text(sessioninfo[0].name, 35, 25)
+                doc.text(sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_firstname, 23, 30);
+                doc.text(sessioninfo[0].trainer_firstname+ " " + sessioninfo[0].trainer_lastname, 25, 35);
+                // doc.text(trainerName, 25, 35);
+                doc.setFont(undefined, 'bold');
+                doc.text("Session Date:", 10, 25)
+                doc.text("Client:", 10, 30);
+                doc.text("Trainer:", 10, 35);
+                // doc.setFont(undefined, 'bold')
+                doc.addImage(dataimg, 5, 45, 200, 110);
+            }
+            let pdf_name = sessioninfo[0].name + "-" +pdfReportName + ".pdf" ; 
+           setTimeout(() => {
+            
+            let formData = {    
+                'data':  dataimg,
+                'session_id': session_id,
+                'pdf_name' : pdf_name,
+                'status': status,
+                'type': type    
+                } ;
+
+            fetch(API_URL + "/save/screenshot", {
+                method: 'POST',
+                headers: {  
+                     'Content-Type': 'application/json',
+                     'x-access-token': accessToken,
+                },
+                body: JSON.stringify(formData),
+            }).then((result) => {
+                result.json().then((resp) => {
+                    setrequestProcessingModal(false) ; 
+                    // () ;
+                    setrequestProcesedModal(true) ;
+
+                })
+            })
+          
+            
+           }, 5000);
+            
+
+
+        });
+
+    }
     const saveScreenshot = () => {
         // console.log(sessioninfo);
         setrequestProcessingModal(true) ; 
@@ -127,7 +202,7 @@ const ChartHeader = (props) => {
             }
     
            setTimeout(() => {
-            doc.save("PDF Report - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname + ".pdf");
+            doc.save(sessioninfo[0].name + "-" +pdfReportName + ".pdf");
             setrequestProcessingModal(false) ; 
             // () ;
             setrequestProcesedModal(true) ;
@@ -583,6 +658,7 @@ const ChartHeader = (props) => {
         doc.text("Client:" ,10,30);
         doc.text("Trainer:",10,35);
         // doc.setFont(undefined, 'bold')
+        
         doc.addImage(_image, 5, 45,200,110);
    
         }
@@ -637,7 +713,7 @@ const ChartHeader = (props) => {
  
 }
                                 <li><a href="javascript:void" onClick={takeNotesToggle} data-tip="Take report notes."><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li>
-                                <li><a href="javascript:void" data-tip="Export report as PDF." onClick={saveScreenshot}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" data-tip="Export report as PDF." onClick={savePdfModalToggle}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 {
                                 !group && 
                                 <li><a href="javascript:void" onClick={saveReportConfig} data-tip="Save as alternate configuration."><i class="fa fa-sliders" aria-hidden="true"></i></a></li>
@@ -655,7 +731,7 @@ const ChartHeader = (props) => {
                                 <li><a href="javascript:void" onClick={ViewlivesessionImage} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
                                {
                                 !group && 
-                                <li><a href="javascript:void" onClick={() => setShowSignalStat(!showSignalStat)} data-tip="View all signal statistics"><i class="fa fa-table"></i></a></li>
+                                <li><a href="javascript:void" onClick={() => setShowSignalStat(!showSignalStat)} data-tip="Toggle all signal statistics"><i class="fa fa-table"></i></a></li>
                                }
                                 <li><a href="javascript:void" onClick={viewManual} data-tip="View help document"><i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="javascript:void" onClick={() => setShowActualTime(!showActualTime)}  data-tip='Switch time format' data-tog><i class="fa fa-clock-o" aria-hidden="true"></i></a></li> */}
@@ -788,7 +864,26 @@ const ChartHeader = (props) => {
                         </ModalBody>
 
                     </Modal>
+                    <Modal isOpen={savePdfModal} toggle={savePdfModalToggle} className="modal-box-wrp" centered={true}>
+                        <ModalHeader toggle={savePdfModalToggle}><span className="ml-1 roititle modal-head"> PDF Report</span></ModalHeader>
+                        <ModalBody>
+                        <p className=''>Please enter the name of PDF you want to save.</p>
+                        <div class="input-group mb-3">
+                              <div class="input-group-prepend">
+     <span class="input-group-text" id="basic-addon1">{sessioninfo[0] ? sessioninfo[0].name: ""}</span>
+  </div>
+  <input type="text" class="form-control" value={pdfReportName} onChange={(e) => setPdfReportName(e.target.value)} placeholder="Report Name" aria-label="Report Name" aria-describedby="basic-addon1" />
+</div>
+                            
+                        <div className='d-flex justify-content-around mt-3'>
+                            <button className='lightbtn w-100'  onClick={saveScreenshotPDF} >Save PDF</button>
+                           
+                            <button className='darktbtn w-100 ml-1'  onClick={saveScreenshot} >Download PDF</button>
+                           
+                        </div>
+                        </ModalBody>
 
+                    </Modal>
         </div>
     )
 }
