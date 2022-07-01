@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import fs from 'fs';
 import i18n from "i18next";
 import html2canvas from 'html2canvas';
 import { jsPDF } from "jspdf";
@@ -38,7 +40,7 @@ const Editassemblyreport = () => {
     const [PdfArrays, setPdfArrays] = useState([]);
     const [livesessectionArray, setLivesessectionArray] = useState([]);
 
-    
+
 
     const reportName = useRef();
     const summaryReportDes = useRef();
@@ -75,17 +77,17 @@ const Editassemblyreport = () => {
                     setAssemblydata(resp.data[0]);
 
                     const pdfdatareport = resp.data[0].report_desc;
-                    if(pdfdatareport != null){
+                    if (pdfdatareport != null) {
                         const pdfArray = JSON.parse(pdfdatareport);
                         setPdfArrays(pdfArray)
                     }
 
                     const liveSessionreport = resp.data[0].session_image_desc;
-                    if(liveSessionreport != null){
+                    if (liveSessionreport != null) {
                         const liveSessionreportArra = JSON.parse(liveSessionreport);
                         setLivesessectionArray(liveSessionreportArra)
                     }
-                   
+
                 });
             }
             else if (response.status == 401) {
@@ -352,8 +354,74 @@ const Editassemblyreport = () => {
 
 
     }
+    const saveAssemblyFullscreenshort = () => {
 
 
+        html2canvas(document.getElementById("takescreenassembly")).then(function (canvas) {
+
+            let dataimg = canvas.toDataURL('image/png')
+
+            const doc = new jsPDF();
+
+            doc.addImage(dataimg, 10, 15, 200, 115);
+
+            doc.save("a4.pdf");
+
+
+            let data = {};
+
+            data['report_img'] = dataimg;
+
+            fetch(API_URL + "/save/assembly/fullscreenshort/" + id, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            }).then((result) => {
+                result.json().then((resp) => {
+
+
+                })
+            })
+
+
+        });
+
+
+    }
+
+    
+    const downloadpdf = () => {
+
+        fetch(API_URL + "/get/full/screenshort/" + id + "/" + Clientid,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+
+                   
+
+
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+    }
 
     const logout = () => {
         localStorage.clear();
@@ -407,8 +475,8 @@ const Editassemblyreport = () => {
 
                                         <div className="text-areat-report">
                                             <label>PDF Report Description ({index + 1})</label>
-                                            <textarea key={index} defaultValue={(PdfArrays[index]? PdfArrays[index] : "")} onChange={handlepdfDescription(index)}></textarea>
-                                            
+                                            <textarea key={index} defaultValue={(PdfArrays[index] ? PdfArrays[index] : "")} onChange={handlepdfDescription(index)}></textarea>
+
                                         </div>
 
                                     </>
@@ -440,8 +508,8 @@ const Editassemblyreport = () => {
                                         </div>
                                         <div className="text-areat-report">
                                             <label>Live Session Image Description ({index + 1})</label>
-                                            <textarea key={index} defaultValue={(livesessectionArray[index]? livesessectionArray[index] : "")} onChange={handleLiveDescription(index)}></textarea>
-                                            
+                                            <textarea key={index} defaultValue={(livesessectionArray[index] ? livesessectionArray[index] : "")} onChange={handleLiveDescription(index)}></textarea>
+
                                         </div>
                                     </>
                                 )
@@ -481,8 +549,8 @@ const Editassemblyreport = () => {
                         }
 
                         <div className="assembly-btn-wrp assembly-btn-wrp2">
-                            <div className="assembly-btn"><a href="#" onClick={UpdateAssemblyreport} >SAVE REPORT</a></div>
-                            <div className="assembly-btn ml-assembly"><a href="#">SAVE & DOWNLOAD PDF</a></div>
+                            <div className="assembly-btn"><a href="javascript:void" onClick={UpdateAssemblyreport} >SAVE REPORT</a></div>
+                            <div className="assembly-btn ml-assembly"><a href="javascript:void" onClick={downloadpdf}>SAVE & DOWNLOAD PDF</a></div>
                             <div className="assembly-btn ml-assembly"><a href="#">GO TO REPORTS LIST</a></div>
 
                         </div>

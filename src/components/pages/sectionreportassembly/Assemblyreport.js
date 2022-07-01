@@ -314,7 +314,7 @@ const Assemblyreport = () => {
                             </>
                         }
                         <div className="assembly-btn-wrp">
-                            <div className="assembly-btn"><a href="#" onClick={saveAssemblyreport}>Create/Save Report</a></div>
+                            <div className="assembly-btn"><a href="javascript:void" onClick={saveAssemblyreport}>Create/Save Report</a></div>
                             <div className="assembly-btn ml-assembly"><a href="javascript:void" onClick={() => unCheck()}>Clear Selections</a></div>
                             
                         </div>
