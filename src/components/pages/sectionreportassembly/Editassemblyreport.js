@@ -397,30 +397,9 @@ const Editassemblyreport = () => {
         fetch(API_URL + "/get/full/screenshort/" + id + "/" + Clientid,
             {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': accessToken,
-                },
+               
             }
-        ).then((response) => {
-            if (response.status == 200) {
-                response.json().then((resp) => {
-
-                   
-
-
-
-                });
-            }
-            else if (response.status == 401) {
-                logout()
-            }
-            else {
-                alert("network error")
-            }
-
-
-        })
+        )
     }
 
     const logout = () => {
@@ -491,7 +470,8 @@ const Editassemblyreport = () => {
                                     <div className="report-notes">
                                         <>
                                             <label>Live Session Notes</label>
-                                            <p>{val.sessiondata}</p>
+                                            <p dangerouslySetInnerHTML={{ __html: val.sessiondata?val.sessiondata: "No live session notes available"}}></p>
+                                          
                                         </>
                                     </div>
                                 )
@@ -522,7 +502,7 @@ const Editassemblyreport = () => {
                                     <div className="report-notes">
                                         <>
                                             <label>Report Notes </label>
-                                            <p>{val.notes}</p>
+                                            <p>{val.notes?val.notes : "No report available"}</p>
                                         </>
                                     </div>
                                 )
@@ -530,10 +510,14 @@ const Editassemblyreport = () => {
                         }
 
 
+                       {
+                        completeForm.length > 0 &&
                         <p className="complete-forms"><b>Completed Forms</b></p>
+                       }
 
                         {
                             completeForm.length > 0 && completeForm.map((val, index) => {
+                                
                                 return (
                                     <>
                                         <div className="live-section-img">
@@ -550,7 +534,7 @@ const Editassemblyreport = () => {
 
                         <div className="assembly-btn-wrp assembly-btn-wrp2">
                             <div className="assembly-btn"><a href="javascript:void" onClick={UpdateAssemblyreport} >SAVE REPORT</a></div>
-                            <div className="assembly-btn ml-assembly"><a href="javascript:void" onClick={downloadpdf}>SAVE & DOWNLOAD PDF</a></div>
+                            <div className="assembly-btn ml-assembly"><a href="javascript:void" action="" onClick={downloadpdf}>SAVE & DOWNLOAD PDF</a></div>
                             <div className="assembly-btn ml-assembly"><a href="#">GO TO REPORTS LIST</a></div>
 
                         </div>

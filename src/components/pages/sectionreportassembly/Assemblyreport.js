@@ -35,6 +35,7 @@ const Assemblyreport = () => {
     const reportsnote = useRef();
     const cforms = useRef();
     
+    
   
 
     
@@ -120,7 +121,7 @@ const Assemblyreport = () => {
 
     }
     const saveAssemblyreport = ()=>{
-
+        
         const clientandpractionararray = clientNumberArray.concat(practionarNumberArray)
         
         let data ={};
@@ -131,7 +132,7 @@ const Assemblyreport = () => {
         data['lnotes'] = livenotes.current.value;
         data['limages'] = liveimages.current.value;
         data['rnotes'] = reportsnote.current.value;
-        data['cforms'] = cforms.current.value;
+        data['cforms'] =  formsName.length > 0 && cforms.current.value;
 
         fetch(API_URL+"/save/assembly/report", {
                 method: 'POST',
@@ -269,7 +270,10 @@ const Assemblyreport = () => {
                         </ul>
                         
                         <ul className="checkbox-assemblylist">
-                        <li><p><input type="checkbox" onClick={handleClick} className="checkbox" /> Session Data (saved PDF files)</p></li>
+                       {
+                         pdfdata.length > 0 &&
+                         <li><p><input type="checkbox" onClick={handleClick} className="checkbox" /> Session Data (saved PDF files)</p></li>
+                       }
                             
                             {
                                 showsessiondate &&
@@ -284,7 +288,10 @@ const Assemblyreport = () => {
                             <li><p><input type="checkbox" value={livenotesinput == true? 1 : 0}  onChange={() => setlivenotesinput(!livenotesinput)} ref={livenotes} className="checkbox" /> Live Session Notes</p></li>
                             <li><p><input type="checkbox" value={liveimagesinput == true? 1 : 0}  onChange={() => setliveimagesinput(!liveimagesinput)} ref={liveimages} className="checkbox" /> Live Session Images</p></li>
                             <li><p><input type="checkbox" value={reportnotesinput == true? 1 : 0}  onChange={() => setreportnotesinput(!reportnotesinput)} ref={reportsnote} className="checkbox" /> Report Session Notes</p></li>
+                            {formsName.length > 0 &&
+
                             <li><p><input type="checkbox" value={completeform == true? 1 : 0}  onChange={() => setCompleteform(!completeform)} ref={cforms} onClick={handleCompleteForm} className="checkbox" /> Completed Forms</p></li>
+                                }
                         </ul>
                         {
                             completedForm &&

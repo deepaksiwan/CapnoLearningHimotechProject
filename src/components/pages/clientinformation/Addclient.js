@@ -138,8 +138,8 @@ const Addclient = () => {
             if (response.status == 201) {
                 response.json().then((resp) => {
                     // console.log("result", resp);
-
-
+                    successToggleModal();
+                    setLoader(false)
                 });
             }
             else if (response.status == 401) {
@@ -148,9 +148,9 @@ const Addclient = () => {
             else {
                 alert("network error")
             }
-            setLoader(false)
+            
         })
-        successToggleModal();
+        
         
 
 

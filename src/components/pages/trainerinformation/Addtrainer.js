@@ -129,7 +129,8 @@ const Addtrainer = () => {
             if (response.status == 201) {
                 response.json().then((resp) => {
                     console.log("results", resp);
-                  
+                    successToggleModal();
+                    setLoader(false)
 
                 });
             }
@@ -139,10 +140,10 @@ const Addtrainer = () => {
             else {
                 alert("network error")
             }
-            setLoader(false)
+           
         })
 
-        successToggleModal();
+        
 
 
     }
