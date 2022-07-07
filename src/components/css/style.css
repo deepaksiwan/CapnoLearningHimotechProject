@@ -2218,6 +2218,17 @@ sub {
   list-style: none;
   margin-top: 30px;
 }
+.highlighted > a {
+  background: #000;
+  color: #fff;
+}
+.highlighted > a > i {
+ 
+  color: #fff!important;
+}
+.plotly-notifier {
+  display: none;
+}
 .assembly-list > li > p{
   color: #000;
   font-size: 15px;
@@ -2420,3 +2431,11 @@ sub {
 .need-{
   color: #800080 !important;
 } */
+
+.js-plotly-plot .plotly .cursor-crosshair{
+  cursor: help!important;
+}
+.js-plotly-plot .plotly .cursor-ew-resize{
+  cursor: grab!important;
+
+}

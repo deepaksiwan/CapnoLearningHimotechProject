@@ -14,14 +14,14 @@ import { API_URL } from '../../../config';
 
 const ChartTable = () => {
     const accessToken = localStorage.getItem('accessToken');
-    const { config, session  , record,currentConfig} = useParams();
+    const { config, session  , record,currentConfig,showclock} = useParams();
     const [graphs, setgraphs] = useState([]);
     const [notes,setNotes] = useState(null) ; 
     const [reportName,setReportName] = useState(null) ; 
     const [showHeader,setShowHeader] = useState(false) ; 
     const [sessionDate,setSessionDate] = useState(null) ; 
     const userId = localStorage.getItem('user_id');
-    const [showActualTime,setShowActualTime] =  useState(true) ; 
+    const showActualTime =  useState(showclock == 1 ? true : false) ; 
     
     // const [value, setValue] = useState(0);
     // const [point, setPoint] = useState(25);
@@ -68,7 +68,12 @@ const ChartTable = () => {
             grid: data.grid,
             inverty: data.inverty,
             yposition: data.yposition,
-            lineType: data.lineType
+            lineType: data.lineType,
+            thresholdtLine: data.thresholdtLine,
+            thresholdtcolor: data.thresholdtLine,
+            stat: data.stat,
+            thresholdthick: data.thresholdthick,
+            thresholdvalue: data.thresholdvalue
         }
         console.log("signal config",_temp);
         setSignalConfig(_temp)
@@ -83,7 +88,6 @@ const ChartTable = () => {
         data.map((v,i) => {
             _tempData.push({
                 x : v.x,
-                y : v.y,
                 mean : v.mean,
                 median : v.median,
                 sd : v.sd,
@@ -205,7 +209,8 @@ const ChartTable = () => {
                     'name': reportName,
                     'notes': notes,
                     'status' : 1,
-                    'timezone' : timezone   
+                    'timezone' : timezone,
+                    'clock' : showclock
                     } ;
                     
                     fetch(API_URL + "/save/single/report", {
@@ -325,11 +330,11 @@ const ChartTable = () => {
         <div>
             {
                 graphs.length > 0  && showHeader &&
-                <ChartHeader group={false} showHeader={showHeader} setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={config} />
+                <ChartHeader group={false} showHeader={showHeader}  showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={config} />
             }
               {
                 graphs.length > 0  && !showHeader &&
-                <ChartHeader group={false} showHeader={showHeader} setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={config} />
+                <ChartHeader group={false} showHeader={showHeader}  showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={config} />
             }
 
           
@@ -338,13 +343,13 @@ const ChartTable = () => {
                 <div className="container-fluid">
                     <div className="row justify-content-between" >
                         {
-                           graphs.length > 0 &&  graphs.map(function (d, i) {
+                           graphs.length > 0 && sessionDate &&  graphs.map(function (d, i) {
                            
                                
                                 return (
                                   
                                         <div className="chart-w" style={{ width: (d.col != "1/1" ? (eval((d.col)) * 99 )+ "%" : (eval(d.col) * 100) + "%") , maxWidth: (eval(d.col) * 100) + "%", height: "auto" , minHeight:  (eval(d.row) * 82) + "vh"  }}>
-                                        <Chart group={false} showActualTime={showActualTime} showSignalStat={showSignalStat} setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
+                                        <Chart sessionDate={sessionDate}  group={false} showActualTime={showActualTime} showSignalStat={showSignalStat} setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
                                         </div>
                                    
 

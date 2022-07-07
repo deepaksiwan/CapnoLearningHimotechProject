@@ -19,13 +19,18 @@ const Chart = (props) => {
     const session = props.session;
     const record = props.record;
     const [xAxis, setXaxis] = useState([]);
+    const [yAxis2, setYAxis2] = useState([]);
+    const {showclock} = useParams() ; 
+    const sessionDate = props.sessionDate ; 
     const [textTooltip, setTextTooltip] = useState([]);
     const [statistics,setStatistics] = useState([]);
     // alert(new Date(parseInt(props.xmin)));
     let Utz = new Date().getTimezoneOffset() ; 
-    const [tableView , setTableView] = useState(false); 
+    const [tableView , setTableView] = useState(props.showSignalStat); 
     // Utz = Utz*60*1000 ; 
-    
+    useEffect(() =>{
+        setTableView(props.showSignalStat)
+    },[props.showSignalStat])
     
 const [unitArray, setunitArray] = useState({
     pco2wave : ["mmHg", "kPa" , "%" ],
@@ -64,7 +69,7 @@ const [unitArray, setunitArray] = useState({
 
     const [xAxisMin, setXaxisMin] = useState(props.xmin == 0 ? props.xmin :  new Date(parseInt(props.xmin*1e3))); 
     if(props.signal == "pco2wave"  ){
-        console.log("newMin", new Date(parseInt(props.xmin*1e3)));
+        // console.log("newMin", new Date(parseInt(props.xmin*1e3)));
     }
     const [xAxisMax, setXaxisMax] = useState(props.xmax == "full" ? props.xmax :  new Date(parseInt(props.xmax*1e3))); 
     const [yAxisMin, setYaxisMin] = useState(props.ymin);  
@@ -85,14 +90,24 @@ const [unitArray, setunitArray] = useState({
         grid: 1,
         inverty: 2,
         yposition: 1,
-        lineType: "solid"
+        lineType: "solid",
+        stat: "median",
+        tline: "dot",
+        tcolor: "#FF0000",
+        tthick: 1 ,
+        tvalue: 35,
     };
     const [yAxis, setYaxis] = useState([]);
     const [yAxisOg, setYAxisOg] = useState([]);
+    const [csvFile, setCsvFile] = useState([]);
     
     const accessToken = localStorage.getItem('accessToken');
     const [value, setValue] = useState(props.thick); 
-    const [thresholdvalue ,setThresholdvalue] = useState(4)
+    const [thresholdvalue ,setThresholdvalue] = useState(otherConfig.tvalue);
+    const [thresholdthick ,setThresholdthick] = useState(otherConfig.tthick);
+    const [thresholdtLine ,setThresholdtLine] = useState(otherConfig.tline);
+    const [thresholdtcolor ,setThresholdtcolor] = useState(otherConfig.tcolor);
+    
     const [point, setPoint] = useState(25);
     const [xrange, setXRange] = useState(otherConfig.xrange);
     const [rowHeight, setRowHeight] = useState("30px")
@@ -102,6 +117,7 @@ const [unitArray, setunitArray] = useState({
     const [currentAnnotation,setCurrentAnnotation] = useState(null) ; 
     
     // const [liveAnnotation,setLiveAnnotation] = useState([]) ; 
+
     let  liveAnnotation = [] ; 
     const [graphModal, setgraphModal] = useState(false);
     const toggleGraphModal = () => setgraphModal(!graphModal);
@@ -126,6 +142,8 @@ const [unitArray, setunitArray] = useState({
     const [annotationtModal, setannotationtModal] = useState(false);
     const toggleannotationtModal = () => setannotationtModal(!annotationtModal);
     const [play, setPlay] = useState(false);
+    const [dragMode, setDragMode] = useState('pan');
+    
     const [modal,setModal] = useState({
         range:otherConfig.xrange,
         units:otherConfig.units,
@@ -138,17 +156,19 @@ const [unitArray, setunitArray] = useState({
     const [signalModalData,setSignalModalData] = useState({
         signalType:props.type == "line" ? 1 : 2,
         disabledType : props.type == "line" ? true :  false,
+        stat: otherConfig.stat , 
         signal : 1
     })
     const [average,setAverage] = useState(30)
     const [comment,setComment] = useState((props.comment == "{}" || props.comment == "[]" || props.comment == null ? [] :JSON.parse(props.comment)))
     const [signalLinetype , setSignalLinetype] = useState(otherConfig.lineType)
-    const [hideThresholdLine,setHideThresholdLine] = useState(1)
+    // const [hideThresholdLine,setHideThresholdLine] = useState(true)
+    const [showThresholdLine,setShowThresholdLine] = useState(false)
     const setConfig = props.setConfig ; 
     const setStats = props.setStats ; 
     
     const [signalName, setSignalName] = useState({
-        pco2wave : "PCO<sub>2</sub> Waveform",
+        pco2wave : "Raw PCO<sub>2</sub> Waveform",
         petco2 :  "PetCO<sub>2</sub> History",
         bpmhistory : "Breaths/min History",
         pco2b2b : "PCO<sub>2</sub> breath to breath",
@@ -196,7 +216,7 @@ const [unitArray, setunitArray] = useState({
         // super(props);
         // console.log("max" ,xAxisMax)
       
-    }, [xAxis, yAxis,textAnnotations])
+    }, [xAxis, yAxis,textAnnotations,signalModalData])
 
     useEffect(() => {
         let _temp = {
@@ -222,8 +242,12 @@ const [unitArray, setunitArray] = useState({
             grid: modal.grid,
             inverty: modal.invert,
             yposition: modal.position,
-            lineType: signalLinetype
-
+            lineType: signalLinetype,
+            thresholdtLine: thresholdtLine,
+            thresholdtcolor: thresholdtLine,
+            stat: signalModalData.stat,
+            thresholdthick: thresholdthick,
+            thresholdvalue: thresholdvalue
         }
         group  ? clientSerial ?  setConfig(clientSerial,_temp) : setConfig(props.profile.name,_temp) : props.multi ?  setConfig(props.signal+"_"+props.session,_temp) : setConfig(props.signal,_temp)
     },[color,type,average,xAxisMin,value,xAxisMax,yAxisMin,yAxisMax,record,comment,signalLinetype,modal]);
@@ -234,6 +258,19 @@ const [unitArray, setunitArray] = useState({
         getAlldata();
        
     }, [])
+
+    useEffect(() => {
+        let _t =[] ;
+        // super(props);
+       yAxis2.map((v,i) => {
+            _t.push(thresholdvalue);
+            if(i == (yAxis2.length - 1) ){
+                setYAxis2(_t);
+            }
+       })
+       
+    }, [thresholdvalue])
+
 
     const getMax = (arr) => {
         let len = arr.length;
@@ -258,7 +295,8 @@ const [unitArray, setunitArray] = useState({
                 response.json().then((resp) => {
                     // console.warn("result", resp);
                     if (resp.sessions[0]) {
-                        getData(resp.sessions[0].sessiondata)
+                        setCsvFile(resp.sessions[0].sessiondata)
+                        getData(resp.sessions[0].sessiondata,otherConfig.stat)
                     }
 
 
@@ -318,19 +356,26 @@ const [unitArray, setunitArray] = useState({
         localStorage.clear();
         window.location.reload();
     }
-    async function getData(_csvFile) {
+    async function getData(_csvFile,_stat) {
         let _x = [];
         let _toolText=[];
         let _y = [];
         let _tempY = []; 
+        let _threshold = [];
         let _tempStats = [] ;
 
         let _npauseTime = 0 ; 
         let _length = 0 ;
         let _pauseTime = 0 ; 
+        // let userTimeOffset = 0 ; 
         let userTimeOffset = new Date().getTimezoneOffset() ; 
         
-            userTimeOffset = userTimeOffset*60*1000 ; 
+        userTimeOffset = userTimeOffset*60*1000 ; 
+        // alert(userTimeOffset);
+        if(userTimeOffset > 0){
+            userTimeOffset += dstOffset()*60*1000  ; 
+        }
+        // alert(userTimeOffset);
  
         
     //    alert(userTimeOffset);
@@ -343,44 +388,69 @@ const [unitArray, setunitArray] = useState({
             // let _tasks = {} ; 
             let _temptask = [] ; 
             let _taskArray = [] ; 
+            let _recordArray = [] ; 
             let _tempAnnotation = textAnnotations ; 
             let lastRecord  ; 
             let firstRecord = 0   ; 
+            let prevRecord = 0 ; 
+            let endTask  = 0 ;
         // console.log(data[0]);
             data.map((v, i) => {
 
                 // _x.push(new Date(v.x));
                 if(v.z > 0 && (record == 'all' || record == v.r) && v.x > 0 ){
                 lastRecord = v.x ; 
-                if(firstRecord == 0){
-                    firstRecord = v.x ; 
-                    console.log("First Data "+props.signal , data[0].x)
-                    console.log("First Record show"+props.signal , new Date(parseInt((((v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  )))
+                
+                if(firstRecord == 0 ){
+
+                       
+                        firstRecord = v.x ; 
+                  
+                    
+                        // console.log("Selected Stat" , signalModalData.stat )
+                    // console.log("First Data "+props.signal , data[0].x)
+                    // console.log("First Record show"+props.signal , new Date(parseInt((((v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  )))
 
                 }
+              
                 if(_npauseTime > 0){
                     _pauseTime  += _npauseTime ; 
                 }
 
                 let xData = new Date(parseInt((((v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ))
 
+                if(showclock == 1){
+                let _getHours = sessionDate.split("-");
+                _getHours = _getHours[1].split(":");
+                _getHours = parseInt(_getHours[0])*60*60*1000 + parseInt(_getHours[1])*60*1000 ; 
+                xData = new Date(parseInt((((v.x) - firstRecord) + _getHours + (userTimeOffset) ) - _pauseTime  ))
+
+                }
+
                  
                 // console.log("First Data "+props.signal , firstRecord)
                 // console.log("First Record "+props.signal , firstRecord)
-                if(showActualTime){
-                  xData = new Date(parseInt((((v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ))
-                    
-                }
+                
                     _length = parseInt(v.x - firstRecord - _pauseTime) ;
                     // console.log(_length)
                     _x.push(xData);
                     _toolText.push(signalName[props.signal])
                     // console.log()
                     if(group){
-                        console.log('which y', v['y'+(props.index+1)])
-                        _y.push(parseFloat(v['y'+(props.index+1)]));
-                        let yt = parseFloat(v['y'+(props.index+1)]) ; 
-                     
+                        console.log('which y', v['y'+(props.index+1)+'_median'])
+                        _y.push(parseFloat(v['y'+(props.index+1)+'_median']));
+                        // let yt = parseFloat(v['y'+(props.index+1)+'_median']) ; 
+                        let yt ;
+                        if(_stat == "median"){
+                            yt = parseFloat(v['y'+(props.index+1)+'_median']) ;  
+                        }
+                        else if(_stat == "mean"){
+                            yt = parseFloat(v['y'+(props.index+1)]) ;  
+                        }
+                        else if(_stat == "sd"){
+                           yt = parseFloat(v['y'+(props.index+1)+'_std']) ;  
+                         
+                        }
                         if(otherConfig.units == "kPa"){
                             _tempY.push(yt*0.133322);
                         }
@@ -396,11 +466,23 @@ const [unitArray, setunitArray] = useState({
                             _tempY.push(yt);
             
                         }
+                        _threshold.push(thresholdvalue);
+
 
 
                     }
                     else{
-                        let yt = parseFloat(v.y) ; 
+
+                        let yt ;
+                        if(_stat == "median"){
+                            yt = parseFloat(v.median) ;  
+                        }
+                        else if(_stat == "mean"){
+                            yt = parseFloat(v.y) ;  
+                        }
+                        else if(_stat == "sd"){
+                            yt = parseFloat(v.std) ;  
+                        }
                     
                         if(otherConfig.units == "kPa"){
                             _tempY.push(yt*0.133322);
@@ -417,17 +499,27 @@ const [unitArray, setunitArray] = useState({
                             _tempY.push(yt);
             
                         }
+                        if(yt == 0 && i > 0 ){
+                            yt = _y[i-1] ;
+                        }
+                        _threshold.push(thresholdvalue);
                         _y.push(yt);
                     }
 
                     _tempStats.push({
                         x : xData.getHours()+":"+xData.getMinutes()+":"+xData.getSeconds()+":"+xData.getMilliseconds(),
-                        y : parseFloat(v.y).toFixed(2),
                         mean : parseFloat(v.y).toFixed(2),
                         median : parseFloat(v.median).toFixed(2),
                         sd : parseFloat(v.std).toFixed(2),
                     }) 
                 
+                    if( v.r != prevRecord ){
+                        _recordArray.push(xData);
+                      
+                        
+                    }
+                    prevRecord = v.r
+
                     
                     if(v.rname != "Normal" ){
                         
@@ -436,13 +528,15 @@ const [unitArray, setunitArray] = useState({
                             // console.log(v);
                             if(data[i+1]){
                                 if(lastTask != data[i+1].text){
-                                    _taskArray[0] = xData;
-                                    _taskArray.push(xData)
+                                    // _taskArray[0] = xData;
+                                    // _taskArray.push(xData)
                                     _taskArray.push(lastTask)
                                     _taskArray.push(lastTask)
                                     // console.log("task",_taskArray);
+                                    _taskArray.push(xData)
         
                                     // _tasks[] = _taskArray
+                                    endTask = _allTasks.length ; 
                                     _allTasks.push(_taskArray);
                                     _allAnnotation.push(_taskArray);
                                     _taskArray = [] ; 
@@ -450,12 +544,13 @@ const [unitArray, setunitArray] = useState({
                             }
                            else  if(i == data.length - 1 ){
                             // console.log(v);
-                            _taskArray[0] = xData;
+                            // _taskArray[0] = xData;
+                            // _taskArray.push(xData)
+                            _taskArray.push(lastTask)
+                            _taskArray.push(lastTask)
                             _taskArray.push(xData)
-                            _taskArray.push(lastTask)
-                            _taskArray.push(lastTask)
                             // console.log("task",_taskArray);
-
+                            endTask = _allTasks.length
                             // _tasks[] = _taskArray
                             _allTasks.push(_taskArray);
                             _allAnnotation.push(_taskArray);
@@ -492,6 +587,32 @@ const [unitArray, setunitArray] = useState({
                 if (i == (data.length - 1)) {
                     // alert("here");
                 // console.log(_x.length)
+                _recordArray.map((v,i) => {
+
+                _temptask.push(
+                    {
+                        type: 'rect',
+                        // x-reference is assigned to the x-values
+                        xref: 'x',
+                        // y-reference is assigned to the plot paper [0,1]
+                        yref: 'paper',
+                        x0: v,
+                        y0: 0,
+                        x1: v ,
+                        y1: 3,
+                        // fillcolor: "#000" ,
+                        opacity: 1,
+                        line: {
+                            color: 'rgb(255, 0, 0)',
+                            width: 1,
+                            dash:'dot'
+                        },
+                        
+            
+                    }
+                    
+                );
+                })
                     _allTasks.map((v,i) => {
                         console.log(props.signal,v[2],v)
                         if(v[3] == "Paused" ){
@@ -525,7 +646,7 @@ const [unitArray, setunitArray] = useState({
                                     yref: 'paper',
                                     x0: v[0] ,
                                     y0: 0,
-                                    x1: v[1] ,
+                                    x1: v[0] ,
                                     y1: 3,
                                     opacity: 0.5,
                                     line: {
@@ -535,6 +656,31 @@ const [unitArray, setunitArray] = useState({
     
                                 }
                             );
+
+                            if(i == endTask){
+                                console.log("End Task",v)
+                                _temptask.push(
+                                    {
+                                        type: 'rect',
+                                        // x-reference is assigned to the x-values
+                                        xref: 'x',
+                                        // y-reference is assigned to the plot paper [0,1]
+                                        yref: 'paper',
+                                        x0: v[3] ,
+                                        y0: 0,
+                                        x1: v[3] ,
+                                        y1: 3,
+                                        opacity:1,
+                                        line: {
+                                            width: 1
+                                        },
+                                        name: v[2],
+        
+                                    }
+                                );
+                            }
+
+                           
                         }
                         
 
@@ -544,12 +690,13 @@ const [unitArray, setunitArray] = useState({
                         if(i == (_allTasks.length - 1)){
                             if(liveAnnotation.length == 0){
                                 setTaskMarkers(_temptask);
+                                
 
                             }
                             liveAnnotation.map((v,i) => {
                               
                                 let xAnnTime = new Date(parseInt(((parseInt(v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
-                                console.log("I ma here")
+                                // console.log("I ma here")
                                     // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
                                     _temptask.push(
                                         {
@@ -604,6 +751,42 @@ const [unitArray, setunitArray] = useState({
                         }
 
                     }
+
+
+                    _recordArray.map((v,i) => {
+                        if(i > 0 ){
+                        _tempAnnotation.push(
+                            {
+                                xref: 'x',
+                                yref: 'y',
+                                x: v ,
+                                y: yAxisMax-(yAxisMax*0.022),  
+                                textangle: 0,
+                                text: '',
+                                showarrow: true,
+                                arrowhead: 1,
+                                ax: -5, 
+                                bgcolor: "#fff",
+                                ay:0,
+                                arrowcolor: "#FF0000",                 
+                            },
+                            {
+                                xref: 'x',
+                                yref: 'y',
+                                x: v ,
+                                y: yAxisMax-(yAxisMax*0.02),  
+                                textangle: 0,
+                                text: '',
+                                showarrow: true,
+                                arrowhead: -10,
+                                ax: 0, 
+                                bgcolor: "#fff",
+                                ay:-5,
+                                arrowcolor: "#FF0000",                 
+                            }
+                        );
+                        }
+                    })
 
                     _allAnnotation.map((v,i) => {
                         // console.log(v)
@@ -692,11 +875,28 @@ const [unitArray, setunitArray] = useState({
 
                     } )
 
+                    if(_allAnnotation.length == 0){
+                        setTextAnnotations(_tempAnnotation);                                 
+
+                    }
+
                     setLength(_length);
-                    setXaxis(_x);
+                   
                     setTextTooltip(_toolText);
-                 
-                    setYaxis(_tempY);
+                    setYAxis2(_threshold)
+                    if(average == 30){
+                        console.log("axis x" , _x.length)
+                        console.log("axis y" , _tempY.length)
+                        setYaxis(_tempY);
+                        setXaxis(_x);
+                    }
+                    else{
+                        let _data =  calculate_history_sample([_x,_tempY],average)
+                        setYaxis(_data[1]);
+                        setXaxis(_data[0]);
+                    }
+                   
+
                     setYAxisOg(_y);
                     if(props.signal == "capin"){
                         
@@ -771,9 +971,10 @@ const [unitArray, setunitArray] = useState({
 }
 
     const handleRelayout = (e) => {
-        console.log(e);
+        console.log("relayout event" , e);
         console.log("relayout",xAxisMin)
         console.log("relayout",xAxisMax)
+        setXRange('')
         setXaxisMin(new Date(e['xaxis.range[0]']))
   
         setXaxisMax(new Date(e['xaxis.range[1]']))
@@ -786,6 +987,9 @@ const [unitArray, setunitArray] = useState({
         if(new Date(e['xaxis.range[1]']) > new Date(xAxis[xAxis.length-1])){
             setXaxisMax(new Date(xAxis[xAxis.length-1]))
 
+        }
+        else if(new Date(e['xaxis.range[1]']) < new Date(xAxis[0])){
+            setXaxisMax(new Date(xAxis[xAxis.length - 1]))
         }
         
 }
@@ -867,12 +1071,19 @@ const moveForward = () => {
     if(_newMin < new Date(xAxis[0])){
         setXaxisMin(new Date(xAxis[0]))
     }
+    else if(_newMin >= new Date(xAxis[xAxis.length - 1])){
+      
+
+        _newMin =  new Date(xAxis[xAxis.length - 1]).getTime() - _diff ; 
+  
+        setXaxisMin(_newMin)
+    }
     else{
         setXaxisMin(_newMin)
     }
     let _newMax =  new Date(xAxisMax).getTime() + _diff ; 
     _newMax =  new Date(_newMax)  ; 
-    if(_newMax > xAxis[xAxis.length - 1]){
+    if(_newMax >= xAxis[xAxis.length - 1]){
         setXaxisMax(new Date(xAxis[xAxis.length - 1]))
     }
     else{
@@ -905,18 +1116,39 @@ const moveBackward = () => {
     let _diff = new Date(xAxisMax).getTime() -  new Date(xAxisMin).getTime() ; 
     let _newMin =  new Date(xAxisMin).getTime() - _diff ; 
     _newMin = new Date(_newMin) ;
-    if(_newMin < new Date(xAxis[0])){
+    console.log("Newmin C" , _newMin);
+    // console.log("OGmin" , _newMin);
+    console.log("Newmin O" , new Date(xAxis[0]));
+    if(_newMin <= new Date(xAxis[0])){
+        // console.log("Newmin R" ,"true")
+        // console.log("Newmin S" ,xAxisMin)
+        // console.log("Newmin Y" ,xAxis)
         setXaxisMin(new Date(xAxis[0]))
+    }
+    else if(_newMin >= new Date(xAxis[xAxis.length - 1])){
+      
+
+        _newMin =  new Date(xAxis[xAxis.length - 1]).getTime() - _diff ; 
+  
+        setXaxisMin(_newMin)
     }
     else{
         setXaxisMin(_newMin)
     }
     let _newMax =  new Date(xAxisMax).getTime() - _diff ; 
     _newMax =  new Date(_newMax)  ; 
-    if(_newMax > xAxis[xAxis.length - 1]){
+    if(_newMax >= xAxis[xAxis.length - 1]){
+        console.log("this is set 1");
         setXaxisMax(new Date(xAxis[xAxis.length - 1]))
     }
+    else if(_newMax <= new Date(xAxis[0])){
+    _newMax =  new Date(xAxis[0]).getTime() + _diff ; 
+ 
+        setXaxisMax(_newMax)
+    }
+
     else{
+       
         setXaxisMax(_newMax)
     }
    
@@ -966,6 +1198,15 @@ const handlePlay = () => {
     setPlay(true);
    
 }
+
+const handleSelection = () => {
+    if(dragMode == 'pan'){
+        setDragMode('zoom')
+    }   
+    else{
+        setDragMode('pan')
+    }
+}
   
 const handlePause = () => {
 
@@ -973,6 +1214,55 @@ const handlePause = () => {
 
 
 }  
+
+
+const calculate_history_sample = (data,sample) => {
+    let first = data[0][0];
+    var num =  sample/30 ;
+     var next = num - 1 ;
+    var newdataX = [] ;
+    var newdataY = [] ;
+    if(sample == 30){
+        newdataX = data[0] ;
+        newdataY = data[1] ;
+    return [newdataX,newdataY];
+
+    }
+    else{
+        var totalsum = 0 ;
+        var c = 1 ;
+         first = 0 ;
+        for(var i = 0 ; i < data[0].length ;  i++   ){
+            if(first == 0){
+                first = i ;
+            }
+            if(i < next ){
+                c++ ;
+                totalsum += parseFloat(data[1][i]) ;
+            }
+            else if(i == next || i == (data[0].length - 1)){
+                totalsum += parseFloat(data[1][i]) ;
+                
+                console.log(totalsum);
+            var avgvalue = parseFloat(totalsum / num);
+            // console.log(data[i][0]);
+            // console.log(avgvalue);
+            newdataX.push(data[0][i-(num - 1)]);
+            newdataY.push(avgvalue);
+         
+            next = next + num ;
+            totalsum = 0 ;
+        
+            c = 1 ;
+            }           
+            if(i == (data[0].length - 1)){
+    // console.log("Average" , [newdataX,newdataY]);
+
+                return [newdataX,newdataY];
+            }
+    }
+    }
+}
  
 
 const handleUnitChange = (e) => {
@@ -997,12 +1287,17 @@ const handleUnitChange = (e) => {
             }
 
             if(i == (yAxisOg.length -1) ){
-                setYaxis(_temp);
+           
+                   let _data =  calculate_history_sample([xAxis,_temp],average)
+                    setYaxis(_data[1]);
+                    setXaxis(_data[0]);
+                
+                
             }
 
         })
-  
-}
+    }
+ 
 
 const handleAnnotations = e => {
     let {value = "" } = e.target || {}
@@ -1083,6 +1378,26 @@ const xAxisRange = (event) =>{
 
 }
 
+
+const handleSignalStat = e => {
+    let {value = ""} = e.target || {}
+        setSignalModalData(prevState=>({
+            ...prevState, 
+            stat : value
+        }))   
+        // setTimeout(() => {
+            getData(csvFile,value) ; 
+        // }, 3000);
+       
+    }
+
+    // useEffect(() => {
+    //     console.log(signalModalData.stat);
+    //    getData(csvFile,signalModalData.stat) ;    
+    //     },[showActualTime])
+    
+ 
+
 const handleSignalType = e => {
     let {value = ""} = e.target || {}
     if(value == 2){
@@ -1101,6 +1416,17 @@ const handleSignalType = e => {
         setType("line")
     }
 }
+
+const dstOffset = (date = new Date()) => {
+    const january = new Date(date.getFullYear(), 11, 20).getTimezoneOffset();
+    const july = new Date(date.getFullYear(), 6, 20).getTimezoneOffset();
+    console.log("Jan Time" , january);
+    console.log("July Time" , july);
+    let max = Math.max(january, july);
+    let min = Math.min(january, july);
+    return Math.abs(min - max);
+  }
+
 const handleLine = (e) => {
     let {value = ""} = e.target || {}
 
@@ -1128,11 +1454,13 @@ const handleLine = (e) => {
 
 const hideThreshold = event => {
     let {value = "" } = event.target || {}
-    setHideThresholdLine(value)
+    setShowThresholdLine(value)        
+ 
 }
 
 const handleClick = event => {
-      
+    
+    console.log("clicl",event)
     setReportComment(null);
     // setCurrentPoint(event)
     setCommentModal(true);
@@ -1220,6 +1548,12 @@ const updateComment = () => {
 
 }
 
+const handleThresholdValue = (e) => {
+    
+    setYAxis2([e.target.value])
+    setThresholdvalue(e.target.value)
+}
+
 const deleteComment = () => {
 
    let _oldAnnotation = textAnnotations ; 
@@ -1232,24 +1566,31 @@ const deleteComment = () => {
 
 }
 
+const handletTline = (e) => {
+    setThresholdtLine(e.target.value)
+}
 
+const handleKeypress = (e) => {
+    console.log("Relayouting",e)
+}
     return (
-        <div>
+        <div >
                                 <ReactTooltip />
         
            
             {   
                 xAxis.length > 0 && yAxis.length > 0 &&
              <> 
-                <div style={{ width:  "100%" , maxWidth:"100%", height:  (props.row == '1/2' ? (eval(props.row) * 70 + "vh") : (eval(props.row) * 66 + "vh") )  } }>
+                
+                <div     style={{ width:  "100%" , maxWidth:"100%", height:  (props.row == '1/2' ? (eval(props.row) * 70 + "vh") : (eval(props.row) * 66 + "vh") )  } }>
                   <ul className="top-filter-left">
                         <li>
                             <div className='colorsqr' style={{backgroundColor: color}}></div>
                         </li>
                         <li>
-                        <span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]  }} ></span>{modal.units != "" &&
-                        <span style={{fontSize : "11px"}} dangerouslySetInnerHTML={{__html : props && modal.units }} ></span>
-                        }{
+                        <span dangerouslySetInnerHTML={{__html : (props && signalName[props.signal] ? modal.units != "" ? signalName[props.signal]+"<span style='font-size:10px'>("+modal.units+")</span>" : signalName[props.signal] : null )}} ></span>
+                        
+                        {
                             group &&
                            
                           <span data-tip="Client name" dangerouslySetInnerHTML={{__html : props && "- " + (clientSerial ? clientSerial : props.profile['name'] ) }} ></span>
@@ -1260,15 +1601,21 @@ const deleteComment = () => {
                         </li>
                   </ul>
                 <ul className="top-filter" data-html2canvas-ignore="true">
-                    <li data-tip="Open Graph Setting"><a  onClick={toggleGraphModal}><i class="fa fa-line-chart" aria-hidden="true"></i></a></li>
-                    <li data-tip="Open Signal Setting"><a   onClick={toggleSignalModal}><i class="fa fa-signal" aria-hidden="true"></i></a></li>
-                    {/* <li><a   onClick={toggletrehSoldModal}><i class="fa fa-area-chart" aria-hidden="true"></i></a></li> */}
+                    <li data-tip="Graph Settings"><a  onClick={toggleGraphModal}><i class="fa fa-line-chart" aria-hidden="true"></i></a></li>
+                    <li data-tip="Signal Settings"><a   onClick={toggleSignalModal}><i class="fa fa-signal" aria-hidden="true"></i></a></li>
+                    <li data-tip="Threshold Settings"><a   onClick={toggletrehSoldModal}><i class="fa fa-area-chart" aria-hidden="true"></i></a></li>
                  <li data-tip="Zoom in"><a onClick={zoomIn}><i class="fa fa-search-plus"></i></a></li>
                     <li data-tip="Zoom out"><a onClick={zoomOut}><i class="fa fa-search-minus"></i></a></li>
-                    <li data-tip="Move Forward"><a onClick={moveForward}><i class="fa fa-arrow-right"></i></a></li>
                     <li data-tip="Move Backward"><a onClick={moveBackward}><i class="fa fa-arrow-left"></i></a></li>
-                    <li data-tip="Play"><a onClick={handlePlay}><i class="fa fa-play"></i></a></li>
+
+                    <li data-tip="Move Forward"><a onClick={moveForward}><i class="fa fa-arrow-right"></i></a></li>
+                    {
+                        play ? 
                     <li data-tip="Pause"><a onClick={handlePause}><i class="fa fa-pause"></i></a></li>
+                    :
+                        <li data-tip="Play"><a onClick={handlePlay}><i class="fa fa-play"></i></a></li>                     
+                    }
+                    <li data-tip="Toggle Selection Mode"  className={(dragMode == 'zoom' ? "highlighted" : "" )}  ><a onClick={handleSelection}><i class="fa fa-arrows-h"></i></a></li>
                     <li data-tip="Reset Graph"><a onClick={reset}><i class="fa fa-undo"></i></a></li>
                     {
                          props.signal != "pco2wave"  && props.signal != "pco2b2b"  && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa" &&
@@ -1295,21 +1642,44 @@ const deleteComment = () => {
                 <Plot className="plot-charts"
                  onClick={handleClick}
                  onRelayout={handleRelayout}
+                //  onRedraw={handleKeypress}
                  onClickAnnotation={handleAnnotationClick}
                 //  onUpdate={handleRelayout}
+                //  onKeyDown={() => handleKeypress}
                  onInitialized={handleInitial}
                     data={[
                         {  
                             x: xAxis,
                             y: yAxis,
                             text: textTooltip,
+                       
                             marker: { color:  color },
                             textposition: "none",
                             type:  type,
                             line: {
                                 dash: signalLinetype,
                                 width: value
-                            }  
+                            },
+                            hovertemplate: '<b>'+signalModalData.stat.toUpperCase()+'</b><br><i>Y</i>: %{y:.2f}' +
+                            '<br><b>X</b>: %{x}<br>' +
+                            '<extra></extra>',
+                        },
+                        {  
+                            x: xAxis,
+                            y: yAxis2,
+                            mode:  'lines',
+                            marker: { color:  thresholdtcolor },
+                            textposition: "none",
+                            type:  'lines',
+                            line: {
+                                dash: thresholdtLine,
+                                width: thresholdthick
+                            } ,
+                            hoverinfo: "skip",
+                            showlegend: false,
+                            visible: showThresholdLine
+
+                           
                         },
                     ]}
                     layout={{
@@ -1317,7 +1687,9 @@ const deleteComment = () => {
                         yaxis: {rangemode: 'tozero'},
                         xaxis: {rangemode: 'tozero'},
                         hovermode: true,
-                        dragmode: true, 
+                       
+                        dragmode: dragMode, 
+                        showlegend: false,
                         shapes: modal.annotation === 1 ? taskMarkers : [],
                         xaxis :{
                             type: "date",
@@ -1341,6 +1713,7 @@ const deleteComment = () => {
                             side : modal.position == "1" ? "left" : "right"
                         },
                         bargap: 0,
+                        
                         annotations: modal.annotation === 1 ? textAnnotations : [],
                 // autosize: true,
                         margin: {
@@ -1357,6 +1730,7 @@ const deleteComment = () => {
                     config={{
 			        	displayModeBar: false,  
                         scrollZoom: true,
+                         
                         doubleClick:false,
                         transition: {
                             duration: 50,
@@ -1426,93 +1800,106 @@ const deleteComment = () => {
                 {/* trehsold modal */}
                     
                 <Modal isOpen={trehSoldModal} toggle={toggletrehSoldModal} className="modal-box-wrp" centered={true}>
-                    <ModalHeader toggle={toggletrehSoldModal}><span className="ml-1 roititle modal-head">Threhsold Setting (<span dangerouslySetInnerHTML={signalName[props.signalName]} ></span>)</span></ModalHeader>
+                    <ModalHeader toggle={toggletrehSoldModal}><span className="ml-1 roititle modal-head">Threhsold Setting (<span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]}} ></span>)</span></ModalHeader>
                     <ModalBody>
                         <ul className="range-list">
-                            <li>
-                                <div className="range-content-wrp">
-                                    <div className="range-c-child1">
-                                        <p>Name</p>
-                                    </div>
-                                    <div className="range-c-child2">
-                                        <div className="raw-pcos"><p>{props && signalName[props.signal]}</p></div>
-                                    </div>
-                                </div>
+                        <li>
+                            <Row justify="space-between" style={{height: rowHeight}}>
+                                    <Col lg={5} xl={5}>
+                                        <span>Show Threshold Line</span>
+                                    </Col>
+                                    <Col lg={7} xl={7}>
+                                    <Radio.Group onChange={hideThreshold} value={showThresholdLine} >
+                                                <Radio value={true} style={{marginRight : "20px"}} > Yes </Radio>
+                                                <Radio value={false} style={{marginRight : "20px"}} > No </Radio>                                              
+                                            </Radio.Group>
+ 
+                                        </Col>
+                                </Row>
                             </li>
+                            {/* {
+                                showThresholdLine &&
+                                <> */}
                             <li>
-                                <div className="range-content-wrp">
-                                    <div className="range-c-child1">
-                                        <p>Value</p>
-                                    </div>
-                                    <div className="range-c-child2">
-                                        <input placeholder='50' type="text" />
-                                    </div>
-
-                                </div>
+                            <Row justify="space-between" style={{height: rowHeight}}>
+                                    <Col lg={5} xl={5}>
+                                        <span>Value</span>
+                                    </Col>
+                                    <Col lg={7} xl={7}>
+                                      
+                                    <RangeSlider
+                                            min={yAxisMin}
+                                            max={yAxisMax}
+                                            value={thresholdvalue}
+                                            onChange={(e) => setThresholdvalue(e.target.value)}
+                                        />
+                                
+                                 
+                                        </Col>
+                                </Row>
                             </li>
-                            <li>
-                                <div className="range-content-wrp">
-                                    <div className="range-c-child1">
-                                        <p>Hide Threshold</p>
-                                    </div>
-                                    <div className="range-c-child2">
-                                        <p>
-                                            <input type="radio" id="yes" name="selector" value="1" onChange={hideThreshold}/>
-                                            <label for="yes">Yes</label> 
-                                            <input type="radio" className="mrl-input" id="no" name="selector" value="2" onChange={hideThreshold}/>
-                                            <label for="no">No</label>
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
-                            
-                           
-                            
-                            <li>
-                                <div className="range-content-wrp">
-                                    <div className="range-c-child1">
-                                        <p>Line Width</p>
-                                    </div>
-                                    <div className="range-c-child2">
+                        
+                             <li>
+                                <Row justify="space-between" style={{height: rowHeight}}>
+                                    <Col lg={5} xl={5}>
+                                        <span>Line Width</span>
+                                    </Col>
+                                    <Col lg={7} xl={7}>
+                                    
                                         <RangeSlider
                                             min={1}
                                             max={10}
-                                            value={thresholdvalue}
-                                            onChange={changeEvent => setThresholdvalue(changeEvent.target.value)}
+                                            value={thresholdthick}
+                                            onChange={(e) => setThresholdthick(e.target.value)}
                                         />
-                                    </div>
-                                </div>
+                                
+                                    </Col>
+                                </Row>
                             </li>
                             <li>
-                                <div className="range-content-wrp">
-                                    <div className="range-c-child1">
-                                        <p>Type of Line</p>
-                                    </div>
-                                    <div className="range-c-child2">
-
-                                        <input placeholder='Solid Line' type="number" />
-                                    </div>
-
-                                </div>
+                                <Row justify="space-between" style={{height: rowHeight}}>
+                                    <Col lg={5} xl={5}>
+                                        <span>Line Type</span>
+                                    </Col>
+                                    <Col lg={7} xl={7}>
+                                  
+                                            <Radio.Group
+                                                onChange={handletTline}
+                                                value={thresholdtLine}
+                                            >
+                                                <Radio value={"solid"} style={{marginRight : "20px"}} > Solid </Radio>
+                                                <Radio value={"dot"} style={{marginRight : "20px"}} > Dotted </Radio>
+                                                <Radio value={"dashdot"} > Dashed </Radio>
+                                            </Radio.Group>
+                                         
+                                    </Col>
+                                </Row>
                             </li>
+                                   
                             <li>
-                                <div className="range-content-wrp">
-                                    <div className="range-c-child1">
-                                        <p>Color</p>
-                                        
-                                    </div>
-                                    <div className="range-c-child2">
-                                    
+                            <Row justify="space-between" style={{height: rowHeight}}>
+                                    <Col lg={5} xl={5}>
+                                        <span>Color</span>
+                                    </Col>
+                                    <Col lg={7} xl={7}>
+                                      
+                                    <div  >
+                                      
                                         <InputColor
-                                            initialValue={"#444444"}
-                                            onChange={setColor}
+                                            initialValue={(thresholdtcolor.hex ? thresholdtcolor.hex : otherConfig.tcolor)}
+                                            onChange={setThresholdtcolor}
                                             placement="right"
+                                            style={{width: "100%"}}
                                         />
+                                        </div>
                                      
-                                        
-                                    </div>
-                                </div>
+                                     </Col>
+                                </Row>
                             </li>
+                            {/* </>
+
+                            } */}
+
                         </ul>
                     </ModalBody>
 
@@ -1556,6 +1943,63 @@ const deleteComment = () => {
                                     </div>
                                 </div>
                             </li> */}
+                          {
+                     props.signal != "pco2wave"  && props.signal != "pco2b2b"  && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa"  &&       
+                     <>                  
+                     <li>
+                     <Row justify="space-between" style={{height: rowHeight}}>
+                                    <Col lg={5} xl={5}>
+                                        <span>Data Point Size</span>
+                                    </Col>
+                                    <Col lg={7} xl={7}>
+                         <select 
+                                            style={{width:"100%"}}
+                                      
+                                            onChange={(e)=>{
+                                     
+                                                let {value=""}=e.target||{}
+                                                     
+                                                     setAverage(value);
+                                                     let _data =   calculate_history_sample([xAxis,yAxis],value)
+                                                     
+                                                     setXaxis(_data[0]);
+                                                     setYaxis(_data[1]);
+
+                                             }}
+                                             value={average}
+
+                                        >
+                                            <option value="30">30 Seconds</option>
+                                            <option value="60">60 Seconds</option>
+                                            <option value="90">90 Seconds</option>
+                                            <option value="120">120 Seconds</option>
+                                           
+                                            {/* <option value="0">Custom</option> */}
+                                        </select>
+                                          </Col>
+                                </Row>
+                                       </li>   
+                             <li>
+                                <Row justify="space-between" style={{height: rowHeight}}>
+                                    <Col lg={5} xl={5}>
+                                        <span>Signal Data</span>
+                                    </Col>
+                                    <Col lg={7} xl={7}>
+                                        
+                                            <Radio.Group
+                                                onChange={handleSignalStat}
+                                                value={signalModalData.stat}
+                                            >
+                                                <Radio value={"mean"}> Mean</Radio>
+                                                <Radio  style={{marginLeft : "20px"}} value={"median"}> Median</Radio>
+                                                {/* <Radio style={{marginLeft : "20px"}} value={"sd"}> SD</Radio> */}
+                                            </Radio.Group>
+                                      
+                                    </Col>
+                                </Row>
+                            </li>
+                            </>
+}
                             <li>
                                 <Row justify="space-between" style={{height: rowHeight}}>
                                     <Col lg={5} xl={5}>
@@ -1675,10 +2119,14 @@ const deleteComment = () => {
                                         >
                                             <option value="0">Full Length</option>
                                             <option value="1">1 Minute</option>
-                                            <option value="2">2 Minute</option>
-                                            <option value="5">5 Minute</option>
-                                            <option value="10">10 Minute</option>
-                                            {/* <option value="0">Custom</option> */}
+                                            <option value="2">2 Minutes</option>
+                                            <option value="5">5 Minutes</option>
+                                            <option value="10">10 Minutes</option>
+                                            <option value="15">15 Minutes</option>
+                                            <option value="20">20 Minutes</option>
+                                            <option value="30">30 Minutes</option>
+                                            <option value="60">60 Minutes</option>
+                                            <option value="">Custom</option>
                                         </select>
                                        
                                     </Col>
@@ -1854,14 +2302,13 @@ const deleteComment = () => {
                 </div>
                 {
                   (  props.signal != "pco2wave"  && props.signal != "pco2b2b"  && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa") && ( showSignalStat || tableView)  ?
-                          <table className='table table-resposnive table-hover statTable mt-5' style={{display: (showSignalStat || tableView)  ? "" : "none" }} >
+                          <table className='table table-resposnive table-hover statTable mt-5' style={{display: (showSignalStat && tableView)  ? "" : "none" }} >
                                         <thead className='thead-dark'>
                                             <tr>
                                                 <th>X</th>
-                                                <th>Y</th>
-                                                <th>Mean</th>
-                                                <th>Median</th>
-                                                <th>SD <span data-tip="Standard Deviation"><i className='fa fa-info-circle'  ></i></span></th>
+                                                <th>Mean {modal.units == "" ? "" : "("+modal.units+")"}</th>
+                                                <th>Median {modal.units == "" ? "" : "("+modal.units+")"}</th>
+                                                <th>SD {modal.units == "" ? "" : "("+modal.units+")"}</th>
                                                 
                                             </tr>
                                         </thead>
@@ -1873,7 +2320,6 @@ const deleteComment = () => {
                                                     return (
                                                         <tr>
                                                         <td>{v.x}</td>
-                                                        <td>{v.y}</td>
                                                         <td>{v.mean}</td>
                                                         <td>{v.median}</td>
                                                         <td>{v.sd}</td>            

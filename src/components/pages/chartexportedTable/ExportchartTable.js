@@ -151,7 +151,6 @@ const ChartTable = (props) => {
             data.map((v,i) => {
                 _tempData.push({
                     x : v.x,
-                    y : v.y,
                     mean : v.mean,
                     median : v.median,
                     sd : v.sd,

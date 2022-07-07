@@ -6,6 +6,7 @@ import { API_URL } from '../../config';
 import ReactTooltip from 'react-tooltip';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import ReactExport from "react-export-excel";
+import { csv } from 'd3';
 
 
 const ChartHeader = (props) => {
@@ -23,12 +24,15 @@ const ChartHeader = (props) => {
     const [alternate, setAlternate] = useState([]);
     const [pdfReportName, setPdfReportName] = useState(null);
     
+    const [emgAvg, setEmgAvg] = useState(false);
+    const [emgRaw, setEmgRaw] = useState(false);
+
     const group = props.group;
     const reportconfig = useRef();
     const alternateconfig = useRef();
     const reportRecord = useRef();
     
-    const { config, session, record ,currentConfig } = useParams();
+    const { config, session, record ,currentConfig ,showclock } = useParams();
     const [notesModal, setNotesModal] = useState(false);
     const notesModalToggle = () => setNotesModal(!notesModal);
 
@@ -46,8 +50,7 @@ const ChartHeader = (props) => {
 
     const [takeNotesModal, setTakeNotesModal] = useState(false);
     const takeNotesToggle = () => setTakeNotesModal(!takeNotesModal);
-
-    const setShowActualTime = props.setShowActualTime ;
+ 
     const showActualTime = props.showActualTime ;
 
     const setShowSignalStat = props.setShowSignalStat ;
@@ -100,6 +103,84 @@ const ChartHeader = (props) => {
     }
 
     
+    const getCsv = () => {
+        fetch(API_URL+"/session/data?session_id=" + sessionid + "&signal_name=emg3_wave",
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    // console.warn("result", resp);
+                    if (resp.sessions[0]) {
+                        // setCsvFile(resp.sessions[0].sessiondata)
+                        getData(resp.sessions[0].sessiondata,"raw")
+                    }
+
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+        })
+
+
+            fetch(API_URL+"/session/data?session_id=" + sessionid + "&signal_name=emg1_avg",
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    // console.warn("result", resp);
+                    if (resp.sessions[0]) {
+                        // setCsvFile(resp.sessions[0].sessiondata)
+                        getData(resp.sessions[0].sessiondata,"avg")
+                    }
+
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+    }
+
+
+        async function getData(_csvFile,_stat) {
+           
+            
+            //   console.log(userTimeOffset);
+            csv('https://capnolearning.com/webroot/csvupl/' + _csvFile).then(data => {
+                if(data.length > 2){
+                    if(_stat == 'avg'){
+                        setEmgAvg(true);
+                    }
+                    else if(_stat == 'raw'){
+                        setEmgRaw(true)
+                    }
+                }
+        })
+    }
+
 
     const saveScreenshotPDF = () => {
         // console.log(sessioninfo);
@@ -397,6 +478,7 @@ const ChartHeader = (props) => {
                 response.json().then((resp) => {
                     // console.warn("result", resp);
                     setsessions(resp.sessions)
+                    getCsv()
 
                 });
             }
@@ -441,18 +523,26 @@ const ChartHeader = (props) => {
         })
     }
 
+    
+    const moveClock = () => {
+        let moveClock = (showclock == 0 ? 1 : 0);
+        let config = reportconfig.current.value;
+
+        window.location.href = "/create/report/" + moveClock + "/" + config + "/" + session + "/" + record + "/" + config ; 
+    }
+
     const reportconfigupdate = () => {
         let _configId = reportconfig.current.value;
-        window.location.href = "/create/report/" + _configId + "/" + session + "/" + record + "/" + _configId ; 
+        window.location.href = "/create/report/" + showclock + "/" + _configId + "/" + session + "/" + record + "/" + _configId ; 
     }
 
     const reportconfigalternateupdate = () => {
         let _configId = alternateconfig.current.value;
         if(group){
-            window.location.href = "/create/group/report/" + config + "/" + session + "/" + record + "/" + _configId ; 
+            window.location.href = "/create/group/report/" + showclock + "/" + config + "/" + session + "/" + record + "/" + _configId ; 
         }
         else{
-            window.location.href = "/create/report/" + config + "/" + session + "/" + record + "/" + _configId ; 
+            window.location.href = "/create/report/" + showclock + "/" + config + "/" + session + "/" + record + "/" + _configId ; 
 
         }
 
@@ -461,10 +551,10 @@ const ChartHeader = (props) => {
         let _configId = reportconfig.current.value;
         let _reportRecord = reportRecord.current.value;
         if(group){
-            window.location.href = "/create/group/report/" + _configId + "/" + session + "/" + _reportRecord + "/" + _configId ; 
+            window.location.href = "/create/group/report/" + showclock + "/" + _configId + "/" + session + "/" + _reportRecord + "/" + _configId ; 
         }
         else{
-        window.location.href = "/create/report/" + _configId + "/" + session + "/" + _reportRecord + "/" + currentConfig ; 
+        window.location.href = "/create/report/" + showclock + "/" + _configId + "/" + session + "/" + _reportRecord + "/" + currentConfig ; 
 
         }
 
@@ -697,7 +787,6 @@ const ChartHeader = (props) => {
 
                                     <ExcelSheet data={signalStat[v.signal_name] ? signalStat[v.signal_name] : [] } name={v.signal_name}>
                                         <ExcelColumn label="X" value="x"/>
-                                        <ExcelColumn label="Y" value="y"/>
                                         <ExcelColumn label="Mean" value="mean"/>
                                         <ExcelColumn label="Median" value="median"/>
                                         <ExcelColumn label="Standard Deviation" value="sd"/>
@@ -734,7 +823,7 @@ const ChartHeader = (props) => {
                                 <li><a href="javascript:void" onClick={() => setShowSignalStat(!showSignalStat)} data-tip="Toggle all signal statistics"><i class="fa fa-table"></i></a></li>
                                }
                                 <li><a href="javascript:void" onClick={viewManual} data-tip="View help document"><i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
-                                {/* <li><a href="javascript:void" onClick={() => setShowActualTime(!showActualTime)}  data-tip='Switch time format' data-tog><i class="fa fa-clock-o" aria-hidden="true"></i></a></li> */}
+                                
                             </ul>
                         </div>
                     </div>
@@ -746,9 +835,11 @@ const ChartHeader = (props) => {
 
                                 {
                                     sessions.map((sessions) => {
+                                        if((sessions.id == 46 && emgAvg) || (sessions.id == 47 && emgRaw) || (sessions.id != 46 && sessions.id != 47) ){
                                         return (
                                             <option selected={sessions.id == config ? true : false} value={sessions.id}>{sessions.name}</option>
                                         )
+                                        }
 
                                     })
                                 }
@@ -809,10 +900,18 @@ const ChartHeader = (props) => {
                      <li data-tip="Session date">
                         {sessioninfo.map((sessionName) => {
                             return (
-                               <a href="javascript:void"><i class="fa fa-calendar" aria-hidden="true"></i> {sessionName.name}</a>
+                               <a href="javascript:void"><i class="fa fa-calendar" aria-hidden="true"></i> {sessionName.name}  
+                               </a>
                             )
                         }
                         )}
+                        </li>
+                             <li data-tip="Switch time format">
+                      
+                               <a href="javascript:void">  <i class="fa fa-clock-o" aria-hidden="true" onClick={moveClock}  data-tip='Switch time format'></i> 
+                               </a>
+                            
+                        
                         </li>
                     </ul>
                 </div>

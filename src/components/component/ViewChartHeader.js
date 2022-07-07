@@ -26,7 +26,7 @@ const ViewChartHeader = (props) => {
     const group = props.group ; 
     const reportconfig = useRef();
     const alternateconfig = useRef();
-    const { session , reportId , record} = useParams();
+    const { session , reportId , record,showclock} = useParams();
 
     const [notesModal, setNotesModal] = useState(false);
     const notesModalToggle = () => setNotesModal(!notesModal);
@@ -616,6 +616,14 @@ const ViewChartHeader = (props) => {
         setrequestProcesedModal(true);
     }
     
+        
+    const moveClock = () => {
+        let moveClock = (showclock == 0 ? 1 : 0);
+    
+
+        window.location.href = "/view/multi/report/" + moveClock + "/" + reportId; 
+    }
+
     // console.log("excel data",signalStat)
     // signalStat.map((v,i)=>{
     // console.log("excel data",v)
@@ -646,7 +654,6 @@ const ViewChartHeader = (props) => {
 
                                     <ExcelSheet data={signalStat[v.signal_name] ? signalStat[v.signal_name] : [] } name={v.signal_name}>
                                         <ExcelColumn label="X" value="x"/>
-                                        <ExcelColumn label="Y" value="y"/>
                                         <ExcelColumn label="Mean" value="mean"/>
                                         <ExcelColumn label="Median" value="median"/>
                                         <ExcelColumn label="Standard Deviation" value="sd"/>
@@ -685,8 +692,9 @@ const ViewChartHeader = (props) => {
                                     !group &&
                                     <li><a href="javascript:void" onClick={() => setShowSignalStat(!showSignalStat)} data-tip="View all signal statistics"><i class="fa fa-table"></i></a></li>
                                 }
+                                
                                 <li><a href="javascript:void" onClick={viewManual} data-tip="View help document"><i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
-                                {/* <li><a href="javascript:void" onClick={() => setShowActualTime(!showActualTime)}  data-tip='Switch time format' data-tog><i class="fa fa-clock-o" aria-hidden="true"></i></a></li> */}
+
                             </ul>
                         </div>
                     </div>
@@ -773,6 +781,7 @@ const ViewChartHeader = (props) => {
                         }
                         )}
                         </li>
+                      
                     </ul>
                 </div>
                 <div className="chart-header-c4">

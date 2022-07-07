@@ -110,12 +110,12 @@ function App(){
 				<Route  path="/group/session/data/report" element={<Groupsessiondatareport />} />
 				<Route  path="/chart" element={<Chart />} />
 				<Route  path="/exportchart" element={<ExportChart />} />
-				<Route  path="/view/multi/report/:reportId" element={<MultiChartTable />} />
-				<Route  path="/create/group/report/:config/:session/:record/:currentConfig" element={<GroupChartTable />} />
+				<Route  path="/view/multi/report/:showclock/:reportId" element={<MultiChartTable />} />
+				<Route  path="/create/group/report/:showclock/:config/:session/:record/:currentConfig" element={<GroupChartTable />} />
 
-				<Route  path="/create/report/:config/:session/:record/:currentConfig" element={<ChartTable />} />
-				<Route  path="/view/report/:session/:reportId/:record" element={<ViewChartTable />} />
-				<Route  path="/view/group/report/:session/:reportId/:record" element={<ViewGroupChartTable />} />
+				<Route  path="/create/report/:showclock/:config/:session/:record/:currentConfig" element={<ChartTable />} />
+				<Route  path="/view/report/:showclock/:session/:reportId/:record" element={<ViewChartTable />} />
+				<Route  path="/view/group/report/:showclock/:session/:reportId/:record" element={<ViewGroupChartTable />} />
 				<Route  path="/create/exported/report/:config" element={<ChartExportedTable/>} />
 				<Route  path="/session/data/report/:type" element={<SessiondataReport />} />
 				<Route path="/multidata/report" element={<MultidataReport />} />

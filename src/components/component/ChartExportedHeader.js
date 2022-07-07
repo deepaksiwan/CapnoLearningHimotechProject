@@ -271,7 +271,6 @@ const ChartExportedHeader = (props) => {
 
                                     <ExcelSheet data={signalStat[v.signal_name] ? signalStat[v.signal_name] : [] } name={v.signal_name}>
                                         <ExcelColumn label="X" value="x"/>
-                                        <ExcelColumn label="Y" value="y"/>
                                         <ExcelColumn label="Mean" value="mean"/>
                                         <ExcelColumn label="Median" value="mean"/>
                                         <ExcelColumn label="Standard Deviation" value="sd"/>

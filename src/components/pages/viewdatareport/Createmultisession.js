@@ -149,7 +149,7 @@ const logout = () => {
               
                     if (result.status) {
                         setrequestProcesedModal(true)
-                        window.location.replace("/view/multi/report/"+result.rid)
+                        window.location.replace("/view/multi/report/0/"+result.rid)
                     }
 
 
