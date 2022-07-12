@@ -514,7 +514,7 @@ const [unitArray, setunitArray] = useState({
                     }) 
                 
                     if( v.r != prevRecord ){
-                        _recordArray.push(xData);
+                        _recordArray.push([xData,v.rname]);
                       
                         
                     }
@@ -596,10 +596,10 @@ const [unitArray, setunitArray] = useState({
                         xref: 'x',
                         // y-reference is assigned to the plot paper [0,1]
                         yref: 'paper',
-                        x0: v,
+                        x0: v[0],
                         y0: 0,
-                        x1: v ,
-                        y1: 3,
+                        x1: v[0] ,
+                        y1: 1,
                         // fillcolor: "#000" ,
                         opacity: 1,
                         line: {
@@ -759,31 +759,18 @@ const [unitArray, setunitArray] = useState({
                             {
                                 xref: 'x',
                                 yref: 'y',
-                                x: v ,
+                                x: new Date(new Date(v[0]).getTime() + 10000) ,
                                 y: yAxisMax-(yAxisMax*0.022),  
                                 textangle: 0,
-                                text: '',
+                                text: v[1],
                                 showarrow: true,
                                 arrowhead: 1,
-                                ax: -5, 
+                                ax: -45, 
                                 bgcolor: "#fff",
                                 ay:0,
                                 arrowcolor: "#FF0000",                 
                             },
-                            {
-                                xref: 'x',
-                                yref: 'y',
-                                x: v ,
-                                y: yAxisMax-(yAxisMax*0.02),  
-                                textangle: 0,
-                                text: '',
-                                showarrow: true,
-                                arrowhead: -10,
-                                ax: 0, 
-                                bgcolor: "#fff",
-                                ay:-5,
-                                arrowcolor: "#FF0000",                 
-                            }
+                          
                         );
                         }
                     })
@@ -1407,7 +1394,16 @@ const handleSignalType = e => {
             signalType : value
         }))   
         setType("bar")
-    }else{
+    }
+    else if(value == 3){
+        setSignalModalData(prevState=>({
+            ...prevState,
+            disabledType : false,
+            signalType : value
+        }))   
+        setType("obar")
+    }
+    else{
         setSignalModalData(prevState=>({
             ...prevState,
             disabledType : true,
@@ -1653,13 +1649,22 @@ const handleKeypress = (e) => {
                             y: yAxis,
                             text: textTooltip,
                        
-                            marker: { color:  color },
-                            textposition: "none",
-                            type:  type,
+                            marker: { 
+                            color:  type == "obar" ?  "rgba(58,200,225,0)" : color ,
                             line: {
+                                color: color,
                                 dash: signalLinetype,
                                 width: value
                             },
+                        },
+                        line: {
+                            color: color,
+                            dash: signalLinetype,
+                            width: value
+                        },
+                            textposition: "none",
+                            type:  type == "obar" ? "bar" : type,
+                            
                             hovertemplate: '<b>'+signalModalData.stat.toUpperCase()+'</b><br><i>Y</i>: %{y:.2f}' +
                             '<br><b>X</b>: %{x}<br>' +
                             '<extra></extra>',
@@ -2013,6 +2018,7 @@ const handleKeypress = (e) => {
                                             >
                                                 <Radio value={1}> Line</Radio>
                                                 <Radio style={{marginLeft : "20px"}} value={2}> Bar</Radio>
+                                                <Radio style={{marginLeft : "20px"}} value={3}> Outline Bar</Radio>
                                             </Radio.Group>
                                       
                                     </Col>
@@ -2037,7 +2043,7 @@ const handleKeypress = (e) => {
                                     </Col>
                                 </Row>
                             </li>}
-                            {signalModalData.disabledType && <li>
+                           <li>
                                 <Row justify="space-between" style={{height: rowHeight}}>
                                     <Col lg={5} xl={5}>
                                         <span>Line Width</span>
@@ -2051,7 +2057,7 @@ const handleKeypress = (e) => {
                                         />
                                    </Col>
                                 </Row>
-                            </li>}         
+                            </li> 
                             {/* {signalModalData.disabledType && <li>
                                 <div className="range-content-wrp">
                                     <div className="range-c-child1">

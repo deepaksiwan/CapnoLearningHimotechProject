@@ -822,6 +822,13 @@ const ChartHeader = (props) => {
                                 !group && 
                                 <li><a href="javascript:void" onClick={() => setShowSignalStat(!showSignalStat)} data-tip="Toggle all signal statistics"><i class="fa fa-table"></i></a></li>
                                }
+                                  <li data-tip="Switch time format">
+                      
+                      <a href="javascript:void">  <i class="fa fa-clock-o" aria-hidden="true" onClick={moveClock}  data-tip='Switch time format'></i> 
+                      </a>
+                   
+               
+               </li>
                                 <li><a href="javascript:void" onClick={viewManual} data-tip="View help document"><i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
                                 
                             </ul>
@@ -906,13 +913,7 @@ const ChartHeader = (props) => {
                         }
                         )}
                         </li>
-                             <li data-tip="Switch time format">
-                      
-                               <a href="javascript:void">  <i class="fa fa-clock-o" aria-hidden="true" onClick={moveClock}  data-tip='Switch time format'></i> 
-                               </a>
-                            
-                        
-                        </li>
+                          
                     </ul>
                 </div>
                 <div className="chart-header-c4">
