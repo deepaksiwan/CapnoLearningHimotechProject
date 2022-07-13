@@ -31,6 +31,11 @@ const Trainerinformation = () => {
     const associated_owner = localStorage.getItem('associated_owner');
     const { trainerid } = useParams();
     const [Loader, setLoader] = useState(false)
+    const [fillallfieldmodal, setFillallfieldModal] = useState(false);
+    const fillallfieldtoggleModal = () => setFillallfieldModal(!fillallfieldmodal);
+    const [emailalreadyExitmodal, setEmailalreadyExitmodal] = useState(false);
+    const EmailalreadyExittoggleModal = () => setEmailalreadyExitmodal(!emailalreadyExitmodal);
+    const [error, setError] = useState(false);
 
 
     useEffect(() => {
@@ -58,6 +63,7 @@ const Trainerinformation = () => {
 
                 });
             }
+            
             else if (response.status == 401) {
                 logout()
             }
@@ -67,6 +73,18 @@ const Trainerinformation = () => {
 
 
         })
+    }
+
+    function isValidEmail(email) {
+        return /\S+@\S+\.\S+/.test(email);
+      }
+
+    const handleEmail = ()=>{
+        if (!isValidEmail(email.current.value)) {
+            setError(true);
+          } else {
+            setError(false);
+          }
     }
 
     function updatetrainer(){
@@ -90,6 +108,12 @@ const Trainerinformation = () => {
         data['country'] = country.current.value;
         data['sendemail'] = true;
         data['associated_owner'] = associated_owner;
+
+        if (firstname.current.value == "" || lastname.current.value == "" || profession.current.value == "" || degreescompleted.current.value == "" || year_exp.current.value == "" || license.current.value == "" || certificationscompleted.current.value == "" || telephone.current.value == "" || email.current.value == "" || address.current.value == "" || address2.current.value == "" || city.current.value == "" || zipcode.current.value == "" || state.current.value == "" || country.current.value == "" ) {
+            fillallfieldtoggleModal();
+            setLoader(false)
+            return false;
+        }
       
         console.log(data)
         fetch(API_URL+"/trainer/update/"+trainerid,{
@@ -103,9 +127,14 @@ const Trainerinformation = () => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     console.log("results", resp);
-                  
+                    setLoader(false);
+                    successToggleModal();
 
                 });
+            }
+            else if (response.status == 400) {
+                setLoader(false)
+                EmailalreadyExittoggleModal();
             }
             else if (response.status == 401) {
                 logout()
@@ -113,11 +142,11 @@ const Trainerinformation = () => {
             else {
                 alert("network error")
             }
-            setLoader(false)
+           
             })
        
 
-            successToggleModal();
+            
     }
     const getCountry = () => {
         fetch(API_URL+"/countries",
@@ -247,7 +276,10 @@ const Trainerinformation = () => {
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Email</p>
-                                        <input placeholder="Enter an email" defaultValue={trainer.email} ref={email} />
+                                        <input placeholder="Enter an email" onChange={handleEmail} defaultValue={trainer.email} ref={email} />
+                                        {
+                                            error && <p className='validemail'>invalid Email</p>
+                                        }
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
@@ -324,7 +356,7 @@ const Trainerinformation = () => {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="go-back">
-                                        <a href="#">Go Back</a>
+                                        <Link to="/viewcreate">Go Back</Link>
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
@@ -353,7 +385,25 @@ const Trainerinformation = () => {
                     </div>
                 </div>
             </div>
+            <Modal isOpen={fillallfieldmodal} toggle={fillallfieldtoggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={fillallfieldtoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-error-p">
+                        <p>Please fill all field</p>
+                    </div>
+                </ModalBody>
 
+            </Modal>
+
+            <Modal isOpen={emailalreadyExitmodal} toggle={EmailalreadyExittoggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={EmailalreadyExittoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-error-p">
+                        <p>Account already exist with this email</p>
+                    </div>
+                </ModalBody>
+
+            </Modal>
         </div>
     )
 }

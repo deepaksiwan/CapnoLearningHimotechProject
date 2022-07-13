@@ -35,7 +35,7 @@ const Uploadclientform = () => {
     const selectedSession = localStorage.getItem('selectedSession');
     
     const [modal, setModal] = useState(false);
-    const toggleModal = () => setModal(!modal) ;
+    const toggleModal = () => setModal(!modal);
 
     const [successModal, setsuccessModal] = useState(false);
     const successToggleModal = () => setsuccessModal(!successModal) ;
@@ -63,6 +63,7 @@ const Uploadclientform = () => {
         if (client_id == "" || formname.current.value == "" || !formFile.current.files[0]) {
 
             toggleModal();
+            setLoader(false)
             return false;
 
         }
@@ -77,13 +78,14 @@ const Uploadclientform = () => {
         }).then((result) => {
             // console.warn("result",result);
             result.json().then((resp) => {
-                // console.log("resp",resp);
+                successToggleModal();
+                setLoader(false)
 
             })
         })
 
         // alert("Successfully submitted");
-        successToggleModal();
+        
        
 
     }
@@ -455,7 +457,7 @@ const Uploadclientform = () => {
                                     <ModalHeader toggle={toggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
                                     <ModalBody>
                                         <div className="modal-error-p">
-                                            <p>Please Fill all field</p>
+                                            <p>Please fill all field</p>
                                         </div>
                                     </ModalBody>
 

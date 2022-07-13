@@ -11,7 +11,7 @@ import closeicon from '../../images/closeicon.png';
 import { API_URL } from '../../../config';
 
 const Editclient = () => {
-    
+
     const accessToken = localStorage.getItem('accessToken');
     const selectedTrainer = localStorage.getItem('selectedTrainer');
     const selectedGroup = localStorage.getItem('selectedGroup');
@@ -31,11 +31,16 @@ const Editclient = () => {
         getClients();
         getTrainer();
 
+        const interval = setInterval(()=>{
+            getClients();
+        },3000);
+        return()=> clearInterval(interval);
+
     }, []);
 
     const deleteClient = () => {
-        let id = itemId ; 
-        fetch(API_URL+"/client/delete/" + id,
+        let id = itemId;
+        fetch(API_URL + "/client/delete/" + id,
             {
                 method: 'POST',
                 headers: {
@@ -47,7 +52,7 @@ const Editclient = () => {
             if (response.status == 200) {
                 getClients();
                 setdeleteModal(!deleteModal)
-                
+
             }
             else if (response.status == 401) {
                 logout()
@@ -67,7 +72,7 @@ const Editclient = () => {
     }
 
     const getTrainer = () => {
-        fetch(API_URL+"/trainers?user_id=" + userId,
+        fetch(API_URL + "/trainers?user_id=" + userId,
             {
                 method: 'GET',
                 headers: {
@@ -99,21 +104,21 @@ const Editclient = () => {
 
         localStorage.setItem('selectedTrainer', trainerSelected.current.value);
 
-       getClients()
+        getClients()
     }
 
     const getClients = () => {
 
-        let selectedTrainer = localStorage.getItem('selectedTrainer') ;
-        if(selectedTrainer == "all"){
-            selectedTrainer = _userId ; 
-            _trainer = false ;
+        let selectedTrainer = localStorage.getItem('selectedTrainer');
+        if (selectedTrainer == "all") {
+            selectedTrainer = _userId;
+            _trainer = false;
         }
-        else{
-            _trainer = true; 
+        else {
+            _trainer = true;
         }
 
-        fetch(API_URL+"/clients?user_id=" + selectedTrainer + "&trainer=" + _trainer + "&user_type=3",
+        fetch(API_URL + "/clients?user_id=" + selectedTrainer + "&trainer=" + _trainer + "&user_type=3",
 
             {
                 method: 'GET',
@@ -135,7 +140,7 @@ const Editclient = () => {
                             email: v.email,
                             status: v.status == 1 ? "Active" : "Inactive",
                             telephone: v.telephone,
-                            actions: <p><a href={"/edit/client/"+v.id} className="downloadimg" ><img src={edit} /></a> <a href='#' className="downloadimg"><img src={checks} /></a> <a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></p>
+                            actions: <p><a href={"/edit/client/" + v.id} className="downloadimg" ><img src={edit} /></a> <a href='#' className="downloadimg"><img src={checks} /></a> <a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></p>
                         })
                     })
                     setData(_temp);
@@ -199,8 +204,8 @@ const Editclient = () => {
                     <div className="choose-trainer">
                         <label>Trainer</label>
                         <select ref={trainerSelected} onChange={updateSelectTrainer} className="choose-trainerselectopt">
-                        
-                            <option  selected={"all" == selectedTrainer ? true : false} value={"all"}>All trainers</option>
+
+                            <option selected={"all" == selectedTrainer ? true : false} value={"all"}>All trainers</option>
 
                             {
                                 trainers.map((items, i) => {
@@ -217,6 +222,12 @@ const Editclient = () => {
                     <div className="wrp-bankform">
                         <div style={{ maxWidth: '100%' }}>
                             <MaterialTable
+                                options={{
+                                    search: true,
+                                    showTitle: false,
+                                    toolbar: true,
+                                    pageSizeOptions: [5, 10, 20, 50, 150, 200]
+                                }}
                                 columns={columns}
                                 data={data}
                                 title=""
@@ -226,20 +237,20 @@ const Editclient = () => {
                     </div>
 
                     <Modal isOpen={deleteModal} toggle={deleteToggleModal} className="connect-box" centered={true}>
-                    <ModalHeader toggle={deleteToggleModal}><span className="ml-1 roititle font-weight-bold">Delete</span></ModalHeader>
-                    <ModalBody>
-                        <div className="modal-p">
-                            <div className="right-circle cancel-circle"><img src={closeicon} /></div>
-                            <h4>Are You Sure?</h4>
-                            <p>Do you really want to delete this record?</p>
-                            <div className="wrp-delete-btn">
-                                <div className="cancel-btn1" ><a onClick={deleteToggleModal}>Cancel</a></div>
-                                <div className="delete-btn1"><a onClick={deleteClient}>Delete</a></div>
+                        <ModalHeader toggle={deleteToggleModal}><span className="ml-1 roititle font-weight-bold">Delete</span></ModalHeader>
+                        <ModalBody>
+                            <div className="modal-p">
+                                <div className="right-circle cancel-circle"><img src={closeicon} /></div>
+                                <h4>Are You Sure?</h4>
+                                <p>Do you really want to delete this record?</p>
+                                <div className="wrp-delete-btn">
+                                    <div className="cancel-btn1" ><a onClick={deleteToggleModal}>Cancel</a></div>
+                                    <div className="delete-btn1"><a onClick={deleteClient}>Delete</a></div>
+                                </div>
                             </div>
-                        </div>
-                    </ModalBody>
+                        </ModalBody>
 
-                </Modal>
+                    </Modal>
                 </div>
             </div>
 

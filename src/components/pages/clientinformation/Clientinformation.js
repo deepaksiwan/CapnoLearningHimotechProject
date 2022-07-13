@@ -31,7 +31,11 @@ const Clientinformation = () => {
     let _userType = 3
     let _trainer = false;
     const [Loader, setLoader] = useState(false)
-
+    const [fillallfieldmodal, setFillallfieldModal] = useState(false);
+    const fillallfieldtoggleModal = () => setFillallfieldModal(!fillallfieldmodal);
+    const [emailalreadyExitmodal, setEmailalreadyExitmodal] = useState(false);
+    const EmailalreadyExittoggleModal = () => setEmailalreadyExitmodal(!emailalreadyExitmodal);
+    const [error, setError] = useState(false);
 
     const { id } = useParams();
 
@@ -41,7 +45,7 @@ const Clientinformation = () => {
     }, [])
 
     const getClient = () => {
-        fetch(API_URL+"/client/profile/" + id,
+        fetch(API_URL + "/client/profile/" + id,
             {
                 method: 'GET',
                 headers: {
@@ -89,12 +93,14 @@ const Clientinformation = () => {
         data['zipcode'] = zipcode.current.value;
         data['state'] = state.current.value;
         data['country'] = country.current.value;
-        // data['sendemail'] = true;
-        // data['associated_practioner'] = associated_practioner;
-        // data['associated_owner'] = associated_owner;
 
+        if (firstname.current.value == "" || lastname.current.value == "" || age.current.value == "" || education.current.value == "" || profession.current.value == "" || telephone.current.value == "" || email.current.value == "" || complaint.current.value == "" || address.current.value == "" || zipcode.current.value == "" || state.current.value == "" || country.current.value == "") {
+            fillallfieldtoggleModal();
+            setLoader(false)
+            return false;
+        }
 
-        fetch(API_URL+"/client/update/" + id, {
+        fetch(API_URL + "/client/update/" + id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -105,9 +111,14 @@ const Clientinformation = () => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     console.log("results", resp);
-
+                    successToggleModal();
+                    setLoader(false)
 
                 });
+            }
+            else if (response.status == 400) {
+                setLoader(false)
+                EmailalreadyExittoggleModal();
             }
             else if (response.status == 401) {
                 logout()
@@ -115,18 +126,28 @@ const Clientinformation = () => {
             else {
                 alert("network error")
             }
-            setLoader(false)
+
 
         })
 
 
-        successToggleModal();
+
     }
 
+    function isValidEmail(email) {
+        return /\S+@\S+\.\S+/.test(email);
+      }
 
+    const handleEmail = ()=>{
+        if (!isValidEmail(email.current.value)) {
+            setError(true);
+          } else {
+            setError(false);
+          }
+    }
 
     const getCountry = () => {
-        fetch(API_URL+"/countries",
+        fetch(API_URL + "/countries",
             {
                 method: 'GET',
                 headers: {
@@ -156,7 +177,7 @@ const Clientinformation = () => {
 
 
 
-        fetch(API_URL+"/states?country_id=" + countryid,
+        fetch(API_URL + "/states?country_id=" + countryid,
             {
                 method: 'GET',
                 headers: {
@@ -258,7 +279,10 @@ const Clientinformation = () => {
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Email</p>
-                                        <input placeholder="Enter an email" defaultValue={client.email} ref={email} />
+                                        <input placeholder="Enter an email" onChange={handleEmail} defaultValue={client.email} ref={email} />
+                                        {
+                                            error && <p className='validemail'>invalid Email</p>
+                                        }
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
@@ -272,7 +296,7 @@ const Clientinformation = () => {
                                 <div className="col-lg-12">
                                     <div className="client-input">
                                         <p>Presenting Complaint</p>
-                                        <textarea placeholder="Enter a present considiton" defaultValue={client.complete} ref={complaint}></textarea>
+                                        <textarea placeholder="Enter a present considiton" defaultValue={client.complaint} ref={complaint}></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -364,7 +388,25 @@ const Clientinformation = () => {
                     </div>
                 </div>
             </div>
+            <Modal isOpen={fillallfieldmodal} toggle={fillallfieldtoggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={fillallfieldtoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-error-p">
+                        <p>Please fill all field</p>
+                    </div>
+                </ModalBody>
 
+            </Modal>
+
+            <Modal isOpen={emailalreadyExitmodal} toggle={EmailalreadyExittoggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={EmailalreadyExittoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-error-p">
+                        <p>Account already exist with this email</p>
+                    </div>
+                </ModalBody>
+
+            </Modal>
         </div>
     )
 }

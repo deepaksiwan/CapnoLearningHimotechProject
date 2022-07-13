@@ -30,6 +30,8 @@ const Editgroupinformation = () => {
     const [Loader, setLoader] = useState(false)
     const successToggleModal = () => setsuccessModal(!successModal);
     const associated_owner = localStorage.getItem('associated_owner');
+    const [fillallfieldmodal, setFillallfieldModal] = useState(false);
+    const fillallfieldtoggleModal = () => setFillallfieldModal(!fillallfieldmodal);
 
     const { groupid } = useParams();
 
@@ -39,7 +41,7 @@ const Editgroupinformation = () => {
         getProfileGroup();
     }, [])
 
-    const CreateGroupprofile = () => {
+    const updateGroupprofile = () => {
         setLoader(true)
         let data = {};
 
@@ -56,7 +58,11 @@ const Editgroupinformation = () => {
         data['devices'] = _temp;
         // console.log(data)
 
-
+        if(groupName.current.value == "" || associateTrainer.current.value == "" || groupEmail.current.value == "" || associateHardwaretype.current.value == ""){
+            fillallfieldtoggleModal();
+            setLoader(false);
+            return false;
+        }
         fetch(API_URL+"/group/update/" + groupid, {
             method: 'POST',
             headers: {
@@ -70,7 +76,8 @@ const Editgroupinformation = () => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     console.log("results", resp);
-
+                    successToggleModal();
+                    setLoader(false)
 
                 });
             }
@@ -80,8 +87,7 @@ const Editgroupinformation = () => {
             else {
                 alert("network error")
             }
-            successToggleModal();
-            setLoader(false)
+            
         })
 
     }
@@ -320,7 +326,7 @@ const Editgroupinformation = () => {
 
                                     </Modal>
                                     <div className="create-btn">
-                                        <button type="submit" onClick={CreateGroupprofile}>Update Group Information
+                                        <button type="submit" onClick={updateGroupprofile}>Update Group Information
                                             {
                                                 Loader &&
                                                 <div id="loader"></div>
@@ -333,7 +339,15 @@ const Editgroupinformation = () => {
                     </div>
                 </div>
             </div>
+            <Modal isOpen={fillallfieldmodal} toggle={fillallfieldtoggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={fillallfieldtoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-error-p">
+                        <p>Please fill all field</p>
+                    </div>
+                </ModalBody>
 
+            </Modal>
         </div>
     )
 }

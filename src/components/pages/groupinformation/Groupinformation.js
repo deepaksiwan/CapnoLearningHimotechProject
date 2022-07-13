@@ -25,7 +25,9 @@ const Groupinformation = () => {
     const [successModal, setsuccessModal] = useState(false);
     const successToggleModal = () => setsuccessModal(!successModal);
     const associated_owner = localStorage.getItem('associated_owner');
-    const [Loader, setLoader] = useState(false)
+    const [Loader, setLoader] = useState(false);
+    const [fillallfieldmodal, setFillallfieldModal] = useState(false);
+    const fillallfieldtoggleModal = () => setFillallfieldModal(!fillallfieldmodal);
 
 
     useEffect(() => {
@@ -39,9 +41,15 @@ const Groupinformation = () => {
         data['name'] = groupName.current.value;
         data['associated_owner'] = associated_owner;
         data['associated_practioner'] = associateTrainer.current.value;
-
         data['email'] = groupEmail.current.value;
         data['device_type'] = associateHardwaretype.current.value;
+
+        if(groupName.current.value == "" || associateTrainer.current.value == "" || groupEmail.current.value == "" || associateHardwaretype.current.value == ""){
+            fillallfieldtoggleModal();
+            setLoader(false);
+            return false;
+        }
+
         let _temp = [];
         for (let i = 0; i < clientCount; i++) {
             _temp.push(devicelist[i + 1]);
@@ -60,10 +68,11 @@ const Groupinformation = () => {
 
         }).then((response) => {
 
-            if (response.status == 200) {
+            if (response.status == 201) {
                 response.json().then((resp) => {
                     console.log("results", resp);
-
+                    successToggleModal();
+                    setLoader(false)
 
                 });
             }
@@ -73,8 +82,7 @@ const Groupinformation = () => {
             else {
                 alert("network error")
             }
-            successToggleModal();
-            setLoader(false)
+           
         })
 
     }
@@ -292,7 +300,15 @@ const Groupinformation = () => {
                     </div>
                 </div>
             </div>
+            <Modal isOpen={fillallfieldmodal} toggle={fillallfieldtoggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={fillallfieldtoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-error-p">
+                        <p>Please fill all field</p>
+                    </div>
+                </ModalBody>
 
+            </Modal>
         </div>
     )
 }

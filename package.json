@@ -20,6 +20,7 @@
     "axios": "^0.24.0",
     "bootstrap": "^4.6.0",
     "d3": "^7.3.0",
+    "downloadjs": "^1.4.7",
     "fs": "^0.0.1-security",
     "html2canvas": "^1.4.1",
     "i18next": "^21.6.11",

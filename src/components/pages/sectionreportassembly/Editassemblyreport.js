@@ -1,17 +1,21 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
+import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import fs from 'fs';
 import i18n from "i18next";
 import html2canvas from 'html2canvas';
 import { jsPDF } from "jspdf";
 import { useTranslation, initReactI18next } from "react-i18next";
+import download from 'downloadjs';
 import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
 import report from '../../images/report.png'
+import right from '../../images/right.png';
 import { API_URL } from "../../../config";
-import { map } from "jquery";
+
+
 
 const Editassemblyreport = () => {
 
@@ -39,6 +43,10 @@ const Editassemblyreport = () => {
     const [assemblydata, setAssemblydata] = useState([]);
     const [PdfArrays, setPdfArrays] = useState([]);
     const [livesessectionArray, setLivesessectionArray] = useState([]);
+    const [Loader, setLoader] = useState(false)
+    const [Loader2, setLoader2] = useState(false)
+    const [successModal, setsuccessModal] = useState(false);
+    const successToggleModal = () => setsuccessModal(!successModal);
 
 
 
@@ -59,7 +67,7 @@ const Editassemblyreport = () => {
 
     }, []);
 
-
+    console.log("mypdf", PdfReport)
     const listAssemblyReportbyid = () => {
 
         fetch(API_URL + "/assembly/list/by/" + id,
@@ -322,7 +330,7 @@ const Editassemblyreport = () => {
 
 
     const UpdateAssemblyreport = () => {
-
+        setLoader2(true)
         let data = {};
 
         data['name'] = reportName.current.value;
@@ -342,7 +350,8 @@ const Editassemblyreport = () => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     console.log("results", resp);
-
+                    setLoader2(false);
+                    successToggleModal();
                 });
             }
             else {
@@ -391,15 +400,32 @@ const Editassemblyreport = () => {
 
     }
 
-    
-    const downloadpdf = () => {
 
+    const downloadpdf = () => {
+        setLoader(true)
         fetch(API_URL + "/get/full/screenshort/" + id + "/" + Clientid,
             {
                 method: 'GET',
-               
+                headers: {
+                    "Content-Type": "application/pdf"
+
+                },
             }
-        )
+        ).then(res => res.blob())
+            .then(response => {
+                //Create a Blob from the PDF Stream
+                console.log(response);
+                setLoader(false)
+                const file = new Blob([response], {
+                    type: "application/pdf"
+                });
+                //Build a URL from the file
+                const fileURL = URL.createObjectURL(file);
+                //Open the URL on new Window
+                window.open(fileURL);
+                download(fileURL);
+
+            })
     }
 
     const logout = () => {
@@ -470,8 +496,8 @@ const Editassemblyreport = () => {
                                     <div className="report-notes">
                                         <>
                                             <label>Live Session Notes</label>
-                                            <p dangerouslySetInnerHTML={{ __html: val.sessiondata?val.sessiondata: "No live session notes available"}}></p>
-                                          
+                                            <p dangerouslySetInnerHTML={{ __html: val.sessiondata ? val.sessiondata : "No live session notes available" }}></p>
+
                                         </>
                                     </div>
                                 )
@@ -502,7 +528,7 @@ const Editassemblyreport = () => {
                                     <div className="report-notes">
                                         <>
                                             <label>Report Notes </label>
-                                            <p>{val.notes?val.notes : "No report available"}</p>
+                                            <p>{val.notes ? val.notes : "No report available"}</p>
                                         </>
                                     </div>
                                 )
@@ -510,14 +536,14 @@ const Editassemblyreport = () => {
                         }
 
 
-                       {
-                        completeForm.length > 0 &&
-                        <p className="complete-forms"><b>Completed Forms</b></p>
-                       }
+                        {
+                            completeForm.length > 0 &&
+                            <p className="complete-forms"><b>Completed Forms</b></p>
+                        }
 
                         {
                             completeForm.length > 0 && completeForm.map((val, index) => {
-                                
+
                                 return (
                                     <>
                                         <div className="live-section-img">
@@ -533,14 +559,35 @@ const Editassemblyreport = () => {
                         }
 
                         <div className="assembly-btn-wrp assembly-btn-wrp2">
-                            <div className="assembly-btn"><a href="javascript:void" onClick={UpdateAssemblyreport} >SAVE REPORT</a></div>
-                            <div className="assembly-btn ml-assembly"><a href="javascript:void" action="" onClick={downloadpdf}>SAVE & DOWNLOAD PDF</a></div>
+                            <div className="assembly-btn"><a href="javascript:void" onClick={UpdateAssemblyreport} >SAVE REPORT
+                                {
+                                    Loader2 &&
+                                    <div id="loader"></div>
+                                }
+                            </a></div>
+                            <div className="assembly-btn ml-assembly"><a href="javascript:void" action="" onClick={downloadpdf}>SAVE & DOWNLOAD PDF
+                                {
+                                    Loader &&
+                                    <div id="loader"></div>
+                                }
+                            </a></div>
                             <div className="assembly-btn ml-assembly"><a href="#">GO TO REPORTS LIST</a></div>
 
                         </div>
                     </div>
                 </div>
             </div>
+            <Modal isOpen={successModal} toggle={successToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-p">
+                        <div className="right-circle"><img src={right} /></div>
+                        <h4>Saved!</h4>
+                        <p>Your Form has been Updated Successfully</p>
+                    </div>
+                </ModalBody>
+
+            </Modal>
         </div>
 
     )

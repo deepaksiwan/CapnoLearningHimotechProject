@@ -30,7 +30,11 @@ const Addtrainer = () => {
     const [states, setStates] = useState([]);
     const associated_owner = localStorage.getItem('associated_owner');
     const [Loader, setLoader] = useState(false)
-
+    const [fillallfieldmodal, setFillallfieldModal] = useState(false);
+    const fillallfieldtoggleModal = () => setFillallfieldModal(!fillallfieldmodal);
+    const [emailalreadyExitmodal, setEmailalreadyExitmodal] = useState(false);
+    const EmailalreadyExittoggleModal = () => setEmailalreadyExitmodal(!emailalreadyExitmodal);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         getCountry();
@@ -102,7 +106,7 @@ const Addtrainer = () => {
         data["usertype"]  = 2;
         data['lastname'] = lastname.current.value;
         data['profession'] = profession.current.value;
-        data['degreescompleted '] = degreescompleted .current.value;
+        data['degreescompleted'] = degreescompleted .current.value;
         data['year_exp'] = year_exp.current.value;
         data['license'] = license.current.value;
         data['certificationscompleted'] = certificationscompleted.current.value;
@@ -117,7 +121,11 @@ const Addtrainer = () => {
         data['sendemail'] = true;
         data['associated_owner'] = associated_owner;
      
-
+        if(firstname.current.value == "" || lastname.current.value == "" || profession.current.value == "" || degreescompleted.current.value == "" || year_exp.current.value == "" || license.current.value == "" || certificationscompleted.current.value == "" || email.current.value == "" || telephone.current.value == "" || address.current.value == "" || address2.current.value == "" || city.current.value == "" || zipcode.current.value == "" || state.current.value == "" || country.current.value == ""){
+            fillallfieldtoggleModal();
+            setLoader(false);
+            return false;
+        }
         fetch(API_URL+"/trainer/create", {
             method: 'POST',
             headers: {
@@ -134,6 +142,10 @@ const Addtrainer = () => {
 
                 });
             }
+            else if (response.status == 400) {
+                EmailalreadyExittoggleModal();
+                setLoader(false);
+            }
             else if (response.status == 401) {
                 logout()
             }
@@ -147,6 +159,19 @@ const Addtrainer = () => {
 
 
     }
+
+    function isValidEmail(email) {
+        return /\S+@\S+\.\S+/.test(email);
+      }
+
+    const handleEmail = ()=>{
+        if (!isValidEmail(email.current.value)) {
+            setError(true);
+          } else {
+            setError(false);
+          }
+    }
+    
     const handleCountryUpdate = () => {
         getState(country.current.value)
     }
@@ -218,13 +243,16 @@ const Addtrainer = () => {
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Email</p>
-                                        <input placeholder="Enter an email" ref={email} />
+                                        <input placeholder="Enter an email" onChange={handleEmail} ref={email} />
+                                        {
+                                            error && <p className='validemail'>invalid Email</p>
+                                        }
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Password</p>
-                                        <input placeholder="Enter password" />
+                                        <input type="password" placeholder="Enter password" />
                                     </div>
                                 </div>
                             </div>
@@ -295,7 +323,7 @@ const Addtrainer = () => {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="go-back">
-                                        <a href="#">Go Back</a>
+                                        <Link to="/viewcreate">Go Back</Link>
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
@@ -324,7 +352,24 @@ const Addtrainer = () => {
                     </div>
                 </div>
             </div>
+            <Modal isOpen={fillallfieldmodal} toggle={fillallfieldtoggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={fillallfieldtoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-error-p">
+                        <p>Please fill all field</p>
+                    </div>
+                </ModalBody>
 
+            </Modal>
+            <Modal isOpen={emailalreadyExitmodal} toggle={EmailalreadyExittoggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={EmailalreadyExittoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-error-p">
+                        <p>Account already exist with this email</p>
+                    </div>
+                </ModalBody>
+
+            </Modal>
         </div>
     )
 }

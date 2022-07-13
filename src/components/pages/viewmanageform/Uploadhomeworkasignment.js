@@ -36,6 +36,7 @@ const Uploadhomeworkasignment = () => {
     const toggleModal = () => setModal(!modal);
     const [successModal, setsuccessModal] = useState(false);
     const successToggleModal = () => setsuccessModal(!successModal);
+    const [Loader, setLoader] = useState(false);
 
 
     useEffect(() => {
@@ -47,6 +48,8 @@ const Uploadhomeworkasignment = () => {
 
 
     const submithomeworkform = () => {
+
+        setLoader(true)
         let formData = new FormData();
         let client_id = localStorage.getItem('selectedClient');
         let session_id = localStorage.getItem('selectedSession');
@@ -57,6 +60,7 @@ const Uploadhomeworkasignment = () => {
         if (client_id == "" || !formFile.current.files[0] || session_id == "") {
 
             toggleModal();
+            setLoader(false)
             return false;
 
         }
@@ -71,12 +75,13 @@ const Uploadhomeworkasignment = () => {
         }).then((result) => {
             // console.warn("result",result);
             result.json().then((resp) => {
-                // console.log("resp",resp);
+                setLoader(false)
+                successToggleModal();
 
             })
         })
 
-        successToggleModal();
+        
 
     }
    
@@ -346,7 +351,11 @@ const Uploadhomeworkasignment = () => {
 
                         </Modal>
                         <div className="client-submit-btn">
-                            <button type="submit" onClick={submithomeworkform}>Submit</button>
+                            <button type="submit" onClick={submithomeworkform}>Submit
+                            {
+                                                Loader && <div id="loader"></div>
+                                            }
+                            </button>
                         </div>
                     </div>
 

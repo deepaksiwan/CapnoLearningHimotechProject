@@ -10,7 +10,7 @@ import Dashboard from './components/pages/dashboard/Dashboard.js';
 import Demodatareport from './components/pages/demodatareport/Demodatareport.js';
 import Uploadclientform from './components/pages/Uploadclientform/Uploadclientform.js';
 import Bankform from './components/pages/bankform/Bankform.js';
-// import Editprofile from './components/pages/editprofile/Editprofile.js';
+import Editprofile from './components/pages/editprofile/Editprofile.js';
 import Hardwareprofile from './components/pages/hardwareprofile/Hardwareprofile.js';
 import Clientinformation from './components/pages/clientinformation/Clientinformation.js';
 import Trainerinformation from './components/pages/trainerinformation/Trainerinformation.js';
@@ -142,7 +142,7 @@ function App(){
 				<Route path="/edit/assembly/report/:id" element={<Editassemblyreport />} />
 				
 
-				{/* <Route  path="/edit/profile" element={<Editprofile />} /> */} 
+				<Route  path="/edit/profile" element={<Editprofile />} /> 
 			 	<Route path="" element={<Privateroutelogin />}>
 				<Route path="/login" element={<Login />} />
 				</Route>

@@ -26,6 +26,10 @@ const Editgroup = () => {
     useEffect(() => {
         getGroups();
 
+        const interval = setInterval(()=>{
+            getGroups();
+        },3000);
+        return()=> clearInterval(interval);
 
     }, []);
 
@@ -143,6 +147,12 @@ const Editgroup = () => {
                     <div className="wrp-bankform">
                         <div style={{ maxWidth: '100%' }}>
                             <MaterialTable
+                            options={{
+                                search: true,
+                                showTitle: false,
+                                toolbar: true,
+                                pageSizeOptions:[5,10,20,50,150,200]
+                            }}
                                 columns={columns}
                                 data={data}
                                 title=""

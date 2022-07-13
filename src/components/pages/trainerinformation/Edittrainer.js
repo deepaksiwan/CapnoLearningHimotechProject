@@ -25,8 +25,12 @@ const Edittrainer = () => {
 
     useEffect(() => {
         getTrainer();
-
+        const interval = setInterval(()=>{
+            getTrainer();
+        },3000);
+        return()=> clearInterval(interval);
     }, []);
+
 
     const deleteTrainer = () => {
 
@@ -155,6 +159,12 @@ const Edittrainer = () => {
                     <div className="wrp-bankform">
                         <div style={{ maxWidth: '100%' }}>
                             <MaterialTable
+                            options={{
+                                search: true,
+                                showTitle: false,
+                                toolbar: true,
+                                pageSizeOptions:[5,10,20,50,150,200]
+                            }}
                                 columns={columns}
                                 data={data}
                                 title=""

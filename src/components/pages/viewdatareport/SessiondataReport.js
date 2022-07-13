@@ -47,7 +47,7 @@ const SessiondataReport = () => {
                         _temp.push({
                             report : v.name,
                             Createdate : new Date(v.added_on).toLocaleString(),
-                            actions : <p><a href={type == 'single' ? '/view/report/'+v.clock+'/'+sessionid+"/"+v.id+'/all' : '/view/group/report/'+sessionid+"/"+v.id+'/all'} className="downloadimg"><img src={preveiw} /></a></p>
+                            actions : <p><a href={type == 'single' ? '/view/report/'+sessionid+"/"+v.id+'/all' : '/view/group/report/'+sessionid+"/"+v.id+'/all'} className="downloadimg"><img src={preveiw} /></a></p>
                         })
                     })
                     setData(_temp);

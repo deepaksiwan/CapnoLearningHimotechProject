@@ -48,7 +48,7 @@ const Bankform = () => {
                     resp.forms.map((v,i) => {
                         _temp.push({
                             name : v.forms,
-                            download: <p><a href={v.file} className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg" target="_blank"><img src={preveiw} /></a></p>
+                            download: <p><a href={v.file} className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg" ><img src={preveiw} /></a></p>
                             
                         })
                     })
