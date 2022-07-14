@@ -1,29 +1,183 @@
 import React, {useEffect,useState} from "react";
 import {Link,useParams, Router} from 'react-router-dom';
+import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
+import download from 'downloadjs';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
-import download from '../../images/download.png'
+import downloads from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
+import { API_URL } from "../../../config";
+import edit from '../../images/edit.png'
+import Delete from '../../images/delete.png';
+import closeicon from '../../images/closeicon.png';
 
 
 const Viewassemblyreport = () => {
     const accessToken = localStorage.getItem('accessToken');
-   
-
+    const sessionid = localStorage.getItem('selectedSession');
+    const [data, setData] = useState([]);
+    const Clientid = localStorage.getItem('selectedClient');
+    const [itemId, setItemId] = useState(null);
+    const [deleteModal, setdeleteModal] = useState(false);
+    const deleteToggleModal = () => setdeleteModal(!deleteModal);
 
     useEffect(() => {
-        
+        getassebllyList();
 
+
+        const interval = setInterval(()=>{
+            getassebllyList();
+        },3000);
+        return()=> clearInterval(interval);
 
     }, []);
 
     
-    const logout = () => {
-        localStorage.clear();
-        window.location.reload();
+    const getassebllyList = () => {
+
+
+        fetch(API_URL + "/display/assembly/list/" + sessionid,
+
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    console.warn("result", resp);
+                    const clientName = resp.firstname + resp.lastname
+                    const sessionDate = resp.sessionDate
+                  
+                 console.log(clientName)
+                    
+                    let _temp = [];
+                    console.log(_temp)
+                    resp.data.map((v, i) => {
+                        _temp.push({
+                            reportTitle: v.name,
+                            Client: clientName,
+                            Session: sessionDate,
+                            dateCreated: new Date(v.created_at*1000).toLocaleString(),
+                            actions: <p><a href="#" onClick={()=> viewpdf(v.id)} className="downloadimg" ><img src={preveiw} /></a><a href={"/view/edit/assemblyreport/" + v.id} className="downloadimg" ><img src={edit} /></a> <a href='#' onClick={()=> downloadpdf(v.id)} className="downloadimg"><img src={downloads} /></a> <a className="downloadimg" onClick={() => openItemPopUp(v.id)} ><img src={Delete} /></a></p>
+                            
+                        })
+                    })
+                    setData(_temp);
+
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+
+
     }
 
+   
+   
+
+
+    const downloadpdf = (id) => {
+      
+        fetch(API_URL + "/get/full/screenshort/" + id + "/" + Clientid,
+            {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/pdf"
+
+                },
+            }
+        ).then(res => res.blob())
+            .then(response => {
+                //Create a Blob from the PDF Stream
+                console.log(response);
+              
+                const file = new Blob([response], {
+                    type: "application/pdf"
+                });
+                //Build a URL from the file
+                const fileURL = URL.createObjectURL(file);
+               
+                download(fileURL);
+
+            })
+    }
+
+    const viewpdf = (id) => {
+      
+        fetch(API_URL + "/get/full/screenshort/" + id + "/" + Clientid,
+            {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/pdf"
+
+                },
+            }
+        ).then(res => res.blob())
+            .then(response => {
+                //Create a Blob from the PDF Stream
+                console.log(response);
+              
+                const file = new Blob([response], {
+                    type: "application/pdf"
+                });
+                //Build a URL from the file
+                const fileURL = URL.createObjectURL(file);
+                //Open the URL on new Window
+                window.open(fileURL);
+               
+
+            })
+    }
+
+
+    const openItemPopUp = (id) => {
+        setItemId(id);
+        setdeleteModal(!deleteModal)
+    }
+
+    const deleteClient = () => {
+        let id = itemId;
+        fetch(API_URL + "/delete/assembly/list/" + id,
+            {
+                method: 'delete',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                getassebllyList();
+                setdeleteModal(!deleteModal)
+
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+
+        })
+
+    }
+   
     const columns =[
         {
             title: "Client", field: "Client"
@@ -59,7 +213,7 @@ const Viewassemblyreport = () => {
                     <div style={{ maxWidth: '100%' }}>
                         <MaterialTable
                         columns={columns}
-                        // data={data}
+                        data={data}
                         title=""
                         />
                         
@@ -68,6 +222,21 @@ const Viewassemblyreport = () => {
                </div>
              </div>
             
+             <Modal isOpen={deleteModal} toggle={deleteToggleModal} className="connect-box" centered={true}>
+                        <ModalHeader toggle={deleteToggleModal}><span className="ml-1 roititle font-weight-bold">Delete</span></ModalHeader>
+                        <ModalBody>
+                            <div className="modal-p">
+                                <div className="right-circle cancel-circle"><img src={closeicon} /></div>
+                                <h4>Are You Sure?</h4>
+                                <p>Do you really want to delete this record?</p>
+                                <div className="wrp-delete-btn">
+                                    <div className="cancel-btn1" ><a onClick={deleteToggleModal}>Cancel</a></div>
+                                    <div className="delete-btn1"><a onClick={deleteClient}>Delete</a></div>
+                                </div>
+                            </div>
+                        </ModalBody>
+
+                    </Modal>
         </div>
     )
 }

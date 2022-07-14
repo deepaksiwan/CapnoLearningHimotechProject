@@ -37,9 +37,6 @@ const Assemblyreport = () => {
     const cforms = useRef();
 
 
-
-
-
     useEffect(() => {
         getpdfname();
         getclientformName();
@@ -47,7 +44,8 @@ const Assemblyreport = () => {
 
     }, []);
 
-
+console.log("sessionid", sessionid)
+console.log("Clientid", Clientid)
 
 
 

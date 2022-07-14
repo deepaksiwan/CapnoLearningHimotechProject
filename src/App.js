@@ -68,6 +68,7 @@ import ViewChartTable from './components/pages/chartTable/ViewChartTable';
 import GroupChartTable from './components/pages/chartTable/GroupChartTable';
 import ViewGroupChartTable from './components/pages/chartTable/ViewGroupChartTable';
 import MultiChartTable from './components/pages/chartTable/MultiChartTable';
+import Vieweditassemblyreport from './components/pages/sectionreportassembly/Vieweditassemblyreport';
 
 function App(){
 	return(
@@ -127,6 +128,8 @@ function App(){
 				<Route path="/pdf/sessetion/report/notes" element={<PdfsessetionreportNotes />} />
 				<Route path="/assemblyreport" element={<Assemblyreport />} />
 				<Route path="/view/assembly" element={<Viewassemblyreport />} />
+				<Route path="/view/edit/assemblyreport/:vid" element={<Vieweditassemblyreport />} />
+				
 				<Route path="/upload/homework/asignment" element={<Uploadhomeworkasignment />} />
 				<Route path="/add/trainer" element={<Addtrainer />} />
 				<Route path="/multilanguage" element={<Multilanguage />} />
