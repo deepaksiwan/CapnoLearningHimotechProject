@@ -2439,3 +2439,62 @@ sub {
   cursor: grab!important;
 
 }
+
+
+/* downloader */
+
+.loading2 {
+  width: 15rem;
+  height: 7.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.loading2 .text {
+  font-size: 2rem;
+  text-transform: uppercase;
+  margin: auto;
+}
+
+.dot {
+  font-size: 2rem;
+  font-weight: 700;
+  border-radius: 50%;
+  color: #c867c6;
+  animation: load 0.5s alternate infinite;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.16s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.32s;
+}
+
+.dot:nth-child(4) {
+  animation-delay: 0.48s;
+}
+
+.dot:nth-child(5) {
+  animation-delay: 0.64s;
+}
+
+.dot:nth-child(6) {
+  animation-delay: 0.8s;
+}
+
+.dot:nth-child(7) {
+  animation-delay: 0.96s;
+}
+
+@keyframes load {
+  from {
+    transform: scaleX(1.25);
+  }
+  to {
+    transform: translateY(-2rem) scaleX(1);
+  }
+}
