@@ -689,6 +689,7 @@ label{
 .select-client > select{
   background-color: #f0f0f0;
     border: 1px solid #f0f0f0;
+    font-weight: 600;
     border-radius: 8px;
     color: #6c6c6c;
     font-size: 14px;
@@ -696,6 +697,9 @@ label{
     width: 100%;
     padding: 8px;
     outline: none;
+}
+.selected-bold{
+  font-weight: 600;
 }
 .select-client{
   margin-top: 15px;

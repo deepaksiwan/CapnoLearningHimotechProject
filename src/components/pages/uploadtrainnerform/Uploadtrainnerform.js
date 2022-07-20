@@ -391,11 +391,11 @@ const Uploadclientform = () => {
                                         </div>
                                         <div className="select-client">
                                             <select ref={trainerSelected} onChange={updateSelectTrainer}  >
-                                                <option>Choose a trainer</option>
-                                                <option value={"all"}>All trainers</option>
+                                                <option className="selected-bold">Choose a trainer</option>
+                                                <option className="selected-bold" value={"all"}>All trainers</option>
                                                 {
                                                     trainers.map((items) =>
-                                                        <option selected={items.id == selectedTrainer ? true : false} value={items.id}>
+                                                        <option className="selected-bold" selected={items.id == selectedTrainer ? true : false} value={items.id}>
                                                             {items.firstname} {items.lastname}
                                                         </option>)
                                                 }
@@ -441,11 +441,11 @@ const Uploadclientform = () => {
                                         </div>
                                         <div className="select-client">
                                             <select ref={clientSelected} onChange={updateSelectClient}>
-                                                <option>Choose a client</option>
+                                                <option className="selected-bold">Choose a client</option>
 
                                                 {
                                                     clients.length > 0 && clients.map((client, i) =>
-                                                        <option selected={client.id == selectedClient ? true : false} value={client.id}>
+                                                        <option className="selected-bold" selected={client.id == selectedClient ? true : false} value={client.id}>
                                                             {client.firstname} {client.lastname}
                                                         </option>)
                                                 }
@@ -464,7 +464,7 @@ const Uploadclientform = () => {
                                                 {
                                                     blankform.map((bankforms, i) => {
                                                         return (
-                                                            <option value={bankforms.id} >{bankforms.forms}</option>
+                                                            <option className="selected-bold" value={bankforms.id} >{bankforms.forms}</option>
                                                         );
                                                     })
                                                 }
@@ -489,10 +489,10 @@ const Uploadclientform = () => {
 
                                         <div className="select-client mrt-select">
                                             <select ref={sessionSelected} onChange={updateselectedSecssion}>
-                                                <option>Choose a session</option>
+                                                <option className="selected-bold">Choose a session</option>
                                                 {
                                                     sesstion.map((sesstion, i) =>
-                                                        <option selected={sesstion.id == selectedSession ? true : false} value={sesstion.id}>
+                                                        <option className="selected-bold" selected={sesstion.id == selectedSession ? true : false} value={sesstion.id}>
                                                             {sesstion.name}
                                                         </option>)
                                                 }
