@@ -24,6 +24,7 @@ const Filter = () => {
     const groupSelected = useRef()
     const clientSelected = useRef()
     const cid = useRef()
+    const cid2 = useRef()
     const sessionSelected = useRef()
 
     const userId = localStorage.getItem('user_id');
@@ -36,6 +37,8 @@ const Filter = () => {
     const selectedclientActive = localStorage.getItem('selectedclientActive');
     const selectedclientInactive = localStorage.getItem('selectedclientInactive');
     const selectedHomework = localStorage.getItem('selectedHomework');
+    
+    selectedStandard
     const userType = localStorage.getItem('userType');
 
     const accessToken = localStorage.getItem('accessToken');
@@ -46,11 +49,12 @@ const Filter = () => {
         if (userId && userType == 1) {
             getTrainers();
         }
-        if (selectedTrainer  && (userType == 1 || userType == 2)) {
+        if (selectedTrainer && (userType == 1 || userType == 2)) {
             getClients();
         }
         if (selectedClient) {
             getSession()
+         
         }
 
         // getSession();
@@ -61,34 +65,34 @@ const Filter = () => {
     const getTrainers = () => {
         setinclients([])
 
-        let url = API_URL+"/trainers?user_id=" + userId + "&status=2";
+        let url = API_URL + "/trainers?user_id=" + userId + "&status=2";
         // console.log(trainerActive);
         let _trainerActive = trainerActive.current.checked;
         let _trainerInactive = trainerInactive.current.checked;
 
-        if(trainerActive.current.checked){
+        if (trainerActive.current.checked) {
             localStorage.setItem('selectedtrainerActive', true);
-            }
-            else{
+        }
+        else {
             localStorage.setItem('selectedtrainerActive', false);
-    
-            }
-            if(trainerInactive.current.checked){
-                localStorage.setItem('selectedtrainerInactive', true);
-                }
-                else{
-                localStorage.setItem('selectedtrainerInactive', false);
-        
-                }
-        
+
+        }
+        if (trainerInactive.current.checked) {
+            localStorage.setItem('selectedtrainerInactive', true);
+        }
+        else {
+            localStorage.setItem('selectedtrainerInactive', false);
+
+        }
+
         if (_trainerActive && !_trainerInactive) {
-            url = API_URL+"/trainers?user_id=" + userId + "&status=1";;
+            url = API_URL + "/trainers?user_id=" + userId + "&status=1";;
         }
         else if (!_trainerActive && _trainerInactive) {
-            url = API_URL+"/trainers?user_id=" + userId + "&status=0";
+            url = API_URL + "/trainers?user_id=" + userId + "&status=0";
         }
         else if (_trainerActive && _trainerInactive) {
-            url = API_URL+"/trainers?user_id=" + userId;
+            url = API_URL + "/trainers?user_id=" + userId;
         }
         fetch(url,
             {
@@ -134,14 +138,14 @@ const Filter = () => {
         let _userId = localStorage.getItem('selectedTrainer');
         let _selectedGroup = localStorage.getItem('selectedGroup');
         let _userType = 3
-        let _groupSelected = _selectedGroup === "true" ? true : false ;
+        let _groupSelected = _selectedGroup === "true" ? true : false;
         let _trainer = true;
         if (_userId == "all") {
             _trainer = false;
-         _userId = localStorage.getItem('user_id');
+            _userId = localStorage.getItem('user_id');
 
         }
-    
+
 
         localStorage.setItem('selectedGroup', false);
         if (_groupSelected) {
@@ -149,34 +153,34 @@ const Filter = () => {
             _userType = 4;
         }
 
-        if(clientActive.current.checked){
+        if (clientActive.current.checked) {
             localStorage.setItem('selectedclientActive', true);
-            }
-            else{
+        }
+        else {
             localStorage.setItem('selectedclientActive', false);
-    
-            }
-            if(clientInactive.current.checked){
-                localStorage.setItem('selectedclientInactive', true);
-                }
-                else{
-                localStorage.setItem('selectedclientInactive', false);
-        
-                }
-        let url = API_URL+"/clients?user_id=" + _userId + "&status=2&trainer=" + _trainer + "&user_type=" + _userType;
-    
+
+        }
+        if (clientInactive.current.checked) {
+            localStorage.setItem('selectedclientInactive', true);
+        }
+        else {
+            localStorage.setItem('selectedclientInactive', false);
+
+        }
+        let url = API_URL + "/clients?user_id=" + _userId + "&status=2&trainer=" + _trainer + "&user_type=" + _userType;
+
         let _clientActive = clientActive.current.checked;
         let _clientInactive = clientInactive.current.checked;
 
 
         if (_clientActive && !_clientInactive) {
-            url = API_URL+"/clients?user_id=" + _userId + "&status=1&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL + "/clients?user_id=" + _userId + "&status=1&trainer=" + _trainer + "&user_type=" + _userType;
         }
         else if (!_clientActive && _clientInactive) {
-            url = API_URL+"/clients?user_id=" + _userId + "&status=0&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL + "/clients?user_id=" + _userId + "&status=0&trainer=" + _trainer + "&user_type=" + _userType;
         }
         else if (_clientActive && _clientInactive) {
-            url = API_URL+"/clients?user_id=" + _userId + "&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL + "/clients?user_id=" + _userId + "&trainer=" + _trainer + "&user_type=" + _userType;
         }
 
 
@@ -225,14 +229,15 @@ const Filter = () => {
         if (_homework) {
             _hw = 1;
         }
-        if(cid.current.checked){
+        if (cid.current.checked) {
+      
             localStorage.setItem('selectedHomework', true);
-            }
-            else{
+        }
+        else {
             localStorage.setItem('selectedHomework', false);
-    
-            }
-        let url = API_URL+"/sessions?cid=" + _cid + "&hw=" + _hw;
+
+        }
+        let url = API_URL + "/sessions?cid=" + _cid + "&hw=" + _hw;
 
 
         fetch(url,
@@ -274,6 +279,7 @@ const Filter = () => {
         })
     }
 
+
     //    trainer check react
     const logout = () => {
         localStorage.clear();
@@ -305,11 +311,11 @@ const Filter = () => {
     const handleGroup = () => {
         localStorage.setItem('selectedSession', null);
         localStorage.setItem('selectedClient', null);
-        if(groupSelected.current.checked){
-        localStorage.setItem('selectedGroup', true);
+        if (groupSelected.current.checked) {
+            localStorage.setItem('selectedGroup', true);
         }
-        else{
-        localStorage.setItem('selectedGroup', false);
+        else {
+            localStorage.setItem('selectedGroup', false);
 
         }
         getClients();
@@ -320,7 +326,7 @@ const Filter = () => {
         <div>
             <div className="reset-wrp">
                 <div className="reset-child1">
-                    <p>{t('Choose-a-clients-and-a-session-below-populates-and-activates-relevant-menu-options')}</p>
+                    <p>Choose a Client and a Session.  The Dashboard will activate the relevant options based on your selections.</p>
                 </div>
                 <div className="reset-child2">
                     <button onClick={Reset} className="reset">{t('Reset')}</button>
@@ -330,6 +336,9 @@ const Filter = () => {
                 {
                     userType == 1 &&
                     <div className="step-box">
+                        <div className="step-trainers-box">
+                            <p>TRAINERS</p>
+                        </div>
                         <div className="main-checkbox">
 
                             <div className="checkbox-wrp">
@@ -376,73 +385,93 @@ const Filter = () => {
                     </div>
 
 
-                   
+
                 }
 
                 {
-                   ( userType == 2 || userType == 1) &&
+                    (userType == 2 || userType == 1) &&
 
-                        <div className="step-box">
-                            <div className="main-checkbox">
-                                <div className="checkbox-wrp">
-                                    <div class="custom-radios">
-                                        <input type="checkbox" id="color-8" value="color-8" onChange={handleGroup} ref={groupSelected} defaultChecked={(selectedGroup === "true" ? true : false)} />
-                                        <label for="color-8">
-                                            <span className="redious">
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div className="caption-cheeckbox">
-                                        <p>{t('Group')}</p>
-                                    </div>
+                    <div className="step-box">
+                        <div className="step-trainers-box">
+                            <p>CLIENTS</p>
+                        </div>
+                        <div className="main-checkbox">
+                            
+                            <div className="checkbox-wrp">
+                                <div class="custom-radios">
+                                    <input type="checkbox" id="color-9" value="color-9" onChange={getClients} ref={clientActive} defaultChecked={(selectedclientActive === "true" ? true : false)} />
+                                    <label for="color-9">
+                                        <span className="redious">
+                                        </span>
+                                    </label>
                                 </div>
-                                <div className="checkbox-wrp">
-                                    <div class="custom-radios">
-                                        <input type="checkbox" id="color-9" value="color-9" onChange={getClients} ref={clientActive} defaultChecked={(selectedclientActive === "true" ? true : false)} />
-                                        <label for="color-9">
-                                            <span className="redious">
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div className="caption-cheeckbox">
-                                        <p>Active</p>
-                                    </div>
-                                </div>
-                                <div className="checkbox-wrp">
-                                    <div class="custom-radios">
-                                        <input type="checkbox" id="color-10" value="color-10" onChange={getClients} ref={clientInactive} defaultChecked={(selectedclientInactive === "true" ? true : false)} />
-                                        <label for="color-10">
-                                            <span className="redious">
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div className="caption-cheeckbox">
-                                        <p>Inactive</p>
-                                    </div>
+                                <div className="caption-cheeckbox">
+                                    <p>Active</p>
                                 </div>
                             </div>
-                            <div className="select-client">
-                                <select ref={clientSelected} onChange={updateSelectClient}>
-                                    <option className="selected-bold">{t('Choose-a-client')}</option>
-
-                                    {
-                                        clients.length > 0 && clients.map((client, i) =>
-                                            <option className="selected-bold" selected={client.id == selectedClient ? true : false} value={client.id}>
-                                                {client.firstname} {client.lastname}
-                                            </option>)
-                                    }
-                                </select>
+                            <div className="checkbox-wrp">
+                                <div class="custom-radios">
+                                    <input type="checkbox" id="color-10" value="color-10" onChange={getClients} ref={clientInactive} defaultChecked={(selectedclientInactive === "true" ? true : false)} />
+                                    <label for="color-10">
+                                        <span className="redious">
+                                        </span>
+                                    </label>
+                                </div>
+                                <div className="caption-cheeckbox">
+                                    <p>Inactive</p>
+                                </div>
                             </div>
-                            <div className="step-smallbox">
-                                <p>{t('Step')} {userType == 1 ? 2 : 1}</p>
+                            <div className="checkbox-wrp">
+                                <div class="custom-radios">
+                                    <input type="checkbox" id="color-8" value="color-8" onChange={handleGroup} ref={groupSelected} defaultChecked={(selectedGroup === "true" ? true : false)} />
+                                    <label for="color-8">
+                                        <span className="redious">
+                                        </span>
+                                    </label>
+                                </div>
+                                <div className="caption-cheeckbox">
+                                    <p>{t('Group')}</p>
+                                </div>
                             </div>
                         </div>
+                        <div className="select-client">
+                            <select ref={clientSelected} onChange={updateSelectClient}>
+                                <option className="selected-bold">{t('Choose-a-client')}</option>
 
-                   
-                      
+                                {
+                                    clients.length > 0 && clients.map((client, i) =>
+                                        <option className="selected-bold" selected={client.id == selectedClient ? true : false} value={client.id}>
+                                            {client.firstname} {client.lastname}
+                                        </option>)
+                                }
+                            </select>
+                        </div>
+                        <div className="step-smallbox">
+                            <p>{t('Step')} {userType == 1 ? 2 : 1}</p>
+                        </div>
+                    </div>
+
+
+
                 }
 
                 <div className="step-box">
+                    <div className="step-trainers-box">
+                        <p>SESSIONS</p>
+                    </div>
+                    <div className="main-checkbox">
+                    <div className="checkbox-wrp">
+                        <div class="custom-radios">
+                            <input type="checkbox" id="cid2" onChange={getSession} ref={cid} defaultChecked={(selectedHomework === "true" ? true : false)} />
+                            <label for="cid2">
+                                <span className="redious">
+                                </span>
+                            </label>
+                        </div>
+                        <div className="caption-cheeckbox">
+                            <p>{t('Standard')}</p>
+                        </div>
+                    </div>
                     <div className="checkbox-wrp">
                         <div class="custom-radios">
                             <input type="checkbox" id="cid" onChange={getSession} ref={cid} defaultChecked={(selectedHomework === "true" ? true : false)} />
@@ -455,6 +484,8 @@ const Filter = () => {
                             <p>{t('Home-Work-Session')}</p>
                         </div>
                     </div>
+                    </div>
+                    
                     <div className="select-client">
                         <select ref={sessionSelected} onChange={updateselectedSecssion}>
                             <option className="selected-bold">{t('Choose-a-session')}</option>
@@ -473,7 +504,7 @@ const Filter = () => {
                 </div>
 
             </div>
-           
+
 
         </div>
     );

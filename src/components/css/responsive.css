@@ -143,7 +143,7 @@
     }
     .step-box{
         width: 100%;
-        margin-bottom: 45px;
+        margin-bottom: 65px;
     }
     .step-smallbox-wrp{
         display: none;
@@ -314,6 +314,9 @@
     }
 }
 @media(max-width: 640px){
+    .step-smallbox{
+        margin-top: 47px;
+    }
     .head-listing > h3{
         font-size: 24px;
     }

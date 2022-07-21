@@ -104,7 +104,7 @@ const Header = () => {
                 <div className="header-box">
                     <div className="header-c1">
                         <div className="header-child1">
-                            <h3>Dashboard</h3>
+                            <h3>Database Dashboard</h3>
                         </div>
                     </div>
 

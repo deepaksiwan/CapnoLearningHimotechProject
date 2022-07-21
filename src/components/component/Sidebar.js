@@ -64,7 +64,7 @@ const Sidebar = () => {
   return (
     <div>
       <div className="sidebar">
-        <div class="header-child1 mrb-header"><h3>Dashboard</h3></div>
+        <div class="header-child1 mrb-header"><h3>Database Dashboard</h3></div>
         <ul className="sidebar-list">
           {
             tabArray.map(function (v, i) {

@@ -633,6 +633,7 @@ a:hover {
 .reset-child1 > p{
   font-size: 16px;
   color: #000;
+  font-weight: 600;
 }
 .reset-child2 > button{
   display: inline-block;
@@ -652,7 +653,7 @@ a:hover {
 .wrp-step-box{
   display: flex;
   justify-content: space-between;
-  margin-top: 25px;
+  margin-top: 40px;
   margin-bottom: 40px;
 }
 .step-box{
@@ -660,12 +661,14 @@ a:hover {
     border-radius: 8px;
     background-color: #fff;
     padding: 15px;
-    height: 150px;
+    height: 165px;
+    position: relative;
     border: 2px solid #c867c6;
     box-shadow: 1px 1px 8px 1px #00000052;
 }
 .checkbox-wrp{
   display: flex;
+  margin-top: 15px;
 }
 .caption-cheeckbox > p{
   color: #000;
@@ -713,7 +716,6 @@ label{
   justify-content: space-between;
 }
 .step-smallbox{
-  width: 32%;
   margin: auto;
   margin-top: 55px;
 }
@@ -2501,4 +2503,24 @@ sub {
   to {
     transform: translateY(-2rem) scaleX(1);
   }
+}
+
+
+/* new css */
+
+.step-trainers-box {
+  width: 120px;
+  height: 42px;
+  line-height: 38px;
+  border-radius: 8px;
+  color: #000;
+  text-align: center;
+  background-color: #fff;
+  border: 2px solid #c867c6;
+  box-shadow: 1px 1px 8px 1px #00000052;
+  margin: auto;
+  margin-top: -38px;
+}
+.step-trainers-box > p{
+  font-size: 16px;
 }

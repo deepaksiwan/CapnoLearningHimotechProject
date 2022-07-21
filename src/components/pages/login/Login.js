@@ -51,6 +51,7 @@ const Login = () => {
             localStorage.setItem('selectedclientActive', true);
             localStorage.setItem('selectedclientInactive', false);
             localStorage.setItem('selectedHomework', false);
+            
             localStorage.setItem('selectedTrainer', null);
             localStorage.setItem('selectedTrainerGroup', null);
             localStorage.setItem('selectedClient', data.user_id);
