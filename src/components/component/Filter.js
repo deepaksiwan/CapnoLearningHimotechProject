@@ -37,8 +37,6 @@ const Filter = () => {
     const selectedclientActive = localStorage.getItem('selectedclientActive');
     const selectedclientInactive = localStorage.getItem('selectedclientInactive');
     const selectedHomework = localStorage.getItem('selectedHomework');
-    
-    selectedStandard
     const userType = localStorage.getItem('userType');
 
     const accessToken = localStorage.getItem('accessToken');
