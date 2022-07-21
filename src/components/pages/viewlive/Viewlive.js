@@ -2,6 +2,7 @@ import React, {useEffect,useState} from "react";
 import {Link,useParams, Router} from 'react-router-dom';
 import i18n from "i18next";
 import { jsPDF } from "jspdf";
+import download from 'downloadjs';
 import { useTranslation, initReactI18next } from "react-i18next";
 import { API_URL } from "../../../config";
 import Header from '../../component/Header';
@@ -140,67 +141,32 @@ const Viewlive = () => {
     }
 
     const downloadlivesessionImage = () => {
-
         let dataType = 3;
-
-        fetch(API_URL + "/get/live/sessionimage/" + sessionid + "/" + dataType,
+        fetch(API_URL + "/get/live/sessionimage/download/" + sessionid + "/" + dataType,
             {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': accessToken,
+                    "Content-Type": "application/pdf"
+    
                 },
             }
-        ).then((response) => {
-            if (response.status == 200) {
-                response.json().then((resp) => {
-                  
-                    let _clientName = resp.firstname + " " + resp.lastname ;
-                    let _trainerName = resp.data[0].firstname+ " " + resp.data[0].lastname ;
-                    let _sessionDate = resp.sessionDate;
-                    let _pdfname = resp.pdfname;
-                    downloadliveimg(_clientName , _trainerName , resp.result,_sessionDate)
-
+        ).then(res => res.blob())
+            .then(response => {
+                //Create a Blob from the PDF Stream
+              
+                const file = new Blob([response], {
+                    type: "application/pdf"
                 });
-            }
-            else if (response.status == 401) {
-                logout()
-            }
-            else {
-                alert("network error")
-            }
-
-
-        })
-
-       
+                //Build a URL from the file
+                const fileURL = URL.createObjectURL(file);
+                //Open the URL on new Window
+                // window.open(fileURL);
+                download(fileURL);
+    
+            })
     }
 
-    const downloadliveimg = (_clientName,_trainerName, _image, _sessionDate,_pdfname)=>{
-      
-        const doc = new jsPDF();
-
-        for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
-            doc.setPage(pageNumber)
-        doc.setTextColor(0, 0, 0);
-        doc.text('Capnolearning Report', 10, 10,
-            {styles:{ fontSize: 20,fontWeight: 'bold'}})
-        doc.setDrawColor(0, 0, 0);
-        doc.line(10, 15, 600, 15);
-        doc.setFontSize(10)
-        
-        doc.text(_sessionDate ,35,25)
-        doc.text( _clientName,23,30);
-        doc.text( _trainerName,25,35);
-        doc.setFont(undefined, 'bold');
-        doc.text("Session Date:" ,10,25)
-        doc.text("Client:" ,10,30);
-        doc.text("Trainer:",10,35);
-        // doc.setFont(undefined, 'bold')
-        doc.addImage(_image, 5, 45,200,110);
-        }
-        doc.save(_sessionDate +".pdf");
-    }
+   
 
 
     const ViewlivesessionImage = () => {
