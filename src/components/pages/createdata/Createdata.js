@@ -81,7 +81,6 @@ const Createdata = (props) => {
                         <ul className="create-list">
 
                             <li>
-
                                 <div className="create-list-box"><Link to={(selectedSession === "null" || selectedGroup === "true") ? "" : "/choose/report/config"} className={(selectedSession === "null" || selectedGroup === "true") ? "deactivate" : ""}>{t('Create-&-Save-a-Session-Data-Report')}</Link></div>
 
                             </li>

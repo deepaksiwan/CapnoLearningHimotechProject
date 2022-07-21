@@ -748,8 +748,10 @@ const ChartHeader = (props) => {
         doc.text("Client:" ,10,30);
         doc.text("Trainer:",10,35);
         // doc.setFont(undefined, 'bold')
-        
-        doc.addImage(_image, 5, 45,200,110);
+        _image.map((v,i) => {
+            doc.addImage(v.sessiondata, 5, 45,200,110);
+            doc.addPage();
+        } )   
    
         }
     
@@ -777,7 +779,9 @@ const ChartHeader = (props) => {
                                   !group &&  sessioninfo.length >  0 && showHeader &&
                                    
                                 <li>
-                                <ExcelFile filename={"Statistics - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname  } element={<a href="javascript:void" onClick={exportExcel} data-tip="Export session data as Excel Sheet."   ><i class="fa fa-upload" aria-hidden="true"></i></a>}>
+                                <ReactTooltip />
+
+                                <ExcelFile filename={"Statistics - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname  } element={<a href="javascript:void" onClick={exportExcel} data-tip="Export session statistics as Excel Sheet."   ><i class="fa fa-upload" aria-hidden="true"></i></a>}>
                                
                                     {
                                        graphs.map((v,i) => {

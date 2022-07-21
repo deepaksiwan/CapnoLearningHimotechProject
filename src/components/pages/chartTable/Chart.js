@@ -5,7 +5,7 @@ import ReactTooltip from 'react-tooltip';
 
 import { Link, useParams, Router } from 'react-router-dom';
 import Plot from 'react-plotly.js';
-import { csv } from 'd3';
+import { csv, image } from 'd3';
 import Header from '../../component/Header';
 import RangeSlider from 'react-bootstrap-range-slider';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
@@ -13,7 +13,7 @@ import InputColor from 'react-input-color';
 import { trim } from 'jquery';
 import { setTextRange } from 'typescript';
 import { API_URL } from '../../../config';
-
+import arrowHeadRight from '../../images/turn_arrow.png'
 const Chart = (props) => {
     console.log("props",props)
     const session = props.session;
@@ -72,8 +72,8 @@ const [unitArray, setunitArray] = useState({
         // console.log("newMin", new Date(parseInt(props.xmin*1e3)));
     }
     const [xAxisMax, setXaxisMax] = useState(props.xmax == "full" ? props.xmax :  new Date(parseInt(props.xmax*1e3))); 
-    const [yAxisMin, setYaxisMin] = useState(props.ymin);  
-    const [yAxisMax, setYaxisMax] = useState(props.ymax);
+    const [yAxisMin, setYaxisMin] = useState(parseFloat(props.ymin));  
+    const [yAxisMax, setYaxisMax] = useState(parseFloat(props.ymax));
     const unit = useRef(0);
     const [color, setColor] = useState(props.color);
     const group = props.group;
@@ -117,7 +117,7 @@ const [unitArray, setunitArray] = useState({
     const [currentAnnotation,setCurrentAnnotation] = useState(null) ; 
     
     // const [liveAnnotation,setLiveAnnotation] = useState([]) ; 
-
+    const [images , setImages] = useState([])
     let  liveAnnotation = [] ; 
     const [graphModal, setgraphModal] = useState(false);
     const toggleGraphModal = () => setgraphModal(!graphModal);
@@ -168,7 +168,7 @@ const [unitArray, setunitArray] = useState({
     const setStats = props.setStats ; 
     
     const [signalName, setSignalName] = useState({
-        pco2wave : "Raw PCO<sub>2</sub> Waveform",
+        pco2wave : "Raw PCO<sub>2</sub>",
         petco2 :  "PetCO<sub>2</sub> History",
         bpmhistory : "Breaths/min History",
         pco2b2b : "PCO<sub>2</sub> breath to breath",
@@ -180,18 +180,18 @@ const [unitArray, setunitArray] = useState({
         relativevpm : "Relative Volume/per min History",
         aborted_expm : "Aborted exhales/min History",
         bhpm : "Breath-holds/min",
-        b2b2hr : "Breath to breath heart rate",
+        b2b2hr : "Beat to Beat heart rate",
         hrhistory : "Heart rate History",
         rsahistory : "RSA History",
         b2brsa : "Beat to Beat RSA",
         bpm : "Breaths/min",
-        hf_avg : "Tachograph of RR",
-        b2brr_wave : "Arousal",
-        arousal_avg : "Parasympathetic Tone",
-        tone_avg : "Parasympathetic Reserve" , 
-        reserve_avg : "VLF Band",
-        vlf_avg : "LF Band",
-        lf_avg : "HF Band",
+        hf_avg : "HF Band",
+        b2brr_wave : "Tachograph of RR",
+        arousal_avg : "Activation",
+        tone_avg : "Parasympathetic Tone" , 
+        reserve_avg : "Parasympathetic Reserve",
+        vlf_avg : "VLF Band",
+        lf_avg : "LF Band",
         emg1_avg : "EMG 1 Average",
         emg2_avg : "EMG 2 Average",
         emg3_avg : "EMG 3 Average",
@@ -372,9 +372,10 @@ const [unitArray, setunitArray] = useState({
         
         userTimeOffset = userTimeOffset*60*1000 ; 
         // alert(userTimeOffset);
-        if(userTimeOffset > 0){
+        if(userTimeOffset > 0 || userTimeOffset < -60*60*1000){
             userTimeOffset += dstOffset()*60*1000  ; 
         }
+         
         // alert(userTimeOffset);
  
         
@@ -390,13 +391,22 @@ const [unitArray, setunitArray] = useState({
             let _taskArray = [] ; 
             let _recordArray = [] ; 
             let _tempAnnotation = textAnnotations ; 
+            let _tempImages = [] ; 
             let lastRecord  ; 
             let firstRecord = 0   ; 
+            let recId = 0 ; 
             let prevRecord = 0 ; 
             let endTask  = 0 ;
         // console.log(data[0]);
             data.map((v, i) => {
+  
+            //     if(v.z > 0 && record != 'all'  && v.x > 0 ){
 
+                       
+            //         firstRecord = v.x ; 
+              
+            
+            // }
                 // _x.push(new Date(v.x));
                 if(v.z > 0 && (record == 'all' || record == v.r) && v.x > 0 ){
                 lastRecord = v.x ; 
@@ -406,11 +416,7 @@ const [unitArray, setunitArray] = useState({
                        
                         firstRecord = v.x ; 
                   
-                    
-                        // console.log("Selected Stat" , signalModalData.stat )
-                    // console.log("First Data "+props.signal , data[0].x)
-                    // console.log("First Record show"+props.signal , new Date(parseInt((((v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  )))
-
+                
                 }
               
                 if(_npauseTime > 0){
@@ -514,7 +520,9 @@ const [unitArray, setunitArray] = useState({
                     }) 
                 
                     if( v.r != prevRecord ){
-                        _recordArray.push([xData,v.rname]);
+                        recId++ ; 
+                        let _recName = "Record - "+recId ; 
+                        _recordArray.push([xData,v.rname == "Normal" ? _recName : v.rname  ]);
                       
                         
                     }
@@ -587,8 +595,22 @@ const [unitArray, setunitArray] = useState({
                 if (i == (data.length - 1)) {
                     // alert("here");
                 // console.log(_x.length)
+                // console.log("records",_recordArray)
                 _recordArray.map((v,i) => {
-
+                    // let _xPer = new Date(_x[_x.length - 1]).getTime() - new Date(_x[0]).getTime() ;
+                    // _xPer = _xPer*0.015 ; 
+                    // _tempImages.push({
+                    //     source: arrowHeadRight,
+                    //     xref: "x",
+                    //     yref: "y",
+                    //     x: v[0],
+                    //     y: yAxisMax-(yAxisMax*0.1),
+                    //     sizex: (_xPer > 5000 ? 5000 : 3000 ),
+                    //     sizey: 100,
+                    //     xanchor: "left",
+                    //     yanchor: "bottom",
+                    //     pointNum: 1
+                    // })
                 _temptask.push(
                     {
                         type: 'rect',
@@ -613,6 +635,52 @@ const [unitArray, setunitArray] = useState({
                     
                 );
                 })
+
+                
+                if(_allTasks.length == 0){
+                    
+                    liveAnnotation.map((v,i) => {
+                      
+                        let xAnnTime = new Date(parseInt(((parseInt(v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
+                        // console.log("I ma here")
+                            // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
+                            _temptask.push(
+                                {
+                                    type: 'rect',
+                                    // x-reference is assigned to the x-values
+                                    xref: 'x',
+                                    // y-reference is assigned to the plot paper [0,1]
+                                    yref: 'paper',
+                                    x0: xAnnTime ,
+                                    y0: 0,
+                                    x1: xAnnTime ,
+                                    y1: 3,
+                                    // fillcolor: "#000" ,
+                                    opacity: 1,
+                                    line: {
+                                        color: 'rgb(255, 0, 0)',
+                                        width: 1,
+                                        dash:'dot'
+                                    },
+                                    name: v.z,
+                                    
+                        
+                                }
+                                
+                            );
+
+                           if(i == (liveAnnotation.length - 1)){
+                           
+                            setTaskMarkers(_temptask);
+                           }
+
+                        })
+                    // console.log(_temptask)
+                 
+             
+                }
+
+
                     _allTasks.map((v,i) => {
                         console.log(props.signal,v[2],v)
                         if(v[3] == "Paused" ){
@@ -752,28 +820,77 @@ const [unitArray, setunitArray] = useState({
 
                     }
 
-
+                    if(record == "all" ){
                     _recordArray.map((v,i) => {
-                        if(i > 0 ){
+                        // if(i > 0 ){
                         _tempAnnotation.push(
                             {
                                 xref: 'x',
                                 yref: 'y',
-                                x: new Date(new Date(v[0]).getTime() + 10000) ,
+                                x: new Date(new Date(v[0]).getTime()) ,
                                 y: yAxisMax-(yAxisMax*0.022),  
                                 textangle: 0,
-                                text: v[1],
+                                text: '',
                                 showarrow: true,
                                 arrowhead: 1,
-                                ax: -45, 
+                                ax: -20, 
                                 bgcolor: "#fff",
                                 ay:0,
                                 arrowcolor: "#FF0000",                 
                             },
                           
                         );
-                        }
+                        _tempAnnotation.push(
+                            {
+                                xref: 'x',
+                                yref: 'y',
+                                x: new Date(new Date(v[0]).getTime()) ,
+                                y: yAxisMax-(yAxisMax*0.2),  
+                                textangle: 270,
+                                text: v[1],
+                                showarrow: false,
+                                arrowhead: 1,
+                                ax: 0, 
+                                bgcolor: "#fff",
+                                ay:0,
+                                arrowcolor: "#FF0000",                 
+                            },
+                          
+                        );
+                        // }
                     })
+                }
+                    if(_allAnnotation.length == 0 ){
+                        liveAnnotation.map((v,i) => {
+                              
+                            let xAnnTime = new Date(parseInt(((parseInt(v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ))
+                                // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
+                                _tempAnnotation.push(
+                                    {
+                                        xref: 'x',
+                                        yref: 'y',
+                                        x: xAnnTime ,
+                                        y: 40,  
+                                        textangle: 270,
+                                        text: v.z,
+                                        showarrow: true,
+                                        arrowhead: 0,
+                                        ax: 5,
+                                        bgcolor: "#fff",
+                                        arrowcolor: "#FF0000", 
+                                        
+                                        ay:5
+                            
+                                    }
+                                    
+                                );
+
+                               if(i == (liveAnnotation.length - 1)){
+                                 
+                                   setTextAnnotations(_tempAnnotation);                                 
+                               }
+                            })
+                    }
 
                     _allAnnotation.map((v,i) => {
                         // console.log(v)
@@ -868,7 +985,7 @@ const [unitArray, setunitArray] = useState({
                     }
 
                     setLength(_length);
-                   
+                    setImages(_tempImages)
                     setTextTooltip(_toolText);
                     setYAxis2(_threshold)
                     if(average == 30){
@@ -978,7 +1095,27 @@ const [unitArray, setunitArray] = useState({
         else if(new Date(e['xaxis.range[1]']) < new Date(xAxis[0])){
             setXaxisMax(new Date(xAxis[xAxis.length - 1]))
         }
-        
+        // let _tempImages = [] ; 
+        // images.map((v,i) => {
+        //     let _xPer = new Date(e['xaxis.range[1]']).getTime() - new Date(e['xaxis.range[0]']).getTime() ;
+        //     _xPer = _xPer*0.015 ; 
+        //     _tempImages.push({
+        //         source: arrowHeadRight,
+        //         xref: "paper",
+        //         yref: "paper",
+        //         x: v[0],
+        //         y: yAxisMax-(yAxisMax*0.1),
+        //         sizex: 100,
+        //         sizey: 100,
+        //         xanchor: "left",
+        //         yanchor: "bottom",
+        //         pointNum: 1
+        //     })
+        //     if(i == (images.length - 1)){
+        //         setImages(_tempImages)
+        //     }
+        // })
+
 }
 
 useEffect(() => {    
@@ -1650,7 +1787,7 @@ const handleKeypress = (e) => {
                             text: textTooltip,
                        
                             marker: { 
-                            color:  type == "obar" ?  "rgba(58,200,225,0)" : color ,
+                            color:  type == "obar" ?  color.hex ? color.hex+"43" : color+"43" : color ,
                             line: {
                                 color: color,
                                 dash: signalLinetype,
@@ -1665,7 +1802,7 @@ const handleKeypress = (e) => {
                             textposition: "none",
                             type:  type == "obar" ? "bar" : type,
                             
-                            hovertemplate: '<b>'+signalModalData.stat.toUpperCase()+'</b><br><i>Y</i>: %{y:.2f}' +
+                            hovertemplate: '<b>'+ ((  props.signal != "pco2wave"  && props.signal != "pco2b2b"  && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa") ?  signalModalData.stat.toUpperCase() : 'Raw Data' ) +'</b><br><i>Y</i>: %{y:.2f}' +
                             '<br><b>X</b>: %{x}<br>' +
                             '<extra></extra>',
                         },
@@ -1692,7 +1829,7 @@ const handleKeypress = (e) => {
                         yaxis: {rangemode: 'tozero'},
                         xaxis: {rangemode: 'tozero'},
                         hovermode: true,
-                       
+                        images: images,
                         dragmode: dragMode, 
                         showlegend: false,
                         shapes: modal.annotation === 1 ? taskMarkers : [],
@@ -1712,7 +1849,7 @@ const handleKeypress = (e) => {
                             // visible : false
                         },
                         yaxis : {
-                            range: (modal.units === "mmHg" || modal.units === "") ? [yAxisMin, yAxisMax] : [yAxisMin,yAxisMax*0.13],
+                            range: (modal.units === "mmHg" || modal.units === "") ? [yAxisMin, yAxisMax] : [yAxisMin,(yAxisMax+yAxisMax*0.13)],
                             fixedrange: true,
                             showgrid: modal.showGrid,
                             side : modal.position == "1" ? "left" : "right"
@@ -2239,7 +2376,7 @@ const handleKeypress = (e) => {
                                             <div className='max-axis'>
                                                 <input placeholder='0' value={yAxisMax} onChange={(e) => {
                                                     let {value = ""} = e.target
-                                                    setYaxisMax(value)
+                                                    setYaxisMax(parseFloat(value))
                                                 }}/>
                                                 <span>Max</span>
                                             </div>

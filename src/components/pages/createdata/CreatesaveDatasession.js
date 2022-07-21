@@ -142,7 +142,7 @@ const CreatesaveDatasession = () => {
                 </div>
                 <div className="right-section">
                     <div className="groupreport-list-head">
-                        <h3>Pre-configured Reports</h3>
+                        <h3>Preconfigured Reports</h3>
                     </div>
                     <ul className="groupreport-list">
 
