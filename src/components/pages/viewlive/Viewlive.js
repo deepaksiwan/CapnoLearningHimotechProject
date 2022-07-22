@@ -167,83 +167,34 @@ const Viewlive = () => {
     }
 
 
-
-
     const ViewlivesessionImage = () => {
-
         let dataType = 3;
-
-        fetch(API_URL + "/get/live/sessionimage/" + sessionid + "/" + dataType,
+        fetch(API_URL + "/get/live/sessionimage/download/" + sessionid + "/" + dataType,
             {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': accessToken,
+                    "Content-Type": "application/pdf"
+
                 },
             }
-        ).then((response) => {
-            if (response.status == 200) {
-                response.json().then((resp) => {
+        ).then(res => res.blob())
+            .then(response => {
+                //Create a Blob from the PDF Stream
 
-                    let _clientName = resp.firstname + " " + resp.lastname;
-                    let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
-                    let _sessionDate = resp.sessionDate;
-                    let liveimg = resp.dataimg;
-                    Viewliveimg(_clientName, _trainerName, liveimg, _sessionDate)
-
+                const file = new Blob([response], {
+                    type: "application/pdf"
                 });
-            }
-            else if (response.status == 401) {
-                logout()
-            }
-            else {
-                alert("network error")
-            }
+                //Build a URL from the file
+                const fileURL = URL.createObjectURL(file);
+                // Open the URL on new Window
+                window.open(fileURL);
+                // download(fileURL);
 
-
-        })
-
-
+            })
     }
 
-    const Viewliveimg = (_clientName, _trainerName, liveimg, _sessionDate, _pdfname) => {
-
-        const doc = new jsPDF();
-        for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
-            doc.setPage(pageNumber)
-            doc.setTextColor(0, 0, 0);
-            doc.text('Capnolearning Report', 10, 10,
-                { styles: { fontSize: 20, fontWeight: 'bold' } })
-            doc.setDrawColor(0, 0, 0);
-            doc.line(10, 15, 600, 15);
-            doc.setFontSize(10)
-
-            doc.text(_sessionDate, 35, 25)
-            doc.text(_clientName, 23, 30);
-            doc.text(_trainerName, 25, 35);
-            doc.setFont(undefined, 'bold');
-            doc.text("Session Date:", 10, 25)
-            doc.text("Client:", 10, 30);
-            doc.text("Trainer:", 10, 35);
-            // doc.setFont(undefined, 'bold')
-
-            var sessionImagerequiredPages = liveimg.length;
-            console.log(sessionImagerequiredPages)
-            for (var i = 0; i < sessionImagerequiredPages; i++) {
-                let liveimgs = liveimg[i].sessiondata;
-                doc.addImage(liveimgs, 5, 45, 200, 110);
-                if (i != liveimg.length - 1) {
-                    doc.addPage();
-                }
-            }
-
-
-
-
-        }
-
-        window.open(doc.output('bloburl'))
-    }
+    
+    
 
     const downloadlivesessionnotes = () => {
 
