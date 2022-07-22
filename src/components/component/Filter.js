@@ -436,7 +436,11 @@ const Filter = () => {
                         </div>
                         <div className="select-client">
                             <select ref={clientSelected} onChange={updateSelectClient}>
-                                <option className="selected-bold">{t('Choose-a-client')}</option>
+
+                                {
+                                    selectedGroup == "true"? <option className="selected-bold">Choose a Group</option>: <option className="selected-bold">{t('Choose-a-client')}</option>
+                                }
+                                
 
                                 {
                                     clients.length > 0 && clients.map((client, i) =>

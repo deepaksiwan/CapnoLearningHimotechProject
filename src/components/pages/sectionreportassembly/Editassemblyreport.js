@@ -565,7 +565,7 @@ const Editassemblyreport = () => {
                                     <div id="loader"></div>
                                 }
                             </a></div>
-                            <div className="assembly-btn ml-assembly"><a href="javascript:void" action="" onClick={downloadpdf}>SAVE & DOWNLOAD PDF
+                            <div className="assembly-btn ml-assembly"><a href="javascript:void" action="" onClick={downloadpdf}>DOWNLOAD PDF
                                 {
                                     Loader &&
                                     <div id="loader"></div>
