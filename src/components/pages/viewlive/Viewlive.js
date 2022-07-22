@@ -1,5 +1,5 @@
-import React, {useEffect,useState} from "react";
-import {Link,useParams, Router} from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Link, useParams, Router } from 'react-router-dom';
 import i18n from "i18next";
 import { jsPDF } from "jspdf";
 import download from 'downloadjs';
@@ -19,30 +19,30 @@ const Viewlive = () => {
     const sessionid = localStorage.getItem('selectedSession');
     const [sessions, setsessions] = useState([]);
     const [session, setsession] = useState([]);
-    const [selectedSession,setSelectedSession] = useState() ;
+    const [selectedSession, setSelectedSession] = useState();
 
 
     useEffect(() => {
-        
+
         setInterval(() => {
             setSelectedSession(localStorage.getItem('selectedSession'));
-      
+
         }, 1000);
 
-    }, []); 
+    }, []);
 
     useEffect(() => {
         livesessionNote();
         livesessionImage();
         zoomRecording();
-        
-    },[selectedSession])
+
+    }, [selectedSession])
 
 
     const livesessionNote = () => {
 
-       
-        fetch(API_URL+"/session/data/type?type=3&session_id=" + sessionid,
+
+        fetch(API_URL + "/session/data/type?type=3&session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {
@@ -57,7 +57,7 @@ const Viewlive = () => {
                     setsessions(resp.sessions);
                     // let len = setsessions.length;
                     //   console.warn(len);
-                   
+
 
                 });
             }
@@ -74,8 +74,8 @@ const Viewlive = () => {
 
     const livesessionImage = () => {
 
-       
-        fetch(API_URL+"/session/data/type?type=4&session_id=" + sessionid,
+
+        fetch(API_URL + "/session/data/type?type=4&session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {
@@ -90,7 +90,7 @@ const Viewlive = () => {
                     setsessions(resp.sessions);
                     // let len = setsessions.length;
                     //   console.warn(len);
-                   
+
 
                 });
             }
@@ -106,8 +106,8 @@ const Viewlive = () => {
     }
     const zoomRecording = () => {
 
-       
-        fetch(API_URL+"/session/info?session_id=" + sessionid,
+
+        fetch(API_URL + "/session/info?session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {
@@ -119,13 +119,13 @@ const Viewlive = () => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     console.log("result", resp);
-                    if(resp.session.length >0){
+                    if (resp.session.length > 0) {
                         setsession(resp.session[0].link);
 
                     }
                     // let len = session.length;
                     //   console.warn(len);
-                   
+
 
                 });
             }
@@ -147,13 +147,13 @@ const Viewlive = () => {
                 method: 'GET',
                 headers: {
                     "Content-Type": "application/pdf"
-    
+
                 },
             }
         ).then(res => res.blob())
             .then(response => {
                 //Create a Blob from the PDF Stream
-              
+
                 const file = new Blob([response], {
                     type: "application/pdf"
                 });
@@ -162,11 +162,11 @@ const Viewlive = () => {
                 //Open the URL on new Window
                 // window.open(fileURL);
                 download(fileURL);
-    
+
             })
     }
 
-   
+
 
 
     const ViewlivesessionImage = () => {
@@ -184,12 +184,12 @@ const Viewlive = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                  
-                    let _clientName = resp.firstname + " " + resp.lastname ;
-                    let _trainerName = resp.data[0].firstname+ " " + resp.data[0].lastname ;
+
+                    let _clientName = resp.firstname + " " + resp.lastname;
+                    let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _sessionDate = resp.sessionDate;
-                    let _pdfname = resp.pdfname;
-                    Viewliveimg(_clientName , _trainerName , resp.result,_sessionDate)
+                    let liveimg = resp.dataimg;
+                    Viewliveimg(_clientName, _trainerName, liveimg, _sessionDate)
 
                 });
             }
@@ -203,33 +203,45 @@ const Viewlive = () => {
 
         })
 
-       
+
     }
 
-    const Viewliveimg = (_clientName,_trainerName, _image, _sessionDate,_pdfname)=>{
-      
+    const Viewliveimg = (_clientName, _trainerName, liveimg, _sessionDate, _pdfname) => {
+
         const doc = new jsPDF();
         for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
             doc.setPage(pageNumber)
-        doc.setTextColor(0, 0, 0);
-        doc.text('Capnolearning Report', 10, 10,
-            {styles:{ fontSize: 20,fontWeight: 'bold'}})
-        doc.setDrawColor(0, 0, 0);
-        doc.line(10, 15, 600, 15);
-        doc.setFontSize(10)
-        
-        doc.text(_sessionDate ,35,25)
-        doc.text( _clientName,23,30);
-        doc.text( _trainerName,25,35);
-        doc.setFont(undefined, 'bold');
-        doc.text("Session Date:" ,10,25)
-        doc.text("Client:" ,10,30);
-        doc.text("Trainer:",10,35);
-        // doc.setFont(undefined, 'bold')
-        doc.addImage(_image, 5, 45,200,110);
-   
+            doc.setTextColor(0, 0, 0);
+            doc.text('Capnolearning Report', 10, 10,
+                { styles: { fontSize: 20, fontWeight: 'bold' } })
+            doc.setDrawColor(0, 0, 0);
+            doc.line(10, 15, 600, 15);
+            doc.setFontSize(10)
+
+            doc.text(_sessionDate, 35, 25)
+            doc.text(_clientName, 23, 30);
+            doc.text(_trainerName, 25, 35);
+            doc.setFont(undefined, 'bold');
+            doc.text("Session Date:", 10, 25)
+            doc.text("Client:", 10, 30);
+            doc.text("Trainer:", 10, 35);
+            // doc.setFont(undefined, 'bold')
+
+            var sessionImagerequiredPages = liveimg.length;
+            console.log(sessionImagerequiredPages)
+            for (var i = 0; i < sessionImagerequiredPages; i++) {
+                let liveimgs = liveimg[i].sessiondata;
+                doc.addImage(liveimgs, 5, 45, 200, 110);
+                if (i != liveimg.length - 1) {
+                    doc.addPage();
+                }
+            }
+
+
+
+
         }
-    
+
         window.open(doc.output('bloburl'))
     }
 
@@ -248,12 +260,12 @@ const Viewlive = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                  
-                    let _clientName = resp.firstname + " " + resp.lastname ;
-                    let _trainerName = resp.data[0].firstname+ " " + resp.data[0].lastname ;
+
+                    let _clientName = resp.firstname + " " + resp.lastname;
+                    let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _sessionDate = resp.sessionDate;
                     let _pdfname = resp.pdfname;
-                    downloadlivenote(_clientName , _trainerName , resp.result,_sessionDate)
+                    downloadlivenote(_clientName, _trainerName, resp.result, _sessionDate)
 
                 });
             }
@@ -267,32 +279,32 @@ const Viewlive = () => {
 
         })
 
-       
+
     }
 
-    const downloadlivenote = (_clientName,_trainerName, _notes, _sessionDate)=>{
-      
+    const downloadlivenote = (_clientName, _trainerName, _notes, _sessionDate) => {
+
         const doc = new jsPDF();
         doc.setTextColor(0, 0, 0);
         doc.text('Capnolearning Report', 10, 10,
-            {styles:{ fontSize: 20,fontWeight: 'bold'}}) 
-       
+            { styles: { fontSize: 20, fontWeight: 'bold' } })
+
         doc.setDrawColor(0, 0, 0);
         doc.line(10, 15, 600, 15);
         doc.setFontSize(10)
-        doc.text(_sessionDate ,35,25)
-        doc.text( _clientName,23,30);
-        doc.text( _trainerName,25,35);
+        doc.text(_sessionDate, 35, 25)
+        doc.text(_clientName, 23, 30);
+        doc.text(_trainerName, 25, 35);
         doc.setFont(undefined, 'bold');
-        doc.text("Session Date:" ,10,25)
-        doc.text("Client:" ,10,30);
-        doc.text("Trainer:",10,35);
+        doc.text("Session Date:", 10, 25)
+        doc.text("Client:", 10, 30);
+        doc.text("Trainer:", 10, 35);
         doc.setFont(undefined, 'normal');
-        doc.text(_notes, 10,52);
+        doc.text(_notes, 10, 52);
         doc.setFontSize(13)
-        doc.text('Session Report Notes', 10, 45, {styles:{ fontSize: 13,fontWeight: 'bold'}})
+        doc.text('Session Report Notes', 10, 45, { styles: { fontSize: 13, fontWeight: 'bold' } })
         doc.line(10, 47, 55, 47);
-        doc.save(_sessionDate +".pdf");
+        doc.save(_sessionDate + ".pdf");
     }
 
 
@@ -311,12 +323,12 @@ const Viewlive = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                  
-                    let _clientName = resp.firstname + " " + resp.lastname ;
-                    let _trainerName = resp.data[0].firstname+ " " + resp.data[0].lastname ;
+
+                    let _clientName = resp.firstname + " " + resp.lastname;
+                    let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _sessionDate = resp.sessionDate;
                     let _pdfname = resp.pdfname;
-                    Viewlivenote(_clientName , _trainerName , resp.result,_sessionDate)
+                    Viewlivenote(_clientName, _trainerName, resp.result, _sessionDate)
 
                 });
             }
@@ -330,30 +342,30 @@ const Viewlive = () => {
 
         })
 
-       
+
     }
 
-    const Viewlivenote = (_clientName,_trainerName, _notes, _sessionDate)=>{
-      
+    const Viewlivenote = (_clientName, _trainerName, _notes, _sessionDate) => {
+
         const doc = new jsPDF();
         doc.setTextColor(0, 0, 0);
         doc.text('Capnolearning Report', 10, 10,
-            {styles:{ fontSize: 20,fontWeight: 'bold'}}) 
-       
+            { styles: { fontSize: 20, fontWeight: 'bold' } })
+
         doc.setDrawColor(0, 0, 0);
         doc.line(10, 15, 600, 15);
         doc.setFontSize(10)
-        doc.text(_sessionDate ,35,25)
-        doc.text( _clientName,23,30);
-        doc.text( _trainerName,25,35);
+        doc.text(_sessionDate, 35, 25)
+        doc.text(_clientName, 23, 30);
+        doc.text(_trainerName, 25, 35);
         doc.setFont(undefined, 'bold');
-        doc.text("Session Date:" ,10,25)
-        doc.text("Client:" ,10,30);
-        doc.text("Trainer:",10,35);
+        doc.text("Session Date:", 10, 25)
+        doc.text("Client:", 10, 30);
+        doc.text("Trainer:", 10, 35);
         doc.setFont(undefined, 'normal');
-        doc.text(_notes, 10,52);
+        doc.text(_notes, 10, 52);
         doc.setFontSize(13)
-        doc.text('Session Report Notes', 10, 45, {styles:{ fontSize: 13,fontWeight: 'bold'}})
+        doc.text('Session Report Notes', 10, 45, { styles: { fontSize: 13, fontWeight: 'bold' } })
         doc.line(10, 47, 55, 47);
         window.open(doc.output('bloburl'))
     }
@@ -377,28 +389,28 @@ const Viewlive = () => {
                     <div className="create-section">
                         <ul className="create-list">
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null")? "deactivate" : ""} onClick={() => Viewlivesessionnotes()}>{t('View-Live-Session-Notes')}</a></div>
+                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => Viewlivesessionnotes()}>{t('View-Live-Session-Notes')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null")? "deactivate" : ""} onClick={() => downloadlivesessionnotes()}>{t('Download-Live-Session-Notes')}</a></div>
+                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => downloadlivesessionnotes()}>{t('Download-Live-Session-Notes')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null")? "deactivate" : ""} onClick={() => ViewlivesessionImage()}>{t('View-Live-Session-Images')}</a></div>
+                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => ViewlivesessionImage()}>{t('View-Live-Session-Images')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null")? "deactivate" : ""} onClick={() => downloadlivesessionImage()}>{t('Download-Live-Session-Images')}</a></div>
+                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => downloadlivesessionImage()}>{t('Download-Live-Session-Images')}</a></div>
                             </li>
                             <li>
                                 <div className="create-list-box" >
                                     {/* {session} */}
                                     {
-                                       ( session == null || selectedSession === "null") ?
-                                        <a href="#" data-toggle="modal" data-target="#viewModal"  >{t('View/Link-Zoom-Recordings')}</a>
-                                        :
-                                        <a href="#" data-toggle="modal" data-target="#viewleModal1"  >{t('View/Link-Zoom-Recordings')}</a>
+                                        (session == null || selectedSession === "null") ?
+                                            <a href="#" data-toggle="modal" data-target="#viewModal"  >{t('View/Link-Zoom-Recordings')}</a>
+                                            :
+                                            <a href="#" data-toggle="modal" data-target="#viewleModal1"  >{t('View/Link-Zoom-Recordings')}</a>
 
-                                    }   
-                                    </div>
+                                    }
+                                </div>
                             </li>
                         </ul>
                         <div class="modal fade" id="viewleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -412,7 +424,7 @@ const Viewlive = () => {
                                         </button>
                                     </div>
                                     <div class="addlink-input">
-                                       <input placeholder="Add link here" />
+                                        <input placeholder="Add link here" />
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="close-btn" data-dismiss="modal">Close</button>
@@ -431,7 +443,7 @@ const Viewlive = () => {
                                         </button>
                                     </div>
                                     <div class="addlink-input">
-                                       <input placeholder="Add link here" />
+                                        <input placeholder="Add link here" />
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="close-btn" data-dismiss="modal">Close</button>
