@@ -36,7 +36,7 @@ const Filter = () => {
     const selectedtrainerInactive = localStorage.getItem('selectedtrainerInactive');
     const selectedclientActive = localStorage.getItem('selectedclientActive');
     const selectedclientInactive = localStorage.getItem('selectedclientInactive');
-    const selectedHomework = localStorage.getItem('selectedHomework');
+    const [selectedHomework,setselectedHomework] = useState(localStorage.getItem('selectedHomework'));
     const userType = localStorage.getItem('userType');
 
     const accessToken = localStorage.getItem('accessToken');
@@ -228,10 +228,12 @@ const Filter = () => {
             _hw = 1;
         }
         if (cid.current.checked) {
-      
+            setselectedHomework(true)   ;
             localStorage.setItem('selectedHomework', true);
         }
         else {
+            setselectedHomework(false)   ;
+
             localStorage.setItem('selectedHomework', false);
 
         }
@@ -460,7 +462,7 @@ const Filter = () => {
                     <div className="main-checkbox">
                     <div className="checkbox-wrp">
                         <div class="custom-radios">
-                            <input type="checkbox" id="cid2" onChange={getSession} ref={cid} defaultChecked={(selectedHomework === "true" ? true : false)} />
+                            <input type="checkbox" id="cid2" onChange={getSession}  defaultChecked={(selectedHomework === "false" ? true : false)} />
                             <label for="cid2">
                                 <span className="redious">
                                 </span>
