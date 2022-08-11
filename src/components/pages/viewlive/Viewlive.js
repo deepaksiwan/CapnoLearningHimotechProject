@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
+import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import i18n from "i18next";
 import { jsPDF } from "jspdf";
 import download from 'downloadjs';
@@ -20,7 +21,10 @@ const Viewlive = () => {
     const [sessions, setsessions] = useState([]);
     const [session, setsession] = useState([]);
     const [selectedSession, setSelectedSession] = useState();
-
+    const [downloaderModal, setDownloaderModal] = useState(false);
+    const DownloaderToggleModal = () => setDownloaderModal(!downloaderModal);
+    const [openModal, setOpenModal] = useState(false);
+    const openToggleModal = () => setOpenModal(!openModal);
 
     useEffect(() => {
 
@@ -162,6 +166,7 @@ const Viewlive = () => {
                 //Open the URL on new Window
                 // window.open(fileURL);
                 download(fileURL);
+                DownloaderToggleModal();
 
             })
     }
@@ -190,6 +195,8 @@ const Viewlive = () => {
                 window.open(fileURL);
                 // download(fileURL);
 
+                openToggleModal();
+
             })
     }
 
@@ -217,7 +224,7 @@ const Viewlive = () => {
                     let _sessionDate = resp.sessionDate;
                     let _pdfname = resp.pdfname;
                     downloadlivenote(_clientName, _trainerName, resp.result, _sessionDate)
-
+                    DownloaderToggleModal();
                 });
             }
             else if (response.status == 401) {
@@ -274,7 +281,7 @@ const Viewlive = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-
+                    openToggleModal();
                     let _clientName = resp.firstname + " " + resp.lastname;
                     let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _sessionDate = resp.sessionDate;
@@ -314,7 +321,7 @@ const Viewlive = () => {
         doc.text("Client:", 10, 30);
         doc.text("Trainer:", 10, 35);
         doc.setFont(undefined, 'normal');
-        doc.text(_notes, 10, 52);
+        doc.text(_notes?_notes: "No note found", 10, 52);
         doc.setFontSize(13)
         doc.text('Session Report Notes', 10, 45, { styles: { fontSize: 13, fontWeight: 'bold' } })
         doc.line(10, 47, 55, 47);
@@ -340,16 +347,16 @@ const Viewlive = () => {
                     <div className="create-section">
                         <ul className="create-list">
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => Viewlivesessionnotes()}>{t('View-Live-Session-Notes')}</a></div>
+                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => {Viewlivesessionnotes(); openToggleModal()}}>{t('View-Live-Session-Notes')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => downloadlivesessionnotes()}>{t('Download-Live-Session-Notes')}</a></div>
+                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => {downloadlivesessionnotes(); DownloaderToggleModal()}}>{t('Download-Live-Session-Notes')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => ViewlivesessionImage()}>{t('View-Live-Session-Images')}</a></div>
+                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => {ViewlivesessionImage(); openToggleModal()}}>{t('View-Live-Session-Images')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => downloadlivesessionImage()}>{t('Download-Live-Session-Images')}</a></div>
+                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => {downloadlivesessionImage(); DownloaderToggleModal() }}>{t('Download-Live-Session-Images')}</a></div>
                             </li>
                             <li>
                                 <div className="create-list-box" >
@@ -406,6 +413,43 @@ const Viewlive = () => {
                     </div>
                 </div>
             </div>
+
+            <Modal isOpen={downloaderModal} toggle={DownloaderToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={DownloaderToggleModal}><span className="ml-1 roititle font-weight-bold">Downloading</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-p">
+                        <div class="loading2">
+                            <div class="dot">L</div>
+                            <div class="dot">O</div>
+                            <div class="dot">A</div>
+                            <div class="dot">D</div>
+                            <div class="dot">I</div>
+                            <div class="dot">N</div>
+                            <div class="dot">G</div>
+                            <span class="text">Please Wait...</span>
+                        </div>
+                    </div>
+                </ModalBody>
+
+            </Modal>
+            <Modal isOpen={openModal} toggle={openToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={openToggleModal}><span className="ml-1 roititle font-weight-bold">Opening</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-p">
+                        <div class="loading2">
+                            <div class="dot">O</div>
+                            <div class="dot">P</div>
+                            <div class="dot">E</div>
+                            <div class="dot">N</div>
+                            <div class="dot">I</div>
+                            <div class="dot">N</div>
+                            <div class="dot">G</div>
+                            <span class="text">Please Wait...</span>
+                        </div>
+                    </div>
+                </ModalBody>
+
+            </Modal>
         </div>
     )
 }
