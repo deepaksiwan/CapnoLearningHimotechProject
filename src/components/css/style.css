@@ -121,13 +121,17 @@ h3{
 
 .border-b{
   position: absolute;
-  padding: 13px 30px 10px 30px;
+  padding: 10px 30px 10px 30px;
   background-color: #800080;
   box-shadow: 0 0 8px 1px rgb(0 0 0 / 45%);
   width: 100%;
   z-index: 1000;
 }
-
+select, option { 
+  -webkit-font-feature-settings: "ordn";
+  -moz-font-feature-settings: "ordn";
+  font-feature-settings: "ordn";
+}
 .header-box{
   display: flex;
   justify-content: space-between;

@@ -9,16 +9,17 @@ import { csv } from 'd3';
 const CreatesaveDatasession = () => {
     const accessToken = localStorage.getItem('accessToken');
     const session = localStorage.getItem('selectedSession');
- 
+    const userId  = localStorage.getItem('user_id');
     const [sessions, setsessions] = useState([]);
     const [emgAvg, setEmgAvg] = useState(false);
     const [emgRaw, setEmgRaw] = useState(false);
+    const [hrv, setHrv] = useState(0);
     
     useEffect(() => {
         Report();
+        getUser();
 
-
-    }, []);
+    }, [userId]);
 
 
     const Report = () => {
@@ -131,6 +132,39 @@ const CreatesaveDatasession = () => {
         })
     }
 
+    async function getUser() {
+           
+            
+        fetch(API_URL+ "/user/profile/"+userId,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': accessToken,
+            },
+        }
+    ).then((response) => {
+        if (response.status == 200) {
+            response.json().then((resp) => {
+                setHrv(resp.owner[0].qthird);
+                 
+
+            });
+        }
+        else if (response.status == 401) {
+            logout()
+        }
+        else {
+            alert("network error")
+        }
+
+
+    })
+      
+}
+
+    
+
 
 
     return (
@@ -149,9 +183,10 @@ const CreatesaveDatasession = () => {
                         {
                             sessions.map((sessions) =>
                                 {
-                                    if((sessions.id == 46 && emgAvg) || (sessions.id == 47 && emgRaw) || (sessions.id != 46 && sessions.id != 47) ){
+                                    if((sessions.id == 46 && emgAvg) || (sessions.id == 47 && emgRaw) || (sessions.id != 46 && sessions.id != 47)  ){
+                                        
                                     return(
-                                        <li><a href={"/create/report/0/" + sessions.id + "/" + session + "/all/" + sessions.id}   >{sessions.name}</a></li>
+                                        <li><a href={"/create/report/0/" + sessions.id + "/" + session + "/all/" + sessions.id}  dangerouslySetInnerHTML={{__html : sessions.name }} ></a></li>
                                     )
                                     }
                                 }

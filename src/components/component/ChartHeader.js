@@ -76,7 +76,7 @@ const ChartHeader = (props) => {
     const setrequestProcessingModal  = props.setrequestProcessingModal ; 
     const setrequestProcesedModal  = props.setrequestProcesedModal ; 
     useEffect(() => {
-        console.log("mydata" , signalStat);
+        // console.log("mydata" , signalStat);
     },signalStat)
     useEffect(() => {
         Report();
@@ -533,7 +533,7 @@ const ChartHeader = (props) => {
 
     const reportconfigupdate = () => {
         let _configId = reportconfig.current.value;
-        window.location.href = "/create/report/" + showclock + "/" + _configId + "/" + session + "/" + record + "/" + _configId ; 
+        window.location.href = "/create/report/" + showclock + "/" + _configId + "/" + session + "/all/" + _configId ; 
     }
 
     const reportconfigalternateupdate = () => {
@@ -687,7 +687,7 @@ const ChartHeader = (props) => {
 
         let dataType = 3;
 
-        fetch(API_URL + "/get/live/sessionimage/" + sessionid + "/" + dataType,
+        fetch(API_URL + "/get/live/sessionimage/download/" + sessionid + "/" + dataType,
             {
                 method: 'GET',
                 headers: {
@@ -695,35 +695,24 @@ const ChartHeader = (props) => {
                     'x-access-token': accessToken,
                 },
             }
-        ).then((response) => {
-            if (response.status == 200) {
-                response.json().then((resp) => {
-                    if(resp.length == 0){
-                        setrequestProcessingModal(false)
-                    }
-                    else{
-                        let _clientName = resp.firstname + " " + resp.lastname ;
-                        let _trainerName = resp.data[0].firstname+ " " + resp.data[0].lastname ;
-                        let _sessionDate = resp.sessionDate;
-                        let _pdfname = resp.pdfname;
-                        Viewliveimg(_clientName , _trainerName , resp.result,_sessionDate)
-                    }
-                  
-            
-
-                });
-            }
-            else if (response.status == 401) {
-                logout()
-            }
-            else {
+    
+                ).then(res => res.blob())
+                .then(response => {
+                    //Create a Blob from the PDF Stream
+    
+                    const file = new Blob([response], {
+                        type: "application/pdf"
+                    });
+                    //Build a URL from the file
+                    const fileURL = URL.createObjectURL(file);
+                    // Open the URL on new Window
+                    window.open(fileURL);
         setrequestProcessingModal(false) ;
 
-                alert("No live session images found.")
-            }
-
-
-        })
+                    // download(fileURL);
+    
+                })
+  
 
        
     }
@@ -781,7 +770,7 @@ const ChartHeader = (props) => {
                                 <li>
                                 <ReactTooltip />
 
-                                <ExcelFile filename={"Statistics - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname  } element={<a href="javascript:void" onClick={exportExcel} data-tip="Export session statistics as Excel Sheet."   ><i class="fa fa-upload" aria-hidden="true"></i></a>}>
+                                <ExcelFile filename={"Statistics - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname  } element={<a href="javascript:void" onClick={exportExcel} data-tip="Export statistics to Excel."   ><i class="fa fa-upload" aria-hidden="true"></i></a>}>
                                
                                     {
                                        graphs.map((v,i) => {
@@ -848,7 +837,7 @@ const ChartHeader = (props) => {
                                     sessions.map((sessions) => {
                                         if((sessions.id == 46 && emgAvg) || (sessions.id == 47 && emgRaw) || (sessions.id != 46 && sessions.id != 47) ){
                                         return (
-                                            <option selected={sessions.id == config ? true : false} value={sessions.id}>{sessions.name}</option>
+                                            <option selected={sessions.id == config ? true : false} value={sessions.id} dangerouslySetInnerHTML={{__html: sessions.name}} ></option>
                                         )
                                         }
 
@@ -942,11 +931,9 @@ const ChartHeader = (props) => {
                         <ModalHeader toggle={notesModalToggle}><span className="ml-1 roititle modal-head"> Live Session Notes</span></ModalHeader>
                         <ModalBody>
                            <p id="liveNotes">{liveNotes && liveNotes.length > 0 ?
-                               liveNotes.map((v,i) => {
-                                   return(
-                                    <p dangerouslySetInnerHTML={{__html: v.sessiondata}}></p>
-                                   )
-                               })
+                            
+                                    <p dangerouslySetInnerHTML={{__html: liveNotes[0].sessiondata}}></p>
+                                  
                             : "No notes available."}</p>
                             
                         <div className='d-flex justify-content-around mt-3'>

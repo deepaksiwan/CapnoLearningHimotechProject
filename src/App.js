@@ -69,6 +69,7 @@ import GroupChartTable from './components/pages/chartTable/GroupChartTable';
 import ViewGroupChartTable from './components/pages/chartTable/ViewGroupChartTable';
 import MultiChartTable from './components/pages/chartTable/MultiChartTable';
 import Vieweditassemblyreport from './components/pages/sectionreportassembly/Vieweditassemblyreport';
+import Mantainance from './components/pages/login/Mantainance';
 
 function App(){
 	return(
@@ -147,7 +148,9 @@ function App(){
 
 				<Route  path="/edit/profile" element={<Editprofile />} /> 
 			 	<Route path="" element={<Privateroutelogin />}>
+		 
 				<Route path="/login" element={<Login />} />
+				{/* <Route path="/login" element={<Mantainance />} /> */}
 				</Route>
 				
 			</Routes>

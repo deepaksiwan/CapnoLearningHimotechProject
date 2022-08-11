@@ -290,7 +290,7 @@ const ChartExportedHeader = (props) => {
                                 <li data-tip="Save Report as PDF"><a href="javascript:void"   onClick={saveScreenshot}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="#" for="file"><i class="fa fa-download" aria-hidden="true"></i></a>
                                 </li> */}
-                                <li data-tip="Load Different Session">
+                                <li data-tip="Load Different Client/Session">
                                     <label for="icon"><i class="fa fa-download whiteicon" aria-hidden="true"></i>
                                     </label>
                                     <input type="file" id="icon" name=" " style={{ display: "none" }} onChange={fileupload} webkitdirectory="true"

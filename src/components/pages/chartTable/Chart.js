@@ -67,6 +67,8 @@ const [unitArray, setunitArray] = useState({
     emg4_wave : ["uV"]
 });
 
+const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"] ;
+
     const [xAxisMin, setXaxisMin] = useState(props.xmin == 0 ? props.xmin :  new Date(parseInt(props.xmin*1e3))); 
     if(props.signal == "pco2wave"  ){
         // console.log("newMin", new Date(parseInt(props.xmin*1e3)));
@@ -86,7 +88,7 @@ const [unitArray, setunitArray] = useState({
     const otherConfig = props.otherConfig ? JSON.parse(props.otherConfig) : {
         xrange: 0, 
         units: (unitArray[props.signal][0] ? unitArray[props.signal][0] : ""),
-        annotation: (props.signal == "pco2wave" ? 1 :2),
+        annotation:  1 ,
         grid: 1,
         inverty: 2,
         yposition: 1,
@@ -154,7 +156,7 @@ const [unitArray, setunitArray] = useState({
         showGrid : true
     })
     const [signalModalData,setSignalModalData] = useState({
-        signalType:props.type == "line" ? 1 : 2,
+        signalType:props.type == "line" ? 1 :   props.type == "bar"  ? 2 : 3,
         disabledType : props.type == "line" ? true :  false,
         stat: otherConfig.stat , 
         signal : 1
@@ -384,7 +386,8 @@ const [unitArray, setunitArray] = useState({
           let _allAnnotation = [] ; 
           let lastTask  ; 
         //   console.log(userTimeOffset);
-        csv('https://capnolearning.com/webroot/csvupl/' + _csvFile).then(data => {
+        // csv('//capno-data.s3.amazonaws.com/' + _csvFile).then(data => {
+        csv('https://capnolearning.com/csvupl/' + _csvFile).then(data => {
             // console.log(data);
             // let _tasks = {} ; 
             let _temptask = [] ; 
@@ -396,10 +399,20 @@ const [unitArray, setunitArray] = useState({
             let firstRecord = 0   ; 
             let recId = 0 ; 
             let prevRecord = 0 ; 
+            let vfirstRecord = 0 ;
             let endTask  = 0 ;
         // console.log(data[0]);
             data.map((v, i) => {
-  
+                if(i == 0 || v.x != data[i-1].x ){
+                
+                    if(v.z > 0 && vfirstRecord == 0 && v.x > 0){
+
+                       
+                        vfirstRecord = v.x ; 
+                  
+                
+                   }
+
             //     if(v.z > 0 && record != 'all'  && v.x > 0 ){
 
                        
@@ -418,6 +431,8 @@ const [unitArray, setunitArray] = useState({
                   
                 
                 }
+
+               
               
                 if(_npauseTime > 0){
                     _pauseTime  += _npauseTime ; 
@@ -429,7 +444,7 @@ const [unitArray, setunitArray] = useState({
                 let _getHours = sessionDate.split("-");
                 _getHours = _getHours[1].split(":");
                 _getHours = parseInt(_getHours[0])*60*60*1000 + parseInt(_getHours[1])*60*1000 ; 
-                xData = new Date(parseInt((((v.x) - firstRecord) + _getHours + (userTimeOffset) ) - _pauseTime  ))
+                xData = new Date(parseInt((((v.x) - vfirstRecord) + _getHours + (userTimeOffset) ) - _pauseTime  ))
 
                 }
 
@@ -489,7 +504,8 @@ const [unitArray, setunitArray] = useState({
                         else if(_stat == "sd"){
                             yt = parseFloat(v.std) ;  
                         }
-                    
+                        if(rawSignals.includes(props.signal)){
+ 
                         if(otherConfig.units == "kPa"){
                             _tempY.push(yt*0.133322);
                         }
@@ -505,6 +521,10 @@ const [unitArray, setunitArray] = useState({
                             _tempY.push(yt);
             
                         }
+                    }
+                    else{
+                        _tempY.push(yt);
+                    }
                         if(yt == 0 && i > 0 ){
                             yt = _y[i-1] ;
                         }
@@ -521,7 +541,7 @@ const [unitArray, setunitArray] = useState({
                 
                     if( v.r != prevRecord ){
                         recId++ ; 
-                        let _recName = "Record - "+recId ; 
+                        let _recName = "Rec - "+recId ; 
                         _recordArray.push([xData,v.rname == "Normal" ? _recName : v.rname  ]);
                       
                         
@@ -844,8 +864,8 @@ const [unitArray, setunitArray] = useState({
                             {
                                 xref: 'x',
                                 yref: 'y',
-                                x: new Date(new Date(v[0]).getTime()) ,
-                                y: yAxisMax-(yAxisMax*0.2),  
+                                x: new Date(new Date(v[0]).getTime() + 1000) ,
+                                y: yAxisMax-(yAxisMax*0.18),  
                                 textangle: 270,
                                 text: v[1],
                                 showarrow: false,
@@ -867,19 +887,20 @@ const [unitArray, setunitArray] = useState({
                                 // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
                                 _tempAnnotation.push(
                                     {
+                                        
                                         xref: 'x',
                                         yref: 'y',
                                         x: xAnnTime ,
                                         y: 40,  
-                                        textangle: 270,
+                                        textangle: 0,
                                         text: v.z,
                                         showarrow: true,
-                                        arrowhead: 0,
-                                        ax: 5,
+                                        arrowhead: 10,
+                                        ax: 25,
                                         bgcolor: "#fff",
                                         arrowcolor: "#FF0000", 
                                         
-                                        ay:5
+                                        ay:0
                             
                                     }
                                     
@@ -954,15 +975,15 @@ const [unitArray, setunitArray] = useState({
                                         yref: 'y',
                                         x: xAnnTime ,
                                         y: 40,  
-                                        textangle: 270,
+                                        textangle: 0,
                                         text: v.z,
                                         showarrow: true,
-                                        arrowhead: 0,
-                                        ax: 5,
+                                        arrowhead: 10,
+                                        ax: 25,
                                         bgcolor: "#fff",
                                         arrowcolor: "#FF0000", 
                                         
-                                        ay:5
+                                        ay:0
                             
                                     }
                                     
@@ -1023,6 +1044,7 @@ const [unitArray, setunitArray] = useState({
                     // plotGraph(_x,_y);
 
                 }
+            }
             })
             // console.log(data)
         })
@@ -1721,7 +1743,7 @@ const handleKeypress = (e) => {
                             <div className='colorsqr' style={{backgroundColor: color}}></div>
                         </li>
                         <li>
-                        <span dangerouslySetInnerHTML={{__html : (props && signalName[props.signal] ? modal.units != "" ? signalName[props.signal]+"<span style='font-size:10px'>("+modal.units+")</span>" : signalName[props.signal] : null )}} ></span>
+                        <span dangerouslySetInnerHTML={{__html : (props && signalName[props.signal] ? modal.units != "" ? signalName[props.signal]+"<span style='font-size:10px'> ("+modal.units+")</span>" : signalName[props.signal] : null )}} ></span>
                         
                         {
                             group &&
@@ -1771,7 +1793,7 @@ const handleKeypress = (e) => {
                 </ul> */}
 
                 {/* unit modal */}
-               {console.log(xAxisMin)}
+               {/* {console.log(xAxisMin)} */}
                 <Plot className="plot-charts"
                  onClick={handleClick}
                  onRelayout={handleRelayout}
