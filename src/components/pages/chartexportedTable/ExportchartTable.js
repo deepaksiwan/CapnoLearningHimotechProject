@@ -12,6 +12,7 @@ import ChartExportedHeader from '../../component/ChartExportedHeader';
 import ExportChart from './ChartExported';
 import folderimage from '../../images/choosefile.png'
 import { red } from '@material-ui/core/colors';
+import backIcon from "../../images/back.png";
 
 
 const ChartTable = (props) => {
@@ -28,9 +29,9 @@ const ChartTable = (props) => {
     const [HelpModal, setHelpModal] = useState(false);
     const toggleHelpModal = () => setHelpModal(!HelpModal);
     const [fileSelected, setfileSelected] = useState(null)
-    const [showHeader,setShowHeader] = useState(false) ; 
-    const [signalStat , setSignalStat] = useState({})
-    const [showSignalStat , setShowSignalStat] = useState(false)
+    const [showHeader, setShowHeader] = useState(false);
+    const [signalStat, setSignalStat] = useState({})
+    const [showSignalStat, setShowSignalStat] = useState(false)
     const [sessioninfo, setsessioninfo] = useState({});
 
     const [requestProcessedModal, setrequestProcesedModal] = useState(false);
@@ -41,10 +42,10 @@ const ChartTable = (props) => {
 
 
     const exportExcel = () => {
-   
+
         setrequestProcesedModal(true);
 
-}
+    }
 
     const getData = props.getData;
     //console.log("getData", getData)
@@ -58,7 +59,7 @@ const ChartTable = (props) => {
 
     useEffect(() => {
         exportChart();
-        
+
 
     }, []);
 
@@ -104,13 +105,13 @@ const ChartTable = (props) => {
 
         };
         setfileSelected(event.target.files);
-        getSessionInfo(event.target.files) ; 
+        getSessionInfo(event.target.files);
 
     }
 
     const getSessionInfo = (_fileSelected) => {
         let _files = Array.from(_fileSelected)
-    
+
         _files.length > 0 && _files.map(function (v, i) {
             if (v.name.includes(".json")) {
                 var reader = new FileReader();
@@ -123,10 +124,10 @@ const ChartTable = (props) => {
                 };
 
             }
-            
+
         })
     }
-       
+
     const downloadImage = () => {
         let _image = Array.from(fileSelected)
         let _imageArray = [];
@@ -142,27 +143,27 @@ const ChartTable = (props) => {
         // console.log("png image jdfsdj", _imageArray)
     }
 
-    
-    const setStats = (_signal,data) => {
-        
+
+    const setStats = (_signal, data) => {
+
         // console.log("signal data",data)
-        let _temp = signalStat ; 
-        let _tempData = [] ;
-            data.map((v,i) => {
-                _tempData.push({
-                    x : v.x,
-                    mean : v.mean,
-                    median : v.median,
-                    sd : v.sd,
-                })
+        let _temp = signalStat;
+        let _tempData = [];
+        data.map((v, i) => {
+            _tempData.push({
+                x: v.x,
+                mean: v.mean,
+                median: v.median,
+                sd: v.sd,
             })
-            _temp[_signal] = _tempData ; 
-            console.log("signal data 1"+_signal,_temp);
-            setSignalStat(_temp)
-            setTimeout(() => {
-                setShowHeader(true);
-            }, 2000*graphs.length);
-        }
+        })
+        _temp[_signal] = _tempData;
+        console.log("signal data 1" + _signal, _temp);
+        setSignalStat(_temp)
+        setTimeout(() => {
+            setShowHeader(true);
+        }, 2000 * graphs.length);
+    }
 
     const SaveImage = (_imageArray) => {
         const doc = new jsPDF();
@@ -192,8 +193,8 @@ const ChartTable = (props) => {
                     reader.readAsDataURL(v);
                     reader.onload = event => {
                         let dataimage = event.target.result;
-                        console.log("dataimage", 
-                        dataimage)
+                        console.log("dataimage",
+                            dataimage)
                         doc.addImage(dataimage, 7, 50 + (ev * 110), 200, 90);
                         //doc.addImage(dataimage, 3, 0 + (ev * 0), pageWidth, pageHeight);
                         ev++;
@@ -209,31 +210,33 @@ const ChartTable = (props) => {
 
         }
         setTimeout(() => {
-            doc.save("Live Session Images - "+sessioninfo.session.date+" .pdf");
+            doc.save("Live Session Images - " + sessioninfo.session.date + " .pdf");
 
         }, _imageArray.length * 2000);
     }
     return (
         <div>
+
+
             {
-             graphs.length > 0 &&   showHeader  && 
-            <ChartExportedHeader graphs={graphs} setShowSignalStat={setShowSignalStat} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} showSignalStat={showSignalStat} signalStat={signalStat} exportExcel={exportExcel} showHeader={showHeader} sessioninfo={sessioninfo} downloadImage={downloadImage} fileupload={fileupload} config={config} />
+                graphs.length > 0 && showHeader &&
+                <ChartExportedHeader graphs={graphs} setShowSignalStat={setShowSignalStat} setrequestProcessingModal={setrequestProcessingModal} setrequestProcesedModal={setrequestProcesedModal} showSignalStat={showSignalStat} signalStat={signalStat} exportExcel={exportExcel} showHeader={showHeader} sessioninfo={sessioninfo} downloadImage={downloadImage} fileupload={fileupload} config={config} />
 
             }
-              {
-                graphs.length > 0 &&  !showHeader  && 
-            <ChartExportedHeader graphs={graphs}  setShowSignalStat={setShowSignalStat} setrequestProcessingModal={setrequestProcessingModal}   exportExcel={exportExcel}  setrequestProcesedModal={setrequestProcesedModal} showSignalStat={showSignalStat} signalStat={signalStat} showHeader={showHeader} sessioninfo={sessioninfo} downloadImage={downloadImage} fileupload={fileupload} config={config} />
+            {
+                graphs.length > 0 && !showHeader &&
+                <ChartExportedHeader graphs={graphs} setShowSignalStat={setShowSignalStat} setrequestProcessingModal={setrequestProcessingModal} exportExcel={exportExcel} setrequestProcesedModal={setrequestProcesedModal} showSignalStat={showSignalStat} signalStat={signalStat} showHeader={showHeader} sessioninfo={sessioninfo} downloadImage={downloadImage} fileupload={fileupload} config={config} />
 
             }
             <div className="wrp-charttable" id="exported-chart">
                 <div className="container-fluid">
                     <div className="row justify-content-between">
                         {
-                          sessioninfo.annotations &&  fileSelected && graphs && graphs.map(function (d, i) {
+                            sessioninfo.annotations && fileSelected && graphs && graphs.map(function (d, i) {
                                 console.log("graph show", d);
                                 return (
-                                    <div className="chart-w" style={{ width: (d.col != "1/1" ? (eval((d.col)) * 99 )+ "%" : (eval(d.col) * 100) + "%") , maxWidth: (eval(d.col) * 100) + "%", height: "auto" , minHeight:  (eval(d.row) * 82) + "vh"  }}>
-                                        <ExportChart sessioninfo={sessioninfo} showSignalStat={showSignalStat}  getData={getData} setStats={setStats} index={i} dataFile={fileSelected} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.ymin} ymin={d.ymin} ymax={d.ymax} type={d.type} color={d.color} col={d.col} row={d.row} />
+                                    <div className="chart-w" style={{ width: (d.col != "1/1" ? (eval((d.col)) * 99) + "%" : (eval(d.col) * 100) + "%"), maxWidth: (eval(d.col) * 100) + "%", height: "auto", minHeight: (eval(d.row) * 82) + "vh" }}>
+                                        <ExportChart sessioninfo={sessioninfo} showSignalStat={showSignalStat} getData={getData} setStats={setStats} index={i} dataFile={fileSelected} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.ymin} ymin={d.ymin} ymax={d.ymax} type={d.type} color={d.color} col={d.col} row={d.row} />
                                     </div>
 
                                 )
@@ -241,27 +244,33 @@ const ChartTable = (props) => {
                             })
                         }
                         {
-                           !fileSelected &&
-                           <div className='col-md-12'>
-                           <div className="bag-1">
-                               <div className="uploadfile">
-                                   <div className='content1'>
-                                       <p className='bag-10'>
-                                       Please choose the client session folder on your computer. <br /> You can find the folder by clicking on the <b>"Capno Offline"</b> icon on your desktop. <br />After choosing a client, click on the session you want to review. </p>
-                                   </div>
-                                   <div className='content2 '>
-                                       <div className='bag-2'>
-                                           <button className="buttonstyle" >
-                                               <label><img style={{ marginRight: "10px", marginTop: "3px" }} src={folderimage}></img></label>
-                                               <h6 style={{ color: "#800080", marginTop: "5px", display: "inline-block" }}>Choose Client Folder</h6>
-                                           </button>
-                                           <input id="ChooseFolder" multiple type="file"  onChange={fileupload} webkitdirectory="true"
-                                       />
-                                       </div>
+                            !fileSelected &&
+                            <div className='col-md-12'>
+                                <div className="bag-1">
+                                    <div className="back-icon-wrp">
+                                        <Link to="/choose/exported/file/config" className="backbtn-icon">
+                                            <img src={backIcon} alt="backicon" />
+                                            <span>Back</span>
+                                        </Link>
+                                    </div>
+                                    <div className="uploadfile">
+                                        <div className='content1'>
+                                            <p className='bag-10'>
+                                                Please choose the client session folder on your computer. <br /> You can find the folder by clicking on the <b>"Capno Offline"</b> icon on your desktop. <br />After choosing a client, click on the session you want to review. </p>
+                                        </div>
+                                        <div className='content2 '>
+                                            <div className='bag-2'>
+                                                <button className="buttonstyle" >
+                                                    <label><img style={{ marginRight: "10px", marginTop: "3px" }} src={folderimage}></img></label>
+                                                    <h6 style={{ color: "#800080", marginTop: "5px", display: "inline-block" }}>Choose Client Folder</h6>
+                                                </button>
+                                                <input id="ChooseFolder" multiple type="file" onChange={fileupload} webkitdirectory="true"
+                                                />
+                                            </div>
 
-                                      
-                                   </div>
-                                   {/* <div className=" content3 " >
+
+                                        </div>
+                                        {/* <div className=" content3 " >
                                        <a href='#' onClick={toggleHelpModal}>
                                           <p className='bag-10'>See Pictures</p>
                                            <span><i class="fa fa-question-circle need- bag-200" aria-hidden="true"></i></span>
@@ -269,27 +278,27 @@ const ChartTable = (props) => {
                                        </a>
                                    </div> */}
 
-                               </div>
-                               <Modal isOpen={HelpModal} toggle={toggleHelpModal} className="modal-box-wrp" centered={true}>
-                                   <ModalHeader toggle={toggleHelpModal}><span className="ml-1 roititle modal-head">Instructions to load session files for visulaization </span></ModalHeader>
-                                   <ModalBody>
-                                       
+                                    </div>
+                                    <Modal isOpen={HelpModal} toggle={toggleHelpModal} className="modal-box-wrp" centered={true}>
+                                        <ModalHeader toggle={toggleHelpModal}><span className="ml-1 roititle modal-head">Instructions to load session files for visulaization </span></ModalHeader>
+                                        <ModalBody>
+
                                             <ol>
-                                            <li>Click on <b>Choose Client Folder</b> button. It will open a file picker dialog box.</li>
-                                            <li>On the dialog box open <b>Desktop</b>.</li>
-                                            <li>Then open folder, <b>Capno Offline.</b></li>
-                                            <li>Double click on the <b>client name folder</b>, e,g John Smith.</li>
-                                            <li>Double click on the <b>session date folder</b>, which you want to load for visualization, e.g 2022-6-18-19-10.</li>
+                                                <li>Click on <b>Choose Client Folder</b> button. It will open a file picker dialog box.</li>
+                                                <li>On the dialog box open <b>Desktop</b>.</li>
+                                                <li>Then open folder, <b>Capno Offline.</b></li>
+                                                <li>Double click on the <b>client name folder</b>, e,g John Smith.</li>
+                                                <li>Double click on the <b>session date folder</b>, which you want to load for visualization, e.g 2022-6-18-19-10.</li>
 
                                             </ol>
-                                           
-                                   </ModalBody>
 
-                               </Modal>
+                                        </ModalBody>
+
+                                    </Modal>
 
 
-                           </div>
-                           </div>
+                                </div>
+                            </div>
 
                         }
                     </div>
@@ -297,39 +306,39 @@ const ChartTable = (props) => {
 
                 </div>
             </div>
-   {/* request processing modal */}
+            {/* request processing modal */}
 
-   <Modal isOpen={requestProcessingModal} toggle={requestProcessingModalToggle} className="modal-box-wrp" centered={true}>
-                    <ModalHeader toggle={requestProcessingModalToggle}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
-                    <ModalBody>
-                        <p className='text-center'>Your request is getting processed. Please wait.</p>
+            <Modal isOpen={requestProcessingModal} toggle={requestProcessingModalToggle} className="modal-box-wrp" centered={true}>
+                <ModalHeader toggle={requestProcessingModalToggle}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
                     <div className="wrp-chart-loader">
-                    <div class="loading">
-                        <div class="loading-1"></div>
-                        <div class="loading-2"></div>
-                        <div class="loading-3"></div>
-                        <div class="loading-4"></div>
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
+                        </div>
                     </div>
-                </div>
-                    </ModalBody>
+                </ModalBody>
 
-                </Modal>
+            </Modal>
 
-                {/* request processing modal  */}
+            {/* request processing modal  */}
 
-                
-                    {/* request processed modal */}
 
-                    <Modal isOpen={requestProcessedModal} toggle={requestProcessedModalToggle} className="modal-box-wrp" centered={true}>
-                    <ModalHeader toggle={requestProcessedModalToggle}><span className="ml-1 roititle modal-head">Request processed.</span></ModalHeader>
-                    <ModalBody>
-                        <p className='text-center'>Your request has been processed succesfully.</p>
-                        
-                    </ModalBody>
+            {/* request processed modal */}
 
-                </Modal>
+            <Modal isOpen={requestProcessedModal} toggle={requestProcessedModalToggle} className="modal-box-wrp" centered={true}>
+                <ModalHeader toggle={requestProcessedModalToggle}><span className="ml-1 roititle modal-head">Request processed.</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Your request has been processed succesfully.</p>
 
-                {/* request processed modal  */}
+                </ModalBody>
+
+            </Modal>
+
+            {/* request processed modal  */}
 
         </div>
     )

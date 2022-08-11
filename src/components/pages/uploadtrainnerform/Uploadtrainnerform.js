@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import Header from '../../component/Header';
 import Sidebar from '../../component/Sidebar';
 import { API_URL } from "../../../config";
+import backIcon from "../../images/back.png";
 
 const Uploadclientform = () => {
     const [clients, setinclients] = useState([]);
@@ -353,7 +354,12 @@ const Uploadclientform = () => {
                             <div className="configer-child1">
                                 <h3>Upload Trainer Form</h3>
                             </div>
-
+                            <div className="back-icon-wrp">
+                                <Link to="/view/manageform" className="backbtn-icon">
+                                    <img src={backIcon} alt="backicon" />
+                                    <span>Back</span>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                     <div className="container-fluid">

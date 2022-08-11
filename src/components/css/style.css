@@ -867,6 +867,8 @@ label{
 }
 .head-demoreport{
   margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 .head-demoreport > h3{
   color: #000;
@@ -1233,6 +1235,7 @@ box-shadow: 1px 1px 8px 1px #00000052;
   border-radius: 8px;
   background: linear-gradient( 
     90deg,#a060c2,#c360a9);
+    margin-top: 20px;
 }
 .groupreport-list-head > h3{
   font-size: 15px;
@@ -1268,6 +1271,7 @@ box-shadow: 1px 1px 8px 1px #00000052;
   border-radius: 4px;
   text-align: center;
   margin-bottom: 5px;
+  margin-top: 20px;
 }
 .choose-signals > p{
   color: #800080;
@@ -2211,6 +2215,7 @@ sub {
     padding: 20px 15px;
     box-shadow: 1px 1px 8px 1px #00000029;
     margin-bottom: 30px;
+    margin-top: 20px;
 }
 .assembly-content > h3 {
   font-size: 22px;
@@ -2527,4 +2532,34 @@ sub {
 }
 .step-trainers-box > p{
   font-size: 16px;
+}
+.backbtn-icon{
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid #800080;
+  transition: 0.5s;
+}
+.backbtn-icon > img{
+  width: 15px;
+  margin-right: 8px;
+}
+.backbtn-icon > span{
+  font-size: 14px;
+  color: #000;
+  font-weight: 500;
+}
+.back-icon-wrp{
+  text-align: right;
+}
+.backbtn-icon:hover{
+  background-color: #8000803d;
+  transition: 0.5s;
+}
+.client-info-c{
+  display: flex;
+  justify-content: space-between;
+}
+.multi-lan{
+  margin-top: 20px;
 }

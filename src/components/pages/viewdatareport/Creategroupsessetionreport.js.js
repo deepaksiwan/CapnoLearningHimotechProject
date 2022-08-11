@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams, Router } from 'react-router-dom';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
+import backIcon from "../../../components/images/back.png";
 
 import { API_URL } from "../../../config";
 const Demodatareport = () => {
 
     const accessToken = localStorage.getItem('accessToken');
     const session = localStorage.getItem('selectedSession');
- 
+
     const [sessions, setsessions] = useState([]);
 
     useEffect(() => {
@@ -19,7 +20,7 @@ const Demodatareport = () => {
 
 
     const Report = () => {
-        fetch(API_URL+"/configured/report?type=2",
+        fetch(API_URL + "/configured/report?type=2",
             {
                 method: 'GET',
                 headers: {
@@ -58,17 +59,22 @@ const Demodatareport = () => {
                     <Sidebar />
                 </div>
                 <div className="right-section">
+                    <div className="back-icon-wrp">
+                        <Link to="/" className="backbtn-icon">
+                            <img src={backIcon} alt="backicon" />
+                            <span>Back</span>
+                        </Link>
+                    </div>
                     <div className="groupreport-list-head">
                         <h3>Pre-configured Group Reports</h3>
                     </div>
                     <ul className="groupreport-list">
-                    {
-                            sessions.map((sessions) =>
-                                {
-                                    return(
-                                        <li><a href={"/create/group/report/" + sessions.id + "/" + session + "/all/" + sessions.id}   >{sessions.name}</a></li>
-                                    )
-                                }
+                        {
+                            sessions.map((sessions) => {
+                                return (
+                                    <li><a href={"/create/group/report/" + sessions.id + "/" + session + "/all/" + sessions.id}   >{sessions.name}</a></li>
+                                )
+                            }
                             )
                         }
                     </ul>

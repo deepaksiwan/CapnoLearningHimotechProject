@@ -3,18 +3,19 @@ import { Link, useParams, Router } from 'react-router-dom';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import { API_URL } from "../../../config";
+import backIcon from "../../../components/images/back.png";
 
 import { csv } from 'd3';
 
 const CreatesaveDatasession = () => {
     const accessToken = localStorage.getItem('accessToken');
     const session = localStorage.getItem('selectedSession');
-    const userId  = localStorage.getItem('user_id');
+    const userId = localStorage.getItem('user_id');
     const [sessions, setsessions] = useState([]);
     const [emgAvg, setEmgAvg] = useState(false);
     const [emgRaw, setEmgRaw] = useState(false);
     const [hrv, setHrv] = useState(0);
-    
+
     useEffect(() => {
         Report();
         getUser();
@@ -23,7 +24,7 @@ const CreatesaveDatasession = () => {
 
 
     const Report = () => {
-        fetch(API_URL+"/configured/report?type=1",
+        fetch(API_URL + "/configured/report?type=1",
             {
                 method: 'GET',
                 headers: {
@@ -55,7 +56,7 @@ const CreatesaveDatasession = () => {
     }
 
     const getCsv = () => {
-        fetch(API_URL+"/session/data?session_id=" + session + "&signal_name=emg3_wave",
+        fetch(API_URL + "/session/data?session_id=" + session + "&signal_name=emg3_wave",
             {
                 method: 'GET',
                 headers: {
@@ -69,7 +70,7 @@ const CreatesaveDatasession = () => {
                     // console.warn("result", resp);
                     if (resp.sessions[0]) {
                         // setCsvFile(resp.sessions[0].sessiondata)
-                        getData(resp.sessions[0].sessiondata,"raw")
+                        getData(resp.sessions[0].sessiondata, "raw")
                     }
 
 
@@ -84,7 +85,7 @@ const CreatesaveDatasession = () => {
         })
 
 
-            fetch(API_URL+"/session/data?session_id=" + session + "&signal_name=emg1_avg",
+        fetch(API_URL + "/session/data?session_id=" + session + "&signal_name=emg1_avg",
             {
                 method: 'GET',
                 headers: {
@@ -98,7 +99,7 @@ const CreatesaveDatasession = () => {
                     // console.warn("result", resp);
                     if (resp.sessions[0]) {
                         // setCsvFile(resp.sessions[0].sessiondata)
-                        getData(resp.sessions[0].sessiondata,"avg")
+                        getData(resp.sessions[0].sessiondata, "avg")
                     }
 
 
@@ -116,54 +117,54 @@ const CreatesaveDatasession = () => {
     }
 
 
-        async function getData(_csvFile,_stat) {
-           
-            
-            //   console.log(userTimeOffset);
-            csv('https://capnolearning.com/webroot/csvupl/' + _csvFile).then(data => {
-                if(data.length > 2){
-                    if(_stat == 'avg'){
-                        setEmgAvg(true);
-                    }
-                    else if(_stat == 'raw'){
-                        setEmgRaw(true)
-                    }
+    async function getData(_csvFile, _stat) {
+
+
+        //   console.log(userTimeOffset);
+        csv('https://capnolearning.com/webroot/csvupl/' + _csvFile).then(data => {
+            if (data.length > 2) {
+                if (_stat == 'avg') {
+                    setEmgAvg(true);
                 }
+                else if (_stat == 'raw') {
+                    setEmgRaw(true)
+                }
+            }
         })
     }
 
     async function getUser() {
-           
-            
-        fetch(API_URL+ "/user/profile/"+userId,
-        {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-access-token': accessToken,
-            },
-        }
-    ).then((response) => {
-        if (response.status == 200) {
-            response.json().then((resp) => {
-                setHrv(resp.owner[0].qthird);
-                 
-
-            });
-        }
-        else if (response.status == 401) {
-            logout()
-        }
-        else {
-            alert("network error")
-        }
 
 
-    })
-      
-}
+        fetch(API_URL + "/user/profile/" + userId,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    setHrv(resp.owner[0].qthird);
 
-    
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+
+    }
+
+
 
 
 
@@ -175,21 +176,27 @@ const CreatesaveDatasession = () => {
                     <Sidebar />
                 </div>
                 <div className="right-section">
+                    <div className="back-icon-wrp">
+                        <Link to="/" className="backbtn-icon">
+                            <img src={backIcon} alt="backicon" />
+                            <span>Back</span>
+                        </Link>
+                    </div>
                     <div className="groupreport-list-head">
                         <h3>Preconfigured Reports</h3>
+
                     </div>
                     <ul className="groupreport-list">
 
                         {
-                            sessions.map((sessions) =>
-                                {
-                                    if((sessions.id == 46 && emgAvg) || (sessions.id == 47 && emgRaw) || (sessions.id != 46 && sessions.id != 47)  ){
-                                        
-                                    return(
-                                        <li><a href={"/create/report/0/" + sessions.id + "/" + session + "/all/" + sessions.id}  dangerouslySetInnerHTML={{__html : sessions.name }} ></a></li>
+                            sessions.map((sessions) => {
+                                if ((sessions.id == 46 && emgAvg) || (sessions.id == 47 && emgRaw) || (sessions.id != 46 && sessions.id != 47)) {
+
+                                    return (
+                                        <li><a href={"/create/report/0/" + sessions.id + "/" + session + "/all/" + sessions.id} dangerouslySetInnerHTML={{ __html: sessions.name }} ></a></li>
                                     )
-                                    }
                                 }
+                            }
                             )
                         }
 

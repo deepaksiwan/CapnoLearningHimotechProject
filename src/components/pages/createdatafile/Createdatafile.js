@@ -3,6 +3,7 @@ import { Link, useParams, Router } from 'react-router-dom';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import { API_URL } from "../../../config";
+import backIcon from "../../../components/images/back.png";
 
 
 const CreatesaveFilesession = () => {
@@ -57,6 +58,15 @@ const CreatesaveFilesession = () => {
                     <Sidebar />
                 </div>
                 <div className="right-section">
+                <div className="head-demoreport">
+                    <h3>Demo Data Reports</h3>
+                    <div className="back-icon-wrp">
+                        <Link to="/" className="backbtn-icon">
+                            <img src={backIcon} alt="backicon" />
+                            <span>Back</span>
+                        </Link>
+                    </div>
+                </div>
                     <div className="groupreport-list-head">
                         <h3>Preconfigured Report</h3>
                     </div>

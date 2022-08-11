@@ -9,6 +9,7 @@ import checks from '../../images/checks.png'
 import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
 import { API_URL } from '../../../config';
+import backIcon from "../../images/back.png";
 
 const Edittrainer = () => {
 
@@ -154,6 +155,12 @@ const Edittrainer = () => {
                 <div className="right-section">
                     <div className="head-demoreport">
                         <h3>Trainers</h3>
+                        <div className="back-icon-wrp">
+                            <Link to="/viewcreate" className="backbtn-icon">
+                                <img src={backIcon} alt="backicon" />
+                                <span>Back</span>
+                            </Link>
+                        </div>
                     </div>
 
                     <div className="wrp-bankform">

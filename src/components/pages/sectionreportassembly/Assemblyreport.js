@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import i18n from "i18next";
 import { useTranslation, initReactI18next } from "react-i18next";
 import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
 import { API_URL } from "../../../config";
+import backIcon from "../../images/back.png";
 
 const Assemblyreport = () => {
 
@@ -44,8 +45,8 @@ const Assemblyreport = () => {
 
     }, []);
 
-console.log("sessionid", sessionid)
-console.log("Clientid", Clientid)
+    console.log("sessionid", sessionid)
+    console.log("Clientid", Clientid)
 
 
 
@@ -256,6 +257,12 @@ console.log("Clientid", Clientid)
                     <Sidebar />
                 </div>
                 <div className="right-section">
+                    <div className="back-icon-wrp">
+                        <Link to="/section/report/assembly" className="backbtn-icon">
+                            <img src={backIcon} alt="backicon" />
+                            <span>Back</span>
+                        </Link>
+                    </div>
                     <div className="assembly-box">
 
                         <div className="assembly-content">

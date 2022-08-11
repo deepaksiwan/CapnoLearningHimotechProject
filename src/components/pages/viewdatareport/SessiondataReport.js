@@ -6,6 +6,7 @@ import MaterialTable from 'material-table';
 import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 import { API_URL } from "../../../config";
+import backIcon from "../../../components/images/back.png";
 
 const SessiondataReport = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -130,6 +131,12 @@ const SessiondataReport = () => {
                 <Sidebar />
                </div>
                <div className="right-section">
+               <div className="back-icon-wrp">
+                        <Link to="/view/data/report" className="backbtn-icon">
+                            <img src={backIcon} alt="backicon" />
+                            <span>Back</span>
+                        </Link>
+                    </div>
                 <div className="head-demoreport">
                     <h3>Session Data Reports</h3>
                     <p>{type == "multi"? "Multi": type == "single"? "Single" : type == "group"? "Group" : type == "homework"? "Homework" : null } Sesseion Report</p>

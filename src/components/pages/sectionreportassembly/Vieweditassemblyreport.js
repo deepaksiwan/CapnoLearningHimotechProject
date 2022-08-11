@@ -14,6 +14,7 @@ import Sidebar from '../../component/Sidebar';
 import report from '../../images/report.png'
 import right from '../../images/right.png';
 import { API_URL } from "../../../config";
+import backIcon from "../../images/back.png";
 
 
 
@@ -408,7 +409,12 @@ const Vieweditassemblyreport = () => {
                     <Sidebar />
                 </div>
                 <div className="right-section">
-
+                <div className="back-icon-wrp">
+                        <Link to="/view/assembly" className="backbtn-icon">
+                            <img src={backIcon} alt="backicon" />
+                            <span>Back</span>
+                        </Link>
+                    </div>
                     <div className="assembly-box" id="takescreenassembly">
                         <div className="client-names-wrp">
                             <div className="cients-name-content">
@@ -537,7 +543,7 @@ const Vieweditassemblyreport = () => {
                                     <div id="loader"></div>
                                 }
                             </a></div>
-                            <div className="assembly-btn ml-assembly"><a href="#">GO TO REPORTS LIST</a></div>
+                            <div className="assembly-btn ml-assembly"><a href="/view/assembly">GO TO REPORTS LIST</a></div>
 
                         </div>
                     </div>

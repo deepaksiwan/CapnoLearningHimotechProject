@@ -10,6 +10,7 @@ import Header from '../../component/Header';
 
 import Multilanguage from '../../component/Multilanguage'
 import { API_URL } from "../../../config";
+import backIcon from "../../images/back.png";
 
 
 const Editprofile = () => {
@@ -40,7 +41,7 @@ const Editprofile = () => {
     const userId = localStorage.getItem('user_id');
     const [emailalreadyExitmodal, setEmailalreadyExitmodal] = useState(false);
     const EmailalreadyExittoggleModal = () => setEmailalreadyExitmodal(!emailalreadyExitmodal);
- 
+
 
     const { tab } = useParams();
     const QuestionArray = [
@@ -83,15 +84,15 @@ const Editprofile = () => {
         data['country'] = country.current.value;
         data['password'] = password.current.value;
         data['business'] = businessname.current.value;
-        data['qfirst'] =  qfirst == "0" ? 0 : 1 || qfirst == "1" ? 1 : 0;
+        data['qfirst'] = qfirst == "0" ? 0 : 1 || qfirst == "1" ? 1 : 0;
         data['qsecond'] = qsecond == "0" ? 0 : 1 || qsecond == "1" ? 1 : 0;
         data['qthird'] = qthird == "0" ? 0 : 1 || qthird == "1" ? 1 : 0;
         data['qfourth'] = qfourth == "0" ? 0 : 1 || qfourth == "1" ? 1 : 0;
         data['qfifth'] = qfifth == "0" ? 0 : 1 || qfifth == "1" ? 1 : 0;
 
-        
 
-        fetch(API_URL+"/owner/update/" + userId, {
+
+        fetch(API_URL + "/owner/update/" + userId, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -107,7 +108,7 @@ const Editprofile = () => {
                 });
             }
             else if (response.status == 400) {
-               
+
                 EmailalreadyExittoggleModal();
             }
             else if (response.status == 401) {
@@ -116,14 +117,14 @@ const Editprofile = () => {
             else {
                 alert("network error")
             }
-            
+
 
         })
 
     }
 
     const getOwnerProfile = () => {
-        fetch(API_URL+"/owner/profile/" + userId,
+        fetch(API_URL + "/owner/profile/" + userId,
             {
                 method: 'GET',
                 headers: {
@@ -151,7 +152,7 @@ const Editprofile = () => {
         })
     }
     const getCountry = () => {
-        fetch(API_URL+"/countries",
+        fetch(API_URL + "/countries",
             {
                 method: 'GET',
                 headers: {
@@ -178,7 +179,7 @@ const Editprofile = () => {
         })
     }
     const getState = (countryid) => {
-        fetch(API_URL+"/states?country_id=" + countryid,
+        fetch(API_URL + "/states?country_id=" + countryid,
             {
                 method: 'GET',
                 headers: {
@@ -243,16 +244,22 @@ const Editprofile = () => {
                 <div className="right-section">
 
                     <div className="head-demoreport">
-                        
-                    <div className="wrp-head-profile">
-                        <div className="head-demoreport">
-                            <h3>{ t('edit-profile')}</h3>
-                        </div>
 
-                        <div>
-                            <Multilanguage />
-                        </div>
+                        <div className="wrp-head-profile">
+                            <div className="head-demoreport">
+                                <h3>{t('edit-profile')}</h3>
 
+                            </div>
+                        </div>
+                        <div className="back-icon-wrp">
+                            <Link to="/viewcreate" className="backbtn-icon">
+                                <img src={backIcon} alt="backicon" />
+                                <span>Back</span>
+                            </Link>
+                            <div className="multi-lan">
+                                <Multilanguage />
+                            </div>
+                        </div>
                     </div>
                     <div className="wrp-editprofile">
                         <ul className="question-list">
@@ -262,9 +269,9 @@ const Editprofile = () => {
                                         <li>
                                             <div className="wrp-question">
                                                 <div className="question-child1">
-                                                    
-                                                    <div><input class="form-check-input" type="radio" defaultChecked={owner[q.id] == "0" ? true : false} name={q.id} onChange={() => handleradio(q.id, 0)} defaultValue="0" /><span>{ t('no')}</span></div>
-                                                    <div> <input class="form-check-input" type="radio" defaultChecked={owner[q.id] == "1" ? true : false} name={q.id} onChange={() => handleradio(q.id, 1)} defaultValue="1" /><span>{ t('yes')}</span></div>
+
+                                                    <div><input class="form-check-input" type="radio" defaultChecked={owner[q.id] == "0" ? true : false} name={q.id} onChange={() => handleradio(q.id, 0)} defaultValue="0" /><span>{t('no')}</span></div>
+                                                    <div> <input class="form-check-input" type="radio" defaultChecked={owner[q.id] == "1" ? true : false} name={q.id} onChange={() => handleradio(q.id, 1)} defaultValue="1" /><span>{t('yes')}</span></div>
                                                 </div>
                                                 <div className="question-child2">
                                                     <p><b>{q.questionbold}</b> {q.questiondisplay}</p>
@@ -292,8 +299,8 @@ const Editprofile = () => {
                                     <p>Name of business:</p>
                                     <input placeholder="Peter" defaultValue={owner.business} ref={businessname} />
                                 </div>
-                               
-                               
+
+
                             </div>
                             <div className="edit-input-wrp">
                                 <div className="edit-input">
@@ -324,7 +331,7 @@ const Editprofile = () => {
                                     <p>City</p>
                                     <input placeholder="Santa Fe" defaultValue={owner.city} ref={city} />
                                 </div>
-                               
+
                                 <div className="edit-input">
                                     <p>Postal-Code</p>
                                     <input placeholder="87506" defaultValue={owner.zipcode} ref={postalcode} />
@@ -347,7 +354,7 @@ const Editprofile = () => {
                                 </div>
                                 <div className="edit-input">
                                     <p>Country</p>
-                                  
+
                                     <div className="select-client5">
                                         <select name="country" onChange={handleCountryUpdate} ref={country}>
                                             <option value="">Choose Country</option>
@@ -381,17 +388,16 @@ const Editprofile = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <Modal isOpen={emailalreadyExitmodal} toggle={EmailalreadyExittoggleModal} className="connect-box" centered={true}>
-                <ModalHeader toggle={EmailalreadyExittoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
-                <ModalBody>
-                    <div className="modal-error-p">
-                        <p>Account already exist with this email</p>
-                    </div>
-                </ModalBody>
+                <Modal isOpen={emailalreadyExitmodal} toggle={EmailalreadyExittoggleModal} className="connect-box" centered={true}>
+                    <ModalHeader toggle={EmailalreadyExittoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
+                    <ModalBody>
+                        <div className="modal-error-p">
+                            <p>Account already exist with this email</p>
+                        </div>
+                    </ModalBody>
 
-            </Modal>
-        </div>
+                </Modal>
+            </div>
         </div>
     )
 }

@@ -6,7 +6,8 @@ import Header from '../../component/Header';
 import MaterialTable from 'material-table';
 import { API_URL } from "../../../config";
 import download from '../../images/download.png'
-import preveiw from '../../images/preveiw.png'
+import preveiw from '../../images/preveiw.png';
+import backIcon from "../../../components/images/back.png";
 
 const PdfsessetionreportNotes = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -204,8 +205,15 @@ const PdfsessetionreportNotes = () => {
                 <Sidebar />
                </div>
                <div className="right-section">
+              
                 <div className="head-demoreport">
                     <h3>Session Report Notes</h3>
+                    <div className="back-icon-wrp">
+                        <Link to="/view/pdf/report" className="backbtn-icon">
+                            <img src={backIcon} alt="backicon" />
+                            <span>Back</span>
+                        </Link>
+                    </div>
                 </div>
                 <div className="wrp-bankform">
                     <div style={{ maxWidth: '100%' }}>

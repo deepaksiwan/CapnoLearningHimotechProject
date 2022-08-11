@@ -1,11 +1,12 @@
-import React, {useEffect,useState} from "react";
-import {Link,useParams, Router} from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Link, useParams, Router } from 'react-router-dom';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
 import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 import { API_URL } from "../../../config";
+import backIcon from "../../../components/images/back.png";
 import { jsPDF } from "jspdf";
 
 const PdfsessionReport = () => {
@@ -14,32 +15,32 @@ const PdfsessionReport = () => {
     const [data, setData] = useState([]);
     const sessionid = localStorage.getItem('selectedSession');
     const Clientid = localStorage.getItem('selectedClient');
-    const {pdftype} = useParams();
-   
+    const { pdftype } = useParams();
 
 
-   
+
+
 
     useEffect(() => {
-        
 
-        if(pdftype == "multi"){
+
+        if (pdftype == "multi") {
             Multisession()
         }
-        else{
+        else {
             Singlesession();
         }
-        
+
 
     }, []);
 
 
-    
+
 
 
     const pdfdata = (sid) => {
 
-       
+
 
         fetch(API_URL + "/pdf/list/" + sid,
             {
@@ -52,12 +53,12 @@ const PdfsessionReport = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                   
-                    let _clientName = resp.firstname + " " + resp.lastname ;
-                    let _trainerName = resp.data[0].firstname+ " " + resp.data[0].lastname ;
+
+                    let _clientName = resp.firstname + " " + resp.lastname;
+                    let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _pdfname = resp.pdfname;
                     let _sessionDate = resp.sessionDate;
-                    downloadpdf(_clientName , _trainerName , resp.result,_pdfname,_sessionDate)
+                    downloadpdf(_clientName, _trainerName, resp.result, _pdfname, _sessionDate)
 
                 });
             }
@@ -71,37 +72,37 @@ const PdfsessionReport = () => {
 
         })
 
-       
+
     }
 
 
-    const downloadpdf = (_clientName,_trainerName, _image,_pdfname,_sessionDate)=>{
-        
+    const downloadpdf = (_clientName, _trainerName, _image, _pdfname, _sessionDate) => {
+
         const doc = new jsPDF();
 
         doc.setTextColor(0, 0, 0);
         doc.text('Capnolearning Report', 10, 10,
-            {styles:{ fontSize: 20,fontWeight: 'bold'}})
+            { styles: { fontSize: 20, fontWeight: 'bold' } })
         doc.setDrawColor(0, 0, 0);
         doc.line(10, 15, 600, 15);
         doc.setFontSize(10)
-        
-        doc.text(_sessionDate ,35,25)
-        doc.text( _clientName,23,30);
-        doc.text( _trainerName,25,35);
+
+        doc.text(_sessionDate, 35, 25)
+        doc.text(_clientName, 23, 30);
+        doc.text(_trainerName, 25, 35);
         doc.setFont(undefined, 'bold');
-        doc.text("Session Date:" ,10,25)
-        doc.text("Client:" ,10,30);
-        doc.text("Trainer:",10,35);
+        doc.text("Session Date:", 10, 25)
+        doc.text("Client:", 10, 30);
+        doc.text("Trainer:", 10, 35);
         // doc.setFont(undefined, 'bold')
-        doc.addImage(_image, 5, 45,200,110);
-        doc.save(_pdfname +".pdf");
-    } 
-    
+        doc.addImage(_image, 5, 45, 200, 110);
+        doc.save(_pdfname + ".pdf");
+    }
+
 
     const Viewpdfdata = (sid) => {
 
-       
+
 
         fetch(API_URL + "/pdf/list/" + sid,
             {
@@ -114,12 +115,12 @@ const PdfsessionReport = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                   
-                    let _clientName = resp.firstname + " " + resp.lastname ;
-                    let _trainerName = resp.data[0].firstname+ " " + resp.data[0].lastname ;
+
+                    let _clientName = resp.firstname + " " + resp.lastname;
+                    let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _pdfname = resp.pdfname;
                     let _sessionDate = resp.sessionDate;
-                    Viewpdf(_clientName , _trainerName , resp.result,_pdfname,_sessionDate)
+                    Viewpdf(_clientName, _trainerName, resp.result, _pdfname, _sessionDate)
 
                 });
             }
@@ -133,39 +134,39 @@ const PdfsessionReport = () => {
 
         })
 
-       
+
     }
 
-    const Viewpdf = (_clientName,_trainerName, _image,_pdfname,_sessionDate)=>{
-        
+    const Viewpdf = (_clientName, _trainerName, _image, _pdfname, _sessionDate) => {
+
         const doc = new jsPDF();
 
         doc.setTextColor(0, 0, 0);
         doc.text('Capnolearning Report', 10, 10,
-            {styles:{ fontSize: 20,fontWeight: 'bold'}})
+            { styles: { fontSize: 20, fontWeight: 'bold' } })
         doc.setDrawColor(0, 0, 0);
         doc.line(10, 15, 600, 15);
         doc.setFontSize(10)
-        
-        doc.text(_sessionDate ,35,25)
-        doc.text( _clientName,23,30);
-        doc.text( _trainerName,25,35);
+
+        doc.text(_sessionDate, 35, 25)
+        doc.text(_clientName, 23, 30);
+        doc.text(_trainerName, 25, 35);
         doc.setFont(undefined, 'bold');
-        doc.text("Session Date:" ,10,25)
-        doc.text("Client:" ,10,30);
-        doc.text("Trainer:",10,35);
+        doc.text("Session Date:", 10, 25)
+        doc.text("Client:", 10, 30);
+        doc.text("Trainer:", 10, 35);
         // doc.setFont(undefined, 'bold')
-        doc.addImage(_image, 5, 45,200,110);
+        doc.addImage(_image, 5, 45, 200, 110);
         // doc.output('dataurlnewwindow');
         window.open(doc.output('bloburl'))
-        
-    } 
+
+    }
 
 
     const Singlesession = () => {
 
-        
-        fetch(API_URL+"/report/single/pdf?session_id=" + sessionid,
+
+        fetch(API_URL + "/report/single/pdf?session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {
@@ -177,20 +178,20 @@ const PdfsessionReport = () => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     // console.warn("result", resp);
-                    let _temp = [] ;
-                    resp.pdfs.map((v,i) => {
-                        
+                    let _temp = [];
+                    resp.pdfs.map((v, i) => {
+
                         _temp.push({
-                            report : v.pdf_name,
-                            Createdate : new Date(v.added_on).toLocaleString(),
-                            actions : <p><a href="javascript:void" onClick={() => Viewpdfdata(v.id)} className="downloadimg" target="_blank"><img src={preveiw} /></a>,<a href='javascript:void' onClick={() => pdfdata(v.id)} className="downloadimg"><img src={download} /></a></p>
+                            report: v.pdf_name,
+                            Createdate: new Date(v.added_on).toLocaleString(),
+                            actions: <p><a href="javascript:void" onClick={() => Viewpdfdata(v.id)} className="downloadimg" target="_blank"><img src={preveiw} /></a>,<a href='javascript:void' onClick={() => pdfdata(v.id)} className="downloadimg"><img src={download} /></a></p>
                         })
                     })
                     setData(_temp);
 
                     // let len = pdfs.length;
                     //   console.warn(len);
-                   
+
 
                 });
             }
@@ -206,7 +207,7 @@ const PdfsessionReport = () => {
     }
 
     const Multisession = () => {
-        fetch(API_URL+"/report/multiple/pdf?client_id=" + Clientid,
+        fetch(API_URL + "/report/multiple/pdf?client_id=" + Clientid,
             {
                 method: 'GET',
                 headers: {
@@ -218,15 +219,15 @@ const PdfsessionReport = () => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     // console.warn("result", resp);
-                    let _temp = [] ;
-                    resp.pdfs.map((v,i) => {
+                    let _temp = [];
+                    resp.pdfs.map((v, i) => {
                         _temp.push({
-                            report : v.name,
-                            Createdate : new Date(v.added_on).toLocaleString(),
-                            actions : <p><a href='#' className="downloadimg"><img src={preveiw} /></a></p>
+                            report: v.name,
+                            Createdate: new Date(v.added_on).toLocaleString(),
+                            actions: <p><a href='#' className="downloadimg"><img src={preveiw} /></a></p>
                         })
                     })
-                    setData(_temp);                  
+                    setData(_temp);
 
                 });
             }
@@ -241,13 +242,13 @@ const PdfsessionReport = () => {
         })
     }
 
-    
+
     const logout = () => {
         localStorage.clear();
         window.location.reload();
     }
 
-    const columns =[
+    const columns = [
         {
             title: "Report Name", field: "report"
         },
@@ -260,32 +261,38 @@ const PdfsessionReport = () => {
     ]
 
 
-    return(
+    return (
         <div className="">
             <Header />
-             <div className="wrp-dashbord">
+            <div className="wrp-dashbord">
                 <div className="sidebar-section">
-                <Sidebar />
-               </div>
-               <div className="right-section">
-                <div className="head-demoreport">
-                    <h3>Session Data Reports</h3>
-                
-                    <p>{pdftype == "multi"? "Multi": pdftype == "single"? "Single" : pdftype == "group"? "Group" : pdftype == "homework"? "Homework" : null } Pdf Sesseion Report</p>
+                    <Sidebar />
                 </div>
-                <div className="wrp-bankform">
-                    <div style={{ maxWidth: '100%' }}>
-                        <MaterialTable
-                        columns={columns}
-                        data={data}
-                        title=""
-                        />
-                        
+                <div className="right-section">
+                <div className="back-icon-wrp">
+                        <Link to="/view/pdf/report" className="backbtn-icon">
+                            <img src={backIcon} alt="backicon" />
+                            <span>Back</span>
+                        </Link>
+                    </div>
+                    <div className="head-demoreport">
+                        <h3>Session Data Reports</h3>
+
+                        <p>{pdftype == "multi" ? "Multi" : pdftype == "single" ? "Single" : pdftype == "group" ? "Group" : pdftype == "homework" ? "Homework" : null} Pdf Sesseion Report</p>
+                    </div>
+                    <div className="wrp-bankform">
+                        <div style={{ maxWidth: '100%' }}>
+                            <MaterialTable
+                                columns={columns}
+                                data={data}
+                                title=""
+                            />
+
+                        </div>
                     </div>
                 </div>
-               </div>
-             </div>
-            
+            </div>
+
         </div>
     )
 }

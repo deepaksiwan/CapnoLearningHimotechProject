@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import Header from '../../component/Header';
 import Sidebar from '../../component/Sidebar';
 import { API_URL } from "../../../config";
+import backIcon from "../../images/back.png";
 
 const Uploadclientform = () => {
     const [clients, setinclients] = useState([]);
@@ -33,12 +34,12 @@ const Uploadclientform = () => {
     const userType = localStorage.getItem('userType');
     const accessToken = localStorage.getItem('accessToken');
     const selectedSession = localStorage.getItem('selectedSession');
-    
+
     const [modal, setModal] = useState(false);
     const toggleModal = () => setModal(!modal);
 
     const [successModal, setsuccessModal] = useState(false);
-    const successToggleModal = () => setsuccessModal(!successModal) ;
+    const successToggleModal = () => setsuccessModal(!successModal);
 
 
     useEffect(() => {
@@ -58,7 +59,7 @@ const Uploadclientform = () => {
         formData.append('form_id', formname.current.value);
         formData.append('form', formFile.current.files[0]);
 
-        
+
 
         if (client_id == "" || formname.current.value == "" || !formFile.current.files[0]) {
 
@@ -68,8 +69,8 @@ const Uploadclientform = () => {
 
         }
         formFile.current.value = "";
-        
-        fetch(API_URL+"/forms/client/upload", {
+
+        fetch(API_URL + "/forms/client/upload", {
             method: 'POST',
             headers: {
                 'x-access-token': accessToken,
@@ -85,13 +86,13 @@ const Uploadclientform = () => {
         })
 
         // alert("Successfully submitted");
-        
-       
+
+
 
     }
 
     const blankForm = () => {
-        fetch(API_URL+"/forms/blank",
+        fetch(API_URL + "/forms/blank",
             {
                 method: 'GET',
                 headers: {
@@ -115,17 +116,17 @@ const Uploadclientform = () => {
             else {
                 alert("network error")
             }
-            
+
 
 
         })
-       
+
     }
-    
+
 
     const getTrainers = () => {
 
-        let url = API_URL+"/trainers?user_id=" + userId + "&status=2";
+        let url = API_URL + "/trainers?user_id=" + userId + "&status=2";
         // console.log(trainerActive);
         let _trainerActive = trainerActive.current.checked;
         let _trainerInactive = trainerInactive.current.checked;
@@ -146,13 +147,13 @@ const Uploadclientform = () => {
         }
 
         if (_trainerActive && !_trainerInactive) {
-            url = API_URL+"/trainers?user_id=" + userId + "&status=1";;
+            url = API_URL + "/trainers?user_id=" + userId + "&status=1";;
         }
         else if (!_trainerActive && _trainerInactive) {
-            url = API_URL+"/trainers?user_id=" + userId + "&status=0";
+            url = API_URL + "/trainers?user_id=" + userId + "&status=0";
         }
         else if (_trainerActive && _trainerInactive) {
-            url = API_URL+"/trainers?user_id=" + userId;
+            url = API_URL + "/trainers?user_id=" + userId;
         }
         fetch(url,
             {
@@ -223,19 +224,19 @@ const Uploadclientform = () => {
             localStorage.setItem('selectedclientInactive', false);
 
         }
-        let url = API_URL+"/clients?user_id=" + _userId + "&status=2&trainer=" + _trainer + "&user_type=" + _userType;
+        let url = API_URL + "/clients?user_id=" + _userId + "&status=2&trainer=" + _trainer + "&user_type=" + _userType;
         let _clientActive = clientActive.current.checked;
         let _clientInactive = clientInactive.current.checked;
 
 
         if (_clientActive && !_clientInactive) {
-            url = API_URL+"/clients?user_id=" + _userId + "&status=1&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL + "/clients?user_id=" + _userId + "&status=1&trainer=" + _trainer + "&user_type=" + _userType;
         }
         else if (!_clientActive && _clientInactive) {
-            url = API_URL+"/clients?user_id=" + _userId + "&status=0&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL + "/clients?user_id=" + _userId + "&status=0&trainer=" + _trainer + "&user_type=" + _userType;
         }
         else if (_clientActive && _clientInactive) {
-            url = API_URL+"/clients?user_id=" + _userId + "&trainer=" + _trainer + "&user_type=" + _userType;
+            url = API_URL + "/clients?user_id=" + _userId + "&trainer=" + _trainer + "&user_type=" + _userType;
         }
 
 
@@ -311,6 +312,12 @@ const Uploadclientform = () => {
                         <div className="configer-head">
                             <div className="configer-child1">
                                 <h3>Upload Client Form</h3>
+                            </div>
+                            <div className="back-icon-wrp">
+                                <Link to="/view/manageform" className="backbtn-icon">
+                                    <img src={backIcon} alt="backicon" />
+                                    <span>Back</span>
+                                </Link>
                             </div>
 
                         </div>
@@ -442,27 +449,27 @@ const Uploadclientform = () => {
                                 </div>
                             </div>
                         </div>
-                                <Modal isOpen={successModal} toggle={successToggleModal} className="connect-box" centered={true}>
-                                    <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
-                                    <ModalBody>
-                                        <div className="modal-p">
-                                            <p>Form Submited Successfully</p>
-                                        </div>
-                                    </ModalBody>
+                        <Modal isOpen={successModal} toggle={successToggleModal} className="connect-box" centered={true}>
+                            <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
+                            <ModalBody>
+                                <div className="modal-p">
+                                    <p>Form Submited Successfully</p>
+                                </div>
+                            </ModalBody>
 
-                                </Modal>
-                        
-                        
-                                <Modal isOpen={modal} toggle={toggleModal} className="connect-box" centered={true}>
-                                    <ModalHeader toggle={toggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
-                                    <ModalBody>
-                                        <div className="modal-error-p">
-                                            <p>Please fill all field</p>
-                                        </div>
-                                    </ModalBody>
+                        </Modal>
 
-                                </Modal>
-                         
+
+                        <Modal isOpen={modal} toggle={toggleModal} className="connect-box" centered={true}>
+                            <ModalHeader toggle={toggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
+                            <ModalBody>
+                                <div className="modal-error-p">
+                                    <p>Please fill all field</p>
+                                </div>
+                            </ModalBody>
+
+                        </Modal>
+
                         <div className="client-submit-btn">
                             <button type="submit" onClick={submitclientform}>Submit</button>
                         </div>

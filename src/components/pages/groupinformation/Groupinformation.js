@@ -6,6 +6,7 @@ import Header from '../../component/Header';
 import Addclientname from './Addclientname';
 import right from '../../images/right.png';
 import { API_URL } from '../../../config';
+import backIcon from "../../images/back.png";
 
 const Groupinformation = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -178,7 +179,15 @@ const Groupinformation = () => {
                 <div className="right-section">
                     <div className="client-info-c">
                         <h3>New Group Information</h3>
-                        <div className="client-info-box">
+                        <div className="back-icon-wrp">
+                            <Link to="/viewcreate" className="backbtn-icon">
+                                <img src={backIcon} alt="backicon" />
+                                <span>Back</span>
+                            </Link>
+                        </div>
+                        
+                    </div>
+                    <div className="client-info-box">
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
@@ -297,7 +306,6 @@ const Groupinformation = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
             <Modal isOpen={fillallfieldmodal} toggle={fillallfieldtoggleModal} className="connect-box" centered={true}>

@@ -11,6 +11,7 @@ import { API_URL } from "../../../config";
 import edit from '../../images/edit.png'
 import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
+import backIcon from "../../images/back.png";
 
 
 const Viewassemblyreport = () => {
@@ -213,7 +214,12 @@ const Viewassemblyreport = () => {
                 <div className="right-section">
                     <div className="head-demoreport">
                         <h3>Session Assembly Reports</h3>
-
+                        <div className="back-icon-wrp">
+                        <Link to="/section/report/assembly" className="backbtn-icon">
+                            <img src={backIcon} alt="backicon" />
+                            <span>Back</span>
+                        </Link>
+                    </div>
                     </div>
                     <div className="wrp-bankform">
                         <div style={{ maxWidth: '100%' }}>

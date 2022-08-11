@@ -5,6 +5,7 @@ import Header from '../../component/Header';
 import MaterialTable from 'material-table';
 import download from '../../images/download.png';
 import preveiw from '../../images/preveiw.png';
+import backIcon from "../../images/back.png";
 import { jsPDF } from "jspdf";
 import { API_URL } from "../../../config";
 
@@ -82,6 +83,12 @@ const Bankform = () => {
                <div className="right-section">
                 <div className="head-demoreport">
                     <h3>Blank form</h3>
+                    <div className="back-icon-wrp">
+                        <Link to="/view/manageform" className="backbtn-icon">
+                            <img src={backIcon} alt="backicon" />
+                            <span>Back</span>
+                        </Link>
+                    </div>
                 </div>
                 <div className="wrp-bankform">
                     <div style={{ maxWidth: '100%' }}>

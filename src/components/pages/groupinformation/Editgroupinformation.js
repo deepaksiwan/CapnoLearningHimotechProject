@@ -8,6 +8,7 @@ import Addclientname from './Addclientname';
 import EditgroupProfile from '../groupinformation/EditgroupProfile';
 import md5 from 'md5';
 import { API_URL } from '../../../config';
+import backIcon from "../../images/back.png";
 
 const Editgroupinformation = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -247,7 +248,14 @@ const Editgroupinformation = () => {
                 <div className="right-section">
                     <div className="client-info-c">
                         <h3>Edit Group Information</h3>
-                        <div className="client-info-box">
+                        <div className="back-icon-wrp">
+                            <Link to="/edit/group" className="backbtn-icon">
+                                <img src={backIcon} alt="backicon" />
+                                <span>Back</span>
+                            </Link>
+                        </div>
+                    </div>
+                    <div className="client-info-box">
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
@@ -336,7 +344,6 @@ const Editgroupinformation = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
             <Modal isOpen={fillallfieldmodal} toggle={fillallfieldtoggleModal} className="connect-box" centered={true}>

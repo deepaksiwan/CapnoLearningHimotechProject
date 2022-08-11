@@ -2,6 +2,7 @@ import React from 'react';
 import {Link,useParams, Router} from 'react-router-dom';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
+import backIcon from "../../../components/images/back.png";
 
 const Demodatareport = () => {
     const {tab} = useParams();
@@ -30,6 +31,12 @@ const Demodatareport = () => {
                <div className="right-section">
                 <div className="head-demoreport">
                     <h3>Demo Data Reports</h3>
+                    <div className="back-icon-wrp">
+                        <Link to="/" className="backbtn-icon">
+                            <img src={backIcon} alt="backicon" />
+                            <span>Back</span>
+                        </Link>
+                    </div>
                 </div>
                 <div className="wrp-r-listbox">
                     {

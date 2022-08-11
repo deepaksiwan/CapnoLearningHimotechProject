@@ -5,6 +5,7 @@ import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import right from '../../images/right.png';
 import { API_URL } from '../../../config';
+import backIcon from "../../images/back.png";
 
 const Trainerinformation = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -223,7 +224,15 @@ const Trainerinformation = () => {
                 <div className="right-section">
                     <div className="client-info-c">
                         <h3>Add Trainer Information</h3>
-                        <div className="client-info-box">
+                        <div className="back-icon-wrp">
+                            <Link to="/edit/trainer" className="backbtn-icon">
+                                <img src={backIcon} alt="backicon" />
+                                <span>Back</span>
+                            </Link>
+                        </div>
+                        
+                    </div>
+                    <div className="client-info-box">
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
@@ -382,7 +391,6 @@ const Trainerinformation = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
             <Modal isOpen={fillallfieldmodal} toggle={fillallfieldtoggleModal} className="connect-box" centered={true}>
