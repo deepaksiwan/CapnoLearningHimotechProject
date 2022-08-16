@@ -49,7 +49,7 @@ const SubscriptionRenewalGroup = () =>{
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     setDeviceLength(resp.hardwareprofiles.length);
                     let _devices = resp.hardwareprofiles.length ; 
                     fetch(API_URL+"/get/group/price/" + userid,
@@ -62,7 +62,7 @@ const SubscriptionRenewalGroup = () =>{
                 ).then((response) => {
                     if (response.status == 200) {
                         response.json().then((resp) => {
-                            console.log("result", resp);
+                            // console.log("result", resp);
                             let _price = parseFloat(resp.price);
                             setPrice(_price);
                             payNow(_devices,_price)
@@ -139,7 +139,7 @@ const SubscriptionRenewalGroup = () =>{
                 },
                 onApprove: function (data, actions) {
                     return actions.order.capture().then(function (details) {
-                     //   console.log(details)
+                     //   // console.log(details)
                       
                      completeRegisteration(userid,details) ; 
                        

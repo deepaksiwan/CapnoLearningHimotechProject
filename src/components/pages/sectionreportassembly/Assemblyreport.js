@@ -45,8 +45,8 @@ const Assemblyreport = () => {
 
     }, []);
 
-    console.log("sessionid", sessionid)
-    console.log("Clientid", Clientid)
+    // console.log("sessionid", sessionid)
+    // console.log("Clientid", Clientid)
 
 
 
@@ -144,7 +144,7 @@ const Assemblyreport = () => {
         }).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("results", resp);
+                    // console.log("results", resp);
                     navigate("/edit/assembly/report/" + resp.id)
                     setLoader(false)
                 });

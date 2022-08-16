@@ -47,7 +47,7 @@ const List = () => {
 
                     setEmailList(_list)
                     EditToggleModal()
-                    // console.log(_data)
+                    // // console.log(_data)
                 }
                 else{
                 // alert("no emails found")        
@@ -102,7 +102,7 @@ const List = () => {
                         _dataAray.push(_data) ; 
                     })
                     setData(_dataAray);
-                    // console.log(_data)
+                    // // console.log(_data)
                 }
                 else{
                 // alert("no emails found")        

@@ -41,7 +41,7 @@ const Createdata = (props) => {
             setSelectedClient(localStorage.getItem('selectedClient'));
             setSelectedSession(localStorage.getItem('selectedSession'));
             setselectedGroup(localStorage.getItem('selectedGroup'));
-            //console.log(selectedSession);
+            //// console.log(selectedSession);
             setUserType(localStorage.getItem('userType'));
         }, 1000);
 
@@ -52,19 +52,19 @@ const Createdata = (props) => {
     //     setShowfiles(true)
     //     setselectedfiles([])
     //     var files = event.target.files;
-    //     console.log("files result", files)
+    //     // console.log("files result", files)
     //     var temp = [];
     //     for (var i = 0; i < files.length; i++) {
     //         //temp.push(files[i].webkitRelativePath);
     //         temp.push(files[i].name);
-    //         console.log("array result", temp);
+    //         // console.log("array result", temp);
 
     //     };
     //     // var i = 0
     //     // temp.push(files[i].name)
-    //     // console.log("array result", temp);
+    //     // // console.log("array result", temp);
     //     // temp.push(files.length.name)
-    //     // console.log(temp)
+    //     // // console.log(temp)
     //     setselectedfiles(temp);
     // };
 
@@ -97,7 +97,7 @@ const Createdata = (props) => {
                             </li>
                             <li>
                               
-                                <div className="create-list-box"><Link to="/choose/exported/file/config" >{t('Create report using exported session files')}</Link></div>
+                                <div className="create-list-box"><Link to="/choose/exported/file/config" >{t('Create report using offline data on the computer')}</Link></div>
                                 
                             </li>
 

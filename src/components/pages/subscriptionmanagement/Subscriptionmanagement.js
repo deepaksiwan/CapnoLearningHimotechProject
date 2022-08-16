@@ -41,7 +41,7 @@ const Subscriptionmanagement = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     setOwner(resp.owner[0]);
 
 
@@ -74,7 +74,7 @@ const Subscriptionmanagement = () => {
         }).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("results", resp);
+                    // console.log("results", resp);
                     successToggleModal();
 
                 });

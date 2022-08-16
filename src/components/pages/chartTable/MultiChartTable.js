@@ -75,14 +75,14 @@ const MultiChartTable = () => {
             yposition: data.yposition,
             lineType: data.lineType
         }
-        console.log("signal config",_temp);
+        // console.log("signal config",_temp);
         setSignalConfig(_temp)
     }
 
 
     const setStats = (_signal,data) => {
         
-    // console.log("signal data",data)
+    // // console.log("signal data",data)
     let _temp = signalStat ; 
     let _tempData = [] ;
         data.map((v,i) => {
@@ -94,7 +94,7 @@ const MultiChartTable = () => {
             })
         })
         _temp[_signal] = _tempData ; 
-        // console.log("signal data 1",_temp);
+        // // console.log("signal data 1",_temp);
         setSignalStat(_temp)
         setTimeout(() => {
             setShowHeader(true);
@@ -200,7 +200,7 @@ const MultiChartTable = () => {
             
                         graphs.map((v,i) => {
                                 let _config = signalConfig[v.signal_name+"_"+v.sid] ; 
-                                // console.log(_config) ;
+                                // // console.log(_config) ;
                                 fetch(API_URL + "/save/multi/report/graph", {
                                     method: 'POST',
                                     headers: {
@@ -263,7 +263,7 @@ const MultiChartTable = () => {
 
             graphs.map((v,i) => {
                     let _config = signalConfig[v.signal_name] ; 
-                    // console.log(_config) ;
+                    // // console.log(_config) ;
                     fetch(API_URL + "/save/single/alertnate/report/graph", {
                         method: 'POST',
                         headers: {

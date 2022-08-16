@@ -103,7 +103,7 @@ const Uploadclientform = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     setblankform(resp.forms);
 
 
@@ -127,7 +127,7 @@ const Uploadclientform = () => {
     const getTrainers = () => {
 
         let url = API_URL + "/trainers?user_id=" + userId + "&status=2";
-        // console.log(trainerActive);
+        // // console.log(trainerActive);
         let _trainerActive = trainerActive.current.checked;
         let _trainerInactive = trainerInactive.current.checked;
 
@@ -167,7 +167,7 @@ const Uploadclientform = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((result) => {
-                    console.log(result.trainers)
+                    // console.log(result.trainers)
                     if (result.status) {
                         settrainers(result.trainers)
                         // getClients();
@@ -188,7 +188,7 @@ const Uploadclientform = () => {
 
 
         }).catch(err => {
-            // console.log(err)
+            // // console.log(err)
 
         })
     }
@@ -252,7 +252,7 @@ const Uploadclientform = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((result) => {
-                    console.log(result.clients)
+                    // console.log(result.clients)
                     if (result.status) {
                         setinclients(result.clients)
                     }
@@ -272,7 +272,7 @@ const Uploadclientform = () => {
 
 
         }).catch(err => {
-            // console.log(err)
+            // // console.log(err)
 
         })
     }

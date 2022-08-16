@@ -147,7 +147,7 @@ const Uploadhomeworkasignment = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((result) => {
-                    console.log(result.clients)
+                    // console.log(result.clients)
                     if (result.status) {
                         setinclients(result.clients)
                     }
@@ -167,7 +167,7 @@ const Uploadhomeworkasignment = () => {
 
 
         }).catch(err => {
-            // console.log(err)
+            // // console.log(err)
 
         })
     }
@@ -191,10 +191,10 @@ const Uploadhomeworkasignment = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((result) => {
-                    // console.log(result.sesstion)
+                    // // console.log(result.sesstion)
                     if (result.status) {
                         setsesstion(result.sessions)
-                        // console.log(setsesstion)
+                        // // console.log(setsesstion)
                     }
 
 
@@ -213,7 +213,7 @@ const Uploadhomeworkasignment = () => {
 
 
         }).catch(err => {
-            // console.log(err)
+            // // console.log(err)
 
         })
     }

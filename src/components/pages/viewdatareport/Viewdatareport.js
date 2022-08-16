@@ -30,7 +30,7 @@ const Viewdatareport = () =>{
             setSelectedSession(localStorage.getItem('selectedSession'));
             setselectedGroup(localStorage.getItem('selectedGroup'));
             setselectedHomework(localStorage.getItem('selectedHomework'));
-        //    console.log(selectedSession);
+        //    // console.log(selectedSession);
            setUserType(localStorage.getItem('userType'));
         }, 1000);
 

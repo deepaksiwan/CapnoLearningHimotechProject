@@ -50,7 +50,7 @@ const Viewmanageform = () =>{
                     // // console.warn("result", resp);
                     setforms(resp.forms);
                 //    let len = clientform.length;
-                //       console.log(len);
+                //       // console.log(len);
 
                 });
             }
@@ -79,7 +79,7 @@ const Viewmanageform = () =>{
                     // // console.warn("result", resp);
                     settrainerforms(resp.forms);
                 //    let len = clientform.length;
-                //       console.log(len);
+                //       // console.log(len);
 
                 });
             }

@@ -44,7 +44,7 @@ const ExportedChart = () => {
         let _x = [] ;
         let _y = [];
         csv('/60c4378df1710signalB.csv').then(data=>{
-           console.log(data);
+           // console.log(data);
             data.map((v,i) => {
                 // _x.push(new Date(v.x));
                 _x.push(new Date(parseInt(v.x)));
@@ -57,7 +57,7 @@ const ExportedChart = () => {
  
                 }
             })
-            // console.log(data)
+            // // console.log(data)
         })
 
     }

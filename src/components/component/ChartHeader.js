@@ -76,7 +76,7 @@ const ChartHeader = (props) => {
     const setrequestProcessingModal  = props.setrequestProcessingModal ; 
     const setrequestProcesedModal  = props.setrequestProcesedModal ; 
     useEffect(() => {
-        // console.log("mydata" , signalStat);
+        // // console.log("mydata" , signalStat);
     },signalStat)
     useEffect(() => {
         Report();
@@ -168,7 +168,7 @@ const ChartHeader = (props) => {
         async function getData(_csvFile,_stat) {
            
             
-            //   console.log(userTimeOffset);
+            //   // console.log(userTimeOffset);
             csv('https://capnolearning.com/webroot/csvupl/' + _csvFile).then(data => {
                 if(data.length > 2){
                     if(_stat == 'avg'){
@@ -183,7 +183,7 @@ const ChartHeader = (props) => {
 
 
     const saveScreenshotPDF = () => {
-        // console.log(sessioninfo);
+        // // console.log(sessioninfo);
         setrequestProcessingModal(true) ; 
         html2canvas(document.getElementById("chart-table")).then(function (canvas) {
 
@@ -250,7 +250,7 @@ const ChartHeader = (props) => {
 
     }
     const saveScreenshot = () => {
-        // console.log(sessioninfo);
+        // // console.log(sessioninfo);
         setrequestProcessingModal(true) ; 
         html2canvas(document.getElementById("chart-table")).then(function (canvas) {
 
@@ -300,7 +300,7 @@ const ChartHeader = (props) => {
 
         setSavingReportConfirmation(true) ; 
 
-        // console.log("report data",props.signalConfig)
+        // // console.log("report data",props.signalConfig)
      
     }
  
@@ -444,7 +444,7 @@ const ChartHeader = (props) => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    // console.log("result", resp);
+                    // // console.log("result", resp);
                     setAlternate(resp.reports)
 
                 });
@@ -599,13 +599,62 @@ const ChartHeader = (props) => {
                     y = 10;
                     doc.addPage();
                 }
-                // console.log("line" , splitTitle[i])
+                // // console.log("line" , splitTitle[i])
                 doc.text(splitTitle[i].replace(/(<([^>]+)>)/gi, "") , 10, y);
                 y = y + 3;
             }
         }
  
         doc.save("Live Session Notes - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname + ".pdf");
+        setrequestProcessingModal(false);
+        setrequestProcesedModal(true);
+          
+    }
+
+
+    
+    const viewNotesPDF = () => {
+        setrequestProcessingModal(true);
+        const doc = new jsPDF();
+
+        for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
+            doc.setPage(pageNumber)
+            doc.setTextColor(0, 0, 0);
+            doc.text('Capnolearning Report', 10, 10,
+                { styles: { fontSize: 20, fontWeight: 'bold' } })
+            doc.setDrawColor(0, 0, 0);
+            doc.line(10, 15, 600, 15);
+            doc.setFontSize(10)
+
+            doc.text(sessioninfo[0].name, 35, 25)
+            doc.text(sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_firstname, 23, 30);
+            doc.text(sessioninfo[0].trainer_firstname+ " " + sessioninfo[0].trainer_lastname, 25, 35);
+            // doc.text(trainerName, 25, 35);
+            doc.setFont(undefined, 'bold');
+            doc.text("Session Date:", 10, 25)
+            doc.text("Client:", 10, 30);
+            doc.text("Trainer:", 10, 35);
+            doc.text("Live Session Notes:", 10, 45);
+            doc.setFont(undefined, 'normal');
+            
+            var splitTitle = doc.splitTextToSize(document.getElementById("liveNotes").innerHTML, 270);
+            var pageHeight = doc.internal.pageSize.height;
+           
+            var y = 50;
+            for (var i = 0; i < splitTitle.length; i++) {                
+                if (y > 280) {
+                    y = 10;
+                    doc.addPage();
+                }
+                // // console.log("line" , splitTitle[i])
+                doc.text(splitTitle[i].replace(/(<([^>]+)>)/gi, "") , 10, y);
+                y = y + 3;
+            }
+        }
+ 
+        window.open(doc.output('bloburl'))
+
+        // doc.output("Live Session Notes - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname + ".pdf");
         setrequestProcessingModal(false);
         setrequestProcesedModal(true);
           
@@ -749,9 +798,9 @@ const ChartHeader = (props) => {
         setrequestProcesedModal(true);
     }
     
-    // console.log("excel data",signalStat)
+    // // console.log("excel data",signalStat)
     // signalStat.map((v,i)=>{
-    // console.log("excel data",v)
+    // // console.log("excel data",v)
 
     // })
     return (
@@ -774,7 +823,7 @@ const ChartHeader = (props) => {
                                
                                     {
                                        graphs.map((v,i) => {
-                                            //   console.log("excel data "+v.signal_name );
+                                            //   // console.log("excel data "+v.signal_name );
                                    
                                           return (
 
@@ -808,9 +857,10 @@ const ChartHeader = (props) => {
                             <ul className='action-list'>
                                 <li><a href="javascript:void" onClick={notesModalToggle} data-tip="View session notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
                                 </li>
+                                <li><a href="javascript:void" onClick={() => ViewlivesessionImage} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
+
                                 <li><a href="javascript:void" onClick={zoomModalToggle} data-tip="View zoom recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
                                 <li><a href="javascript:void" onClick={getPreviousSessionPDF} data-tip="View PDF of previous session"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li>
-                                <li><a href="javascript:void" onClick={ViewlivesessionImage} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
                                {
                                 !group && 
                                 <li><a href="javascript:void" onClick={() => setShowSignalStat(!showSignalStat)} data-tip="Toggle all signal statistics"><i class="fa fa-table"></i></a></li>
@@ -855,7 +905,7 @@ const ChartHeader = (props) => {
                                 {
                                     alternate.length > 0 && alternate.map((v,i) => {
                                         return (
-                                            <option value={v.id} selected={v.id == currentConfig ? "selected" : "" }>Alternate {i+1}</option>
+                                            <option value={v.id} selected={v.id == currentConfig ? "selected" : "" }>{v.name}</option>
                                         )
                                     })
                                 }
@@ -940,7 +990,7 @@ const ChartHeader = (props) => {
                             <button className='lightbtn w-100'  onClick={notesModalToggle} >Cancel</button>
                             {
                                liveNotes && liveNotes.length > 0 &&
-                            <button className='darktbtn w-100 ml-1'  onClick={downloadNotesPDF} >Download PDF</button>
+                            <button className='darktbtn w-100 ml-1'  onClick={viewNotesPDF} >View PDF</button>
                             }
                         </div>
                         </ModalBody>

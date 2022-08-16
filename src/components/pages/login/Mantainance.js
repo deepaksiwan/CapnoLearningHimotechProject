@@ -36,7 +36,7 @@ const Mantainance = () => {
 
         const data = await response.json()
         setLoader(false)
-        console.log( "sddssdddsf",data)
+        // console.log( "sddssdddsf",data)
 
         if (data.status) {
             localStorage.setItem('user_id', data.user_id);

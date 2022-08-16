@@ -68,7 +68,7 @@ const Vieweditassemblyreport = () => {
 
     }, []);
 
-    console.log("mypdf", PdfReport)
+    // console.log("mypdf", PdfReport)
     const listAssemblyReportbyid = () => {
 
         fetch(API_URL + "/assembly/list/by/" + vid,
@@ -125,8 +125,8 @@ const Vieweditassemblyreport = () => {
 
     const handlepdfDescription = index => e => {
 
-        console.log('index: ' + index);
-        console.log('property name: ' + e.target.value);
+        // console.log('index: ' + index);
+        // console.log('property name: ' + e.target.value);
         let newArr = [...dataPdf];
         newArr[index] = e.target.value;
         setDataPdf(newArr);
@@ -134,8 +134,8 @@ const Vieweditassemblyreport = () => {
 
     const handleLiveDescription = index => e => {
 
-        console.log('index: ' + index);
-        console.log('property name: ' + e.target.value);
+        // console.log('index: ' + index);
+        // console.log('property name: ' + e.target.value);
         let newArr = [...liveImg];
         newArr[index] = e.target.value;
         setLiveImg(newArr);
@@ -350,7 +350,7 @@ const Vieweditassemblyreport = () => {
         }).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("results", resp);
+                    // console.log("results", resp);
                     setLoader2(false);
                     successToggleModal();
                 });
@@ -380,7 +380,7 @@ const Vieweditassemblyreport = () => {
         ).then(res => res.blob())
             .then(response => {
                 //Create a Blob from the PDF Stream
-                console.log(response);
+                // console.log(response);
                 setLoader(false)
                 const file = new Blob([response], {
                     type: "application/pdf"

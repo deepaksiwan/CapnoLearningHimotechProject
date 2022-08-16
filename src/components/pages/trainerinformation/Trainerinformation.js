@@ -58,7 +58,7 @@ const Trainerinformation = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     settrainer(resp.trainer[0]);
                     getState(resp.trainer[0].country)
 
@@ -116,7 +116,7 @@ const Trainerinformation = () => {
             return false;
         }
       
-        console.log(data)
+        // console.log(data)
         fetch(API_URL+"/trainer/update/"+trainerid,{
             method:'POST',
             headers:{
@@ -127,7 +127,7 @@ const Trainerinformation = () => {
         }).then((response)=>{
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("results", resp);
+                    // console.log("results", resp);
                     setLoader(false);
                     successToggleModal();
 
@@ -161,7 +161,7 @@ const Trainerinformation = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     setCountries(resp.countries);
 
                 });
@@ -191,7 +191,7 @@ const Trainerinformation = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     setStates(resp.states);
 
                 });

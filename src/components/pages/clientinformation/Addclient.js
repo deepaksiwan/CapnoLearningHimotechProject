@@ -59,7 +59,7 @@ const Addclient = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     setCountries(resp.countries);
 
                 });
@@ -89,7 +89,7 @@ const Addclient = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     setStates(resp.states);
 
                 });
@@ -136,7 +136,7 @@ const Addclient = () => {
             setLoader(false)
             return false;
         }
-        console.log(data);
+        // console.log(data);
         fetch(API_URL + "/client/create", {
             method: 'POST',
             headers: {
@@ -149,7 +149,7 @@ const Addclient = () => {
 
             if (response.status == 201) {
                 response.json().then((resp) => {
-                    // console.log("result", resp);
+                    // // console.log("result", resp);
                     successToggleModal();
                     setLoader(false)
                 });

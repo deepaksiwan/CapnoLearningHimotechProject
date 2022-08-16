@@ -90,7 +90,7 @@ const Hardwareprofile = () => {
         }).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("results", resp);
+                    // console.log("results", resp);
                     successToggleModal();
                     get5Device();
                     registerToggleModal();
@@ -143,7 +143,7 @@ const Hardwareprofile = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     
                     let _temp = [];
                     resp.hardwareprofiles.map((v, i) => {
@@ -181,7 +181,7 @@ const Hardwareprofile = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     let _temp = [];
                     resp.hardwareprofiles.map((v, i) => {
                         _temp.push({
@@ -232,7 +232,7 @@ const Hardwareprofile = () => {
         }).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("results", resp);
+                    // console.log("results", resp);
                     successToggleModal();
                     get5Device();
 

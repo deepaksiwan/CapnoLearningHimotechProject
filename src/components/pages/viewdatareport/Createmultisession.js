@@ -43,10 +43,10 @@ const Createmultisession = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((result) => {
-                    // console.log(result.sesstion)
+                    // // console.log(result.sesstion)
                     if (result.status) {
                         setSignals(result.signals)
-                        // console.log(setsesstion)
+                        // // console.log(setsesstion)
                     }
 
 
@@ -65,7 +65,7 @@ const Createmultisession = () => {
 
 
         }).catch(err => {
-            // console.log(err)
+            // // console.log(err)
 
         })
     }
@@ -77,7 +77,7 @@ const logout = () => {
 
     const getSession = () => {
         let _hw = 0;
-        console.log("homework",homework)
+        // console.log("homework",homework)
         if (homework === "true") {
             _hw = 1;
         }
@@ -97,10 +97,10 @@ const logout = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((result) => {
-                    // console.log(result.sesstion)
+                    // // console.log(result.sesstion)
                     if (result.status) {
                         setSession(result.sessions)
-                        // console.log(setsesstion)
+                        // // console.log(setsesstion)
                     }
 
 
@@ -119,7 +119,7 @@ const logout = () => {
 
 
         }).catch(err => {
-            // console.log(err)
+            // // console.log(err)
 
         })
     }

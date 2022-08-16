@@ -119,6 +119,10 @@ h3{
   transition: 0.5s;
 }
 
+.handle{
+  cursor: move;
+}
+
 .border-b{
   position: absolute;
   padding: 10px 30px 10px 30px;

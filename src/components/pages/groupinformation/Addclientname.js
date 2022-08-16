@@ -8,8 +8,8 @@ const Addclientname = (props) => {
     const serialNumber = useRef();
     
     const handleChange = () => {
-        // console.log(props.index)
-        // console.log({"device":serialNumber.current.value,"client":clientname.current.value})
+        // // console.log(props.index)
+        // // console.log({"device":serialNumber.current.value,"client":clientname.current.value})
         props.handleClientList(props.index,{"serialnumber":serialNumber.current.value,"name":clientname.current.value})
     }
 

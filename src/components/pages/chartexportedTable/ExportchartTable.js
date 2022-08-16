@@ -16,7 +16,7 @@ import backIcon from "../../images/back.png";
 
 
 const ChartTable = (props) => {
-    //console.log("chart props", props)
+    //// console.log("chart props", props)
 
     const accessToken = localStorage.getItem('accessToken');
     const { config, session, record } = useParams();
@@ -48,9 +48,9 @@ const ChartTable = (props) => {
     }
 
     const getData = props.getData;
-    //console.log("getData", getData)
+    //// console.log("getData", getData)
     const fileLoaded = props.fileLoaded;
-    //console.log("fileLoaded", fileLoaded);
+    //// console.log("fileLoaded", fileLoaded);
 
 
 
@@ -96,7 +96,7 @@ const ChartTable = (props) => {
     const fileupload = (event) => {
         //setfileLoaded(true)
         var file = event.target.files[0];
-        //console.log(event.target)
+        //// console.log(event.target)
         var reader = new FileReader();
         reader.readAsDataURL(event.target.files[0]);
         reader.onload = event => {
@@ -140,13 +140,13 @@ const ChartTable = (props) => {
                 SaveImage(_imageArray)
             }
         })
-        // console.log("png image jdfsdj", _imageArray)
+        // // console.log("png image jdfsdj", _imageArray)
     }
 
 
     const setStats = (_signal, data) => {
 
-        // console.log("signal data",data)
+        // // console.log("signal data",data)
         let _temp = signalStat;
         let _tempData = [];
         data.map((v, i) => {
@@ -158,7 +158,7 @@ const ChartTable = (props) => {
             })
         })
         _temp[_signal] = _tempData;
-        console.log("signal data 1" + _signal, _temp);
+        // console.log("signal data 1" + _signal, _temp);
         setSignalStat(_temp)
         setTimeout(() => {
             setShowHeader(true);
@@ -182,19 +182,18 @@ const ChartTable = (props) => {
             doc.text("Session Date:", 10, 25)
             // doc.text("Client:", 10, 30);
             // doc.text("Trainer:", 10, 35);
-            console.log("lenght of iamge", _imageArray.length - 4)
+            // console.log("lenght of iamge", _imageArray.length - 4)
             let ev = 0;
 
             _imageArray.length > 0 && _imageArray.map((v, i) => {
                 let reader = new FileReader();
-                console.log("result of v", v)
+                // console.log("result of v", v)
                 if (v) {
-                    console.log("v result", v)
+                    // console.log("v result", v)
                     reader.readAsDataURL(v);
                     reader.onload = event => {
                         let dataimage = event.target.result;
-                        console.log("dataimage",
-                            dataimage)
+                        // console.log("dataimage", dataimage)
                         doc.addImage(dataimage, 7, 50 + (ev * 110), 200, 90);
                         //doc.addImage(dataimage, 3, 0 + (ev * 0), pageWidth, pageHeight);
                         ev++;
@@ -233,7 +232,7 @@ const ChartTable = (props) => {
                     <div className="row justify-content-between">
                         {
                             sessioninfo.annotations && fileSelected && graphs && graphs.map(function (d, i) {
-                                console.log("graph show", d);
+                                // console.log("graph show", d);
                                 return (
                                     <div className="chart-w" style={{ width: (d.col != "1/1" ? (eval((d.col)) * 99) + "%" : (eval(d.col) * 100) + "%"), maxWidth: (eval(d.col) * 100) + "%", height: "auto", minHeight: (eval(d.row) * 82) + "vh" }}>
                                         <ExportChart sessioninfo={sessioninfo} showSignalStat={showSignalStat} getData={getData} setStats={setStats} index={i} dataFile={fileSelected} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.ymin} ymin={d.ymin} ymax={d.ymax} type={d.type} color={d.color} col={d.col} row={d.row} />

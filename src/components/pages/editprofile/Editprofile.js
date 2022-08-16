@@ -102,7 +102,7 @@ const Editprofile = () => {
         }).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("results", resp);
+                    // console.log("results", resp);
                     successToggleModal();
 
                 });
@@ -135,7 +135,7 @@ const Editprofile = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     setOwner(resp.owner[0]);
                     getState(resp.owner[0].country)
 
@@ -163,7 +163,7 @@ const Editprofile = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     setCountries(resp.countries);
 
                 });
@@ -190,7 +190,7 @@ const Editprofile = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     setStates(resp.states);
 
 

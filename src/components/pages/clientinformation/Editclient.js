@@ -84,7 +84,7 @@ const Editclient = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     settrainers(resp.trainers);
 
 

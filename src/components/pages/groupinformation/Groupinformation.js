@@ -56,7 +56,7 @@ const Groupinformation = () => {
             _temp.push(devicelist[i + 1]);
         }
         data['devices'] = _temp;
-        // console.log(data)
+        // // console.log(data)
 
 
         fetch(API_URL+"/group/create", {
@@ -71,7 +71,7 @@ const Groupinformation = () => {
 
             if (response.status == 201) {
                 response.json().then((resp) => {
-                    console.log("results", resp);
+                    // console.log("results", resp);
                     successToggleModal();
                     setLoader(false)
 
@@ -100,7 +100,7 @@ const Groupinformation = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    // console.log("result", resp);
+                    // // console.log("result", resp);
                     setTrainer(resp.trainers);
 
 
@@ -157,12 +157,12 @@ const Groupinformation = () => {
     }, [clientCount])
 
     const handleClientList = (i, data) => {
-        console.log(i);
-        console.log(data);
+        // console.log(i);
+        // console.log(data);
         let _temp = devicelist
         _temp[i] = data;
         setDeviceList(_temp);
-        console.log(devicelist);
+        // console.log(devicelist);
     }
     const logout = () => {
         localStorage.clear();

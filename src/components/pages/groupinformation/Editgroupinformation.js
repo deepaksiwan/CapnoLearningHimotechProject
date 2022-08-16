@@ -57,7 +57,7 @@ const Editgroupinformation = () => {
             _temp.push(devicelist[i + 1]);
         }
         data['devices'] = _temp;
-        // console.log(data)
+        // // console.log(data)
 
         if(groupName.current.value == "" || associateTrainer.current.value == "" || groupEmail.current.value == "" || associateHardwaretype.current.value == ""){
             fillallfieldtoggleModal();
@@ -76,7 +76,7 @@ const Editgroupinformation = () => {
 
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("results", resp);
+                    // console.log("results", resp);
                     successToggleModal();
                     setLoader(false)
 
@@ -105,7 +105,7 @@ const Editgroupinformation = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    // console.log("result", resp);
+                    // // console.log("result", resp);
                     setgroup(resp.group[0]);
 
 
@@ -136,7 +136,7 @@ const Editgroupinformation = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    // console.log("result", resp);
+                    // // console.log("result", resp);
                     setgroupProfile(resp.groupProfile);
 
 
@@ -169,7 +169,7 @@ const Editgroupinformation = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    // console.log("result", resp);
+                    // // console.log("result", resp);
                     setTrainer(resp.trainers);
 
 
@@ -226,12 +226,12 @@ const Editgroupinformation = () => {
     }, [clientCount])
 
     const handleClientList = (i, data) => {
-        console.log(i);
-        console.log(data);
+        // console.log(i);
+        // console.log(data);
         let _temp = devicelist
         _temp[i] = data;
         setDeviceList(_temp);
-        console.log(devicelist);
+        // console.log(devicelist);
     }
     const logout = () => {
         localStorage.clear();

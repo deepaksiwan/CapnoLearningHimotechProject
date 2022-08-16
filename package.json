@@ -41,6 +41,7 @@
     "react-browser-storage": "^0.1.0",
     "react-countdown": "^2.3.1",
     "react-dom": "^17.0.2",
+    "react-draggable": "^4.4.5",
     "react-export-excel": "^0.5.3",
     "react-i18next": "^11.15.4",
     "react-input-color": "^4.0.0",

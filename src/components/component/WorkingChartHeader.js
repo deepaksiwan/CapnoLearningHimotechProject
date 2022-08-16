@@ -65,7 +65,7 @@ const ChartHeader = (props) => {
     const setrequestProcessingModal  = props.setrequestProcessingModal ; 
     const setrequestProcesedModal  = props.setrequestProcesedModal ; 
     useEffect(() => {
-        console.log("mydata" , signalStat);
+        // console.log("mydata" , signalStat);
     },signalStat)
     useEffect(() => {
         Report();
@@ -92,7 +92,7 @@ const ChartHeader = (props) => {
     }
 
     const saveScreenshot = () => {
-        // console.log(sessioninfo);
+        // // console.log(sessioninfo);
         setrequestProcessingModal(true) ; 
         html2canvas(document.getElementById("chart-table")).then(function (canvas) {
 
@@ -142,7 +142,7 @@ const ChartHeader = (props) => {
 
         setSavingReportConfirmation(true) ; 
 
-        // console.log("report data",props.signalConfig)
+        // // console.log("report data",props.signalConfig)
      
     }
  
@@ -286,7 +286,7 @@ const ChartHeader = (props) => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    // console.log("result", resp);
+                    // // console.log("result", resp);
                     setAlternate(resp.reports)
 
                 });
@@ -409,7 +409,7 @@ const ChartHeader = (props) => {
                     y = 10;
                     doc.addPage();
                 }
-                // console.log("line" , splitTitle[i])
+                // // console.log("line" , splitTitle[i])
                 doc.text(splitTitle[i].replace(/(<([^>]+)>)/gi, "") , 10, y);
                 y = y + 3;
             }
@@ -569,9 +569,9 @@ const ChartHeader = (props) => {
         setrequestProcesedModal(true);
     }
     
-    // console.log("excel data",signalStat)
+    // // console.log("excel data",signalStat)
     // signalStat.map((v,i)=>{
-    // console.log("excel data",v)
+    // // console.log("excel data",v)
 
     // })
     return (
@@ -592,7 +592,7 @@ const ChartHeader = (props) => {
                                
                                     {
                                        graphs.map((v,i) => {
-                                        //   console.log("excel data",v);
+                                        //   // console.log("excel data",v);
                                           return (
 
                                     <ExcelSheet data={signalStat[v.signal_name]} name={v.signal_name}>

@@ -43,7 +43,7 @@ const ChartExportedHeader = (props) => {
 
 
     useEffect(() => {
-        console.log("mydata" , signalStat);
+        // console.log("mydata" , signalStat);
     },[signalStat])
     const downloadImage = props.downloadImage;
     useEffect(() => {
@@ -141,18 +141,18 @@ const ChartExportedHeader = (props) => {
     //     setShowfiles(true)
     //     setselectedfiles([])
     //     var files = event.target.files;
-    //     console.log("files result", files)
+    //     // console.log("files result", files)
     //     var temp = [];
     //     for (var i = 0; i < files.length; i++) {
     //         //temp.push(files[i].webkitRelativePath);
     //         temp.push(files[i].name);
-    //         console.log("array result", temp);
+    //         // console.log("array result", temp);
     //     };
     //     setselectedfiles(temp);
     // };
     // const ChooseFolder = (event) => {
     //     file = event.target.file[0]
-    //     console.log("check file", file)
+    //     // console.log("check file", file)
     // }
 
 
@@ -189,7 +189,7 @@ const ChartExportedHeader = (props) => {
                     y = 10;
                     doc.addPage();
                 }
-                // console.log("line" , splitTitle[i])
+                // // console.log("line" , splitTitle[i])
                 doc.text(splitTitle[i].replace(/(<([^>]+)>)/gi, "") , 10, y);
                 y = y + 3;
             }
@@ -202,7 +202,7 @@ const ChartExportedHeader = (props) => {
     }
     
     const saveScreenshot = () => {
-        // console.log(sessioninfo);
+        // // console.log(sessioninfo);
         setrequestProcessingModal(true) ; 
         html2canvas(document.getElementById("exported-chart")).then(function (canvas) {
 
@@ -265,7 +265,7 @@ const ChartExportedHeader = (props) => {
                                
                                     {
                                        graphs.map((v,i) => {
-                                        //       console.log("excel data "+v.signal_name , signalStat[v.signal_name] );
+                                        //       // console.log("excel data "+v.signal_name , signalStat[v.signal_name] );
                                         // if( v.signal_name != "pco2wave"  && v.signal_name != "pco2b2b"  && v.signal_name != "capin" && v.signal_name != "b2b2hr" && v.signal_name != "b2brsa" ){
                                           return (
 

@@ -16,7 +16,7 @@ import { setTextRange } from 'typescript';
 import { API_URL } from '../../../config';
 
 const ExportedChart = (props) => {
-    // console.log("props",props)
+    // // console.log("props",props)
     // const session = props.session;
     const record = 'all';
     const [xAxis, setXaxis] = useState([]);
@@ -64,7 +64,7 @@ const [unitArray, setunitArray] = useState({
 
     const [xAxisMin, setXaxisMin] = useState(props.xmin == 0 ? props.xmin :  new Date(parseInt(props.xmin*1e3))); 
     if(props.signal == "pco2wave"  ){
-        console.log("newMin", new Date(parseInt(props.xmin*1e3)));
+        // console.log("newMin", new Date(parseInt(props.xmin*1e3)));
     }
     const [xAxisMax, setXaxisMax] = useState(props.xmax == "full" ? props.xmax :  new Date(parseInt(props.xmax*1e3))); 
     const [yAxisMin, setYaxisMin] = useState(props.ymin);  
@@ -77,7 +77,7 @@ const [unitArray, setunitArray] = useState({
     // alert(props.color)
     const [type, setType] = useState(props.type);
     const showActualTime = props.showActualTime ; 
-    // console.log("other" , JSON.parse(props.otherConfig))
+    // // console.log("other" , JSON.parse(props.otherConfig))
     const otherConfig = props.otherConfig ? JSON.parse(props.otherConfig) : {
         xrange: 0, 
         units: (unitArray[props.signal][0] ? unitArray[props.signal][0] : ""),
@@ -102,7 +102,7 @@ const [unitArray, setunitArray] = useState({
     const [currentAnnotation,setCurrentAnnotation] = useState(null) ; 
     
     const [liveAnnotation,setLiveAnnotation] = useState(props.sessioninfo.annotations[props.signal]) ; 
-    console.log(props.sessioninfo.annotations[props.signal])
+    // console.log(props.sessioninfo.annotations[props.signal])
     // let  liveAnnotation = [] ; 
     const [graphModal, setgraphModal] = useState(false);
     const toggleGraphModal = () => setgraphModal(!graphModal);
@@ -231,7 +231,7 @@ const [unitArray, setunitArray] = useState({
     colorCodes['Paused'] = "#FF0000"
     useEffect(() => {
         // super(props);
-        // console.log("max" ,xAxisMax)
+        // // console.log("max" ,xAxisMax)
       
     }, [xAxis, yAxis,textAnnotations])
 
@@ -249,19 +249,19 @@ const [unitArray, setunitArray] = useState({
     const loadFile = () => {
         var reader = new FileReader();
         let fileToLoad = fileName[props.signal];
-        //console.log(" result of fileToLoad", fileToLoad)
+        //// console.log(" result of fileToLoad", fileToLoad)
         let _index = false;
         let _files = props.dataFile;
         _files = Array.from(_files);    
-       // console.log("final file var", _files)
+       // // console.log("final file var", _files)
         _files.length > 0 && _files.map(function (v, i) {
-            // console.log("show data fknfdkfjfkdf", v)
-            // console.log("result of name", v.name)
+            // // console.log("show data fknfdkfjfkdf", v)
+            // // console.log("result of name", v.name)
 
             if (v.name == fileToLoad) {
                 _index = i;
             }
-           // console.log("i result", _index);
+           // // console.log("i result", _index);
 
 
         })
@@ -320,7 +320,7 @@ const [unitArray, setunitArray] = useState({
     //             console.warn("result", resp);
     //             if (resp.sessions[0]) {
     //                               liveAnnotation = "["+resp.sessions[0].sessiondata+"]" ; 
-    //                             //   console.log(resp.sessions[0]);
+    //                             //   // console.log(resp.sessions[0]);
     //                               liveAnnotation = JSON.parse(liveAnnotation);
     //                             //   liveAnnotation =
                                
@@ -367,15 +367,15 @@ const [unitArray, setunitArray] = useState({
           let _allTasks = [] ; 
           let _allAnnotation = [] ; 
           let lastTask  ; 
-        //   console.log(userTimeOffset);
+        //   // console.log(userTimeOffset);
         csv(_csvFile).then(data => {
-            // console.log(data);
+            // // console.log(data);
             // let _tasks = {} ; 
             let _temptask = [] ; 
             let _taskArray = [] ; 
             let _tempAnnotation = textAnnotations ; 
             let lastRecord = data[0].x ; 
-        // console.log(data[0]);
+        // // console.log(data[0]);
             data.map((v, i) => {
 
                 // _x.push(new Date(v.x));
@@ -389,12 +389,12 @@ const [unitArray, setunitArray] = useState({
                      xData = new Date(parseInt((((v.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ))
                 }
                     _length = parseInt(v.x - data[0].x - _pauseTime) ;
-                    // console.log(_length)
+                    // // console.log(_length)
                     _x.push(xData);
                     _toolText.push(signalName[props.signal])
-                    // console.log()
+                    // // console.log()
                     if(group){
-                        console.log('which y', v['y'+(props.index+1)])
+                        // console.log('which y', v['y'+(props.index+1)])
                         _y.push(parseFloat(v['y'+(props.index+1)]));
                         let yt = parseFloat(v['y'+(props.index+1)]) ; 
                      
@@ -450,14 +450,14 @@ const [unitArray, setunitArray] = useState({
                         
                       
                         if( _taskArray.length > 0 ){
-                            // console.log(v);
+                            // // console.log(v);
                             if(data[i+1]){
                                 if(lastTask != data[i+1].text){
                                     _taskArray[0] = xData;
                                     _taskArray.push(xData)
                                     _taskArray.push(lastTask)
                                     _taskArray.push(lastTask)
-                                    // console.log("task",_taskArray);
+                                    // // console.log("task",_taskArray);
         
                                     // _tasks[] = _taskArray
                                     _allTasks.push(_taskArray);
@@ -466,12 +466,12 @@ const [unitArray, setunitArray] = useState({
                                 }
                             }
                            else  if(i == data.length - 1 ){
-                            // console.log(v);
+                            // // console.log(v);
                             _taskArray[0] = xData;
                             _taskArray.push(xData)
                             _taskArray.push(lastTask)
                             _taskArray.push(lastTask)
-                            // console.log("task",_taskArray);
+                            // // console.log("task",_taskArray);
 
                             // _tasks[] = _taskArray
                             _allTasks.push(_taskArray);
@@ -483,7 +483,7 @@ const [unitArray, setunitArray] = useState({
                             lastTask =  v.text ; 
                             _taskArray.push(xData)
 
-                            // console.log(lastTask);
+                            // // console.log(lastTask);
                             // _taskArray.push(xData)
                              
                         }
@@ -508,9 +508,9 @@ const [unitArray, setunitArray] = useState({
                 
                 if (i == (data.length - 1)) {
                     // alert("here");
-                // console.log(_x.length)
+                // // console.log(_x.length)
                     _allTasks.map((v,i) => {
-                        console.log(props.signal,v[2],v)
+                        // console.log(props.signal,v[2],v)
                         if(v[3] == "Paused" ){
                             _temptask.push(
                                 {
@@ -566,8 +566,8 @@ const [unitArray, setunitArray] = useState({
                             liveAnnotation.map((v,i) => {
                                 v = JSON.parse(v);
                                 let xAnnTime = new Date(parseInt(((parseInt(v.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ));
-                                console.log("I ma here", xAnnTime)
-                                    // console.log(parseInt(((parseInt(annData.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ));
+                                // console.log("I ma here", xAnnTime)
+                                    // // console.log(parseInt(((parseInt(annData.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ));
                                     _temptask.push(
                                         {
                                             type: 'rect',
@@ -599,7 +599,7 @@ const [unitArray, setunitArray] = useState({
                                    }
     
                                 })
-                            // console.log(_temptask)
+                            // // console.log(_temptask)
                          
                      
                         }
@@ -623,7 +623,7 @@ const [unitArray, setunitArray] = useState({
                     }
 
                     _allAnnotation.map((v,i) => {
-                        // console.log(v)
+                        // // console.log(v)
                         if(v[3] == "Paused" ){
                             
                             _tempAnnotation.push(
@@ -672,13 +672,13 @@ const [unitArray, setunitArray] = useState({
 
 
                         if(i == (_allAnnotation.length - 1)){
-                                                //   console.log("annotation",_tempAnnotation);
+                                                //   // console.log("annotation",_tempAnnotation);
                                                 // alert(liveAnnotation.length)
                             liveAnnotation.map((v,i) => {
                                 v = JSON.parse(v);
                               
                             let xAnnTime = new Date(parseInt(((parseInt(v.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ))
-                                // console.log(parseInt(((parseInt(annData.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ));
+                                // // console.log(parseInt(((parseInt(annData.x) - data[0].x) + (userTimeOffset) ) - _pauseTime  ));
                                 _tempAnnotation.push(
                                     {
                                         xref: 'x',
@@ -725,7 +725,7 @@ const [unitArray, setunitArray] = useState({
  
 
                     }
-                    console.log("signal x:"+props.signal,_x)
+                    // console.log("signal x:"+props.signal,_x)
                     if( props.signal != "pco2wave"  && props.signal != "pco2b2b"  && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa" ){
                         setStats(props.signal,_tempStats)
                     setStatistics(_tempStats)
@@ -735,19 +735,19 @@ const [unitArray, setunitArray] = useState({
 
                 }
             })
-            // console.log(data)
+            // // console.log(data)
         })
 
     }
 
 
     const handleColor = (e) => {
-            console.log(e);
+            // console.log(e);
     }
 
     const handleInitial = (e) => {
         // reset();
-//         console.log(e);
+//         // console.log(e);
 //     let userTimeOffset = new Date().getTimezoneOffset() ; 
 //     // //    alert(userTimeOffset);
 //     userTimeOffset = userTimeOffset*60*1000 ; 
@@ -777,8 +777,8 @@ const [unitArray, setunitArray] = useState({
 }
 
     const handleRelayout = (e) => {
-        console.log(e);
-        console.log("relayout",xAxisMin)
+        // console.log(e);
+        // console.log("relayout",xAxisMin)
   
         
         if(new Date(e['xaxis.range[0]']) < new Date(xAxis[0].getTime())){
@@ -792,7 +792,7 @@ const [unitArray, setunitArray] = useState({
 
         }
         else{
-            console.log("limit")
+            // console.log("limit")
 
         }
 }
@@ -803,9 +803,9 @@ useEffect(() => {
 
 const zoomIn = () => {
     let _deviation = zommDeviation*length ; 
-    console.log(_deviation);
-    console.log(length);
-    console.log(xAxisMin)
+    // console.log(_deviation);
+    // console.log(length);
+    // console.log(xAxisMin)
     
     // let userTimeOffset = new Date().getTimezoneOffset() ; 
     // //    alert(userTimeOffset);
@@ -813,7 +813,7 @@ const zoomIn = () => {
     let _diff = new Date(xAxisMax).getTime() -  new Date(xAxisMin).getTime() ; 
     if(_diff > _deviation && _diff > 60000){
         let _newXaxisMin = new Date(xAxisMin).getTime() + _deviation  ; 
-        console.log(new Date(_newXaxisMin)  );
+        // console.log(new Date(_newXaxisMin)  );
         setXaxisMin(new Date(_newXaxisMin))
     
      
@@ -821,7 +821,7 @@ const zoomIn = () => {
         setXaxisMax(new Date(_newXaxisMax))
     }
     else{
-        console.log("Max Zoom Reached");
+        // console.log("Max Zoom Reached");
     }
    
  
@@ -831,9 +831,9 @@ const zoomIn = () => {
 
 const zoomOut = () => {
     let _deviation = zommDeviation*length ; 
-    // console.log(_deviation);
-    // console.log(length);
-    // console.log(new Date(xAxisMin))
+    // // console.log(_deviation);
+    // // console.log(length);
+    // // console.log(new Date(xAxisMin))
     
     // let userTimeOffset = new Date().getTimezoneOffset() ; 
     // //    alert(userTimeOffset);
@@ -841,7 +841,7 @@ const zoomOut = () => {
     let _diff = new Date(xAxisMax).getTime() -  new Date(xAxisMin).getTime() ; 
     if(_diff < length){
         let _newXaxisMin = new Date(xAxisMin).getTime() - _deviation  ; 
-        console.log(new Date(_newXaxisMin)  );
+        // console.log(new Date(_newXaxisMin)  );
         setXaxisMin(new Date(_newXaxisMin))
     
      
@@ -849,7 +849,7 @@ const zoomOut = () => {
         setXaxisMax(new Date(_newXaxisMax))
     }
     else{
-        console.log("Max Zoom Reached");
+        // console.log("Max Zoom Reached");
     }
    
  
@@ -861,9 +861,9 @@ const zoomOut = () => {
 
 const moveForward = () => {
      
-    // console.log(_deviation);
-    // console.log(length);
-    // console.log(new Date(xAxisMin))
+    // // console.log(_deviation);
+    // // console.log(length);
+    // // console.log(new Date(xAxisMin))
     
     let userTimeOffset = new Date().getTimezoneOffset() ; 
     //    alert(userTimeOffset);
@@ -935,11 +935,11 @@ const moveBackward = () => {
 
 const moveGraph = () => {
     
-        console.log("Checking")
-        console.log(play)
+        // console.log("Checking")
+        // console.log(play)
 
         if(play){
-            console.log("Playing")
+            // console.log("Playing")
             let _diff = 30; 
             let _xAxisMin = xAxisMin
             let _newMin =  new Date(_xAxisMin).getTime() + _diff ; 
@@ -954,8 +954,8 @@ const moveGraph = () => {
                 setXaxisMax(new Date(xAxis[xAxis.length - 1]))
             }
             else{
-                console.log(_newMin);
-                console.log(_newMax);
+                // console.log(_newMin);
+                // console.log(_newMax);
                 setXaxisMax(_newMax)
                 setXaxisMin(_newMin)
                
@@ -966,7 +966,7 @@ const moveGraph = () => {
  
 }
 
-// console.log("xAxis",xAxisMax)
+// // console.log("xAxis",xAxisMax)
     
 const handlePlay = () => {
   
@@ -1144,7 +1144,7 @@ const handleClick = event => {
     // setCurrentPoint(event)
     setCommentModal(true);
     setCurrentPoint(event.points[0])
-    // console.log("clicked", event.points)
+    // // console.log("clicked", event.points)
 }
 
 const addComment = () => {
@@ -1180,7 +1180,7 @@ const addComment = () => {
 }
 
 const handleAnnotationClick = (e) => {
-    console.log(e)
+    // console.log(e)
     setCurrentAnnotation(e);
     setUpdateCommentModal(true)
     setReportComment(e.annotation.text)
@@ -1220,7 +1220,7 @@ const updateComment = () => {
         
  
    _oldAnnotation.push(_tempAnnotation)  ; 
-   console.log("new" , _oldAnnotation) ;
+   // console.log("new" , _oldAnnotation) ;
    setTextAnnotations(_oldAnnotation) ; 
    setComment(_oldAnnotation)
  
@@ -1294,7 +1294,7 @@ const deleteComment = () => {
                 </ul> */}
 
                 {/* unit modal */}
-               {console.log(xAxisMin)}
+         
                 <Plot className="plot-charts"
                  onClick={handleClick}
                  onRelayout={handleRelayout}
@@ -1366,7 +1366,7 @@ const deleteComment = () => {
                     }}
 
                 />
-                {/* {xAxis[0]} */}
+                 
 
           
 

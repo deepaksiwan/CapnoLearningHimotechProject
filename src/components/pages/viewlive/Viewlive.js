@@ -122,7 +122,7 @@ const Viewlive = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     if (resp.session.length > 0) {
                         setsession(resp.session[0].link);
 

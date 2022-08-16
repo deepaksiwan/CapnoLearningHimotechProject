@@ -2,7 +2,7 @@ import React, { Component, useEffect, useRef, useState } from 'react';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import { Radio } from 'antd';
 import ReactTooltip from 'react-tooltip';
-
+// import Draggable from "react-draggable";
 import { Link, useParams, Router } from 'react-router-dom';
 import Plot from 'react-plotly.js';
 import { csv, image } from 'd3';
@@ -14,10 +14,11 @@ import { trim } from 'jquery';
 import { setTextRange } from 'typescript';
 import { API_URL } from '../../../config';
 import arrowHeadRight from '../../images/turn_arrow.png'
+import Draggable from 'react-draggable';
 const Chart = (props) => {
-    console.log("props",props)
+    // console.log("props",props)
     const session = props.session;
-    const record = props.record;
+    const record = props.record; 
     const [xAxis, setXaxis] = useState([]);
     const [yAxis2, setYAxis2] = useState([]);
     const {showclock} = useParams() ; 
@@ -29,7 +30,11 @@ const Chart = (props) => {
     const [tableView , setTableView] = useState(props.showSignalStat); 
     // Utz = Utz*60*1000 ; 
     useEffect(() =>{
-        setTableView(props.showSignalStat)
+        // // console.log("signal sat" , props.showSignalStat)
+        if(!props.showSignalStat)
+        {
+            setTableView(props.showSignalStat)
+        }
     },[props.showSignalStat])
     
 const [unitArray, setunitArray] = useState({
@@ -71,7 +76,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
 
     const [xAxisMin, setXaxisMin] = useState(props.xmin == 0 ? props.xmin :  new Date(parseInt(props.xmin*1e3))); 
     if(props.signal == "pco2wave"  ){
-        // console.log("newMin", new Date(parseInt(props.xmin*1e3)));
+        // // console.log("newMin", new Date(parseInt(props.xmin*1e3)));
     }
     const [xAxisMax, setXaxisMax] = useState(props.xmax == "full" ? props.xmax :  new Date(parseInt(props.xmax*1e3))); 
     const [yAxisMin, setYaxisMin] = useState(parseFloat(props.ymin));  
@@ -84,7 +89,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
     // alert(props.color)
     const [type, setType] = useState(props.type);
     const showActualTime = props.showActualTime ; 
-    // console.log("other" , JSON.parse(props.otherConfig))
+    // // console.log("other" , JSON.parse(props.otherConfig))
     const otherConfig = props.otherConfig ? JSON.parse(props.otherConfig) : {
         xrange: 0, 
         units: (unitArray[props.signal][0] ? unitArray[props.signal][0] : ""),
@@ -216,7 +221,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
     colorCodes['Paused'] = "#FF0000"
     useEffect(() => {
         // super(props);
-        // console.log("max" ,xAxisMax)
+        // // console.log("max" ,xAxisMax)
       
     }, [xAxis, yAxis,textAnnotations,signalModalData])
 
@@ -330,7 +335,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                 console.warn("result", resp);
                 if (resp.sessions[0]) {
                                   liveAnnotation = "["+resp.sessions[0].sessiondata+"]" ; 
-                                //   console.log(resp.sessions[0]);
+                                //   // console.log(resp.sessions[0]);
                                   liveAnnotation = JSON.parse(liveAnnotation);
                                 //   liveAnnotation =
                                
@@ -385,10 +390,10 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
           let _allTasks = [] ; 
           let _allAnnotation = [] ; 
           let lastTask  ; 
-        //   console.log(userTimeOffset);
+        //   // console.log(userTimeOffset);
         // csv('//capno-data.s3.amazonaws.com/' + _csvFile).then(data => {
         csv('https://capnolearning.com/csvupl/' + _csvFile).then(data => {
-            // console.log(data);
+            // // console.log(data);
             // let _tasks = {} ; 
             let _temptask = [] ; 
             let _taskArray = [] ; 
@@ -401,7 +406,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
             let prevRecord = 0 ; 
             let vfirstRecord = 0 ;
             let endTask  = 0 ;
-        // console.log(data[0]);
+        // // console.log(data[0]);
             data.map((v, i) => {
                 if(i == 0 || v.x != data[i-1].x ){
                 
@@ -449,16 +454,16 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                 }
 
                  
-                // console.log("First Data "+props.signal , firstRecord)
-                // console.log("First Record "+props.signal , firstRecord)
+                // // console.log("First Data "+props.signal , firstRecord)
+                // // console.log("First Record "+props.signal , firstRecord)
                 
                     _length = parseInt(v.x - firstRecord - _pauseTime) ;
-                    // console.log(_length)
+                    // // console.log(_length)
                     _x.push(xData);
                     _toolText.push(signalName[props.signal])
-                    // console.log()
+                    // // console.log()
                     if(group){
-                        console.log('which y', v['y'+(props.index+1)+'_median'])
+                        // console.log('which y', v['y'+(props.index+1)+'_median'])
                         _y.push(parseFloat(v['y'+(props.index+1)+'_median']));
                         // let yt = parseFloat(v['y'+(props.index+1)+'_median']) ; 
                         let yt ;
@@ -553,14 +558,14 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                         
                       
                         if( _taskArray.length > 0 ){
-                            // console.log(v);
+                            // // console.log(v);
                             if(data[i+1]){
                                 if(lastTask != data[i+1].text){
                                     // _taskArray[0] = xData;
                                     // _taskArray.push(xData)
                                     _taskArray.push(lastTask)
                                     _taskArray.push(lastTask)
-                                    // console.log("task",_taskArray);
+                                    // // console.log("task",_taskArray);
                                     _taskArray.push(xData)
         
                                     // _tasks[] = _taskArray
@@ -571,13 +576,13 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                                 }
                             }
                            else  if(i == data.length - 1 ){
-                            // console.log(v);
+                            // // console.log(v);
                             // _taskArray[0] = xData;
                             // _taskArray.push(xData)
                             _taskArray.push(lastTask)
                             _taskArray.push(lastTask)
                             _taskArray.push(xData)
-                            // console.log("task",_taskArray);
+                            // // console.log("task",_taskArray);
                             endTask = _allTasks.length
                             // _tasks[] = _taskArray
                             _allTasks.push(_taskArray);
@@ -589,7 +594,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                             lastTask =  v.text ; 
                             _taskArray.push(xData)
 
-                            // console.log(lastTask);
+                            // // console.log(lastTask);
                             // _taskArray.push(xData)
                              
                         }
@@ -614,8 +619,8 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                 
                 if (i == (data.length - 1)) {
                     // alert("here");
-                // console.log(_x.length)
-                // console.log("records",_recordArray)
+                // // console.log(_x.length)
+                // // console.log("records",_recordArray)
                 _recordArray.map((v,i) => {
                     // let _xPer = new Date(_x[_x.length - 1]).getTime() - new Date(_x[0]).getTime() ;
                     // _xPer = _xPer*0.015 ; 
@@ -662,8 +667,8 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                     liveAnnotation.map((v,i) => {
                       
                         let xAnnTime = new Date(parseInt(((parseInt(v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
-                        // console.log("I ma here")
-                            // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
+                        // // console.log("I ma here")
+                            // // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
                             _temptask.push(
                                 {
                                     type: 'rect',
@@ -695,14 +700,14 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                            }
 
                         })
-                    // console.log(_temptask)
+                    // // console.log(_temptask)
                  
              
                 }
 
 
                     _allTasks.map((v,i) => {
-                        console.log(props.signal,v[2],v)
+                        // console.log(props.signal,v[2],v)
                         if(v[3] == "Paused" ){
                             _temptask.push(
                                 {
@@ -746,7 +751,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                             );
 
                             if(i == endTask){
-                                console.log("End Task",v)
+                                // console.log("End Task",v)
                                 _temptask.push(
                                     {
                                         type: 'rect',
@@ -784,8 +789,8 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                             liveAnnotation.map((v,i) => {
                               
                                 let xAnnTime = new Date(parseInt(((parseInt(v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
-                                // console.log("I ma here")
-                                    // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
+                                // // console.log("I ma here")
+                                    // // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
                                     _temptask.push(
                                         {
                                             type: 'rect',
@@ -817,7 +822,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                                    }
     
                                 })
-                            // console.log(_temptask)
+                            // // console.log(_temptask)
                          
                      
                         }
@@ -884,7 +889,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                         liveAnnotation.map((v,i) => {
                               
                             let xAnnTime = new Date(parseInt(((parseInt(v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ))
-                                // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
+                                // // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
                                 _tempAnnotation.push(
                                     {
                                         
@@ -914,7 +919,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                     }
 
                     _allAnnotation.map((v,i) => {
-                        // console.log(v)
+                        // // console.log(v)
                         if(v[3] == "Paused" ){
                             
                             _tempAnnotation.push(
@@ -963,12 +968,12 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
 
 
                         if(i == (_allAnnotation.length - 1)){
-                                                //   console.log("annotation",_tempAnnotation);
+                                                //   // console.log("annotation",_tempAnnotation);
                                                 // alert(liveAnnotation.length)
                             liveAnnotation.map((v,i) => {
                               
                             let xAnnTime = new Date(parseInt(((parseInt(v.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ))
-                                // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
+                                // // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
                                 _tempAnnotation.push(
                                     {
                                         xref: 'x',
@@ -1010,8 +1015,8 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                     setTextTooltip(_toolText);
                     setYAxis2(_threshold)
                     if(average == 30){
-                        console.log("axis x" , _x.length)
-                        console.log("axis y" , _tempY.length)
+                        // console.log("axis x" , _x.length)
+                        // console.log("axis y" , _tempY.length)
                         setYaxis(_tempY);
                         setXaxis(_x);
                     }
@@ -1032,7 +1037,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
  
 
                     }
-                    console.log("signal x:"+props.signal,_x)
+                    // console.log("signal x:"+props.signal,_x)
                      
                     if( props.signal != "pco2wave"  && props.signal != "pco2b2b"  && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa" ){
                         setStats(props.signal,_tempStats)
@@ -1046,31 +1051,32 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                 }
             }
             })
-            // console.log(data)
+            // // console.log(data)
         })
 
     }
 
 
     const handleColor = (e) => {
-            console.log(e);
+            // console.log(e);
     }
 
 
     const toogleTableView = () => {
         // setShowSignalStat(!showSignalStat);
-        setTableView(!tableView)
+        setTableView(!tableView);
+
 }
     
 
     const handleInitial = (e) => {
         // reset();
-//         console.log(e);
+//         // console.log(e);
 //     let userTimeOffset = new Date().getTimezoneOffset() ; 
 //     // //    alert(userTimeOffset);
 //     userTimeOffset = userTimeOffset*60*1000 ; 
-// console.log("initial" , new Date(e.layout.xaxis.range[0]))
-// console.log("initial" , new Date(e.layout.xaxis.range[1]))
+// // console.log("initial" , new Date(e.layout.xaxis.range[0]))
+// // console.log("initial" , new Date(e.layout.xaxis.range[1]))
         if(props.xmin == 0 ){
             setXaxisMin(new Date(xAxis[0]))
         }  
@@ -1097,47 +1103,24 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
 }
 
     const handleRelayout = (e) => {
-        console.log("relayout event" , e);
-        console.log("relayout",xAxisMin)
-        console.log("relayout",xAxisMax)
         setXRange('')
-        setXaxisMin(new Date(e['xaxis.range[0]']))
-  
-        setXaxisMax(new Date(e['xaxis.range[1]']))
-        
         if(new Date(e['xaxis.range[0]']) < new Date(xAxis[0])){
+            let _diff = xAxisMax - xAxisMin ; 
             setXaxisMin(new Date(xAxis[0]))
-
         }
-        
-        if(new Date(e['xaxis.range[1]']) > new Date(xAxis[xAxis.length-1])){
+        else  if(new Date(e['xaxis.range[1]']) > new Date(xAxis[xAxis.length-1])){
+            let _diff = xAxisMax - xAxisMin ; 
             setXaxisMax(new Date(xAxis[xAxis.length-1]))
-
+            setXaxisMin(new Date(xAxis[xAxis.length-1] - _diff )) ;
         }
         else if(new Date(e['xaxis.range[1]']) < new Date(xAxis[0])){
             setXaxisMax(new Date(xAxis[xAxis.length - 1]))
+            setXaxisMin(new Date(xAxis[0]))
         }
-        // let _tempImages = [] ; 
-        // images.map((v,i) => {
-        //     let _xPer = new Date(e['xaxis.range[1]']).getTime() - new Date(e['xaxis.range[0]']).getTime() ;
-        //     _xPer = _xPer*0.015 ; 
-        //     _tempImages.push({
-        //         source: arrowHeadRight,
-        //         xref: "paper",
-        //         yref: "paper",
-        //         x: v[0],
-        //         y: yAxisMax-(yAxisMax*0.1),
-        //         sizex: 100,
-        //         sizey: 100,
-        //         xanchor: "left",
-        //         yanchor: "bottom",
-        //         pointNum: 1
-        //     })
-        //     if(i == (images.length - 1)){
-        //         setImages(_tempImages)
-        //     }
-        // })
-
+        else{
+            setXaxisMin(new Date(e['xaxis.range[0]']))
+            setXaxisMax(new Date(e['xaxis.range[1]']))
+        }
 }
 
 useEffect(() => {    
@@ -1146,9 +1129,9 @@ useEffect(() => {
 
 const zoomIn = () => {
     let _deviation = zommDeviation*length ; 
-    console.log(_deviation);
-    console.log(length);
-    console.log(xAxisMin)
+    // console.log(_deviation);
+    // console.log(length);
+    // console.log(xAxisMin)
     
     // let userTimeOffset = new Date().getTimezoneOffset() ; 
     // //    alert(userTimeOffset);
@@ -1156,7 +1139,7 @@ const zoomIn = () => {
     let _diff = new Date(xAxisMax).getTime() -  new Date(xAxisMin).getTime() ; 
     if(_diff > _deviation && _diff > 60000){
         let _newXaxisMin = new Date(xAxisMin).getTime() + _deviation  ; 
-        console.log(new Date(_newXaxisMin)  );
+        // console.log(new Date(_newXaxisMin)  );
         setXaxisMin(new Date(_newXaxisMin))
     
      
@@ -1164,7 +1147,7 @@ const zoomIn = () => {
         setXaxisMax(new Date(_newXaxisMax))
     }
     else{
-        console.log("Max Zoom Reached");
+        // console.log("Max Zoom Reached");
     }
    
  
@@ -1174,9 +1157,9 @@ const zoomIn = () => {
 
 const zoomOut = () => {
     let _deviation = zommDeviation*length ; 
-    // console.log(_deviation);
-    // console.log(length);
-    // console.log(new Date(xAxisMin))
+    // // console.log(_deviation);
+    // // console.log(length);
+    // // console.log(new Date(xAxisMin))
     
     // let userTimeOffset = new Date().getTimezoneOffset() ; 
     // //    alert(userTimeOffset);
@@ -1184,7 +1167,7 @@ const zoomOut = () => {
     let _diff = new Date(xAxisMax).getTime() -  new Date(xAxisMin).getTime() ; 
     if(_diff < length){
         let _newXaxisMin = new Date(xAxisMin).getTime() - _deviation  ; 
-        console.log(new Date(_newXaxisMin)  );
+        // console.log(new Date(_newXaxisMin)  );
         setXaxisMin(new Date(_newXaxisMin))
     
      
@@ -1192,7 +1175,7 @@ const zoomOut = () => {
         setXaxisMax(new Date(_newXaxisMax))
     }
     else{
-        console.log("Max Zoom Reached");
+        // console.log("Max Zoom Reached");
     }
    
  
@@ -1204,9 +1187,9 @@ const zoomOut = () => {
 
 const moveForward = () => {
      
-    // console.log(_deviation);
-    // console.log(length);
-    // console.log(new Date(xAxisMin))
+    // // console.log(_deviation);
+    // // console.log(length);
+    // // console.log(new Date(xAxisMin))
     
     let userTimeOffset = new Date().getTimezoneOffset() ; 
     //    alert(userTimeOffset);
@@ -1262,13 +1245,13 @@ const moveBackward = () => {
     let _diff = new Date(xAxisMax).getTime() -  new Date(xAxisMin).getTime() ; 
     let _newMin =  new Date(xAxisMin).getTime() - _diff ; 
     _newMin = new Date(_newMin) ;
-    console.log("Newmin C" , _newMin);
-    // console.log("OGmin" , _newMin);
-    console.log("Newmin O" , new Date(xAxis[0]));
+    // console.log("Newmin C" , _newMin);
+    // // console.log("OGmin" , _newMin);
+    // console.log("Newmin O" , new Date(xAxis[0]));
     if(_newMin <= new Date(xAxis[0])){
-        // console.log("Newmin R" ,"true")
-        // console.log("Newmin S" ,xAxisMin)
-        // console.log("Newmin Y" ,xAxis)
+        // // console.log("Newmin R" ,"true")
+        // // console.log("Newmin S" ,xAxisMin)
+        // // console.log("Newmin Y" ,xAxis)
         setXaxisMin(new Date(xAxis[0]))
     }
     else if(_newMin >= new Date(xAxis[xAxis.length - 1])){
@@ -1284,7 +1267,7 @@ const moveBackward = () => {
     let _newMax =  new Date(xAxisMax).getTime() - _diff ; 
     _newMax =  new Date(_newMax)  ; 
     if(_newMax >= xAxis[xAxis.length - 1]){
-        console.log("this is set 1");
+        // console.log("this is set 1");
         setXaxisMax(new Date(xAxis[xAxis.length - 1]))
     }
     else if(_newMax <= new Date(xAxis[0])){
@@ -1306,11 +1289,11 @@ const moveBackward = () => {
 
 const moveGraph = () => {
     
-        console.log("Checking")
-        console.log(play)
+        // console.log("Checking")
+        // console.log(play)
 
         if(play){
-            console.log("Playing")
+            // console.log("Playing")
             let _diff = 30; 
             let _xAxisMin = xAxisMin
             let _newMin =  new Date(_xAxisMin).getTime() + _diff ; 
@@ -1325,8 +1308,8 @@ const moveGraph = () => {
                 setXaxisMax(new Date(xAxis[xAxis.length - 1]))
             }
             else{
-                console.log(_newMin);
-                console.log(_newMax);
+                // console.log(_newMin);
+                // console.log(_newMax);
                 setXaxisMax(_newMax)
                 setXaxisMin(_newMin)
                
@@ -1337,7 +1320,7 @@ const moveGraph = () => {
  
 }
 
-// console.log("xAxis",xAxisMax)
+// // console.log("xAxis",xAxisMax)
     
 const handlePlay = () => {
   
@@ -1389,10 +1372,10 @@ const calculate_history_sample = (data,sample) => {
             else if(i == next || i == (data[0].length - 1)){
                 totalsum += parseFloat(data[1][i]) ;
                 
-                console.log(totalsum);
+                // console.log(totalsum);
             var avgvalue = parseFloat(totalsum / num);
-            // console.log(data[i][0]);
-            // console.log(avgvalue);
+            // // console.log(data[i][0]);
+            // // console.log(avgvalue);
             newdataX.push(data[0][i-(num - 1)]);
             newdataY.push(avgvalue);
          
@@ -1402,7 +1385,7 @@ const calculate_history_sample = (data,sample) => {
             c = 1 ;
             }           
             if(i == (data[0].length - 1)){
-    // console.log("Average" , [newdataX,newdataY]);
+    // // console.log("Average" , [newdataX,newdataY]);
 
                 return [newdataX,newdataY];
             }
@@ -1538,7 +1521,7 @@ const handleSignalStat = e => {
     }
 
     // useEffect(() => {
-    //     console.log(signalModalData.stat);
+    //     // console.log(signalModalData.stat);
     //    getData(csvFile,signalModalData.stat) ;    
     //     },[showActualTime])
     
@@ -1575,8 +1558,8 @@ const handleSignalType = e => {
 const dstOffset = (date = new Date()) => {
     const january = new Date(date.getFullYear(), 11, 20).getTimezoneOffset();
     const july = new Date(date.getFullYear(), 6, 20).getTimezoneOffset();
-    console.log("Jan Time" , january);
-    console.log("July Time" , july);
+    // console.log("Jan Time" , january);
+    // console.log("July Time" , july);
     let max = Math.max(january, july);
     let min = Math.min(january, july);
     return Math.abs(min - max);
@@ -1615,12 +1598,12 @@ const hideThreshold = event => {
 
 const handleClick = event => {
     
-    console.log("clicl",event)
+    // console.log("clicl",event)
     setReportComment(null);
     // setCurrentPoint(event)
     setCommentModal(true);
     setCurrentPoint(event.points[0])
-    // console.log("clicked", event.points)
+    // // console.log("clicked", event.points)
 }
 
 const addComment = () => {
@@ -1656,7 +1639,7 @@ const addComment = () => {
 }
 
 const handleAnnotationClick = (e) => {
-    console.log(e)
+    // console.log(e)
     setCurrentAnnotation(e);
     setUpdateCommentModal(true)
     setReportComment(e.annotation.text)
@@ -1696,7 +1679,7 @@ const updateComment = () => {
         
  
    _oldAnnotation.push(_tempAnnotation)  ; 
-   console.log("new" , _oldAnnotation) ;
+   // console.log("new" , _oldAnnotation) ;
    setTextAnnotations(_oldAnnotation) ; 
    setComment(_oldAnnotation)
  
@@ -1726,7 +1709,7 @@ const handletTline = (e) => {
 }
 
 const handleKeypress = (e) => {
-    console.log("Relayouting",e)
+    // console.log("Relayouting",e)
 }
     return (
         <div >
@@ -1793,15 +1776,20 @@ const handleKeypress = (e) => {
                 </ul> */}
 
                 {/* unit modal */}
-               {/* {console.log(xAxisMin)} */}
+               {/* {// console.log(xAxisMin)} */}
+
+
+
+
                 <Plot className="plot-charts"
-                 onClick={handleClick}
-                 onRelayout={handleRelayout}
+                onClick={handleClick}
+                onRelayout={handleRelayout}
+                
                 //  onRedraw={handleKeypress}
-                 onClickAnnotation={handleAnnotationClick}
+                onClickAnnotation={handleAnnotationClick}
                 //  onUpdate={handleRelayout}
                 //  onKeyDown={() => handleKeypress}
-                 onInitialized={handleInitial}
+                onInitialized={handleInitial}
                     data={[
                         {  
                             x: xAxis,
@@ -1882,18 +1870,20 @@ const handleKeypress = (e) => {
                 // autosize: true,
                         margin: {
                             l: 30,
-                            r: 5,
+                            r: 30,
                             b: 20,
                             t: 0,
                             pad: 0
                         },
                         padding: {
                             top: 0
-                        }
+                        },
+                        autosize: true
                     }}
                     config={{
 			        	displayModeBar: false,  
                         scrollZoom: true,
+                        autosize: true,
                          
                         doubleClick:false,
                         transition: {
@@ -1962,9 +1952,11 @@ const handleKeypress = (e) => {
                 {/* annotations modal */}
 
                 {/* trehsold modal */}
+                <Draggable handle=".handle">
                     
-                <Modal isOpen={trehSoldModal} toggle={toggletrehSoldModal} className="modal-box-wrp" centered={true}>
-                    <ModalHeader toggle={toggletrehSoldModal}><span className="ml-1 roititle modal-head">Threhsold Setting (<span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]}} ></span>)</span></ModalHeader>
+                <Modal isOpen={trehSoldModal}  toggle={toggletrehSoldModal} className="modal-box-wrp" centered={true}>
+                    
+                    <ModalHeader  className='handle' toggle={toggletrehSoldModal}><span className="ml-1 roititle modal-head">Threhsold Settings(<span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]}} ></span>)</span></ModalHeader>
                     <ModalBody>
                         <ul className="range-list">
                         <li>
@@ -1996,14 +1988,17 @@ const handleKeypress = (e) => {
                                             max={yAxisMax}
                                             value={thresholdvalue}
                                             onChange={(e) => setThresholdvalue(e.target.value)}
+                                            tooltip={null}
+                                          
+                                             
+
                                         />
                                 
                                  
                                         </Col>
                                 </Row>
                             </li>
-                        
-                             <li>
+                            <li>
                                 <Row justify="space-between" style={{height: rowHeight}}>
                                     <Col lg={5} xl={5}>
                                         <span>Line Width</span>
@@ -2014,6 +2009,7 @@ const handleKeypress = (e) => {
                                             min={1}
                                             max={10}
                                             value={thresholdthick}
+                                            tooltip={null}
                                             onChange={(e) => setThresholdthick(e.target.value)}
                                         />
                                 
@@ -2030,8 +2026,9 @@ const handleKeypress = (e) => {
                                             <Radio.Group
                                                 onChange={handletTline}
                                                 value={thresholdtLine}
+                                                
                                             >
-                                                <Radio value={"solid"} style={{marginRight : "20px"}} > Solid </Radio>
+                                            <Radio value={"solid"} style={{marginRight : "20px"}} > Solid </Radio>
                                                 <Radio value={"dot"} style={{marginRight : "20px"}} > Dotted </Radio>
                                                 <Radio value={"dashdot"} > Dashed </Radio>
                                             </Radio.Group>
@@ -2068,12 +2065,15 @@ const handleKeypress = (e) => {
                     </ModalBody>
 
                 </Modal>
+                </Draggable>
 
                 {/* trehsold modal */}
 
                 {/* signal modal */}
+                <Draggable handle=".handle">
+
                 <Modal isOpen={signalModal} toggle={toggleSignalModal} className="modal-box-wrp" centered={true}>
-                    <ModalHeader toggle={toggleSignalModal}><span className="ml-1 roititle modal-head">Signal Setting (<span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]}} ></span>)</span></ModalHeader>
+                    <ModalHeader className='handle'  toggle={toggleSignalModal}><span className="ml-1 roititle modal-head">Signal Setting (<span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]}} ></span>)</span></ModalHeader>
                     <ModalBody>
                         <ul className="range-list">
                             <li>
@@ -2252,12 +2252,16 @@ const handleKeypress = (e) => {
                     </ModalBody>
 
                 </Modal>
+                </Draggable>
+
 
                 {/* signal modal */}
 
                 {/* graph modal */}
+                <Draggable handle=".handle">
+
                 <Modal isOpen={graphModal} toggle={toggleGraphModal} className="modal-box-wrp" centered={true}>
-                    <ModalHeader toggle={toggleGraphModal}><span className="ml-1 modal-head roititle">Graph Setting (<span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]}} ></span>)</span></ModalHeader>
+                    <ModalHeader className='handle'  toggle={toggleGraphModal}><span className="ml-1 modal-head roititle">Graph Setting (<span dangerouslySetInnerHTML={{__html : props && signalName[props.signal]}} ></span>)</span></ModalHeader>
                     <ModalBody>
                         <ul className="range-list">
                             <li>
@@ -2427,9 +2431,11 @@ const handleKeypress = (e) => {
                         </ul>
                     </ModalBody>
                 </Modal> 
+                </Draggable>
 
-                {/* comment modal start */}                              
-                <Modal isOpen={commentModal} toggle={toggleCommentModal} className="modal-box-wrp" centered={true}>
+                {/* comment modal start */}         
+                <Draggable handle=".handle">
+                <Modal className='handle'  isOpen={commentModal} toggle={toggleCommentModal} className="modal-box-wrp" centered={true}>
                 <ModalHeader toggle={toggleCommentModal}><span className="ml-1 roititle modal-head">Add Comment</span></ModalHeader>
                         <ModalBody>
                            <textarea rows="8" style={{width: "100%"}} value={reportComment} onChange={(e) => setReportComment(e.target.value) } ></textarea>
@@ -2441,12 +2447,16 @@ const handleKeypress = (e) => {
                         </ModalBody>
                             
                     </Modal>
+                </Draggable>
+
                 {/* comment modal end*/}                              
 
 
-                      {/* update comment modal start */}                              
+                      {/* update comment modal start */}      
+                <Draggable handle=".handle">
+
                       <Modal isOpen={updateCommentModal} toggle={toggleUpdateCommentModal} className="modal-box-wrp" centered={true}>
-                <ModalHeader toggle={toggleUpdateCommentModal}><span className="ml-1 roititle modal-head">Update Comment</span></ModalHeader>
+                <ModalHeader className='handle'  toggle={toggleUpdateCommentModal}><span className="ml-1 roititle modal-head">Update Comment</span></ModalHeader>
                         <ModalBody>
                            <textarea rows="8" style={{width: "100%"}} value={reportComment} onChange={(e) => setReportComment(e.target.value) } ></textarea>
                            
@@ -2457,6 +2467,8 @@ const handleKeypress = (e) => {
                         </ModalBody>
                             
                     </Modal>
+                </Draggable>
+
                 {/* update comment modal end*/}                              
 
 
@@ -2467,7 +2479,7 @@ const handleKeypress = (e) => {
                 </div>
                 {
                   (  props.signal != "pco2wave"  && props.signal != "pco2b2b"  && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa") && ( showSignalStat || tableView)  ?
-                          <table className='table table-resposnive table-hover statTable mt-5' style={{display: (showSignalStat && tableView)  ? "" : "none" }} >
+                          <table className='table table-resposnive table-hover statTable mt-5' style={{display: (showSignalStat || tableView)  ? "" : "none" }} >
                                         <thead className='thead-dark'>
                                             <tr>
                                                 <th>X</th>

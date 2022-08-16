@@ -53,7 +53,7 @@ const Addtrainer = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     setCountries(resp.countries);
 
                 });
@@ -83,7 +83,7 @@ const Addtrainer = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    console.log("result", resp);
+                    // console.log("result", resp);
                     setStates(resp.states);
 
                 });
@@ -137,7 +137,7 @@ const Addtrainer = () => {
         }).then((response) => {
             if (response.status == 201) {
                 response.json().then((resp) => {
-                    console.log("results", resp);
+                    // console.log("results", resp);
                     successToggleModal();
                     setLoader(false)
 

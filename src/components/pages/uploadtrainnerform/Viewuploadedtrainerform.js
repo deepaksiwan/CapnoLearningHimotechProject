@@ -80,7 +80,7 @@ const Viewuploadedtrainerform = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    // console.log("result", resp);
+                    // // console.log("result", resp);
                     let _temp = [];
                     resp.forms.map((v, i) => {
                         _temp.push({

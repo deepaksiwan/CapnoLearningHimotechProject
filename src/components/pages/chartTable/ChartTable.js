@@ -17,6 +17,7 @@ const ChartTable = () => {
     const { config, session  , record,currentConfig,showclock} = useParams();
     const [graphs, setgraphs] = useState([]);
     const [notes,setNotes] = useState(null) ; 
+    const [altName,setAltName] = useState(null)
     const [reportName,setReportName] = useState(null) ; 
     const [showHeader,setShowHeader] = useState(false) ; 
     const [sessionDate,setSessionDate] = useState(null) ; 
@@ -75,14 +76,14 @@ const ChartTable = () => {
             thresholdthick: data.thresholdthick,
             thresholdvalue: data.thresholdvalue
         }
-        console.log("signal config",_temp);
+        // console.log("signal config",_temp);
         setSignalConfig(_temp)
     }
 
 
     const setStats = (_signal,data) => {
         
-    // console.log("signal data",data)
+    // // console.log("signal data",data)
     let _temp = signalStat ; 
     let _tempData = [] ;
         data.map((v,i) => {
@@ -94,7 +95,7 @@ const ChartTable = () => {
             })
         })
         _temp[_signal] = _tempData ; 
-        console.log("signal data 1"+_signal,_temp);
+        // console.log("signal data 1"+_signal,_temp);
         setSignalStat(_temp)
         setTimeout(() => {
             setShowHeader(true);
@@ -226,7 +227,7 @@ const ChartTable = () => {
             
                         graphs.map((v,i) => {
                                 let _config = signalConfig[v.signal_name] ; 
-                                // console.log(_config) ;
+                                // // console.log(_config) ;
                                 fetch(API_URL + "/save/single/report/graph", {
                                     method: 'POST',
                                     headers: {
@@ -277,7 +278,7 @@ const ChartTable = () => {
         let formData = {    
         'original':  config,
         'user': userId,
-        'name': "Alternate",
+        'name': altName,
         'type': "1",
         'status': "1"
         } ;
@@ -295,7 +296,7 @@ const ChartTable = () => {
 
             graphs.map((v,i) => {
                     let _config = signalConfig[v.signal_name] ; 
-                    // console.log(_config) ;
+                    // // console.log(_config) ;
                     fetch(API_URL + "/save/single/alertnate/report/graph", {
                         method: 'POST',
                         headers: {
@@ -407,7 +408,9 @@ const ChartTable = () => {
                     <Modal isOpen={savingAlternateConfirmation} toggle={savingAlternateConfirmationToggle} className="modal-box-wrp" centered={true}>
                     <ModalHeader toggle={savingAlternateConfirmationToggle}><span className="ml-1 roititle modal-head">Confirm request.</span></ModalHeader>
                     <ModalBody>
-                        <p className='text-center'>Are you sure you want to save the current configuration as an alternate configuration of this report?</p>
+                    <p className=''>Please enter the name of alternate configuration you want to save.</p>
+                    <input type="text" class="form-control" value={altName} onChange={(e) => setAltName(e.target.value)} placeholder="Report Name" aria-label="Report Name" aria-describedby="basic-addon1" />
+ 
                         <div className='d-flex justify-content-around mt-3'>
                             <button className='lightbtn w-100'  onClick={savingAlternateConfirmationToggle} >Cancel</button>
                             <button className='darktbtn w-100 ml-1'  onClick={saveReportConfig} >Save</button>

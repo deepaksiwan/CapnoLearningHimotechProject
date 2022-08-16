@@ -59,10 +59,10 @@ const Viewassemblyreport = () => {
                     const clientName = resp.firstname + resp.lastname
                     const sessionDate = resp.sessionDate
 
-                    console.log(clientName)
+                    // console.log(clientName)
 
                     let _temp = [];
-                    console.log(_temp)
+                    // console.log(_temp)
                     resp.data.map((v, i) => {
                         _temp.push({
                             reportTitle: v.name,
@@ -136,7 +136,7 @@ const Viewassemblyreport = () => {
         ).then(res => res.blob())
             .then(response => {
                 //Create a Blob from the PDF Stream
-                console.log(response);
+                // console.log(response);
 
                 const file = new Blob([response], {
                     type: "application/pdf"
