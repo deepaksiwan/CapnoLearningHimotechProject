@@ -59,7 +59,7 @@ const CreatesaveFilesession = () => {
                 </div>
                 <div className="right-section">
                 <div className="head-demoreport">
-                    <h3>Demo Data Reports</h3>
+                    <h3></h3>
                     <div className="back-icon-wrp">
                         <Link to="/" className="backbtn-icon">
                             <img src={backIcon} alt="backicon" />
@@ -76,7 +76,7 @@ const CreatesaveFilesession = () => {
                            sessions && sessions.map((sessions) =>
                                 {
                                     return(
-                                        <li><a href={"/create/exported/report/"+ sessions.id   } >{sessions.name}</a></li>
+                                        <li><a href={"/create/exported/report/"+ sessions.id   } dangerouslySetInnerHTML={{__html: sessions.name}} ></a></li>
                                     )
                                 }
                             )

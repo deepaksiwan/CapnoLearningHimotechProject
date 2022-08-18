@@ -611,9 +611,41 @@ const ChartHeader = (props) => {
           
     }
 
-
-    
     const viewNotesPDF = () => {
+        setrequestProcessingModal(true) ;
+        
+
+        let dataType = 4;
+
+        fetch(API_URL + "/get/live/session/notes/" + sessionid + "/" + dataType,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+    
+                ).then(res => res.blob())
+                .then(response => {
+                    //Create a Blob from the PDF Stream
+    
+                    const file = new Blob([response], {
+                        type: "application/pdf"
+                    });
+                    //Build a URL from the file
+                    const fileURL = URL.createObjectURL(file);
+                    // Open the URL on new Window
+                    window.open(fileURL);
+        setrequestProcessingModal(false) ;
+
+                    // download(fileURL);
+    
+                })
+  
+    }
+    
+    const viewNotesPDFOld = () => {
         setrequestProcessingModal(true);
         const doc = new jsPDF();
 
@@ -857,7 +889,7 @@ const ChartHeader = (props) => {
                             <ul className='action-list'>
                                 <li><a href="javascript:void" onClick={notesModalToggle} data-tip="View session notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
                                 </li>
-                                <li><a href="javascript:void" onClick={() => ViewlivesessionImage} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={ViewlivesessionImage} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
 
                                 <li><a href="javascript:void" onClick={zoomModalToggle} data-tip="View zoom recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
                                 <li><a href="javascript:void" onClick={getPreviousSessionPDF} data-tip="View PDF of previous session"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li>
