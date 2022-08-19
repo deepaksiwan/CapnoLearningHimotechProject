@@ -111,7 +111,7 @@ const Viewmanageform = () =>{
              <div className="create-section">
                        <ul className="create-list">
                             <li>
-                                <div className="create-list-box"><Link to={(selectedSession === "null")? "" : "/bankform"} className={(selectedSession === "null")? "deactivate" : ""}>{ t('Download-Fill-in-PDF-Blank-Forms')}</Link></div>
+                                <div className="create-list-box"><Link to="/bankform">{ t('Download-Fill-in-PDF-Blank-Forms')}</Link></div>
                             </li>
                             <li>
                                 <div className="create-list-box"><Link to={(forms.length == 0 || selectedClient === "null")? "": "/upload/client/form"} className={(forms.length == 0 || selectedClient === "null")? "deactivate": ""}>{ t('Upload-Completed-Client-Forms')}</Link></div>
