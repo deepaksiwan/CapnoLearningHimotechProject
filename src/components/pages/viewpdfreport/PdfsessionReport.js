@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
+import { useTranslation, initReactI18next } from "react-i18next";
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
@@ -11,6 +12,7 @@ import backIcon from "../../../components/images/back.png";
 import { jsPDF } from "jspdf";
 
 const PdfsessionReport = () => {
+    const { t } = useTranslation();
     const accessToken = localStorage.getItem('accessToken');
     const [pdfs, setpdfs] = useState([]);
     const [data, setData] = useState([]);
@@ -259,13 +261,13 @@ const PdfsessionReport = () => {
 
     const columns = [
         {
-            title: "Report Name", field: "report"
+            title: t("Report-Name"), field: "report"
         },
         {
-            title: <span className="text-right">Created Date Time</span>, field: "Createdate"
+            title: <span className="text-right">{t("Created-Date-Time")}</span>, field: "Createdate"
         },
         {
-            title: <span className="text-right">Actions</span>, field: "actions"
+            title: <span className="text-right">{t("Actions")}</span>, field: "actions"
         }
     ]
 
@@ -285,9 +287,9 @@ const PdfsessionReport = () => {
                         </Link>
                     </div>
                     <div className="head-demoreport">
-                        <h3>Session Data Reports</h3>
+                        <h3>{t("Session-Data-Reports")}</h3>
 
-                        <p>{pdftype == "multi" ? "Multi" : pdftype == "single" ? "Single" : pdftype == "group" ? "Group" : pdftype == "homework" ? "Homework" : null} Pdf Sesseion Report</p>
+                        <p>{pdftype == "multi" ? t("Multi") : pdftype == "single" ? t("Single") : pdftype == "group" ? t("group") : pdftype == "homework" ? t("homework") : null} Pdf {t("Sesseion-Report")}</p>
                     </div>
                     <div className="wrp-bankform">
                         <div style={{ maxWidth: '100%' }}>

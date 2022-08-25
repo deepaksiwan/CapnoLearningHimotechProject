@@ -266,14 +266,14 @@ const Assemblyreport = () => {
                     <div className="assembly-box">
 
                         <div className="assembly-content">
-                            <h3>Session Assembly Reports</h3>
-                            <p>You may choose to assemble a SESSION REPORT consisting of any or all of the OPTIONS listed below. Check off the options you wish to include in the Report by clicking on the box in front of each option. These options will appear in the Report in the order shown below. If you do not place a check mark in the box in front of an option, it will not appear in the Report. You may choose to write additional notes in the Report as follows:</p>
+                            <h3>{t("Session-Assembly-Reports")}</h3>
+                            <p>{t("assembly-report-p")}</p>
                         </div>
                         <ul className="assembly-list">
-                            <li><p>(1) a SUMMARY at the top of the Report</p></li>
-                            <li><p>(2) a DESCRIPTION at the bottom of each SESSION IMAGE, and</p></li>
-                            <li><p>(3) a DESCRIPTION at the bottom of each DATA REPORT GRAPH.</p></li>
-                            <li><p>(1) a SUMMARY at the top of the Report</p></li>
+                            <li><p>{t("a-SUMMARY-at-the-top-of-the-Report")}</p></li>
+                            <li><p>{t("(2) a DESCRIPTION at the bottom of each SESSION IMAGE, and")}</p></li>
+                            <li><p>{t("a-DESCRIPTION-at-the-bottom-of-each-DATA-REPORT-GRAPH")}</p></li>
+                            {/* <li><p>{t("(a-)a-SUMMARY-at-the-top-of-the-Report")}</p></li> */}
                         </ul>
 
                         <ul className="checkbox-assemblylist">
@@ -328,13 +328,13 @@ const Assemblyreport = () => {
                             </>
                         }
                         <div className="assembly-btn-wrp">
-                            <div className="assembly-btn"><a href="javascript:void" onClick={saveAssemblyreport}>Create/Save Report
+                            <div className="assembly-btn"><a href="javascript:void" onClick={saveAssemblyreport}>{t("Create/Save-Report")}
                                 {
                                     Loader &&
                                     <div id="loader"></div>
                                 }
                             </a></div>
-                            <div className="assembly-btn ml-assembly"><a href="javascript:void" onClick={() => unCheck()}>Clear Selections</a></div>
+                            <div className="assembly-btn ml-assembly"><a href="javascript:void" onClick={() => unCheck()}>{t("Clear-Selections")}</a></div>
 
                         </div>
                     </div>

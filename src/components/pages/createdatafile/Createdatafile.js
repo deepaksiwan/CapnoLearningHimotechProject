@@ -1,5 +1,6 @@
 import React, { Component, useEffect, useRef, useState } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
+import { useTranslation, initReactI18next } from "react-i18next";
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import { API_URL } from "../../../config";
@@ -11,7 +12,7 @@ const CreatesaveFilesession = () => {
     const session = localStorage.getItem('selectedSession');
     
      const [sessions, setsessions] = useState([]);
-    
+     const { t } = useTranslation();
 
     useEffect(() => {
         Exportedfile();
@@ -63,12 +64,12 @@ const CreatesaveFilesession = () => {
                     <div className="back-icon-wrp">
                         <Link to="/" className="backbtn-icon">
                             <img src={backIcon} alt="backicon" />
-                            <span>Back</span>
+                            <span>{t("Back")}</span>
                         </Link>
                     </div>
                 </div>
                     <div className="groupreport-list-head">
-                        <h3>Preconfigured Report</h3>
+                        <h3>{t("Preconfigured-Report")}</h3>
                     </div>
                     <ul className="groupreport-list">
 

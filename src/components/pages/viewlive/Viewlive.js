@@ -375,7 +375,7 @@ const Viewlive = () => {
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Session Zoom Recording</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">{t("Session-Zoom-Recording")}</h5>
                                         {session}
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
@@ -385,8 +385,8 @@ const Viewlive = () => {
                                         <input placeholder="Add link here" />
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="close-btn" data-dismiss="modal">Close</button>
-                                        <button type="button" class="close-btn">Add link</button>
+                                        <button type="button" class="close-btn" data-dismiss="modal">{t("Close")}</button>
+                                        <button type="button" class="close-btn">{t("Add-link")}</button>
                                     </div>
                                 </div>
                             </div>
@@ -395,7 +395,7 @@ const Viewlive = () => {
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Session Zoom Recording</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">{t("Session-Zoom-Recording")}</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -404,8 +404,8 @@ const Viewlive = () => {
                                         <input placeholder="Add link here" />
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="close-btn" data-dismiss="modal">Close</button>
-                                        <button type="button" class="close-btn">Add link</button>
+                                        <button type="button" class="close-btn" data-dismiss="modal">{t("Close")}</button>
+                                        <button type="button" class="close-btn">{t("Add-link")}</button>
                                     </div>
                                 </div>
                             </div>
@@ -415,7 +415,7 @@ const Viewlive = () => {
             </div>
 
             <Modal isOpen={downloaderModal} toggle={DownloaderToggleModal} className="connect-box" centered={true}>
-                <ModalHeader toggle={DownloaderToggleModal}><span className="ml-1 roititle font-weight-bold">Downloading</span></ModalHeader>
+                <ModalHeader toggle={DownloaderToggleModal}><span className="ml-1 roititle font-weight-bold">{t("Downloading")}</span></ModalHeader>
                 <ModalBody>
                     <div className="modal-p">
                         <div class="loading2">

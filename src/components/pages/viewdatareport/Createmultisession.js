@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import { Link, useParams, Router } from 'react-router-dom';
+import { useTranslation, initReactI18next } from "react-i18next";
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import { API_URL } from '../../../config';
@@ -13,6 +14,7 @@ const Createmultisession = () => {
     const [session, setSession] = useState([]);
     const [signals, setSignals] = useState([]);
     const [selectedSignals, setSelectedSignals] = useState([]);
+    const { t } = useTranslation();
     // const selectedSignals = useRef() ; 
     const [selectedSessions, setSelectedSessions] = useState([]);
     // const selectedSessions =  useRef();
@@ -226,11 +228,11 @@ const logout = () => {
                     <div className="back-icon-wrp">
                         <Link to="/" className="backbtn-icon">
                             <img src={backIcon} alt="backicon" />
-                            <span>Back</span>
+                            <span>{t("Back")}</span>
                         </Link>
                     </div>
                     <div className="choose-signals">
-                        <p>Choose Signals</p>
+                        <p>{t("Choose-Signals")}</p>
                     </div>
                     <ul className="signals-list">
                         <li>
@@ -260,7 +262,7 @@ const logout = () => {
                         </li>
                     </ul>
                     <div className="choose-signals mrt-sessions">
-                        <p>Choose Sessions</p>
+                        <p>{t("Choose-Sessions")}</p>
                     </div>
                     <ul className="signals-list">
                         <li>
@@ -293,7 +295,7 @@ const logout = () => {
                         session.length > 0 &&
                     <div className='d-flex justify-content-around mt-3'>
                             {/* <button className='lightbtn w-100'   >Cancel</button> */}
-                            <button className='darktbtn w-100 ml-1'  onClick={createMultiSession}   >Create</button>
+                            <button className='darktbtn w-100 ml-1'  onClick={createMultiSession}   >{t("Create")}</button>
                         </div>
                     }
 

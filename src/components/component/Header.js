@@ -104,14 +104,14 @@ const Header = () => {
                 <div className="header-box">
                     <div className="header-c1">
                         <div className="header-child1">
-                            <h3>{userType == 1 ? "Admin" :  userType == 2 ? "Trainer" : "Client" } Cloud Database Dashboard</h3>
+                            <h3>{userType == 1 ? "Admin" :  userType == 2 ? "Trainer" : "Client" } {t("Cloud-Database-Dashboard")}</h3>
                         </div>
                     </div>
 
                     <div className="header-c2">
-                    {/* <div className="multi-langueage-wrp">
+                    <div className="multi-langueage-wrp">
                         <Multilanguage />
-                        </div> */}
+                        </div>
                         <div className="burger-area">
                             <a href="#" className="burgers toggle-slide-right"> <img src={burger} /></a>
                         </div>

@@ -326,7 +326,7 @@ const Filter = () => {
         <div>
             <div className="reset-wrp">
                 <div className="reset-child1">
-                    <p>Choose a Client and a Session.  The Dashboard will activate the relevant options based on your selections.</p>
+                    <p>{t("choose-slient-sessions-p")}</p>
                 </div>
                 <div className="reset-child2">
                     <button onClick={Reset} className="reset">{t('Reset')}</button>
@@ -337,7 +337,7 @@ const Filter = () => {
                     userType == 1 &&
                     <div className="step-box">
                         <div className="step-trainers-box">
-                            <p>TRAINERS</p>
+                            <p>{t('Trainer-box')}</p>
                         </div>
                         <div className="main-checkbox">
 
@@ -393,7 +393,7 @@ const Filter = () => {
 
                     <div className="step-box">
                         <div className="step-trainers-box">
-                            <p>CLIENTS</p>
+                            <p>{t("CLIENTS")}</p>
                         </div>
                         <div className="main-checkbox">
                             
@@ -461,7 +461,7 @@ const Filter = () => {
 
                 <div className="step-box">
                     <div className="step-trainers-box">
-                        <p>SESSIONS</p>
+                        <p>{t("SESSIONS")}</p>
                     </div>
                     <div className="main-checkbox">
                     <div className="checkbox-wrp">

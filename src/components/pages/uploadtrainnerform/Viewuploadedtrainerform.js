@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
+import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip } from '@material-ui/core';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
@@ -11,6 +13,14 @@ import closeicon from '../../images/closeicon.png';
 import { API_URL } from "../../../config";
 import backIcon from "../../images/back.png";
 
+
+const useStyles = makeStyles(() => ({
+    customTooltip: {
+      backgroundColor: "black",
+      fontSize: "15px"
+    }
+  }));
+
 const Viewuploadedtrainerform = () => {
     const accessToken = localStorage.getItem('accessToken');
     const selectedClient = localStorage.getItem('selectedClient');
@@ -18,6 +28,8 @@ const Viewuploadedtrainerform = () => {
     const [itemId, setItemId] = useState(null);
     const [deleteModal, setdeleteModal] = useState(false);
     const deleteToggleModal = () => setdeleteModal(!deleteModal);
+
+    const classes = useStyles();
 
     useEffect(() => {
         viewtrainerform();
@@ -61,11 +73,11 @@ const Viewuploadedtrainerform = () => {
         {
             title: "Form Name", field: "formname"
         },
+        // {
+        //     title: "Client Name", field: "clientname"
+        // },
         {
-            title: "Client Name", field: "clientname"
-        },
-        {
-            title: <span className="text-right">Actions</span>, field: "action"
+            title: <span >Actions</span>, field: "action", align: "right"
         }
     ]
     const viewtrainerform = () => {
@@ -84,8 +96,17 @@ const Viewuploadedtrainerform = () => {
                     let _temp = [];
                     resp.forms.map((v, i) => {
                         _temp.push({
-                            formname: v.form_name,
-                            action: <p><a href='#' className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg"><img src={preveiw} /></a> <a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></p>
+                            formname: v.forms,
+                            action: <p><Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Download" placement="top"><a href='#' className="downloadimg tooltip2" download><img src={download} /> </a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="View" placement="top"><a href='#' className="downloadimg tooltip2"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id)} className="downloadimg tooltip2"><img src={Delete} /></a></Tooltip></p>
 
                         })
                     })

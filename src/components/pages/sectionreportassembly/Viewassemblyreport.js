@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
+import { useTranslation, initReactI18next } from "react-i18next";
 import download from 'downloadjs';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
@@ -15,6 +16,7 @@ import backIcon from "../../images/back.png";
 
 
 const Viewassemblyreport = () => {
+    const { t } = useTranslation()
     const accessToken = localStorage.getItem('accessToken');
     const sessionid = localStorage.getItem('selectedSession');
     const [data, setData] = useState([]);
@@ -187,19 +189,19 @@ const Viewassemblyreport = () => {
 
     const columns = [
         {
-            title: "Client", field: "Client"
+            title: <span>{t("Client")}</span>, field: "Client"
         },
         {
-            title: <span className="text-right">Session</span>, field: "Session"
+            title: <span className="text-right">{t("Session")}</span>, field: "Session"
         },
         {
-            title: <span className="text-right">Report Title</span>, field: "reportTitle"
+            title: <span className="text-right">{t("Report-Title")}</span>, field: "reportTitle"
         },
         {
-            title: <span className="text-right">Date Created</span>, field: "dateCreated"
+            title: <span className="text-right">{t("Date-Created")}</span>, field: "dateCreated"
         },
         {
-            title: <span className="text-right">Actions</span>, field: "actions"
+            title: <span className="text-right">{t("Actions")}</span>, field: "actions"
         }
     ]
 
@@ -213,7 +215,7 @@ const Viewassemblyreport = () => {
                 </div>
                 <div className="right-section">
                     <div className="head-demoreport">
-                        <h3>Session Assembly Reports</h3>
+                        <h3>{t("Session-Assembly-Reports")}</h3>
                         <div className="back-icon-wrp">
                         <Link to="/section/report/assembly" className="backbtn-icon">
                             <img src={backIcon} alt="backicon" />

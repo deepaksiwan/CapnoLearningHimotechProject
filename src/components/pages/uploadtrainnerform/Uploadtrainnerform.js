@@ -1,16 +1,19 @@
 import React, { Component, useEffect, useRef, useState } from "react";
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import { Link, useParams } from 'react-router-dom';
+import { useTranslation, initReactI18next } from "react-i18next";
 import Header from '../../component/Header';
 import Sidebar from '../../component/Sidebar';
 import { API_URL } from "../../../config";
 import backIcon from "../../images/back.png";
 
 const Uploadclientform = () => {
+    const { t } = useTranslation();
     const [clients, setinclients] = useState([]);
     const [trainers, settrainers] = useState([]);
     const [sesstion, setsesstion] = useState([]);
     const [blankform, setblankform] = useState([]);
+    const [showSessionbox, setShowSessionbox] = useState(false);
     const trainerActive = useRef()
     const formname = useRef()
     const formFile = useRef()
@@ -90,7 +93,8 @@ const Uploadclientform = () => {
     }
 
     const blankForm = () => {
-        fetch(API_URL+"/forms/blank",
+        let type = 1;
+        fetch(API_URL+"/forms/blank/" + type,
             {
                 method: 'GET',
                 headers: {
@@ -333,6 +337,18 @@ const Uploadclientform = () => {
         localStorage.setItem('selectedSession', sessionSelected.current.value);
     }
 
+    const handleFormName = ()=>{
+        let cureentId = formname.current.value;
+
+        if(cureentId == 9 || cureentId == 11 || cureentId == 12){
+            setShowSessionbox(true);
+        }
+        else{
+            setShowSessionbox(false);
+        }
+
+    }
+
 
     const logout = () => {
         localStorage.clear();
@@ -352,12 +368,12 @@ const Uploadclientform = () => {
                     <div className="container-fluid">
                         <div className="configer-head">
                             <div className="configer-child1">
-                                <h3>Upload Trainer Form</h3>
+                                <h3>{t("Upload-Trainer-Form")}</h3>
                             </div>
                             <div className="back-icon-wrp">
                                 <Link to="/view/manageform" className="backbtn-icon">
                                     <img src={backIcon} alt="backicon" />
-                                    <span>Back</span>
+                                    <span>{t("Back")}</span>
                                 </Link>
                             </div>
                         </div>
@@ -366,7 +382,7 @@ const Uploadclientform = () => {
                         <div className="row">
                             <div className="col-lg-3">
                                 <div className="trainerbox">
-                                    <div className="trainer-c"><p>Trainer:</p></div>
+                                    <div className="trainer-c"><p>{t("trainer")}:</p></div>
                                     <div className="padding-box">
                                         <div className="main-checkbox">
 
@@ -379,7 +395,7 @@ const Uploadclientform = () => {
                                                     </label>
                                                 </div>
                                                 <div className="caption-cheeckbox">
-                                                    <p>Active</p>
+                                                <p>{t("Active")}</p>
                                                 </div>
                                             </div>
                                             <div className="checkbox-wrp">
@@ -391,7 +407,7 @@ const Uploadclientform = () => {
                                                     </label>
                                                 </div>
                                                 <div className="caption-cheeckbox">
-                                                    <p>Inactive</p>
+                                                    <p>{t("Inactive")}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -415,7 +431,7 @@ const Uploadclientform = () => {
                             </div>
                             <div className="col-lg-3">
                                 <div className="trainerbox">
-                                    <div className="trainer-c"><p>Client:</p></div>
+                                    <div className="trainer-c"><p>{t("Client")}:</p></div>
                                     <div className="padding-box">
                                         <div className="main-checkbox">
 
@@ -428,7 +444,7 @@ const Uploadclientform = () => {
                                                     </label>
                                                 </div>
                                                 <div className="caption-cheeckbox">
-                                                    <p>Active</p>
+                                                    <p>{t("Active")}</p>
                                                 </div>
                                             </div>
 
@@ -441,7 +457,7 @@ const Uploadclientform = () => {
                                                     </label>
                                                 </div>
                                                 <div className="caption-cheeckbox">
-                                                    <p>Inactive</p>
+                                                    <p>{t("Inactive")}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -466,7 +482,7 @@ const Uploadclientform = () => {
                                     <div className="padding-box">
 
                                         <div className="select-client mrt-select">
-                                            <select ref={formname}>
+                                            <select ref={formname} onChange={handleFormName}>
                                                 {
                                                     blankform.map((bankforms, i) => {
                                                         return (
@@ -489,7 +505,9 @@ const Uploadclientform = () => {
                                 </div>
                             </div>
                             <div className="col-lg-3">
-                                <div className="trainerbox">
+
+                                {
+                                    showSessionbox && <div className="trainerbox">
                                     <div className="trainer-c"><p>Session:</p></div>
                                     <div className="padding-box">
 
@@ -507,6 +525,8 @@ const Uploadclientform = () => {
                                         </div>
                                     </div>
                                 </div>
+                                }
+                                
                             </div>
                         </div>
                         <Modal isOpen={successModal} toggle={successToggleModal} className="connect-box" centered={true}>

@@ -1,5 +1,6 @@
 import React, {useEffect,useState} from "react";
 import {Link,useParams, Router} from 'react-router-dom';
+import { useTranslation, initReactI18next } from "react-i18next";
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
@@ -15,6 +16,7 @@ const SessiondataReport = () => {
     const sessionid = localStorage.getItem('selectedSession');
     const Clientid = localStorage.getItem('selectedClient');
     const {type} = useParams();
+    const { t } = useTranslation();
     
 
     useEffect(() => {
@@ -112,13 +114,13 @@ const SessiondataReport = () => {
 
     const columns =[
         {
-            title: "Report Name", field: "report"
+            title: t("Report-Name"), field: "report"
         },
         {
-            title: <span className="text-right">Created Date Time</span>, field: "Createdate"
+            title: <span className="text-right">{t("Created-Date-Time")}</span>, field: "Createdate"
         },
         {
-            title: <span className="text-right">Actions</span>, field: "actions"
+            title: <span className="text-right">{t("Actions")}</span>, field: "actions"
         }
     ]
 
@@ -134,12 +136,12 @@ const SessiondataReport = () => {
                <div className="back-icon-wrp">
                         <Link to="/view/data/report" className="backbtn-icon">
                             <img src={backIcon} alt="backicon" />
-                            <span>Back</span>
+                            <span>{t("Back")}</span>
                         </Link>
                     </div>
                 <div className="head-demoreport">
-                    <h3>Session Data Reports</h3>
-                    <p>{type == "multi"? "Multi": type == "single"? "Single" : type == "group"? "Group" : type == "homework"? "Homework" : null } Sesseion Report</p>
+                    <h3>{t("Session-Data-Reports")}</h3>
+                    <p>{type == "multi"? t("Multi"): type == "single"? t("Single") : type == "group"? t("group") : type == "homework"? t("homework") : null } {t("Sesseion-Report")}</p>
                 </div>
                 <div className="wrp-bankform">
                     <div style={{ maxWidth: '100%' }}>

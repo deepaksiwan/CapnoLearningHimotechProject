@@ -452,21 +452,21 @@ const Editassemblyreport = () => {
                     <div className="assembly-box" id="takescreenassembly">
                         <div className="client-names-wrp">
                             <div className="cients-name-content">
-                                <p><i class="fa fa-user" aria-hidden="true"></i> <span>Client:</span> {clientName}</p>
+                                <p><i class="fa fa-user" aria-hidden="true"></i> <span>{t("Client")}:</span> {clientName}</p>
                             </div>
                             <div className="cients-name-content">
-                                <p><i class="fa fa-user-md" aria-hidden="true"></i> <span>Trainer:</span> {trainerName}</p>
+                                <p><i class="fa fa-user-md" aria-hidden="true"></i> <span>{t("trainer")}:</span> {trainerName}</p>
                             </div>
                             <div className="cients-name-content">
-                                <p><i class="fa fa-calendar" aria-hidden="true"></i> <span>Date:</span> {sessionDate}</p>
+                                <p><i class="fa fa-calendar" aria-hidden="true"></i> <span>{t("Date")}:</span> {sessionDate}</p>
                             </div>
                         </div>
                         <div className="report-input">
-                            <label>Name of Report</label>
+                            <label>{t("Name-of-Report")}</label>
                             <input placeholder="Name of Report" defaultValue={assemblydata.name} ref={reportName} />
                         </div>
                         <div className="text-areat-report">
-                            <label>Summary of Report</label>
+                            <label>{t("Summary-of-Report")}</label>
                             <textarea ref={summaryReportDes} defaultValue={assemblydata.summary} ></textarea>
                         </div>
 
@@ -501,7 +501,7 @@ const Editassemblyreport = () => {
                                 return (
                                     <div className="report-notes">
                                         <>
-                                            <label>Live Session Notes</label>
+                                            <label>{t("Live-Session-Notes")}</label>
                                             <p dangerouslySetInnerHTML={{ __html: val.sessiondata ? val.sessiondata : "No live session notes available" }}></p>
 
                                         </>
@@ -533,7 +533,7 @@ const Editassemblyreport = () => {
                                 return (
                                     <div className="report-notes">
                                         <>
-                                            <label>Report Notes </label>
+                                            <label>{t("Report-Notes")}</label>
                                             <p>{val.notes ? val.notes : "No report available"}</p>
                                         </>
                                     </div>
@@ -544,7 +544,7 @@ const Editassemblyreport = () => {
 
                         {
                             completeForm.length > 0 &&
-                            <p className="complete-forms"><b>Completed Forms</b></p>
+                            <p className="complete-forms"><b>{t("Completed-Forms")}</b></p>
                         }
 
                         {

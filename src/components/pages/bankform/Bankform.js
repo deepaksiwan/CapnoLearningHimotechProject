@@ -1,5 +1,6 @@
 import React, {useEffect,useState} from "react";
 import {Link,useParams, Router} from 'react-router-dom';
+import { useTranslation, initReactI18next } from "react-i18next";
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
@@ -13,7 +14,7 @@ const Bankform = () => {
     const accessToken = localStorage.getItem('accessToken');
     const [forms, setforms] = useState([]);
     const [data, setdata] = useState([]);
-
+    const { t } = useTranslation();
 
     useEffect(() => {
         PdfbankForm();
@@ -24,10 +25,10 @@ const Bankform = () => {
 
     const columns =[
         {
-            title: "Form Name", field: "name"
+            title: t("Form-Name"), field: "name"
         },
         {
-            title: <span className="text-right">Actions</span>, field: "download"
+            title: <span className="text-right">{t("Actions")}</span>, field: "download"
         }
        
     ]
@@ -82,11 +83,11 @@ const Bankform = () => {
                </div>
                <div className="right-section">
                 <div className="head-demoreport">
-                    <h3>Blank forms</h3>
+                    <h3>{t("Blank-forms")}</h3>
                     <div className="back-icon-wrp">
                         <Link to="/view/manageform" className="backbtn-icon">
                             <img src={backIcon} alt="backicon" />
-                            <span>Back</span>
+                            <span>{t("Back")}</span>
                         </Link>
                     </div>
                 </div>

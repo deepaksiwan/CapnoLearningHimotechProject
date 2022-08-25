@@ -676,7 +676,7 @@ a:hover {
 }
 .checkbox-wrp{
   display: flex;
-  margin-top: 15px;
+
 }
 .caption-cheeckbox > p{
   color: #000;
@@ -2567,3 +2567,33 @@ sub {
 .multi-lan{
   margin-top: 20px;
 }
+
+
+
+/* tool tip css open here*/
+
+.tooltip2 {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip2 .tooltiptext {
+  visibility: hidden;
+ 
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 15px;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip2:hover .tooltiptext {
+  visibility: visible;
+}
+
+/* tool tip css closed here */
+

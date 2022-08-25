@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, Router } from 'react-router-dom';
+import { useTranslation, initReactI18next } from "react-i18next";
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import backIcon from "../../../components/images/back.png";
@@ -11,6 +12,7 @@ const Demodatareport = () => {
     const session = localStorage.getItem('selectedSession');
 
     const [sessions, setsessions] = useState([]);
+    const { t } = useTranslation();
 
     useEffect(() => {
         Report();
@@ -62,11 +64,11 @@ const Demodatareport = () => {
                     <div className="back-icon-wrp">
                         <Link to="/" className="backbtn-icon">
                             <img src={backIcon} alt="backicon" />
-                            <span>Back</span>
+                            <span>{t("Back")}</span>
                         </Link>
                     </div>
                     <div className="groupreport-list-head">
-                        <h3>Pre-configured Group Reports</h3>
+                        <h3>{t("Pre-configured-Group-Reports")}</h3>
                     </div>
                     <ul className="groupreport-list">
                         {

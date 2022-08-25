@@ -1,5 +1,6 @@
 import React, { Component, useEffect, useRef, useState } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
+import { useTranslation, initReactI18next } from "react-i18next";
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import { API_URL } from "../../../config";
@@ -15,6 +16,7 @@ const CreatesaveDatasession = () => {
     const [emgAvg, setEmgAvg] = useState(false);
     const [emgRaw, setEmgRaw] = useState(false);
     const [hrv, setHrv] = useState(0);
+    const { t } = useTranslation();
 
     useEffect(() => {
         Report();
@@ -179,11 +181,11 @@ const CreatesaveDatasession = () => {
                     <div className="back-icon-wrp">
                         <Link to="/" className="backbtn-icon">
                             <img src={backIcon} alt="backicon" />
-                            <span>Back</span>
+                            <span>{t("Back")}</span>
                         </Link>
                     </div>
                     <div className="groupreport-list-head">
-                        <h3>Preconfigured Reports</h3>
+                    <h3>{t("Preconfigured-Report")}</h3>
 
                     </div>
                     <ul className="groupreport-list">

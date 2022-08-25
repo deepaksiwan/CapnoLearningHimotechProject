@@ -82,10 +82,10 @@ const Sectionreportassembly = () => {
                     <div className="create-section">
                         <ul className="create-list">
                             <li>
-                                <div className="create-list-box"><Link to={(selectedSession === "null" || (selectedGroup === "true" || selectedClient === "null") ) ? "": "/assemblyreport" } className={(selectedSession === "null" || (selectedGroup === "true" || selectedClient === "null") ) ? "deactivate": "" }>Create-Session-Report</Link></div>
+                                <div className="create-list-box"><Link to={(selectedSession === "null" || (selectedGroup === "true" || selectedClient === "null") ) ? "": "/assemblyreport" } className={(selectedSession === "null" || (selectedGroup === "true" || selectedClient === "null") ) ? "deactivate": "" }>{t('Create-Session-Report')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={((selectedSession === "null" || (selectedGroup === "true" || selectedClient === "null") ) ? "": "/view/assembly" )} className={(selectedSession === "null" || (selectedGroup === "true" || selectedClient === "null") ) ? "deactivate": "" }>View/Edit/Delete/Download Session Report</Link></div>
+                                <div className="create-list-box"><Link to={((selectedSession === "null" || (selectedGroup === "true" || selectedClient === "null") ) ? "": "/view/assembly" )} className={(selectedSession === "null" || (selectedGroup === "true" || selectedClient === "null") ) ? "deactivate": "" }>{t('View/Edit/Delete/Download Session Report')}</Link></div>
                             </li>
 
                         </ul>
