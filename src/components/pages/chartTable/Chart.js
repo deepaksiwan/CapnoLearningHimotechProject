@@ -392,7 +392,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
           let lastTask  ; 
         //   // console.log(userTimeOffset);
         // csv('//capno-data.s3.amazonaws.com/' + _csvFile).then(data => {
-        csv('https://capnolearning.com/csvupl/' + _csvFile).then(data => {
+        csv('//capno-data.s3.amazonaws.com/' + _csvFile).then(data => {
             // // console.log(data);
             // let _tasks = {} ; 
             let _temptask = [] ; 
