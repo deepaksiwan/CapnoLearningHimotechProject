@@ -149,10 +149,10 @@ const Viewmanageform = () =>{
                                 <div className="create-list-box"><Link to="/bankform">{ t('Download-Fill-in-PDF-Blank-Forms')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(forms.length == 0 || selectedClient === "null")? "": "/upload/client/form"} className={(forms.length == 0 || selectedClient === "null")? "deactivate": ""}>{ t('Upload-Completed-Client-Forms')}</Link></div>
+                                <div className="create-list-box"><Link to={(selectedClient === "null")? "": "/upload/client/form"} className={(selectedClient === "null")? "deactivate": ""}>{ t('Upload-Completed-Client-Forms')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(trainerforms.length == 0 || selectedClient === "null")? "" : "/upload/trainner/form"} className={(trainerforms.length == 0 || selectedClient === "null")? "deactivate": ""}>{ t('Upload-Completed-Trainer-Forms')}</Link></div>
+                                <div className="create-list-box"><Link to={(selectedClient === "null")? "" : "/upload/trainner/form"} className={(selectedClient === "null")? "deactivate": ""}>{ t('Upload-Completed-Trainer-Forms')}</Link></div>
                             </li>
                             <li>
                                 <div className="create-list-box"><Link to={(clientlength.length == 0 || selectedSession === "null")? "" : "/view/uploaded/client/form"} className={(clientlength.length == 0 || selectedSession === "null")? "deactivate" : ""} >{ t('View-Completed-Client-Forms')}</Link></div>
