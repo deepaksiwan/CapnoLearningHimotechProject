@@ -169,7 +169,7 @@ const ChartHeader = (props) => {
            
             
             //   // console.log(userTimeOffset);
-            csv('https://capnolearning.com/webroot/csvupl/' + _csvFile).then(data => {
+            csv('//capno-data.s3.amazonaws.com/' + _csvFile).then(data => {
                 if(data.length > 2){
                     if(_stat == 'avg'){
                         setEmgAvg(true);
