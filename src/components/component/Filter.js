@@ -222,7 +222,17 @@ const Filter = () => {
         let _cid = localStorage.getItem('selectedClient');
 
         let _homework = cid.current.checked;
-        let _hw = 0;
+        let _standard = cid2.current.checked;
+
+        let _hw;
+        if(_standard){
+             _hw = 0;
+        }
+
+        if (!_homework && !_standard) {
+            _hw = 5;
+        }
+       
 
         if (_homework) {
             _hw = 1;
@@ -466,7 +476,7 @@ const Filter = () => {
                     <div className="main-checkbox">
                     <div className="checkbox-wrp">
                         <div class="custom-radios">
-                            <input type="checkbox" id="cid2" onChange={getSession}  defaultChecked={(selectedHomework === "false" ? true : false)} />
+                            <input type="checkbox" id="cid2" onChange={getSession} ref={cid2} defaultChecked={(selectedHomework === "false" ? true : false)} />
                             <label for="cid2">
                                 <span className="redious">
                                 </span>

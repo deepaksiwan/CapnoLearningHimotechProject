@@ -20,7 +20,7 @@ const Viewcompletedclientwork = () => {
     const [deleteModal, setdeleteModal] = useState(false);
     const deleteToggleModal = () => setdeleteModal(!deleteModal);
 
-
+console.log("Sessionid",Sessionid)
     const columns = [
         {
             title: "Session", field: "session"
@@ -69,7 +69,7 @@ const Viewcompletedclientwork = () => {
         setdeleteModal(!deleteModal)
     }
     const Homeworklist = () => {
-        fetch(API_URL + "/homework/client?session_id=" + Sessionid,
+        fetch(API_URL + "/homework/client/" + Sessionid,
             {
                 method: 'GET',
                 headers: {
@@ -80,11 +80,14 @@ const Viewcompletedclientwork = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
+
                     // console.log("result", resp);
+                    const clientname = resp.ClientName
                     let _temp = [];
-                    resp.homeworks.map((v, i) => {
+                    resp.data.map((v, i) => {
                         _temp.push({
-                            formname: v.form_name,
+                            session: v.name,
+                            clientname: clientname,
                             action: <p><a href='#' className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg"><img src={preveiw} /></a> <a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></p>
 
                         })

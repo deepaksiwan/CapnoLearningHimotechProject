@@ -28,7 +28,7 @@ const Bankform = () => {
             title: t("Form-Name"), field: "name"
         },
         {
-            title: <span className="text-right">{t("Actions")}</span>, field: "download"
+            title: <span className="text-right">{t("Actions")}</span>, field: "download",align: "right"
         }
        
     ]
@@ -47,7 +47,7 @@ const Bankform = () => {
                 response.json().then((resp) => {
                     // console.log("result", resp);
                     let _temp = [] ;
-                    resp.forms.map((v,i) => {
+                    resp.data.map((v,i) => {
                         _temp.push({
                             name : v.forms,
                             download: <p><a href={"/forms/"+v.file} className="downloadimg" target={"_blank"} download><img src={download} /></a> <a href={"/forms/"+v.file} className="downloadimg" target={"_blank"} ><img src={preveiw} /></a></p>

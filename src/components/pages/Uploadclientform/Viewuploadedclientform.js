@@ -29,6 +29,8 @@ const Viewuploadedclientform = () => {
     const [deleteModal, setdeleteModal] = useState(false);
     const deleteToggleModal = () => setdeleteModal(!deleteModal);
 
+   
+
     const classes = useStyles();
 
     useEffect(() => {
@@ -80,7 +82,7 @@ const Viewuploadedclientform = () => {
         }
     ]
     const getclientform = () => {
-        fetch(API_URL + "/forms/client?type=1&client_id=" + selectedClient,
+        fetch(API_URL + "/forms/client/" + selectedClient,
             {
                 method: 'GET',
                 headers: {
@@ -93,7 +95,7 @@ const Viewuploadedclientform = () => {
                 response.json().then((resp) => {
                     // console.log("result", resp);
                     let _temp = [];
-                    resp.forms.map((v, i) => {
+                    resp.data.map((v, i) => {
                         _temp.push({
                             formname: v.forms,
                             action: <p><Tooltip classes={{

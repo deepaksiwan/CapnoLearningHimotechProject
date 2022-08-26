@@ -19,88 +19,45 @@ const Viewmanageform = () =>{
     const [trainerforms, settrainerforms] = useState([]);
     const selectedtrainerActive = localStorage.getItem('selectedtrainerActive');
     const [clientlength, setClientlength]= useState([]);
+    const [trainerLength, setTrainerLength]= useState([]);
+    
     const [selectedHomework,setselectedHomework] = useState();
+    const [homeworklist,setHomeworklist] = useState([])
+    const [userType, setUserType] = useState();
+
 
     useEffect(() => {
-        getclientform();
-
+            
+        
         setInterval(() => {
             setSelectedClient(localStorage.getItem('selectedClient'));
             setSelectedSession(localStorage.getItem('selectedSession'));
             setselectedHomework(localStorage.getItem('selectedHomework'));
-            
-        }, 1000);
+            setUserType(localStorage.getItem('userType'));
+        }, 1000);      
+       
+       
 
     }, []);
+    
 
-    useEffect(()=>{
-        uploadedClientform();
-        uploadedtrainerform();
+    useEffect(() => {
 
-    },[selectedClient,selectedSession])
-
-    const uploadedClientform = () => {
-        fetch(API_URL+"/forms/client?client_id=" + Clientid,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': accessToken,
-                },
-            }
-        ).then((response) => {
-            if (response.status == 200) {
-                response.json().then((resp) => {
-                    // // console.warn("result", resp);
-                    setforms(resp.forms);
-                //    let len = clientform.length;
-                //       // console.log(len);
-
-                });
-            }
-            else if (response.status == 401) {
-                logout()
-            }
-            else {
-                alert("network error")
-            }
-
-
-        })
-    }
-    const uploadedtrainerform = () => {
-        fetch(API_URL+"/forms/client?client_id=" + Clientid + "&session_id=" + sessionid,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': accessToken,
-                },
-            }
-        ).then((response) => {
-            if (response.status == 200) {
-                response.json().then((resp) => {
-                    // // console.warn("result", resp);
-                    settrainerforms(resp.forms);
-                //    let len = clientform.length;
-                //       // console.log(len);
-
-                });
-            }
-            else if (response.status == 401) {
-                logout()
-            }
-            else {
-                alert("network error")
-            }
-
-
-        })
-    }
+        
+           
+                getclientform();
+                viewtrainerform();
+          
+            Homeworklist();
+       
+       
+    },[homeworklist,selectedClient])
+  
+   
 
 
     const getclientform = () => {
-        fetch(API_URL + "/forms/client?type=1&client_id=" + selectedClient,
+        fetch(API_URL + "/forms/client/" + selectedClient,
             {
                 method: 'GET',
                 headers: {
@@ -112,7 +69,7 @@ const Viewmanageform = () =>{
             if (response.status == 200) {
                 response.json().then((resp) => {
                     // console.log("result", resp);
-                  setClientlength(resp);
+                  setClientlength(resp.data);
 
 
 
@@ -129,6 +86,69 @@ const Viewmanageform = () =>{
         })
     }
 
+    const viewtrainerform = () => {
+        fetch(API_URL + "/forms/trainer/" + selectedClient,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    // // console.log("result", resp);
+                  
+                    setTrainerLength(resp.data);
+
+
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+    }
+
+    const Homeworklist = () => {
+        fetch(API_URL + "/homework/client/" + sessionid,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    // console.log("result", resp);
+                   
+                    setHomeworklist(resp.data);
+
+
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        })
+    }
+
+ 
     const logout = () => {
         localStorage.clear();
         alert("You Logout successful")
@@ -155,16 +175,16 @@ const Viewmanageform = () =>{
                                 <div className="create-list-box"><Link to={(selectedClient === "null")? "" : "/upload/trainner/form"} className={(selectedClient === "null")? "deactivate": ""}>{ t('Upload-Completed-Trainer-Forms')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(clientlength.length == 0 || selectedSession === "null")? "" : "/view/uploaded/client/form"} className={(clientlength.length == 0 || selectedSession === "null")? "deactivate" : ""} >{ t('View-Completed-Client-Forms')}</Link></div>
+                                <div className="create-list-box"><Link to={(clientlength.length == 0)? "" : "/view/uploaded/client/form"} className={(clientlength.length == 0)? "deactivate" : ""} >{ t('View-Completed-Client-Forms')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(selectedSession === "null")? "" : "/view/uploaded/trainer/form"} className={(selectedSession === "null")? "deactivate" : ""}>{ t('View-Completed-Trainer-Forms')}</Link></div>
+                                <div className="create-list-box"><Link to={(trainerLength.length == 0)? "" : "/view/uploaded/trainer/form"} className={(trainerLength.length == 0)? "deactivate" : ""}>{ t('View-Completed-Trainer-Forms')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(selectedHomework === "false")? "" : "/view/completed/client/work"} className={(selectedHomework === "false")? "deactivate" : ""}>{ t('View-Homework-Assignment')}</Link></div>
+                                <div className="create-list-box"><Link to={(homeworklist.length == 0 || selectedHomework === "false")? "" : "/view/completed/client/work"} className={(homeworklist.length == 0 || selectedHomework === "false")? "deactivate" : ""}>{ t('View-Homework-Assignment')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(selectedHomework === "false")? "" : "/upload/homework/asignment"} className={(selectedHomework === "false")? "deactivate" : ""}>{ t('Upload-Homework-Assignment')}</Link></div>
+                                <div className="create-list-box"><Link to={(selectedHomework === "false" || selectedSession === "null")? "" : "/upload/homework/asignment"} className={(selectedHomework === "false" || selectedSession === "null")? "deactivate" : ""}>{ t('Upload-Homework-Assignment')}</Link></div>
                             </li>
 
                        </ul>

@@ -24,6 +24,7 @@ const useStyles = makeStyles(() => ({
 const Viewuploadedtrainerform = () => {
     const accessToken = localStorage.getItem('accessToken');
     const selectedClient = localStorage.getItem('selectedClient');
+    const selectedSession = localStorage.getItem('selectedSession');
     const [data, setdata] = useState([]);
     const [itemId, setItemId] = useState(null);
     const [deleteModal, setdeleteModal] = useState(false);
@@ -81,7 +82,10 @@ const Viewuploadedtrainerform = () => {
         }
     ]
     const viewtrainerform = () => {
-        fetch(API_URL + "/forms/client?type=2&client_id=" + selectedClient,
+        // fetch(API_URL + "/forms/trainer?type=1&client_id=" + selectedClient + "&session_id=" + selectedSession,
+        fetch(API_URL + "/forms/trainer/" + selectedClient,
+
+        
             {
                 method: 'GET',
                 headers: {
@@ -94,7 +98,7 @@ const Viewuploadedtrainerform = () => {
                 response.json().then((resp) => {
                     // // console.log("result", resp);
                     let _temp = [];
-                    resp.forms.map((v, i) => {
+                    resp.data.map((v, i) => {
                         _temp.push({
                             formname: v.forms,
                             action: <p><Tooltip classes={{

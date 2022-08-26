@@ -13,6 +13,7 @@ const Uploadclientform = () => {
     const [trainers, settrainers] = useState([]);
     const [sesstion, setsesstion] = useState([]);
     const [blankform, setblankform] = useState([]);
+    const [showSessionbox, setShowSessionbox] = useState(false);
     const trainerActive = useRef()
     const formname = useRef()
     const formFile = useRef()
@@ -48,6 +49,18 @@ const Uploadclientform = () => {
         getTrainers();
         getClients();
         blankForm();
+        getSession();
+
+
+
+        let Currentformname = 4;
+
+        if(Currentformname == 4){
+            setShowSessionbox(true);
+        }
+        else{
+            setShowSessionbox(false);
+        }
 
     }, [])
 
@@ -282,7 +295,7 @@ const Uploadclientform = () => {
 
     const updateSelectClient = () => {
         localStorage.setItem('selectedClient', clientSelected.current.value);
-
+        getSession();
     }
     const updateSelectTrainer = () => {
         localStorage.setItem('selectedTrainer', trainerSelected.current.value);
@@ -295,6 +308,67 @@ const Uploadclientform = () => {
     //     localStorage.setItem('selectedformname', formname.current.value);
     // }
 
+
+    const getSession = () => {
+        let _cid = localStorage.getItem('selectedClient');
+
+        let _hw = 0;
+
+        let url = API_URL+"/sessions?cid=" + _cid + "&hw=" + _hw;
+
+
+        fetch(url,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((result) => {
+                    // // console.log(result.sesstion)
+                    if (result.status) {
+                        setsesstion(result.sessions)
+                        // // console.log(setsesstion)
+                    }
+
+
+                    else {
+                        alert("no data error")
+                    }
+
+                })
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
+
+
+        }).catch(err => {
+            // // console.log(err)
+
+        })
+    }
+    const updateselectedSecssion = () => {
+        localStorage.setItem('selectedSession', sessionSelected.current.value);
+    }
+    const handleFormName = ()=>{
+        let cureentId = formname.current.value;
+
+        if(cureentId == 4){
+            setShowSessionbox(true);
+        }
+        else{
+            setShowSessionbox(false);
+        }
+
+    }
 
     const logout = () => {
         localStorage.clear();
@@ -354,7 +428,7 @@ const Uploadclientform = () => {
                                                     </label>
                                                 </div>
                                                 <div className="caption-cheeckbox">
-                                                <p>{t("Inactive")}</p>
+                                                    <p>{t("Inactive")}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -391,7 +465,7 @@ const Uploadclientform = () => {
                                                     </label>
                                                 </div>
                                                 <div className="caption-cheeckbox">
-                                                <p>{t("Active")}</p>
+                                                    <p>{t("Active")}</p>
                                                 </div>
                                             </div>
 
@@ -404,7 +478,7 @@ const Uploadclientform = () => {
                                                     </label>
                                                 </div>
                                                 <div className="caption-cheeckbox">
-                                                <p>{t("Inactive")}</p>
+                                                    <p>{t("Inactive")}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -429,7 +503,7 @@ const Uploadclientform = () => {
                                     <div className="padding-box">
 
                                         <div className="select-client mrt-select">
-                                            <select ref={formname}>
+                                            <select ref={formname} onChange={handleFormName}>
                                                 {
                                                     blankform.map((bankforms, i) => {
                                                         return (
@@ -450,6 +524,32 @@ const Uploadclientform = () => {
                                         <input type="file" name="file" accept=".pdf" ref={formFile} />
                                     </div>
                                 </div>
+                            </div>
+
+                            <div className="col-lg-3">
+                                {
+                                    showSessionbox && <div className="trainerbox">
+                                    <div className="trainer-c"><p>Session:</p></div>
+                                    <div className="padding-box">
+
+                                        <div className="select-client mrt-select">
+                                            <select ref={sessionSelected} onChange={updateselectedSecssion}>
+                                                <option className="selected-bold">Choose a session</option>
+                                                {
+                                                    sesstion.map((sesstion, i) =>
+                                                        <option className="selected-bold" selected={sesstion.id == selectedSession ? true : false} value={sesstion.id}>
+                                                            {sesstion.name}
+                                                        </option>)
+                                                }
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                                
+
+
                             </div>
                         </div>
                         <Modal isOpen={successModal} toggle={successToggleModal} className="connect-box" centered={true}>

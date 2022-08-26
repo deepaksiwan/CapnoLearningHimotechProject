@@ -174,7 +174,7 @@ const Uploadhomeworkasignment = () => {
     const getSession = () => {
         let _cid = localStorage.getItem('selectedClient');
 
-        let _hw = 0;
+        let _hw = 1;
 
         let url = API_URL+"/sessions?cid=" + _cid + "&hw=" + _hw;
 
