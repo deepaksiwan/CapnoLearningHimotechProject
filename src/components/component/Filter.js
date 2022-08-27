@@ -218,8 +218,9 @@ const Filter = () => {
 
         })
     }
+    
     const getSession = () => {
-        let _cid = localStorage.getItem('selectedClient');
+        const _cid = localStorage.getItem('selectedClient');
 
         let _homework = cid.current.checked;
         let _standard = cid2.current.checked;
@@ -247,46 +248,89 @@ const Filter = () => {
             localStorage.setItem('selectedHomework', false);
 
         }
-        let url = API_URL + "/sessions?cid=" + _cid + "&hw=" + _hw;
 
 
-        fetch(url,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': accessToken,
-                },
-            }
+        if (_homework && _standard) {
+            _hw = 5;
+        }
 
-        ).then((response) => {
-            if (response.status == 200) {
-                response.json().then((result) => {
-                    // // console.log(result.sesstion)
-                    if (result.status) {
-                        setsesstion(result.sessions)
-                        // // console.log(setsesstion)
-                    }
+        if(_homework && _standard){
+            let url = API_URL + "/sessions/by/client?cid=" + _cid;
+            fetch(url,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-access-token': accessToken,
+                    },
+                }
+    
+            ).then((response) => {
+                if (response.status == 200) {
+                    response.json().then((result) => {
+                        // // console.log(result.sessions)
+                        
+                            setsesstion(result.sessions)
+                           
+    
+                    })
+                }
+                else if (response.status == 401) {
+                    logout()
+                }
+                else {
+                    alert("network error")
+                }
+    
+    
+            }).catch(err => {
+                // // console.log(err)
+    
+            })
+           
+        }else{
+            let url = API_URL + "/sessions?cid=" + _cid + "&hw=" + _hw;
+            fetch(url,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-access-token': accessToken,
+                    },
+                }
+    
+            ).then((response) => {
+                if (response.status == 200) {
+                    response.json().then((result) => {
+                        // // console.log(result.sesstion)
+                        if (result.status) {
+                            setsesstion(result.sessions)
+                            // // console.log(setsesstion)
+                        }
+    
+    
+                        else {
+                            alert("no data error")
+                        }
+    
+                    })
+                }
+                else if (response.status == 401) {
+                    logout()
+                }
+                else {
+                    alert("network error")
+                }
+    
+    
+            }).catch(err => {
+                // // console.log(err)
+    
+            })
+        }
 
 
-                    else {
-                        alert("no data error")
-                    }
-
-                })
-            }
-            else if (response.status == 401) {
-                logout()
-            }
-            else {
-                alert("network error")
-            }
-
-
-        }).catch(err => {
-            // // console.log(err)
-
-        })
+        
     }
 
 
@@ -309,6 +353,7 @@ const Filter = () => {
     }
     const updateselectedSecssion = () => {
         localStorage.setItem('selectedSession', sessionSelected.current.value);
+        
     }
     const Reset = () => {
         localStorage.setItem('selectedClient', null);
