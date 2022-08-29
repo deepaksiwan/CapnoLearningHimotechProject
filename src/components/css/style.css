@@ -1584,8 +1584,25 @@ box-shadow: 1px 1px 8px 1px #00000052;
     background: linear-gradient( 
 90deg,#a060c2,#c360a9);
 }
+.create-list-box > a > a{
+  color: #000;
+  font-size: 14px;
+}
 .addlink-input{
   text-align: center;
+  margin: 20px 0px;
+}
+.openvideo{
+  display: block;
+  text-align: center;
+  margin-bottom: 15px;
+}
+.openvideo > img{
+  width: 60px;
+}
+.openvideo > a{
+  display: block;
+  font-size: 15px;
 }
 .addlink-input > input{
   display: inline-block;

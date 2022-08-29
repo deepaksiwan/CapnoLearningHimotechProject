@@ -1,6 +1,8 @@
 import React, { Component, useEffect, useRef, useState } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
+import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip } from '@material-ui/core';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
@@ -11,6 +13,13 @@ import closeicon from '../../images/closeicon.png';
 import { API_URL } from "../../../config";
 import backIcon from "../../images/back.png";
 
+const useStyles = makeStyles(() => ({
+    customTooltip: {
+      backgroundColor: "black",
+      fontSize: "15px"
+    }
+  }));
+
 const Viewcompletedclientwork = () => {
 
     const accessToken = localStorage.getItem('accessToken');
@@ -19,6 +28,8 @@ const Viewcompletedclientwork = () => {
     const [itemId, setItemId] = useState(null);
     const [deleteModal, setdeleteModal] = useState(false);
     const deleteToggleModal = () => setdeleteModal(!deleteModal);
+
+    const classes = useStyles();
 
 console.log("Sessionid",Sessionid)
     const columns = [
@@ -88,7 +99,16 @@ console.log("Sessionid",Sessionid)
                         _temp.push({
                             session: v.name,
                             clientname: clientname,
-                            action: <p><a href='#' className="downloadimg" download><img src={download} /></a> <a href='#' className="downloadimg"><img src={preveiw} /></a> <a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></p>
+                            action: <p> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Download" placement="top"><a href='#' className="downloadimg" download><img src={download} /></a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="View" placement="top"><a href='#' className="downloadimg"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="View" placement="top"><a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></Tooltip></p>
 
                         })
                     })

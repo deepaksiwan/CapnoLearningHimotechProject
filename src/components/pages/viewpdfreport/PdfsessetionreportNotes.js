@@ -1,5 +1,7 @@
 import React, {useEffect,useState} from "react";
 import {Link,useParams, Router} from 'react-router-dom';
+import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip } from '@material-ui/core';
 import Sidebar from '../../component/Sidebar';
 import { jsPDF } from "jspdf";
 import Header from '../../component/Header';
@@ -8,6 +10,15 @@ import { API_URL } from "../../../config";
 import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png';
 import backIcon from "../../../components/images/back.png";
+
+const useStyles = makeStyles(() => ({
+    customTooltip: {
+      backgroundColor: "black",
+      fontSize: "15px"
+    }
+  }));
+
+
 
 const PdfsessetionreportNotes = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -22,7 +33,7 @@ const PdfsessetionreportNotes = () => {
 
 
     const pdfdata = () => {
-
+    const classes = useStyles();
       
 
         fetch(API_URL + "/get/pdfnotes/list/" + sessionid,
@@ -162,7 +173,13 @@ const PdfsessetionreportNotes = () => {
                         _temp.push({
                             notes : v.notes,
                            
-                            actions : <p><a href='#' onClick={() => viewpdfdata()} className="downloadimg"><img src={preveiw} /></a>,<a href='javascript:void' onClick={() => pdfdata()} className="downloadimg"><img src={download} /></a></p>
+                            actions : <p><Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="View" placement="top"><a href='#' onClick={() => viewpdfdata()} className="downloadimg"><img src={preveiw} /></a></Tooltip>,<Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Download" placement="top"><a href='javascript:void' onClick={() => pdfdata()} className="downloadimg"><img src={download} /></a></Tooltip></p>
                         })
                     })
                     setData(_temp);

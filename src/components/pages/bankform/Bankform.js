@@ -1,6 +1,9 @@
 import React, {useEffect,useState} from "react";
 import {Link,useParams, Router} from 'react-router-dom';
 import { useTranslation, initReactI18next } from "react-i18next";
+
+import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip } from '@material-ui/core';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
@@ -10,11 +13,20 @@ import backIcon from "../../images/back.png";
 import { jsPDF } from "jspdf";
 import { API_URL } from "../../../config";
 
+const useStyles = makeStyles(() => ({
+    customTooltip: {
+      backgroundColor: "black",
+      fontSize: "15px"
+    }
+  }));
+
 const Bankform = () => {
     const accessToken = localStorage.getItem('accessToken');
     const [forms, setforms] = useState([]);
     const [data, setdata] = useState([]);
     const { t } = useTranslation();
+
+    const classes = useStyles();
 
     useEffect(() => {
         PdfbankForm();
@@ -50,7 +62,13 @@ const Bankform = () => {
                     resp.data.map((v,i) => {
                         _temp.push({
                             name : v.forms,
-                            download: <p><a href={"/forms/"+v.file} className="downloadimg" target={"_blank"} download><img src={download} /></a> <a href={"/forms/"+v.file} className="downloadimg" target={"_blank"} ><img src={preveiw} /></a></p>
+                            download: <p><Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Download" placement="top"><a href={"/forms/"+v.file} className="downloadimg tooltip2" target={"_blank"} download><img src={download} /></a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="View" placement="top"><a href={"/forms/"+v.file} className="downloadimg" target={"_blank"} ><img src={preveiw} /></a></Tooltip></p>
                             
                         })
                     })

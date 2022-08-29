@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import { useTranslation, initReactI18next } from "react-i18next";
+import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip } from '@material-ui/core';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
@@ -10,6 +12,13 @@ import preveiw from '../../images/preveiw.png'
 import { API_URL } from "../../../config";
 import backIcon from "../../../components/images/back.png";
 import { jsPDF } from "jspdf";
+
+const useStyles = makeStyles(() => ({
+    customTooltip: {
+      backgroundColor: "black",
+      fontSize: "15px"
+    }
+  }));
 
 const PdfsessionReport = () => {
     const { t } = useTranslation();
@@ -26,7 +35,7 @@ const PdfsessionReport = () => {
 
 
     const { pdftype } = useParams();
-
+    const classes = useStyles();
 
 
 
@@ -195,7 +204,13 @@ const PdfsessionReport = () => {
                         _temp.push({
                             report: v.pdf_name,
                             Createdate: new Date(v.added_on).toLocaleString(),
-                            actions: <p><a href="javascript:void" onClick={() => {Viewpdfdata(v.id); openToggleModal()}} className="downloadimg" target="_blank"><img src={preveiw} /></a>,<a href='javascript:void' onClick={() => {pdfdata(v.id); DownloaderToggleModal()}} className="downloadimg"><img src={download} /></a></p>
+                            actions: <p><Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="View" placement="top"><a href="javascript:void" onClick={() => {Viewpdfdata(v.id); openToggleModal()}} className="downloadimg tooltip2" target="_blank"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Download" placement="top"><a href='javascript:void' onClick={() => {pdfdata(v.id); DownloaderToggleModal()}} className="downloadimg"><img src={download} /></a></Tooltip></p>
                         })
                     })
                     setData(_temp);

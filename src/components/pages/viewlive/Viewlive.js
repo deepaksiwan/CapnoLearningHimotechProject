@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import i18n from "i18next";
@@ -9,6 +9,8 @@ import { API_URL } from "../../../config";
 import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
+import right from '../../images/right.png';
+import videoicon from '../../images/videoicon.png'
 
 
 const Viewlive = () => {
@@ -25,6 +27,26 @@ const Viewlive = () => {
     const DownloaderToggleModal = () => setDownloaderModal(!downloaderModal);
     const [openModal, setOpenModal] = useState(false);
     const openToggleModal = () => setOpenModal(!openModal);
+    const [fillallfieldmodal, setFillallfieldModal] = useState(false);
+    const fillallfieldtoggleModal = () => setFillallfieldModal(!fillallfieldmodal);
+    const zoomlink = useRef();
+    const zoomlinkupdate = useRef();
+
+    const [zoomlinkcontentmodal, setZoomlinkcontentmodal] = useState(false);
+    const zoomlinkcontenttoggleModal = () => setZoomlinkcontentmodal(!zoomlinkcontentmodal);
+
+    const [zoomlinkupdatecontentmodal, setZoomlinkupdatecontentmodal] = useState(false);
+    const zoomlinkupdatecontenttoggleModal = () => setZoomlinkupdatecontentmodal(!zoomlinkupdatecontentmodal);
+
+    const [addzoomlinkmodal, setAddzoomlinkmodal] = useState(false);
+    const addzoomlinktoggleModal = () => setAddzoomlinkmodal(!addzoomlinkmodal);
+
+    const [updatezoomlinkmodal, setUpdatezoomlinkmodal] = useState(false);
+    const updatezoomlinktoggleModal = () => setAddzoomlinkmodal(!updatezoomlinkmodal);
+
+    const [zoomdata, setZoomdata] = useState([])
+    const [zoomlinks, setZoomlinks] = useState([])
+
 
     useEffect(() => {
 
@@ -39,6 +61,7 @@ const Viewlive = () => {
         livesessionNote();
         livesessionImage();
         zoomRecording();
+        getZoomLinkbyid();
 
     }, [selectedSession])
 
@@ -200,8 +223,8 @@ const Viewlive = () => {
             })
     }
 
-    
-    
+
+
 
     const downloadlivesessionnotes = () => {
 
@@ -258,9 +281,9 @@ const Viewlive = () => {
         doc.text("Client:", 10, 30);
         doc.text("Trainer:", 10, 35);
         doc.setFont(undefined, 'normal');
-        doc.text(_notes, 10, 52);
+        doc.text(_notes ? _notes : "No note found", 10, 52);
         doc.setFontSize(13)
-        doc.text('Session Report Notes', 10, 45, { styles: { fontSize: 13, fontWeight: 'bold' } })
+        doc.text('Live Session Report Notes', 10, 45, { styles: { fontSize: 13, fontWeight: 'bold' } })
         doc.line(10, 47, 55, 47);
         doc.save(_sessionDate + ".pdf");
     }
@@ -321,11 +344,131 @@ const Viewlive = () => {
         doc.text("Client:", 10, 30);
         doc.text("Trainer:", 10, 35);
         doc.setFont(undefined, 'normal');
-        doc.text(_notes?_notes: "No note found", 10, 52);
+        doc.text(_notes ? _notes : "No note found", 10, 52);
         doc.setFontSize(13)
-        doc.text('Session Report Notes', 10, 45, { styles: { fontSize: 13, fontWeight: 'bold' } })
+        doc.text('Live Session Report Notes', 10, 45, { styles: { fontSize: 13, fontWeight: 'bold' } })
         doc.line(10, 47, 55, 47);
         window.open(doc.output('bloburl'))
+    }
+
+
+    function saveZoomLink() {
+        // setLoader(true)
+        let data = {};
+
+        data['zoom_link'] = zoomlink.current.value;
+
+
+        if (zoomlink.current.value == "") {
+            fillallfieldtoggleModal();
+
+            return false;
+        }
+        // console.log(data);
+        fetch(API_URL + "/session/zoom/link/" + selectedSession, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': accessToken
+            },
+            body: JSON.stringify(data)
+        }).then((response) => {
+
+
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    addzoomlinktoggleModal()
+                    zoomlinkupdatecontenttoggleModal()
+
+                });
+            }
+
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                console.log("network error")
+            }
+
+        })
+
+
+    }
+
+
+    function updatezoomlink() {
+        // setLoader(true)
+        let data = {};
+
+        data['zoom_link'] = zoomlinkupdate.current.value;
+
+
+        if (zoomlinkupdate.current.value == "") {
+            fillallfieldtoggleModal();
+
+            return false;
+        }
+        // console.log(data);
+        fetch(API_URL + "/session/zoom/link/" + selectedSession, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': accessToken
+            },
+            body: JSON.stringify(data)
+        }).then((response) => {
+
+
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    // // console.log("result", resp);
+                    // successToggleModal();
+                    updatezoomlinktoggleModal();
+                    zoomlinkupdatecontenttoggleModal()
+
+                });
+            }
+
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                console.log("network error")
+            }
+
+        })
+
+
+    }
+
+    const getZoomLinkbyid = () => {
+        fetch(API_URL + "/get/zoom/link/by/" + selectedSession,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    // console.log("result", resp);
+
+                    setZoomdata(resp.data)
+                    setZoomlinks(resp.data[0])
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                console.log("network error")
+            }
+
+
+        })
     }
 
 
@@ -347,105 +490,142 @@ const Viewlive = () => {
                     <div className="create-section">
                         <ul className="create-list">
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => {Viewlivesessionnotes(); openToggleModal()}}>{t('View-Live-Session-Notes')}</a></div>
+                                <div className="create-list-box"><a href="javascript:void" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => { Viewlivesessionnotes(); openToggleModal() }}>{t('View-Live-Session-Notes')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => {downloadlivesessionnotes(); DownloaderToggleModal()}}>{t('Download-Live-Session-Notes')}</a></div>
+                                <div className="create-list-box"><a href="#javascript:void" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => { downloadlivesessionnotes(); DownloaderToggleModal() }}>{t('Download-Live-Session-Notes')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => {ViewlivesessionImage(); openToggleModal()}}>{t('View-Live-Session-Images')}</a></div>
+                                <div className="create-list-box"><a href="javascript:void" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => { ViewlivesessionImage(); openToggleModal() }}>{t('View-Live-Session-Images')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="#" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => {downloadlivesessionImage(); DownloaderToggleModal() }}>{t('Download-Live-Session-Images')}</a></div>
+                                <div className="create-list-box"><a href="javascript:void" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => { downloadlivesessionImage(); DownloaderToggleModal() }}>{t('Download-Live-Session-Images')}</a></div>
                             </li>
                             <li>
                                 <div className="create-list-box" >
-                                    {/* {session} */}
-                                    {
-                                        (session == null || selectedSession === "null") ?
-                                            <a href="#" data-toggle="modal" data-target="#viewModal"  >{t('View/Link-Zoom-Recordings')}</a>
-                                            :
-                                            <a href="#" data-toggle="modal" data-target="#viewleModal1"  >{t('View/Link-Zoom-Recordings')}</a>
+                                    <a href="javascript:void" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""}>
+                                        {/* {session} */}
+                                        {
+                                            (zoomdata.length > 0) ?
+                                                <a href="javascript:void" data-toggle="modal" onClick={zoomlinkupdatecontenttoggleModal}  >{t('View/Link-Zoom-Recordings')}</a>
+                                                :
+                                                <a href="javascript:void" data-toggle="modal" onClick={zoomlinkcontenttoggleModal}  >{t('View/Link-Zoom-Recordings')}</a>
 
-                                    }
+
+                                        }
+                                    </a>
                                 </div>
                             </li>
                         </ul>
-                        <div class="modal fade" id="viewleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
+                        <Modal isOpen={zoomlinkupdatecontentmodal} toggle={zoomlinkupdatecontenttoggleModal} className="connect-box" centered={true}>
+
+                           
+                                
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">{t("Session-Zoom-Recording")}</h5>
                                         {session}
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <button type="button" class="close" onClick={zoomlinkupdatecontenttoggleModal} aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="addlink-input">
-                                        <input placeholder="Add link here" />
+                                        <a href={zoomlinks ? zoomlinks.zoom_link : ""} target="_blank" className="openvideo">
+                                            <img src={videoicon} />
+                                            <a href={zoomlinks ? zoomlinks.zoom_link : ""} target="_blank">Open Video</a>
+                                        </a>
+                                        <input placeholder="Add link here" defaultValue={zoomlinks ? zoomlinks.zoom_link : ""} ref={zoomlinkupdate} />
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="close-btn" data-dismiss="modal">{t("Close")}</button>
-                                        <button type="button" class="close-btn">{t("Add-link")}</button>
+                                        <button type="button" class="close-btn" onClick={zoomlinkupdatecontenttoggleModal}>{t("Close")}</button>
+                                        <button type="button" class="close-btn" onClick={updatezoomlink}>Update Link</button>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
+                                
+                          
+
+                        </Modal>
+
+                        <Modal isOpen={zoomlinkcontentmodal} toggle={zoomlinkcontenttoggleModal} className="connect-box" centered={true}>
+
+                           
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">{t("Session-Zoom-Recording")}</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <button type="button" class="close" onClick={zoomlinkcontenttoggleModal} aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="addlink-input">
-                                        <input placeholder="Add link here" />
+                                        <input placeholder="Add link here" ref={zoomlink} />
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="close-btn" data-dismiss="modal">{t("Close")}</button>
-                                        <button type="button" class="close-btn">{t("Add-link")}</button>
+                                        <button type="button" class="close-btn" onClick={zoomlinkcontenttoggleModal}>{t("Close")}</button>
+                                        <button type="button" class="close-btn" onClick={saveZoomLink}>{t("Add-link")}</button>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
+                                
+
+                        </Modal>
                     </div>
                 </div>
             </div>
 
             <Modal isOpen={downloaderModal} toggle={DownloaderToggleModal} className="connect-box" centered={true}>
-                <ModalHeader toggle={DownloaderToggleModal}><span className="ml-1 roititle font-weight-bold">{t("Downloading")}</span></ModalHeader>
+                <ModalHeader toggle={DownloaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
                 <ModalBody>
-                    <div className="modal-p">
-                        <div class="loading2">
-                            <div class="dot">L</div>
-                            <div class="dot">O</div>
-                            <div class="dot">A</div>
-                            <div class="dot">D</div>
-                            <div class="dot">I</div>
-                            <div class="dot">N</div>
-                            <div class="dot">G</div>
-                            <span class="text">Please Wait...</span>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
                         </div>
                     </div>
                 </ModalBody>
 
             </Modal>
             <Modal isOpen={openModal} toggle={openToggleModal} className="connect-box" centered={true}>
-                <ModalHeader toggle={openToggleModal}><span className="ml-1 roititle font-weight-bold">Opening</span></ModalHeader>
+                <ModalHeader toggle={openToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
+                        </div>
+                    </div>
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={fillallfieldmodal} toggle={fillallfieldtoggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={fillallfieldtoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-error-p">
+                        <p>Please fill field</p>
+                    </div>
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={addzoomlinkmodal} toggle={addzoomlinktoggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={addzoomlinktoggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
                 <ModalBody>
                     <div className="modal-p">
-                        <div class="loading2">
-                            <div class="dot">O</div>
-                            <div class="dot">P</div>
-                            <div class="dot">E</div>
-                            <div class="dot">N</div>
-                            <div class="dot">I</div>
-                            <div class="dot">N</div>
-                            <div class="dot">G</div>
-                            <span class="text">Please Wait...</span>
-                        </div>
+                        <div className="right-circle"><img src={right} /></div>
+                        <h4>Save!</h4>
+                        <p>Zoom Link has been Added Successfully</p>
+                    </div>
+                </ModalBody>
+
+            </Modal>
+            <Modal isOpen={updatezoomlinkmodal} toggle={updatezoomlinktoggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={updatezoomlinktoggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-p">
+                        <div className="right-circle"><img src={right} /></div>
+                        <h4>Save!</h4>
+                        <p>Zoom Link has been Updated Successfully</p>
                     </div>
                 </ModalBody>
 
