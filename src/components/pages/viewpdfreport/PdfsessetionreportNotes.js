@@ -209,7 +209,7 @@ const PdfsessetionreportNotes = () => {
         },
         
         {
-            title: <span className="text-right">Actions</span>, field: "actions"
+            title: <span className="text-right">Actions</span>, field: "actions",align: "right"
         }
     ]
 

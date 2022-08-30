@@ -279,10 +279,10 @@ const PdfsessionReport = () => {
             title: t("Report-Name"), field: "report"
         },
         {
-            title: <span className="text-right">{t("Created-Date-Time")}</span>, field: "Createdate"
+            title: <span className="text-right">{t("Created-Date-Time")}</span>, field: "Createdate",align: "center"
         },
         {
-            title: <span className="text-right">{t("Actions")}</span>, field: "actions"
+            title: <span className="text-right">{t("Actions")}</span>, field: "actions",align: "right"
         }
     ]
 

@@ -95,7 +95,7 @@ const Recording = () => {
             title: t('Status'), field: "status"
         },
         {
-            title: <span className="text-right">{t('Actions')}</span>, field: "action"
+            title: <span className="text-right">{t('Actions')}</span>, field: "action",align: "right"
         }
     ]
 

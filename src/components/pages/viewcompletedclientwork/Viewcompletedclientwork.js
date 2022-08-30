@@ -37,10 +37,10 @@ console.log("Sessionid",Sessionid)
             title: "Session", field: "session"
         },
         {
-            title: "Client Name", field: "clientname"
+            title: "Client Name", field: "clientname",align: "center"
         },
         {
-            title: <span className="text-right">Actions</span>, field: "action"
+            title: <span className="text-right">Actions</span>, field: "action",align: "right"
         }
     ]
     useEffect(() => {

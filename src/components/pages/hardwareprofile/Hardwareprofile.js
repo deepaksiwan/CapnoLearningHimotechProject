@@ -52,13 +52,13 @@ const Hardwareprofile = () => {
     const classes = useStyles();
 
     useEffect(() => {
-        get5Device();
+        // get5Device();
         // get6Device();
         
-        const interval = setInterval(()=>{
-            get5Device();
-        },3000);
-        return()=> clearInterval(interval);
+        // const interval = setInterval(()=>{
+        //     get5Device();
+        // },3000);
+        // return()=> clearInterval(interval);
 
     }, []);
 
@@ -71,10 +71,10 @@ const Hardwareprofile = () => {
             title: "Serial Number", field: "name"
         },
         {
-            title: "Date activated", field: "date"
+            title: "Date activated", field: "date",align: "center"
         },
         {
-            title: "Actions", field: "actions"
+            title: "Actions", field: "actions",align: "right"
         }
     ]
 
@@ -132,6 +132,7 @@ const Hardwareprofile = () => {
 
     const updatedType = () => {
         let _device = updatedevice.current.value;
+        console.log("_device",_device)
 
         if (_device == 1) {
             get5Device();
@@ -227,7 +228,7 @@ const Hardwareprofile = () => {
 
     function Updatedevice5() {
         let id = itemId;
-        alert(id);
+       
         let data = {};
 
         data['serial_key'] = serialKey.current.value;

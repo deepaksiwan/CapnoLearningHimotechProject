@@ -147,7 +147,7 @@ const Editgroup = () => {
             title: "Status", field: "status"
         },
         {
-            title: <span className="text-right">Actions</span>, field: "action"
+            title: <span className="text-right">Actions</span>, field: "action",align: "right"
         }
     ]
 

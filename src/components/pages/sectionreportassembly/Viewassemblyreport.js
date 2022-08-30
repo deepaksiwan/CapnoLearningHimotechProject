@@ -219,7 +219,7 @@ const Viewassemblyreport = () => {
             title: <span className="text-right">{t("Date-Created")}</span>, field: "dateCreated"
         },
         {
-            title: <span className="text-right">{t("Actions")}</span>, field: "actions"
+            title: <span className="text-right">{t("Actions")}</span>, field: "actions",align: "right"
         }
     ]
 

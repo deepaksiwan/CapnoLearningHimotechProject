@@ -42,7 +42,7 @@ const Viewlive = () => {
     const addzoomlinktoggleModal = () => setAddzoomlinkmodal(!addzoomlinkmodal);
 
     const [updatezoomlinkmodal, setUpdatezoomlinkmodal] = useState(false);
-    const updatezoomlinktoggleModal = () => setAddzoomlinkmodal(!updatezoomlinkmodal);
+    const updatezoomlinktoggleModal = () => setUpdatezoomlinkmodal(!updatezoomlinkmodal);
 
     const [zoomdata, setZoomdata] = useState([])
     const [zoomlinks, setZoomlinks] = useState([])
@@ -61,6 +61,7 @@ const Viewlive = () => {
         livesessionNote();
         livesessionImage();
         zoomRecording();
+        
         getZoomLinkbyid();
 
     }, [selectedSession])
@@ -92,7 +93,7 @@ const Viewlive = () => {
                 logout()
             }
             else {
-                console.log("network error")
+                alert("network error")
             }
 
 
@@ -125,7 +126,7 @@ const Viewlive = () => {
                 logout()
             }
             else {
-                console.log("network error")
+                alert("network error")
             }
 
 
@@ -160,7 +161,7 @@ const Viewlive = () => {
                 logout()
             }
             else {
-                console.log("network error")
+                alert("network error")
             }
 
 
@@ -189,8 +190,7 @@ const Viewlive = () => {
                 //Open the URL on new Window
                 // window.open(fileURL);
                 download(fileURL);
-                setDownloaderModal(false)
-                
+                DownloaderToggleModal();
 
             })
     }
@@ -219,7 +219,7 @@ const Viewlive = () => {
                 window.open(fileURL);
                 // download(fileURL);
 
-                setOpenModal(false);
+                openToggleModal();
 
             })
     }
@@ -242,20 +242,20 @@ const Viewlive = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    
+
                     let _clientName = resp.firstname + " " + resp.lastname;
                     let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _sessionDate = resp.sessionDate;
                     let _pdfname = resp.pdfname;
                     downloadlivenote(_clientName, _trainerName, resp.result, _sessionDate)
-                    setDownloaderModal(false)
+                    DownloaderToggleModal();
                 });
             }
             else if (response.status == 401) {
                 logout()
             }
             else {
-                console.log("network error")
+                alert("network error")
             }
 
 
@@ -305,8 +305,7 @@ const Viewlive = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                   
-                    setOpenModal(false)
+                    openToggleModal();
                     let _clientName = resp.firstname + " " + resp.lastname;
                     let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _sessionDate = resp.sessionDate;
@@ -319,7 +318,7 @@ const Viewlive = () => {
                 logout()
             }
             else {
-                console.log("network error")
+                alert("network error")
             }
 
 
@@ -380,7 +379,10 @@ const Viewlive = () => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     addzoomlinktoggleModal()
-                    zoomlinkupdatecontenttoggleModal()
+                    zoomlinkcontenttoggleModal()
+                    getZoomLinkbyid()
+                    setOpenModal(false);
+                    
 
                 });
             }
@@ -426,7 +428,10 @@ const Viewlive = () => {
                     // // console.log("result", resp);
                     // successToggleModal();
                     updatezoomlinktoggleModal();
-                    zoomlinkupdatecontenttoggleModal()
+                    zoomlinkupdatecontenttoggleModal();
+                    updatezoomlinktoggleModal();
+                    getZoomLinkbyid();
+                    setOpenModal(false);
 
                 });
             }
@@ -459,6 +464,7 @@ const Viewlive = () => {
 
                     setZoomdata(resp.data)
                     setZoomlinks(resp.data[0])
+                   
 
                 });
             }
@@ -505,7 +511,7 @@ const Viewlive = () => {
                             </li>
                             <li>
                                 <div className="create-list-box" >
-                                    <a href="javascript:void" className={( selectedSession === "null") ? "deactivate" : ""}>
+                                    <a href="javascript:void" className={(selectedSession === "null") ? "deactivate" : ""}>
                                         {/* {session} */}
                                         {
                                             (zoomdata.length > 0) ?
@@ -535,11 +541,11 @@ const Viewlive = () => {
                                             <img src={videoicon} />
                                             <a href={zoomlinks ? zoomlinks.zoom_link : ""} target="_blank">Open Video</a>
                                         </a>
-                                        <input placeholder="Add link here" defaultValue={zoomlinks ? zoomlinks.zoom_link : ""} ref={zoomlinkupdate} />
+                                        <input placeholder="Update link here" defaultValue={zoomlinks ? zoomlinks.zoom_link : ""} ref={zoomlinkupdate} />
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="close-btn" onClick={zoomlinkupdatecontenttoggleModal}>{t("Close")}</button>
-                                        <button type="button" class="close-btn" onClick={updatezoomlink}>Update Link</button>
+                                        <button type="button" class="close-btn" onClick={ ()=>{updatezoomlink(); openToggleModal()}} >Update Link</button>
                                     </div>
                                 
                           
@@ -560,7 +566,7 @@ const Viewlive = () => {
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="close-btn" onClick={zoomlinkcontenttoggleModal}>{t("Close")}</button>
-                                        <button type="button" class="close-btn" onClick={saveZoomLink}>{t("Add-link")}</button>
+                                        <button type="button" class="close-btn" onClick={ ()=>{saveZoomLink(); openToggleModal()}}>{t("Add-link")}</button>
                                     </div>
                                 
 
