@@ -64,14 +64,18 @@ const Viewuploadedclientform = () => {
     const classes = useStyles();
 
     useEffect(() => {
-        getclientform();
+        
         getTrainers();
         getClients();
         blankForm();
         getSession();
 
+        if(selectedClient != "null"){
+            getclientform();
+        }
 
-    }, []);
+
+    }, [selectedClient]);
 
 
     const blankForm = () => {
@@ -249,7 +253,52 @@ const Viewuploadedclientform = () => {
 
     const updateSelectClient = () => {
         localStorage.setItem('selectedClient', clientSelected.current.value);
-        getSession();
+        getSession(selectedClient);
+     
+        // fetch(API_URL + "/forms/client/" + selectedClient,
+        //     {
+        //         method: 'GET',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'x-access-token': accessToken,
+        //         },
+        //     }
+        // ).then((response) => {
+        //     if (response.status == 200) {
+        //         response.json().then((resp) => {
+        //             // console.log("result", resp);
+        //             let _temp = [];
+        //             resp.data.map((v, i) => {
+        //                 _temp.push({
+        //                     formname: v.forms,
+        //                     action: <p><Tooltip classes={{
+        //                         tooltip: classes.customTooltip,
+                                
+        //                       }} title="Download" placement="top"><a href='#' className="downloadimg tooltip2" download><img src={download} /> </a></Tooltip> <Tooltip classes={{
+        //                         tooltip: classes.customTooltip,
+                                
+        //                       }} title="View" placement="top"><a href='#' className="downloadimg tooltip2"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
+        //                         tooltip: classes.customTooltip,
+                                
+        //                       }} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id)} className="downloadimg tooltip2"><img src={Delete} /></a></Tooltip></p>
+
+        //                 })
+        //             })
+        //             setdata(_temp);
+
+
+
+        //         });
+        //     }
+        //     else if (response.status == 401) {
+        //         logout()
+        //     }
+        //     else {
+        //         console.log("network error")
+        //     }
+
+
+        // })
     }
     const updateSelectTrainer = () => {
         localStorage.setItem('selectedTrainer', trainerSelected.current.value);
@@ -367,6 +416,7 @@ const Viewuploadedclientform = () => {
             title: <span >Actions</span>, field: "action", align: "right"
         }
     ]
+   
     const getclientform = () => {
         fetch(API_URL + "/forms/client/" + selectedClient,
             {
@@ -426,9 +476,18 @@ const Viewuploadedclientform = () => {
                     <Sidebar />
                 </div>
                 <div className="right-section">
-
+                <div className="head-demoreport">
+                        <h3>View Uploaded Client Forms</h3>
+                        <div className="back-icon-wrp">
+                            <Link to="/view/manageform" className="backbtn-icon">
+                                <img src={backIcon} alt="backicon" />
+                                <span>Back</span>
+                            </Link>
+                        </div>
+                    </div>
+                <div className="filter-top">
                 <div className="row">
-                            <div className="col-lg-3">
+                            <div className="col-lg-4">
                                 <div className="trainerbox">
                                     <div className="trainer-c"><p>{t("trainer")}:</p></div>
                                     <div className="padding-box">
@@ -477,7 +536,7 @@ const Viewuploadedclientform = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-lg-3">
+                            <div className="col-lg-4">
                                 <div className="trainerbox">
                                     <div className="trainer-c"><p>{t("Client")}:</p></div>
                                     <div className="padding-box">
@@ -524,7 +583,7 @@ const Viewuploadedclientform = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-lg-3">
+                            <div className="col-lg-4">
                                 <div className="trainerbox">
                                     <div className="trainer-c"><p>{t("Form-Name")}:</p></div>
                                     <div className="padding-box">
@@ -548,15 +607,8 @@ const Viewuploadedclientform = () => {
 
                             
                         </div>
-                    <div className="head-demoreport mrt-view-upload">
-                        <h3>View Uploaded Client Forms</h3>
-                        <div className="back-icon-wrp">
-                            <Link to="/view/manageform" className="backbtn-icon">
-                                <img src={backIcon} alt="backicon" />
-                                <span>Back</span>
-                            </Link>
-                        </div>
-                    </div>
+                </div>
+                    
                    
                     <div className="wrp-bankform">
                         <div className="table-box">

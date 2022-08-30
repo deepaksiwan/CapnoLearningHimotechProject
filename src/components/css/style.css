@@ -1080,6 +1080,10 @@ box-shadow: 1px 1px 8px 1px #00000052;
   border: 2px solid #c867c6;
     box-shadow: 1px 1px 8px 1px #00000052! important;
 }
+.filter-top{
+  margin-top: -15px;
+  margin-bottom: 20px;
+}
 .downloadimg{
   display: inline-block;
   margin-left: 8px;

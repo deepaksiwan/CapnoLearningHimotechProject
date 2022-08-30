@@ -340,7 +340,7 @@ const Uploadhomeworkasignment = () => {
                             <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
                             <ModalBody>
                                 <div className="modal-p">
-                                    <p>Form Submited Successfully</p>
+                                    <p>Form Submitted Successfully</p>
                                 </div>
                             </ModalBody>
 
