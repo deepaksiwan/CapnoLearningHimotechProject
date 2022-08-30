@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams, Router } from 'react-router-dom';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import { useTranslation, initReactI18next } from "react-i18next";
+import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip } from '@material-ui/core';
 import download from 'downloadjs';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
@@ -14,6 +16,12 @@ import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
 import backIcon from "../../images/back.png";
 
+const useStyles = makeStyles(() => ({
+    customTooltip: {
+      backgroundColor: "black",
+      fontSize: "15px"
+    }
+  }));
 
 const Viewassemblyreport = () => {
     const { t } = useTranslation()
@@ -28,6 +36,7 @@ const Viewassemblyreport = () => {
     const DownloaderToggleModal = () => setDownloaderModal(!downloaderModal);
     const [openModal, setOpenModal] = useState(false);
     const openToggleModal = () => setOpenModal(!openModal);
+    const classes = useStyles();
 
     useEffect(() => {
         getassebllyList();
@@ -71,7 +80,16 @@ const Viewassemblyreport = () => {
                             Client: clientName,
                             Session: sessionDate,
                             dateCreated: new Date(v.created_at * 1000).toLocaleString(),
-                            actions: <p><a href="#" onClick={() => {viewpdf(v.id); openToggleModal()}} className="downloadimg" ><img src={preveiw} /></a><a href={"/view/edit/assemblyreport/" + v.id} className="downloadimg" ><img src={edit} /></a> <a href='#' onClick={() => {downloadpdf(v.id); DownloaderToggleModal()}} className="downloadimg"><img src={downloads} /></a> <a className="downloadimg" onClick={() => openItemPopUp(v.id)} ><img src={Delete} /></a></p>
+                            actions: <p>
+                                <Tooltip classes={{
+                                tooltip: classes.customTooltip,}} title="Preview" placement="top"><a href="#" onClick={() => {viewpdf(v.id); openToggleModal()}} className="downloadimg" ><img src={preveiw} /></a></Tooltip>
+                                <Tooltip classes={{
+                                tooltip: classes.customTooltip,}} title="Edit" placement="top"><a href={"/view/edit/assemblyreport/" + v.id} className="downloadimg" ><img src={edit} /></a></Tooltip>
+                                 <Tooltip classes={{
+                                tooltip: classes.customTooltip,}} title="Download" placement="top"><a href='#' onClick={() => {downloadpdf(v.id); DownloaderToggleModal()}} className="downloadimg"><img src={downloads} /></a></Tooltip>
+                                 <Tooltip classes={{
+                                tooltip: classes.customTooltip,}} title="Delete" placement="top"><a className="downloadimg" onClick={() => openItemPopUp(v.id)} ><img src={Delete} /></a></Tooltip>
+                                 </p>
 
                         })
                     })
@@ -84,7 +102,7 @@ const Viewassemblyreport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -178,7 +196,7 @@ const Viewassemblyreport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

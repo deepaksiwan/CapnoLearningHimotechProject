@@ -41,7 +41,7 @@ const CreatesaveFilesession = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

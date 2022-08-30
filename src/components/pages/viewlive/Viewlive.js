@@ -189,7 +189,8 @@ const Viewlive = () => {
                 //Open the URL on new Window
                 // window.open(fileURL);
                 download(fileURL);
-                DownloaderToggleModal();
+                setDownloaderModal(false)
+                
 
             })
     }
@@ -218,7 +219,7 @@ const Viewlive = () => {
                 window.open(fileURL);
                 // download(fileURL);
 
-                openToggleModal();
+                setOpenModal(false);
 
             })
     }
@@ -241,13 +242,13 @@ const Viewlive = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-
+                    
                     let _clientName = resp.firstname + " " + resp.lastname;
                     let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _sessionDate = resp.sessionDate;
                     let _pdfname = resp.pdfname;
                     downloadlivenote(_clientName, _trainerName, resp.result, _sessionDate)
-                    DownloaderToggleModal();
+                    setDownloaderModal(false)
                 });
             }
             else if (response.status == 401) {
@@ -304,7 +305,8 @@ const Viewlive = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    openToggleModal();
+                   
+                    setOpenModal(false)
                     let _clientName = resp.firstname + " " + resp.lastname;
                     let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _sessionDate = resp.sessionDate;

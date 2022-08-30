@@ -82,7 +82,7 @@ const Bankform = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

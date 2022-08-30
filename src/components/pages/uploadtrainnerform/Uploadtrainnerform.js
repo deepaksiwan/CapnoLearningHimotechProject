@@ -39,9 +39,11 @@ const Uploadclientform = () => {
     const accessToken = localStorage.getItem('accessToken');
     const [modal, setModal] = useState(false);
     const toggleModal = () => setModal(!modal);
-    const [Loader, setLoader] = useState(false)
     const [successModal, setsuccessModal] = useState(false);
     const successToggleModal = () => setsuccessModal(!successModal);
+
+    const [loaderModal, setLoaderModal] = useState(false);
+    const loaderToggleModal = () => setLoaderModal(!loaderModal);
 
 
     useEffect(() => {
@@ -54,7 +56,7 @@ const Uploadclientform = () => {
 
 
     const submittrainerform = () => {
-        setLoader(true)
+       
         let formData = new FormData();
         let client_id = localStorage.getItem('selectedClient');
         let session_id = localStorage.getItem('selectedSession');
@@ -64,13 +66,15 @@ const Uploadclientform = () => {
         formData.append('form', formFile.current.files[0]);
         formData.append('session_id', session_id);
 
-        if (client_id == "" || formname.current.value == "" || !formFile.current.files[0] || session_id == "") {
+      
 
-            toggleModal();
-            setLoader(false)
+        if (client_id == "" || formname.current.value == "" || !formFile.current.files[0] || session_id == "") {
+            setLoaderModal(false);
+            setModal(true);
             return false;
 
         }
+       
         formFile.current.value = "";
 
         fetch(API_URL+"/forms/trainer/upload", {
@@ -83,7 +87,7 @@ const Uploadclientform = () => {
             // console.warn("result",result);
             result.json().then((resp) => {
                 successToggleModal();
-                setLoader(false)
+                setLoaderModal(false);
             })
            
         })
@@ -341,10 +345,10 @@ const Uploadclientform = () => {
         let cureentId = formname.current.value;
 
         if(cureentId == 9 || cureentId == 11 || cureentId == 12){
-            setShowSessionbox(true);
+            setShowSessionbox(false);
         }
         else{
-            setShowSessionbox(false);
+            setShowSessionbox(true);
         }
 
     }
@@ -550,17 +554,29 @@ const Uploadclientform = () => {
 
                         </Modal>
                         <div className="client-submit-btn">
-                            <button type="submit" onClick={submittrainerform}>Submit
-                            {
-                                                Loader &&
-                                                <div id="loader"></div>
-                                            }
+                            <button type="submit" onClick={() => { submittrainerform();loaderToggleModal()}} >Submit
                             </button>
                         </div>
                     </div>
 
                 </div>
             </div>
+
+            <Modal isOpen={loaderModal} toggle={loaderToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={loaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
+                        </div>
+                    </div>
+                </ModalBody>
+
+            </Modal>
         </div>
     )
 }

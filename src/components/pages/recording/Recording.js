@@ -2,6 +2,8 @@ import React, {useEffect,useRef,useState} from 'react';
 import {Link,useParams, Router} from 'react-router-dom';
 import i18n from "i18next";
 import { useTranslation, initReactI18next } from "react-i18next";
+import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip } from '@material-ui/core';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
@@ -9,12 +11,20 @@ import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 import { API_URL } from '../../../config';
 
+const useStyles = makeStyles(() => ({
+    customTooltip: {
+      backgroundColor: "black",
+      fontSize: "15px"
+    }
+  }));
+
 const Recording = () => {
     
     const { t } = useTranslation();
     const accessToken = localStorage.getItem('accessToken');
     const [recordings, setrecordings] = useState([]);
     const [data, setData] = useState([]);
+    const classes = useStyles();
 
 
     useEffect(() =>{
@@ -44,7 +54,10 @@ const Recording = () => {
                             recordingname: v.recording_name,
                             recordingtype: v.recording_type,
                             status: v.status == 1 ? "Active" : "Inactive",
-                            action : <p> <a href='#' className="downloadimg"><img src={preveiw} /></a></p>
+                            action : <p> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="View" placement="top"><a href='#' className="downloadimg"><img src={preveiw} /></a></Tooltip></p>
                         })
                     })
                     setData(_temp);
@@ -56,7 +69,7 @@ const Recording = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

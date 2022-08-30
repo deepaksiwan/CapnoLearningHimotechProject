@@ -1,6 +1,8 @@
 import React, { Component, useState, useEffect, useRef } from 'react';
 import { Link, useParams, Router } from 'react-router-dom';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
+import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip } from '@material-ui/core';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
@@ -10,6 +12,14 @@ import right from '../../images/right.png';
 import closeicon from '../../images/closeicon.png';
 import { API_URL } from '../../../config';
 import backIcon from "../../images/back.png";
+
+
+const useStyles = makeStyles(() => ({
+    customTooltip: {
+      backgroundColor: "black",
+      fontSize: "15px"
+    }
+  }));
 
 const Hardwareprofile = () => {
 
@@ -39,6 +49,7 @@ const Hardwareprofile = () => {
     };
     const [updateSuccessModal, setUpdateSuccessModal] = useState(false);
     const UpdateSuccessToggleModal = () => setUpdateSuccessModal(!updateSuccessModal);
+    const classes = useStyles();
 
     useEffect(() => {
         get5Device();
@@ -105,7 +116,7 @@ const Hardwareprofile = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -151,7 +162,12 @@ const Hardwareprofile = () => {
                             name: v.serial_key,
                             date: new Date(v.date_activated * 1000).toLocaleString(),
 
-                            actions: <p><a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a> <a className="downloadimg" onClick={() => {updateDivce5ModalToggleModal(v.id)}}><img src={edit} /></a></p>
+                            actions: <p> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Edit" placement="top"><a className="downloadimg" onClick={() => {updateDivce5ModalToggleModal(v.id)}}><img src={edit} /></a></Tooltip> 
+                              <Tooltip classes={{
+                                tooltip: classes.customTooltip,}} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></Tooltip></p>
                         })
                     })
                     setData(_temp);
@@ -163,7 +179,7 @@ const Hardwareprofile = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -200,7 +216,7 @@ const Hardwareprofile = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -244,7 +260,7 @@ const Hardwareprofile = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -275,7 +291,7 @@ const Hardwareprofile = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
         })

@@ -115,7 +115,7 @@ const Editprofile = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -145,7 +145,7 @@ const Editprofile = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -172,7 +172,7 @@ const Editprofile = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -200,7 +200,7 @@ const Editprofile = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
         })

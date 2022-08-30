@@ -66,7 +66,7 @@ const Clientinformation = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -125,7 +125,7 @@ const Clientinformation = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -168,7 +168,7 @@ const Clientinformation = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -198,7 +198,7 @@ const Clientinformation = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

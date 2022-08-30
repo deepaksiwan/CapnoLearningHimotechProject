@@ -46,7 +46,7 @@ const CreatesaveDatasession = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -82,7 +82,7 @@ const CreatesaveDatasession = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
         })
 
@@ -111,7 +111,7 @@ const CreatesaveDatasession = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -158,7 +158,7 @@ const CreatesaveDatasession = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

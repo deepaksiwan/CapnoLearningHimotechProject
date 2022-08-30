@@ -103,7 +103,7 @@ const Vieweditassemblyreport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -169,7 +169,7 @@ const Vieweditassemblyreport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -198,7 +198,7 @@ const Vieweditassemblyreport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -229,7 +229,7 @@ const Vieweditassemblyreport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -259,7 +259,7 @@ const Vieweditassemblyreport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -290,7 +290,7 @@ const Vieweditassemblyreport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -322,7 +322,7 @@ const Vieweditassemblyreport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -356,7 +356,7 @@ const Vieweditassemblyreport = () => {
                 });
             }
             else {
-                alert("Network Error")
+                console.log("network error")
             }
 
         })

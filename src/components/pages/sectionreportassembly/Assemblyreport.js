@@ -150,7 +150,7 @@ const Assemblyreport = () => {
                 });
             }
             else {
-                alert("Network Error")
+                console.log("network error")
             }
 
         })
@@ -182,7 +182,7 @@ const Assemblyreport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -211,7 +211,7 @@ const Assemblyreport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -242,7 +242,7 @@ const Assemblyreport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

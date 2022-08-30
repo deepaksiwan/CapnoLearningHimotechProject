@@ -200,7 +200,7 @@ const ChartHeader = (props) => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -264,7 +264,7 @@ const ChartHeader = (props) => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -295,7 +295,7 @@ const ChartHeader = (props) => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -323,7 +323,7 @@ const ChartHeader = (props) => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -353,7 +353,7 @@ const ChartHeader = (props) => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -482,7 +482,7 @@ const ChartHeader = (props) => {
             else {
         setrequestProcessingModal(false);
 
-                alert("network error")
+        console.log("network error")
             }
 
 
@@ -531,7 +531,7 @@ const ChartHeader = (props) => {
             else {
         setrequestProcessingModal(false) ;
 
-                alert("network error")
+        console.log("network error")
             }
 
 
@@ -649,7 +649,7 @@ const ChartHeader = (props) => {
                             </select>
                         </div>
                         <div className="select-row">
-                            <select onChange={reportconfigalternateupdate} ref={alternateconfig}>>
+                            <select onChange={reportconfigalternateupdate} ref={alternateconfig}>
                                 <option value={config} selected={config == currentConfig ? "selected" : "" } >Default</option>
                                 {
                                     alternate.length > 0 && alternate.map((v,i) => {

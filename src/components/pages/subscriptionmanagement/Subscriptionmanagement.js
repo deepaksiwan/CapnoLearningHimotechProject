@@ -51,7 +51,7 @@ const Subscriptionmanagement = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -83,7 +83,7 @@ const Subscriptionmanagement = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
             // alert("Updated")
 

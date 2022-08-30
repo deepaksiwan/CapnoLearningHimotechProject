@@ -129,7 +129,7 @@ const Chooseemail = (props) => {
             logout()
         }
         else {
-            alert("network error")
+            console.log("network error")
         }
 
 
@@ -166,7 +166,7 @@ const Chooseemail = (props) => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

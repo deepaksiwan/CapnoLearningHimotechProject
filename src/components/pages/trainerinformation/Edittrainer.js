@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams, Router } from 'react-router-dom';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
+import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip } from '@material-ui/core';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
@@ -10,6 +12,13 @@ import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
 import { API_URL } from '../../../config';
 import backIcon from "../../images/back.png";
+
+const useStyles = makeStyles(() => ({
+    customTooltip: {
+      backgroundColor: "black",
+      fontSize: "15px"
+    }
+  }));
 
 const Edittrainer = () => {
 
@@ -22,7 +31,7 @@ const Edittrainer = () => {
     const deleteToggleModal = () => setdeleteModal(!deleteModal);
     let _userType = 3
     let _trainer = false;
-    
+    const classes = useStyles();
 
     useEffect(() => {
         getTrainer();
@@ -92,7 +101,16 @@ const Edittrainer = () => {
                             trainer: v.firstname,
                             status: v.status,
                             telephone: v.telephone,
-                            actions: <p><a href={"/edit/trainer/" + v.id} className="downloadimg" ><img src={edit} /></a> <a href='#' className="downloadimg"><img src={checks} /></a> <a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></p>
+                            actions: <p> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Edit" placement="top"><a href={"/edit/trainer/" + v.id} className="downloadimg" ><img src={edit} /></a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Inactive" placement="top"><a href='#' className="downloadimg"><img src={checks} /></a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></Tooltip></p>
                         })
                     })
                     setData(_temp);

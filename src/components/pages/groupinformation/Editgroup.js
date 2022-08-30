@@ -1,6 +1,8 @@
 import React, { Component, useState, useEffect, useRef } from 'react';
 import { Link, useParams, Router } from 'react-router-dom';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
+import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip } from '@material-ui/core';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
@@ -10,6 +12,13 @@ import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
 import { API_URL } from '../../../config';
 import backIcon from "../../images/back.png";
+
+const useStyles = makeStyles(() => ({
+    customTooltip: {
+      backgroundColor: "black",
+      fontSize: "15px"
+    }
+  }));
 
 const Editgroup = () => {
 
@@ -23,6 +32,7 @@ const Editgroup = () => {
     let _trainer = false;
     const [deleteModal, setdeleteModal] = useState(false);
     const deleteToggleModal = () => setdeleteModal(!deleteModal);
+    const classes = useStyles();
 
     useEffect(() => {
         getGroups();
@@ -55,7 +65,7 @@ const Editgroup = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -87,7 +97,16 @@ const Editgroup = () => {
                         _temp.push({
                             name: v.firstname,
                             status: v.status == 1 ? "Active" : "Inactive",
-                            action: <p><a href={"/edit/group/information/" + v.id} className="downloadimg" ><img src={edit} /></a> <a href='#' className="downloadimg"><img src={checks} /></a> <a  onClick={() => openItemPopUp(v.id)}  className="downloadimg"><img src={Delete} /></a></p>
+                            action: <p> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Edit" placement="top"><a href={"/edit/group/information/" + v.id} className="downloadimg" ><img src={edit} /></a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Inactive" placement="top"><a href='#' className="downloadimg"><img src={checks} /></a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Delete" placement="top"><a  onClick={() => openItemPopUp(v.id)}  className="downloadimg"><img src={Delete} /></a></Tooltip> </p>
                         })
                     })
                     setData(_temp);
@@ -99,7 +118,7 @@ const Editgroup = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

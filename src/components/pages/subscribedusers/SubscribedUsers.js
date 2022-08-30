@@ -71,7 +71,7 @@ const SubscribedUsers = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -108,7 +108,7 @@ const SubscribedUsers = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -144,7 +144,7 @@ const SubscribedUsers = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

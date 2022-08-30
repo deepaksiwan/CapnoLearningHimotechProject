@@ -313,7 +313,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -353,7 +353,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
             logout()
         }
         else {
-            alert("network error")
+            console.log("network error")
         }
 
 

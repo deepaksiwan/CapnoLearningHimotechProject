@@ -110,7 +110,7 @@ const Header = () => {
 
                     <div className="header-c2">
                     <div className="multi-langueage-wrp">
-                        <Multilanguage />
+                        
                         </div>
                         <div className="burger-area">
                             <a href="#" className="burgers toggle-slide-right"> <img src={burger} /></a>

@@ -44,6 +44,9 @@ const Uploadclientform = () => {
     const [successModal, setsuccessModal] = useState(false);
     const successToggleModal = () => setsuccessModal(!successModal);
 
+    const [loaderModal, setLoaderModal] = useState(false);
+    const loaderToggleModal = () => setLoaderModal(!loaderModal);
+
 
     useEffect(() => {
         getTrainers();
@@ -55,10 +58,10 @@ const Uploadclientform = () => {
 
         let Currentformname = 4;
 
-        if(Currentformname == 4){
+        if (Currentformname == 4) {
             setShowSessionbox(true);
         }
-        else{
+        else {
             setShowSessionbox(false);
         }
 
@@ -75,11 +78,9 @@ const Uploadclientform = () => {
         formData.append('form', formFile.current.files[0]);
 
 
-
         if (client_id == "" || formname.current.value == "" || !formFile.current.files[0]) {
 
             toggleModal();
-            setLoader(false)
             return false;
 
         }
@@ -95,7 +96,8 @@ const Uploadclientform = () => {
             // console.warn("result",result);
             result.json().then((resp) => {
                 successToggleModal();
-                setLoader(false)
+                setLoaderModal(false);
+
 
             })
         })
@@ -314,7 +316,7 @@ const Uploadclientform = () => {
 
         let _hw = 0;
 
-        let url = API_URL+"/sessions?cid=" + _cid + "&hw=" + _hw;
+        let url = API_URL + "/sessions?cid=" + _cid + "&hw=" + _hw;
 
 
         fetch(url,
@@ -358,13 +360,13 @@ const Uploadclientform = () => {
     const updateselectedSecssion = () => {
         localStorage.setItem('selectedSession', sessionSelected.current.value);
     }
-    const handleFormName = ()=>{
+    const handleFormName = () => {
         let cureentId = formname.current.value;
 
-        if(cureentId == 4){
+        if (cureentId == 4) {
             setShowSessionbox(true);
         }
-        else{
+        else {
             setShowSessionbox(false);
         }
 
@@ -526,7 +528,7 @@ const Uploadclientform = () => {
                                 </div>
                             </div>
 
-                            <div className="col-lg-3">
+                            {/* <div className="col-lg-3">
                                 {
                                     showSessionbox && <div className="trainerbox">
                                     <div className="trainer-c"><p>Session:</p></div>
@@ -550,8 +552,23 @@ const Uploadclientform = () => {
                                 
 
 
-                            </div>
+                            </div> */}
                         </div>
+                        <Modal isOpen={loaderModal} toggle={loaderToggleModal} className="connect-box" centered={true}>
+                            <ModalHeader toggle={loaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                            <ModalBody>
+                                <p className='text-center'>Your request is getting processed. Please wait.</p>
+                                <div className="wrp-chart-loader">
+                                    <div class="loading">
+                                        <div class="loading-1"></div>
+                                        <div class="loading-2"></div>
+                                        <div class="loading-3"></div>
+                                        <div class="loading-4"></div>
+                                    </div>
+                                </div>
+                            </ModalBody>
+
+                        </Modal>
                         <Modal isOpen={successModal} toggle={successToggleModal} className="connect-box" centered={true}>
                             <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
                             <ModalBody>
@@ -574,7 +591,7 @@ const Uploadclientform = () => {
                         </Modal>
 
                         <div className="client-submit-btn">
-                            <button type="submit" onClick={submitclientform}>{t("Submit")}</button>
+                            <button type="submit" onClick={() => { submitclientform(); loaderToggleModal() }}>{t("Submit")}</button>
                         </div>
                     </div>
 

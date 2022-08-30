@@ -86,7 +86,7 @@ const Editgroupinformation = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
             
         })
@@ -116,7 +116,7 @@ const Editgroupinformation = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -148,7 +148,7 @@ const Editgroupinformation = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -180,7 +180,7 @@ const Editgroupinformation = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

@@ -1,6 +1,9 @@
 import React, {useEffect,useState} from "react";
 import {Link,useParams, Router} from 'react-router-dom';
 import { useTranslation, initReactI18next } from "react-i18next";
+import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
+import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip } from '@material-ui/core';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
@@ -8,6 +11,13 @@ import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 import { API_URL } from "../../../config";
 import backIcon from "../../../components/images/back.png";
+
+const useStyles = makeStyles(() => ({
+    customTooltip: {
+      backgroundColor: "black",
+      fontSize: "15px"
+    }
+  }));
 
 const SessiondataReport = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -17,7 +27,7 @@ const SessiondataReport = () => {
     const Clientid = localStorage.getItem('selectedClient');
     const {type} = useParams();
     const { t } = useTranslation();
-    
+    const classes = useStyles();
 
     useEffect(() => {
         if(type == "multi"){
@@ -50,7 +60,13 @@ const SessiondataReport = () => {
                         _temp.push({
                             report : v.name,
                             Createdate : new Date(v.added_on).toLocaleString(),
-                            actions : <p><a href={type == 'single' ? '/view/report/'+sessionid+"/"+v.id+'/all' : '/view/group/report/'+sessionid+"/"+v.id+'/all'} className="downloadimg"><img src={preveiw} /></a></p>
+                            actions : <p> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="View" placement="top"><a href={type == 'single' ? '/view/report/'+sessionid+"/"+v.id+'/all' : '/view/group/report/'+sessionid+"/"+v.id+'/all'} className="downloadimg"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Download" placement="top"><a href='#' className="downloadimg" download><img src={download} /></a></Tooltip></p>
                         })
                     })
                     setData(_temp);

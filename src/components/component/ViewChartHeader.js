@@ -211,7 +211,7 @@ const ViewChartHeader = (props) => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -275,7 +275,7 @@ const ViewChartHeader = (props) => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -306,7 +306,7 @@ const ViewChartHeader = (props) => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -334,7 +334,7 @@ const ViewChartHeader = (props) => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -374,7 +374,7 @@ const ViewChartHeader = (props) => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -529,7 +529,7 @@ const ViewChartHeader = (props) => {
             else {
         setrequestProcessingModal(false);
 
-                alert("network error")
+        console.log("network error")
             }
 
 
@@ -578,7 +578,7 @@ const ViewChartHeader = (props) => {
             else {
         setrequestProcessingModal(false) ;
 
-                alert("network error")
+        console.log("network error")
             }
 
 

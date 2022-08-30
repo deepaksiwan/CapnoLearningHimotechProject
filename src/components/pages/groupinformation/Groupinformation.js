@@ -81,7 +81,7 @@ const Groupinformation = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
            
         })
@@ -111,7 +111,7 @@ const Groupinformation = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

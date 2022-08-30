@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams, Router } from 'react-router-dom';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
+import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip } from '@material-ui/core';
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
 import MaterialTable from 'material-table';
@@ -10,6 +12,14 @@ import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
 import { API_URL } from '../../../config';
 import backIcon from "../../images/back.png";
+
+
+const useStyles = makeStyles(() => ({
+    customTooltip: {
+      backgroundColor: "black",
+      fontSize: "15px"
+    }
+  }));
 
 const Editclient = () => {
 
@@ -27,6 +37,8 @@ const Editclient = () => {
     let _userId = localStorage.getItem('user_id');
     let _userType = 3
     let _trainer = false;
+
+    const classes = useStyles();
 
     useEffect(() => {
         getClients();
@@ -59,7 +71,7 @@ const Editclient = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -95,7 +107,7 @@ const Editclient = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -141,7 +153,16 @@ const Editclient = () => {
                             email: v.email,
                             status: v.status == 1 ? "Active" : "Inactive",
                             telephone: v.telephone,
-                            actions: <p><a href={"/edit/client/" + v.id} className="downloadimg" ><img src={edit} /></a> <a href='#' className="downloadimg"><img src={checks} /></a> <a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></p>
+                            actions: <p> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Edit" placement="top"><a href={"/edit/client/" + v.id} className="downloadimg" ><img src={edit} /></a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Inactive" placement="top"><a href='#' className="downloadimg"><img src={checks} /></a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></Tooltip></p>
                         })
                     })
                     setData(_temp);
@@ -153,7 +174,7 @@ const Editclient = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

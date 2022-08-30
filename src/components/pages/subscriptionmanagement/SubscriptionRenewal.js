@@ -59,7 +59,7 @@ const SubscriptionRenewal = () =>{
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -86,7 +86,7 @@ const SubscriptionRenewal = () =>{
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

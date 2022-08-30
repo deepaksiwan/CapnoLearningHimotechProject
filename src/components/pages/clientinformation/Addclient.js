@@ -69,7 +69,7 @@ const Addclient = () => {
             }
            
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -98,7 +98,7 @@ const Addclient = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -162,7 +162,7 @@ const Addclient = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
         })

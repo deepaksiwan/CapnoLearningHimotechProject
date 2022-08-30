@@ -84,7 +84,7 @@ const ChartTable = (props) => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
         })
