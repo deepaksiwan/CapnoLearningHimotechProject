@@ -53,7 +53,7 @@ const Viewlive = () => {
         setInterval(() => {
             setSelectedSession(localStorage.getItem('selectedSession'));
 
-        }, 1000);
+        }, 300);
 
     }, []);
 
