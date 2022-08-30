@@ -1082,7 +1082,7 @@ box-shadow: 1px 1px 8px 1px #00000052;
 }
 .downloadimg{
   display: inline-block;
-  margin-right: 8px;
+  margin-left: 8px;
   cursor: pointer;
 }
 .downloadimg > img{
