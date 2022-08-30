@@ -64,7 +64,7 @@ const Viewpdfreport = () =>{
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -92,7 +92,7 @@ const Viewpdfreport = () =>{
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

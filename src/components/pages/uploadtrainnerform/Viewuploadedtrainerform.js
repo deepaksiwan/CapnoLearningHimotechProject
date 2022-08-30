@@ -57,7 +57,7 @@ const Viewuploadedtrainerform = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -124,7 +124,7 @@ const Viewuploadedtrainerform = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

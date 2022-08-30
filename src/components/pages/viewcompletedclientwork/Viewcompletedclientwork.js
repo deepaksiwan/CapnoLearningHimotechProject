@@ -69,7 +69,7 @@ console.log("Sessionid",Sessionid)
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
         })
@@ -122,7 +122,7 @@ console.log("Sessionid",Sessionid)
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

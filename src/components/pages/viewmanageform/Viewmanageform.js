@@ -79,7 +79,7 @@ console.log("Clientid",Clientid)
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -110,7 +110,7 @@ console.log("Clientid",Clientid)
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -141,7 +141,7 @@ console.log("Clientid",Clientid)
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

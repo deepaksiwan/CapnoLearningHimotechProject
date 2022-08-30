@@ -98,7 +98,7 @@ const Viewuploadedclientform = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -153,7 +153,7 @@ const Viewuploadedclientform = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -237,7 +237,7 @@ const Viewuploadedclientform = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -300,7 +300,7 @@ const Viewuploadedclientform = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -344,7 +344,7 @@ const Viewuploadedclientform = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -407,7 +407,7 @@ const Viewuploadedclientform = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

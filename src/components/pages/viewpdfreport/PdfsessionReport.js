@@ -85,7 +85,7 @@ const PdfsessionReport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -148,7 +148,7 @@ const PdfsessionReport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -225,7 +225,7 @@ const PdfsessionReport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -261,7 +261,7 @@ const PdfsessionReport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

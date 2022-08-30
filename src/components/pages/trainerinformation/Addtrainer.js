@@ -62,7 +62,7 @@ const Addtrainer = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -92,7 +92,7 @@ const Addtrainer = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -151,7 +151,7 @@ const Addtrainer = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
            
         })

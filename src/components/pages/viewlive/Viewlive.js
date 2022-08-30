@@ -92,7 +92,7 @@ const Viewlive = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -125,7 +125,7 @@ const Viewlive = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -160,7 +160,7 @@ const Viewlive = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -255,7 +255,7 @@ const Viewlive = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -319,7 +319,7 @@ const Viewlive = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -505,7 +505,7 @@ const Viewlive = () => {
                             </li>
                             <li>
                                 <div className="create-list-box" >
-                                    <a href="javascript:void" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""}>
+                                    <a href="javascript:void" className={( selectedSession === "null") ? "deactivate" : ""}>
                                         {/* {session} */}
                                         {
                                             (zoomdata.length > 0) ?

@@ -47,7 +47,7 @@ const PdfclienthomeworkReport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -110,7 +110,7 @@ const PdfclienthomeworkReport = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

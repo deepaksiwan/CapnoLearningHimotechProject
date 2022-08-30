@@ -69,7 +69,7 @@ const Trainerinformation = () => {
                 logout()
             }
             else {
-                alert("network error")
+                // alert("network error")
             }
 
 
@@ -141,7 +141,7 @@ const Trainerinformation = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
            
             })
@@ -170,7 +170,7 @@ const Trainerinformation = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -200,7 +200,7 @@ const Trainerinformation = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

@@ -162,7 +162,7 @@ const Uploadhomeworkasignment = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -208,7 +208,7 @@ const Uploadhomeworkasignment = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

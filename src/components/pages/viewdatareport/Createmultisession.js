@@ -62,7 +62,7 @@ const Createmultisession = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -116,7 +116,7 @@ const logout = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -166,7 +166,7 @@ const logout = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 

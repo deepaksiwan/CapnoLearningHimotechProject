@@ -132,7 +132,7 @@ const Uploadclientform = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -201,7 +201,7 @@ const Uploadclientform = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -285,7 +285,7 @@ const Uploadclientform = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
@@ -348,7 +348,7 @@ const Uploadclientform = () => {
                 logout()
             }
             else {
-                alert("network error")
+                console.log("network error")
             }
 
 
