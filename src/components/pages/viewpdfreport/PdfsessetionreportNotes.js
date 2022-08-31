@@ -25,6 +25,9 @@ const PdfsessetionreportNotes = () => {
     const sessionid = localStorage.getItem('selectedSession');
     const [notes, senotes] = useState([]);
     const [data, setData] = useState([]);
+    const classes = useStyles();
+
+
     useEffect(() => {
         pdfReportNote();
         
@@ -33,7 +36,7 @@ const PdfsessetionreportNotes = () => {
 
 
     const pdfdata = () => {
-    const classes = useStyles();
+   
       
 
         fetch(API_URL + "/get/pdfnotes/list/" + sessionid,
@@ -171,7 +174,7 @@ const PdfsessetionreportNotes = () => {
                     resp.notes.map((v,i) => {
                         
                         _temp.push({
-                            notes : v.notes,
+                            reportName : v.sessiondate + " - " + v.name,
                            
                             actions : <p><Tooltip classes={{
                                 tooltip: classes.customTooltip,
@@ -205,7 +208,7 @@ const PdfsessetionreportNotes = () => {
 
     const columns =[
         {
-            title: "Notes", field: "notes"
+            title: "Report Name", field: "reportName"
         },
         
         {

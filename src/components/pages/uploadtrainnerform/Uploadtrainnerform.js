@@ -69,10 +69,12 @@ const Uploadclientform = () => {
       
 
         if (client_id == "" || formname.current.value == "" || !formFile.current.files[0] || session_id == "") {
-            setLoaderModal(false);
+           
             setModal(true);
             return false;
 
+        }else{
+            setLoaderModal(true);
         }
        
         formFile.current.value = "";
@@ -554,7 +556,7 @@ const Uploadclientform = () => {
 
                         </Modal>
                         <div className="client-submit-btn">
-                            <button type="submit" onClick={() => { submittrainerform();loaderToggleModal()}} >Submit
+                            <button type="submit" onClick={() => { submittrainerform();}} >Submit
                             </button>
                         </div>
                     </div>

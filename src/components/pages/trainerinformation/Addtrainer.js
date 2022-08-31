@@ -122,7 +122,7 @@ const Addtrainer = () => {
         data['sendemail'] = true;
         data['associated_owner'] = associated_owner;
      
-        if(firstname.current.value == "" || lastname.current.value == "" || profession.current.value == "" || degreescompleted.current.value == "" || year_exp.current.value == "" || license.current.value == "" || certificationscompleted.current.value == "" || email.current.value == "" || telephone.current.value == "" || address.current.value == "" || address2.current.value == "" || city.current.value == "" || zipcode.current.value == "" || state.current.value == "" || country.current.value == ""){
+        if(firstname.current.value == "" || lastname.current.value == "" || email.current.value == "" ){
             fillallfieldtoggleModal();
             setLoader(false);
             return false;
@@ -202,13 +202,13 @@ const Addtrainer = () => {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>First Name</p>
+                                        <p>First Name *</p>
                                         <input placeholder="Enter first name" ref={firstname} />
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Last Name</p>
+                                        <p>Last Name *</p>
                                         <input placeholder="Enter last name" ref={lastname} />
                                     </div>
                                 </div>
@@ -250,7 +250,7 @@ const Addtrainer = () => {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Email</p>
+                                        <p>Email *</p>
                                         <input placeholder="Enter an email" onChange={handleEmail} ref={email} />
                                         {
                                             error && <p className='validemail'>invalid Email</p>
@@ -363,7 +363,7 @@ const Addtrainer = () => {
                 <ModalHeader toggle={fillallfieldtoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
                 <ModalBody>
                     <div className="modal-error-p">
-                        <p>Please fill all field</p>
+                        <p>Please fill Required field</p>
                     </div>
                 </ModalBody>
 

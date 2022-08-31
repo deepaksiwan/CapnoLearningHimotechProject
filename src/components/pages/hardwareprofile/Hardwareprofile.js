@@ -52,13 +52,10 @@ const Hardwareprofile = () => {
     const classes = useStyles();
 
     useEffect(() => {
-        // get5Device();
+        get5Device();
         // get6Device();
         
-        // const interval = setInterval(()=>{
-        //     get5Device();
-        // },3000);
-        // return()=> clearInterval(interval);
+        
 
     }, []);
 
@@ -71,11 +68,9 @@ const Hardwareprofile = () => {
             title: "Serial Number", field: "name"
         },
         {
-            title: "Date activated", field: "date",align: "center"
+            title: "Date Activated", field: "date",align: "right"
         },
-        {
-            title: "Actions", field: "actions",align: "right"
-        }
+       
     ]
 
     function saveRegisterdevice5() {
@@ -99,7 +94,7 @@ const Hardwareprofile = () => {
             },
             body: JSON.stringify(data)
         }).then((response) => {
-            if (response.status == 200) {
+            if (response.status == 201) {
                 response.json().then((resp) => {
                     // console.log("results", resp);
                     successToggleModal();
@@ -108,7 +103,7 @@ const Hardwareprofile = () => {
 
                 });
             }
-            else if (response.status == 202) {
+            else if (response.status == 200) {
                 serialkeyToggleModal();
                 registerToggleModal();
             }
@@ -163,12 +158,12 @@ const Hardwareprofile = () => {
                             name: v.serial_key,
                             date: new Date(v.date_activated * 1000).toLocaleString(),
 
-                            actions: <p> <Tooltip classes={{
-                                tooltip: classes.customTooltip,
+                            // actions: <p> <Tooltip classes={{
+                            //     tooltip: classes.customTooltip,
                                 
-                              }} title="Edit" placement="top"><a className="downloadimg" onClick={() => {updateDivce5ModalToggleModal(v.id)}}><img src={edit} /></a></Tooltip> 
-                              <Tooltip classes={{
-                                tooltip: classes.customTooltip,}} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></Tooltip></p>
+                            //   }} title="Edit" placement="top"><a className="downloadimg" onClick={() => {updateDivce5ModalToggleModal(v.id)}}><img src={edit} /></a></Tooltip> 
+                            //   <Tooltip classes={{
+                            //     tooltip: classes.customTooltip,}} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></Tooltip></p>
                         })
                     })
                     setData(_temp);
@@ -205,7 +200,7 @@ const Hardwareprofile = () => {
                             name: v.serial_key,
 
                             date: new Date(v.date_activated * 1000).toLocaleString(),
-                            actions: <p><a href='#' className="downloadimg"><img src={Delete} /></a> <a href='#' className="downloadimg"><img src={edit} /></a></p>
+                            // actions: <p><a href='#' className="downloadimg"><img src={Delete} /></a> <a href='#' className="downloadimg"><img src={edit} /></a></p>
                         })
                     })
                     setData(_temp);
@@ -250,7 +245,7 @@ const Hardwareprofile = () => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     // console.log("results", resp);
-                    successToggleModal();
+                    UpdateSuccessToggleModal()
                     get5Device();
 
 
@@ -365,7 +360,7 @@ const Hardwareprofile = () => {
                                 </ModalBody>
 
                             </Modal>
-                            <div className="registerdevice-btn"><a href="#" onClick={registerToggleModal}>Register 5.0 Device</a></div>
+                            {/* <div className="registerdevice-btn"><a href="#" onClick={registerToggleModal}>Register 5.0 Device</a></div> */}
                         </div>
                     </div>
                     <div className="wrp-bankform">
@@ -431,7 +426,7 @@ const Hardwareprofile = () => {
                                     <div className="modal-p">
                                         <div className="right-circle"><img src={right} /></div>
                                         <h4>Saved!</h4>
-                                        <p>Serial Number has been updated Successfully</p>
+                                        <p>Hardware Profile updated Successfully</p>
                                     </div>
                                 </ModalBody>
 

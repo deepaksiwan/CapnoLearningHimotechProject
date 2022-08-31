@@ -1,5 +1,6 @@
 import React, { Component, useEffect, useRef, useState } from "react";
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
+
 import { Link, useParams } from 'react-router-dom';
 import Header from '../../component/Header';
 import Sidebar from '../../component/Sidebar';
@@ -7,6 +8,7 @@ import { API_URL } from "../../../config";
 import backIcon from "../../images/back.png";
 
 const Uploadhomeworkasignment = () => {
+   
     const [clients, setinclients] = useState([]);
     const [trainers, settrainers] = useState([]);
     const [sesstion, setsesstion] = useState([]);
@@ -37,7 +39,8 @@ const Uploadhomeworkasignment = () => {
     const toggleModal = () => setModal(!modal);
     const [successModal, setsuccessModal] = useState(false);
     const successToggleModal = () => setsuccessModal(!successModal);
-    const [Loader, setLoader] = useState(false);
+    const [loaderModal, setLoaderModal] = useState(false);
+    const loaderToggleModal = () => setLoaderModal(!loaderModal);
 
 
     useEffect(() => {
@@ -50,7 +53,6 @@ const Uploadhomeworkasignment = () => {
 
     const submithomeworkform = () => {
 
-        setLoader(true)
         let formData = new FormData();
         let client_id = localStorage.getItem('selectedClient');
         let session_id = localStorage.getItem('selectedSession');
@@ -61,9 +63,10 @@ const Uploadhomeworkasignment = () => {
         if (client_id == "" || !formFile.current.files[0] || session_id == "") {
 
             toggleModal();
-            setLoader(false)
             return false;
 
+        }else{
+            setLoaderModal(true)
         }
         formFile.current.value = "";
 
@@ -76,7 +79,7 @@ const Uploadhomeworkasignment = () => {
         }).then((result) => {
             // console.warn("result",result);
             result.json().then((resp) => {
-                setLoader(false)
+                setLoaderModal(false)
                 successToggleModal();
 
             })
@@ -358,15 +361,29 @@ const Uploadhomeworkasignment = () => {
                         </Modal>
                         <div className="client-submit-btn">
                             <button type="submit" onClick={submithomeworkform}>Submit
-                            {
-                                                Loader && <div id="loader"></div>
-                                            }
+                           
                             </button>
                         </div>
                     </div>
 
                 </div>
             </div>
+
+            <Modal isOpen={loaderModal} toggle={loaderToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={loaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
+                        </div>
+                    </div>
+                </ModalBody>
+
+            </Modal>
         </div>
     )
 }

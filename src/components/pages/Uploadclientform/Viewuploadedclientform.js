@@ -254,6 +254,7 @@ const Viewuploadedclientform = () => {
     const updateSelectClient = () => {
         localStorage.setItem('selectedClient', clientSelected.current.value);
         getSession(selectedClient);
+       
      
         // fetch(API_URL + "/forms/client/" + selectedClient,
         //     {
@@ -303,7 +304,8 @@ const Viewuploadedclientform = () => {
     const updateSelectTrainer = () => {
         localStorage.setItem('selectedTrainer', trainerSelected.current.value);
         localStorage.setItem('selectedClient', null);
-
+    
+      
         getClients()
     }
 

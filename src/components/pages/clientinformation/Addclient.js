@@ -131,7 +131,7 @@ const Addclient = () => {
         data['associated_practioner'] = associated_practioner;
         data['associated_owner'] = associated_owner;
         
-        if(firstname.current.value == "" || lastname.current.value == "" || age.current.value == "" || education.current.value == "" || profession.current.value == "" || telephone.current.value == "" || email.current.value == "" || complaint.current.value == "" || address.current.value == "" || zipcode.current.value == "" || state.current.value == "" || country.current.value == ""){
+        if(firstname.current.value == "" || lastname.current.value == "" || email.current.value == "" ){
             fillallfieldtoggleModal();
             setLoader(false)
             return false;
@@ -211,13 +211,13 @@ const Addclient = () => {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>First Name</p>
+                                        <p>First Name *</p>
                                         <input placeholder="Enter first name" ref={firstname} />
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Last Name</p>
+                                        <p>Last Name *</p>
                                         <input placeholder="Enter last name" ref={lastname} />
                                     </div>
                                 </div>
@@ -263,7 +263,7 @@ const Addclient = () => {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Email</p>
+                                        <p>Email *</p>
                                         <input placeholder="Enter an email" onChange={handleEmail} ref={email} />
                                         {
                                             error && <p className='validemail'>invalid Email</p>
@@ -377,7 +377,7 @@ const Addclient = () => {
                 <ModalHeader toggle={fillallfieldtoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
                 <ModalBody>
                     <div className="modal-error-p">
-                        <p>Please fill all field</p>
+                        <p>Please fill Required field</p>
                     </div>
                 </ModalBody>
 

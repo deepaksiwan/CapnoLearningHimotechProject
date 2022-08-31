@@ -236,13 +236,13 @@ const Trainerinformation = () => {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>First Name</p>
+                                        <p>First Name *</p>
                                         <input placeholder="Enter first name" defaultValue={trainer.firstname} ref={firstname} />
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Last Name</p>
+                                        <p>Last Name *</p>
                                         <input placeholder="Enter last name" defaultValue={trainer.lastname} ref={lastname} />
                                     </div>
                                 </div>
@@ -250,19 +250,19 @@ const Trainerinformation = () => {
                             <div className="row">
                                 <div className="col-lg-4">
                                     <div className="client-input">
-                                        <p>Profession</p>
+                                        <p>Profession *</p>
                                         <input placeholder="Enter profession" defaultValue={trainer.profession} ref={profession} />
                                     </div>
                                 </div>
                                 <div className="col-lg-4">
                                     <div className="client-input">
-                                        <p>Highest Degree Earned</p>
+                                        <p>Highest Degree Earned *</p>
                                         <input placeholder="Enter highest degree earned" defaultValue={trainer.degreescompleted} ref={degreescompleted} />
                                     </div>
                                 </div>
                                 <div className="col-lg-4">
                                     <div className="client-input">
-                                        <p>Years of Profession Experience</p>
+                                        <p>Years of Profession Experience *</p>
                                         <input placeholder="Enter number of years of experience" defaultValue={trainer.year_exp} ref={year_exp} />
                                     </div>
                                 </div>
@@ -270,13 +270,13 @@ const Trainerinformation = () => {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Licenses</p>
+                                        <p>Licenses *</p>
                                         <input placeholder="Enter licenses" defaultValue={trainer.license} ref={license} />
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Certificate</p>
+                                        <p>Certificate *</p>
                                         <input placeholder="Certificate" defaultValue={trainer.certificationscompleted} ref={certificationscompleted} />
                                     </div>
                                 </div>
@@ -284,7 +284,7 @@ const Trainerinformation = () => {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Email</p>
+                                        <p>Email *</p>
                                         <input placeholder="Enter an email" onChange={handleEmail} defaultValue={trainer.email} ref={email} />
                                         {
                                             error && <p className='validemail'>invalid Email</p>
@@ -293,7 +293,7 @@ const Trainerinformation = () => {
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Password</p>
+                                        <p>Password *</p>
                                         <input placeholder="Enter password" defaultValue={trainer.password} />
                                     </div>
                                 </div>
@@ -301,7 +301,7 @@ const Trainerinformation = () => {
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="client-input">
-                                        <p>Telephone</p>
+                                        <p>Telephone *</p>
                                         <input placeholder="Enter a telephone" defaultValue={trainer.telephone} ref={telephone} />
                                     </div>
                                 </div>
@@ -309,7 +309,7 @@ const Trainerinformation = () => {
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="client-input">
-                                        <p>Address</p>
+                                        <p>Address *</p>
                                         <textarea name="address" placeholder="Enter physical adderss 1" defaultValue={trainer.address} ref={address}></textarea>
                                         <textarea name="address" placeholder="Enter physical adderss 2" defaultValue={trainer.address2} ref={address2}></textarea>
                                     </div>
@@ -318,13 +318,13 @@ const Trainerinformation = () => {
                             <div className="row">
                                 <div className="col-lg-3">
                                     <div className="client-input">
-                                        <p>City</p>
+                                        <p>City *</p>
                                         <input placeholder="Enter City" defaultValue={trainer.city} ref={city} />
                                     </div>
                                 </div>
                                 <div className="col-lg-3">
                                     <div className="client-input">
-                                        <p>Postal Code</p>
+                                        <p>Postal Code *</p>
                                         <input placeholder="Enter postal code" defaultValue={trainer.zipcode} ref={zipcode} />
                                     </div>
                                 </div>
@@ -346,7 +346,7 @@ const Trainerinformation = () => {
                                 </div>
                                 <div className="col-lg-3">
                                 <div className="client-input">
-                                        <p>Country</p>
+                                        <p>Country *</p>
                                         <select name="country" onChange={handleCountryUpdate}  ref={country}>
                                         <option value="">Choose Country</option>
                                             {
@@ -397,7 +397,7 @@ const Trainerinformation = () => {
                 <ModalHeader toggle={fillallfieldtoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
                 <ModalBody>
                     <div className="modal-error-p">
-                        <p>Please fill all field</p>
+                        <p>Please Fill all Field</p>
                     </div>
                 </ModalBody>
 

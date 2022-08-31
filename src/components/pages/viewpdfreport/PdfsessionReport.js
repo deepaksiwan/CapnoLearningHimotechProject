@@ -202,7 +202,7 @@ const PdfsessionReport = () => {
                     resp.pdfs.map((v, i) => {
 
                         _temp.push({
-                            report: v.pdf_name,
+                            report: v.name + " - " + v.pdf_name,
                             Createdate: new Date(v.added_on).toLocaleString(),
                             actions: <p><Tooltip classes={{
                                 tooltip: classes.customTooltip,
@@ -304,7 +304,7 @@ const PdfsessionReport = () => {
                     <div className="head-demoreport">
                         <h3>{t("Session-Data-Reports")}</h3>
 
-                        <p>{pdftype == "multi" ? t("Multi") : pdftype == "single" ? t("Single") : pdftype == "group" ? t("group") : pdftype == "homework" ? t("homework") : null} Pdf {t("Sesseion-Report")}</p>
+                        {/* <p>{pdftype == "multi" ? t("Multi") : pdftype == "single" ? t("Single") : pdftype == "group" ? t("group") : pdftype == "homework" ? t("homework") : null} Pdf {t("Sesseion-Report")}</p> */}
                     </div>
                     <div className="wrp-bankform">
                         <div style={{ maxWidth: '100%' }}>

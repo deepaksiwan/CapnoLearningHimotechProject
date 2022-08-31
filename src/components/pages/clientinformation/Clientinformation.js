@@ -234,13 +234,13 @@ const Clientinformation = () => {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>First Name</p>
+                                        <p>First Name *</p>
                                         <input placeholder="Enter first name" defaultValue={client.firstname} ref={firstname} />
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Last Name</p>
+                                        <p>Last Name *</p>
                                         <input placeholder="Enter last name" defaultValue={client.lastname} ref={lastname} />
                                     </div>
                                 </div>
@@ -248,7 +248,7 @@ const Clientinformation = () => {
                             <div className="row">
                                 <div className="col-lg-3">
                                     <div className="client-input">
-                                        <p>Sex</p>
+                                        <p>Sex *</p>
                                         <select defaultValue={client.gender} ref={gender} >
                                             <option>Male</option>
                                             <option>Female</option>
@@ -257,7 +257,7 @@ const Clientinformation = () => {
                                 </div>
                                 <div className="col-lg-3">
                                     <div className="client-input">
-                                        <p>Age</p>
+                                        <p>Age *</p>
                                         <input placeholder="Enter age" defaultValue={client.age} ref={age} />
                                     </div>
                                 </div>
@@ -272,13 +272,13 @@ const Clientinformation = () => {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Profession</p>
+                                        <p>Profession *</p>
                                         <input placeholder="Enter profession" defaultValue={client.profession} ref={profession} />
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Telephone</p>
+                                        <p>Telephone *</p>
                                         <input placeholder="Enter a telephone" defaultValue={client.telephone} ref={telephone} />
                                     </div>
                                 </div>
@@ -286,7 +286,7 @@ const Clientinformation = () => {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Email</p>
+                                        <p>Email *</p>
                                         <input placeholder="Enter an email" onChange={handleEmail} defaultValue={client.email} ref={email} />
                                         {
                                             error && <p className='validemail'>invalid Email</p>
@@ -295,7 +295,7 @@ const Clientinformation = () => {
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Password</p>
+                                        <p>Password *</p>
                                         <input placeholder="Enter Password" defaultValue={client.password} />
                                     </div>
                                 </div>
@@ -303,7 +303,7 @@ const Clientinformation = () => {
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="client-input">
-                                        <p>Presenting Complaint</p>
+                                        <p>Presenting Complaint *</p>
                                         <textarea placeholder="Enter a present considiton" defaultValue={client.complaint} ref={complaint}></textarea>
                                     </div>
                                 </div>
@@ -311,7 +311,7 @@ const Clientinformation = () => {
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="client-input">
-                                        <p>Address</p>
+                                        <p>Address *</p>
                                         <textarea name="address" placeholder="Enter physical adderss 1" defaultValue={client.address} ref={address} ></textarea>
 
                                     </div>
@@ -320,19 +320,19 @@ const Clientinformation = () => {
                             <div className="row">
                                 <div className="col-lg-3">
                                     <div className="client-input">
-                                        <p>City</p>
+                                        <p>City *</p>
                                         <input placeholder="Enter City" defaultValue={client.city} ref={city} />
                                     </div>
                                 </div>
                                 <div className="col-lg-3">
                                     <div className="client-input">
-                                        <p>Postal Code</p>
+                                        <p>Postal Code *</p>
                                         <input placeholder="Enter postal code" defaultValue={client.zipcode} ref={zipcode} />
                                     </div>
                                 </div>
                                 <div className="col-lg-3">
                                     <div className="client-input">
-                                        <p>State/Province</p>
+                                        <p>State/Province *</p>
                                         <select name="state" id="state" ref={state}>
                                             <option >Choose States/Province</option>
 
@@ -348,7 +348,7 @@ const Clientinformation = () => {
                                 </div>
                                 <div className="col-lg-3">
                                     <div className="client-input">
-                                        <p>Country</p>
+                                        <p>Country *</p>
                                         <select name="country" onChange={handleCountryUpdate} ref={country}>
                                             <option value="">Choose Country</option>
                                             {

@@ -998,6 +998,9 @@ b, strong {
 .edit-input{
   width: 32.3%;
 }
+.filter-mrb{
+  margin-bottom: 20px;
+}
 .edit-input > input{
   display: inline-block;
   width: 100%;
