@@ -36,6 +36,8 @@ const Addtrainer = () => {
     const [emailalreadyExitmodal, setEmailalreadyExitmodal] = useState(false);
     const EmailalreadyExittoggleModal = () => setEmailalreadyExitmodal(!emailalreadyExitmodal);
     const [error, setError] = useState(false);
+    const [loaderModal, setLoaderModal] = useState(false);
+    const loaderToggleModal = () => setLoaderModal(!loaderModal);
 
     useEffect(() => {
         getCountry();
@@ -124,8 +126,9 @@ const Addtrainer = () => {
      
         if(firstname.current.value == "" || lastname.current.value == "" || email.current.value == "" ){
             fillallfieldtoggleModal();
-            setLoader(false);
             return false;
+        }else{
+            setLoaderModal(true)
         }
         fetch(API_URL+"/trainer/create", {
             method: 'POST',
@@ -139,13 +142,13 @@ const Addtrainer = () => {
                 response.json().then((resp) => {
                     // console.log("results", resp);
                     successToggleModal();
-                    setLoader(false)
+                    setLoaderModal(false)
 
                 });
             }
             else if (response.status == 400) {
                 EmailalreadyExittoggleModal();
-                setLoader(false);
+                setLoaderModal(false)
             }
             else if (response.status == 401) {
                 logout()
@@ -348,10 +351,7 @@ const Addtrainer = () => {
                                     </Modal>
                                     <div className="create-btn">
                                         <button type="submit" onClick={createtrainers}>Create
-                                        {
-                                                Loader &&
-                                                <div id="loader"></div>
-                                            }
+                                        
                                         </button>
                                     </div>
                                 </div>
@@ -373,6 +373,23 @@ const Addtrainer = () => {
                 <ModalBody>
                     <div className="modal-error-p">
                         <p>Account already exist with this email</p>
+                    </div>
+                </ModalBody>
+
+            </Modal>
+
+
+            <Modal isOpen={loaderModal} toggle={loaderToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={loaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
+                        </div>
                     </div>
                 </ModalBody>
 

@@ -48,6 +48,8 @@ const Editassemblyreport = () => {
     const [Loader2, setLoader2] = useState(false)
     const [successModal, setsuccessModal] = useState(false);
     const successToggleModal = () => setsuccessModal(!successModal);
+    const [loaderModal, setLoaderModal] = useState(false);
+    const loaderToggleModal = () => setLoaderModal(!loaderModal);
 
 
 
@@ -331,7 +333,7 @@ const Editassemblyreport = () => {
 
 
     const UpdateAssemblyreport = () => {
-        setLoader2(true)
+   
         let data = {};
 
         data['name'] = reportName.current.value;
@@ -351,7 +353,7 @@ const Editassemblyreport = () => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     // console.log("results", resp);
-                    setLoader2(false);
+                    setLoaderModal(false);
                     successToggleModal();
                 });
             }
@@ -403,7 +405,7 @@ const Editassemblyreport = () => {
 
 
     const downloadpdf = () => {
-        setLoader(true)
+   
         fetch(API_URL + "/get/full/screenshort/" + id + "/" + Clientid,
             {
                 method: 'GET',
@@ -416,7 +418,7 @@ const Editassemblyreport = () => {
             .then(response => {
                 //Create a Blob from the PDF Stream
                 // console.log(response);
-                setLoader(false)
+              
                 const file = new Blob([response], {
                     type: "application/pdf"
                 });
@@ -425,6 +427,7 @@ const Editassemblyreport = () => {
                 //Open the URL on new Window
                 window.open(fileURL);
                 download(fileURL);
+                setLoaderModal(false)
 
             })
     }
@@ -565,17 +568,14 @@ const Editassemblyreport = () => {
                         }
 
                         <div className="assembly-btn-wrp assembly-btn-wrp2">
-                            <div className="assembly-btn"><a href="javascript:void" onClick={UpdateAssemblyreport} >SAVE REPORT
+                            <div className="assembly-btn"><a href="javascript:void" onClick={()=>{UpdateAssemblyreport(); loaderToggleModal()}} >SAVE REPORT
                                 {
                                     Loader2 &&
                                     <div id="loader"></div>
                                 }
                             </a></div>
-                            <div className="assembly-btn ml-assembly"><a href="javascript:void" action="" onClick={downloadpdf}>DOWNLOAD PDF
-                                {
-                                    Loader &&
-                                    <div id="loader"></div>
-                                }
+                            <div className="assembly-btn ml-assembly"><a href="javascript:void" action="" onClick={()=>{downloadpdf(); loaderToggleModal()}}>DOWNLOAD PDF
+        
                             </a></div>
                             <div className="assembly-btn ml-assembly"><a href="/view/assembly">GO TO REPORTS LIST</a></div>
 
@@ -590,6 +590,22 @@ const Editassemblyreport = () => {
                         <div className="right-circle"><img src={right} /></div>
                         <h4>Saved!</h4>
                         <p>Your Form has been Updated Successfully</p>
+                    </div>
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={loaderModal} toggle={loaderToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={loaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
+                        </div>
                     </div>
                 </ModalBody>
 

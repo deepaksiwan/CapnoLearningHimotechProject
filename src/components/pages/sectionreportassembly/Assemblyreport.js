@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from 'react-router-dom';
+import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import i18n from "i18next";
 import { useTranslation, initReactI18next } from "react-i18next";
 import Header from '../../component/Header';
@@ -28,7 +29,8 @@ const Assemblyreport = () => {
     const [selected, setSelected] = useState([]);
     const [selectedClient, setSelectedClient] = useState([]);
     const [selectedPractionar, setSelectedPractionar] = useState([]);
-    const [Loader, setLoader] = useState(false)
+    const [loaderModal, setLoaderModal] = useState(false);
+    const loaderToggleModal = () => setLoaderModal(!loaderModal);
 
     const navigate = useNavigate();
     const pdfnames = useRef();
@@ -121,7 +123,6 @@ const Assemblyreport = () => {
 
     }
     const saveAssemblyreport = () => {
-        setLoader(true)
         const clientandpractionararray = clientNumberArray.concat(practionarNumberArray)
 
         let data = {};
@@ -146,7 +147,8 @@ const Assemblyreport = () => {
                 response.json().then((resp) => {
                     // console.log("results", resp);
                     navigate("/edit/assembly/report/" + resp.id)
-                    setLoader(false)
+                    setLoaderModal(false)
+
                 });
             }
             else {
@@ -328,11 +330,8 @@ const Assemblyreport = () => {
                             </>
                         }
                         <div className="assembly-btn-wrp">
-                            <div className="assembly-btn"><a href="javascript:void" onClick={saveAssemblyreport}>{t("Create/Save-Report")}
-                                {
-                                    Loader &&
-                                    <div id="loader"></div>
-                                }
+                            <div className="assembly-btn"><a href="javascript:void" onClick={()=>{saveAssemblyreport(); loaderToggleModal()}}>{t("Create/Save-Report")}
+                               
                             </a></div>
                             <div className="assembly-btn ml-assembly"><a href="javascript:void" onClick={() => unCheck()}>{t("Clear-Selections")}</a></div>
 
@@ -340,6 +339,22 @@ const Assemblyreport = () => {
                     </div>
                 </div>
             </div>
+
+            <Modal isOpen={loaderModal} toggle={loaderToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={loaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
+                        </div>
+                    </div>
+                </ModalBody>
+
+            </Modal>
         </div>
     )
 }

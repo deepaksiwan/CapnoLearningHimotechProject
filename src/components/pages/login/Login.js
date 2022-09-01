@@ -47,6 +47,7 @@ const Login = () => {
             localStorage.setItem('accessToken', data.accessToken);
             localStorage.setItem('selectedGroup', false);
             localStorage.setItem('selectedtrainerActive', true);
+            localStorage.setItem('selectedStandard', true);
             localStorage.setItem('selectedtrainerInactive', false);
             localStorage.setItem('selectedclientActive', true);
             localStorage.setItem('selectedclientInactive', false);

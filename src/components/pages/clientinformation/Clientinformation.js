@@ -37,6 +37,9 @@ const Clientinformation = () => {
     const [emailalreadyExitmodal, setEmailalreadyExitmodal] = useState(false);
     const EmailalreadyExittoggleModal = () => setEmailalreadyExitmodal(!emailalreadyExitmodal);
     const [error, setError] = useState(false);
+    const [loaderModal, setLoaderModal] = useState(false);
+    const loaderToggleModal = () => setLoaderModal(!loaderModal);
+    
 
     const { id } = useParams();
 
@@ -97,8 +100,10 @@ const Clientinformation = () => {
 
         if (firstname.current.value == "" || lastname.current.value == "" || age.current.value == "" || education.current.value == "" || profession.current.value == "" || telephone.current.value == "" || email.current.value == "" || complaint.current.value == "" || address.current.value == "" || zipcode.current.value == "" || state.current.value == "" || country.current.value == "") {
             fillallfieldtoggleModal();
-            setLoader(false)
+           
             return false;
+        }else{
+            setLoaderModal(true)
         }
 
         fetch(API_URL + "/client/update/" + id, {
@@ -113,12 +118,12 @@ const Clientinformation = () => {
                 response.json().then((resp) => {
                     // console.log("results", resp);
                     successToggleModal();
-                    setLoader(false)
+                    setLoaderModal(false)
 
                 });
             }
             else if (response.status == 400) {
-                setLoader(false)
+                setLoaderModal(false)
                 EmailalreadyExittoggleModal();
             }
             else if (response.status == 401) {
@@ -384,10 +389,7 @@ const Clientinformation = () => {
                                     </Modal>
                                     <div className="create-btn">
                                         <button type="submit" onClick={saveClientinfo} >Update
-                                            {
-                                                Loader &&
-                                                <div id="loader"></div>
-                                            }
+                                          
                                         </button>
                                     </div>
                                 </div>
@@ -410,6 +412,23 @@ const Clientinformation = () => {
                 <ModalBody>
                     <div className="modal-error-p">
                         <p>Account already exist with this email</p>
+                    </div>
+                </ModalBody>
+
+            </Modal>
+
+
+            <Modal isOpen={loaderModal} toggle={loaderToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={loaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
+                        </div>
                     </div>
                 </ModalBody>
 

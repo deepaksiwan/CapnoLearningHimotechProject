@@ -1,5 +1,6 @@
 import React, {useEffect,useState} from "react";
 import {Link,useParams, Router} from 'react-router-dom';
+import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import { Tooltip } from '@material-ui/core';
 import Sidebar from '../../component/Sidebar';
@@ -26,6 +27,8 @@ const PdfsessetionreportNotes = () => {
     const [notes, senotes] = useState([]);
     const [data, setData] = useState([]);
     const classes = useStyles();
+    const [loaderModal, setLoaderModal] = useState(false);
+    const loaderToggleModal = () => setLoaderModal(!loaderModal);
 
 
     useEffect(() => {
@@ -50,7 +53,7 @@ const PdfsessetionreportNotes = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                   
+                    setLoaderModal(false)
                     let _clientName = resp.firstname + " " + resp.lastname ;
                     let _trainerName = resp.data[0].firstname+ " " + resp.data[0].lastname ;
                     let _sessionDate = resp.sessionDate;
@@ -111,7 +114,7 @@ const PdfsessetionreportNotes = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                   
+                    setLoaderModal(false)
                     let _clientName = resp.firstname + " " + resp.lastname ;
                     let _trainerName = resp.data[0].firstname+ " " + resp.data[0].lastname ;
                     let _sessionDate = resp.sessionDate;
@@ -179,10 +182,10 @@ const PdfsessetionreportNotes = () => {
                             actions : <p><Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="View" placement="top"><a href='#' onClick={() => viewpdfdata()} className="downloadimg"><img src={preveiw} /></a></Tooltip>,<Tooltip classes={{
+                              }} title="View" placement="top"><a href='#' onClick={() => {viewpdfdata(); loaderToggleModal()}} className="downloadimg"><img src={preveiw} /></a></Tooltip>,<Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="Download" placement="top"><a href='javascript:void' onClick={() => pdfdata()} className="downloadimg"><img src={download} /></a></Tooltip></p>
+                              }} title="Download" placement="top"><a href='javascript:void' onClick={() => {pdfdata(); loaderToggleModal()}} className="downloadimg"><img src={download} /></a></Tooltip></p>
                         })
                     })
                     setData(_temp);
@@ -247,7 +250,21 @@ const PdfsessetionreportNotes = () => {
                 </div>
                </div>
              </div>
-            
+             <Modal isOpen={loaderModal} toggle={loaderToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={loaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
+                        </div>
+                    </div>
+                </ModalBody>
+
+            </Modal>
         </div>
     )
 }

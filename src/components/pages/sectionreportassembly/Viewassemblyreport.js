@@ -34,8 +34,8 @@ const Viewassemblyreport = () => {
     const deleteToggleModal = () => setdeleteModal(!deleteModal);
     const [downloaderModal, setDownloaderModal] = useState(false);
     const DownloaderToggleModal = () => setDownloaderModal(!downloaderModal);
-    const [openModal, setOpenModal] = useState(false);
-    const openToggleModal = () => setOpenModal(!openModal);
+    const [loaderModal, setLoaderModal] = useState(false);
+    const loaderToggleModal = () => setLoaderModal(!loaderModal);
     const classes = useStyles();
 
     useEffect(() => {
@@ -82,11 +82,11 @@ const Viewassemblyreport = () => {
                             dateCreated: new Date(v.created_at * 1000).toLocaleString(),
                             actions: <p>
                                 <Tooltip classes={{
-                                tooltip: classes.customTooltip,}} title="Preview" placement="top"><a href="#" onClick={() => {viewpdf(v.id); openToggleModal()}} className="downloadimg" ><img src={preveiw} /></a></Tooltip>
+                                tooltip: classes.customTooltip,}} title="Preview" placement="top"><a href="#" onClick={() => {viewpdf(v.id); loaderToggleModal()}} className="downloadimg" ><img src={preveiw} /></a></Tooltip>
                                 <Tooltip classes={{
                                 tooltip: classes.customTooltip,}} title="Edit" placement="top"><a href={"/view/edit/assemblyreport/" + v.id} className="downloadimg" ><img src={edit} /></a></Tooltip>
                                  <Tooltip classes={{
-                                tooltip: classes.customTooltip,}} title="Download" placement="top"><a href='#' onClick={() => {downloadpdf(v.id); DownloaderToggleModal()}} className="downloadimg"><img src={downloads} /></a></Tooltip>
+                                tooltip: classes.customTooltip,}} title="Download" placement="top"><a href='#' onClick={() => {downloadpdf(v.id); loaderToggleModal()}} className="downloadimg"><img src={downloads} /></a></Tooltip>
                                  <Tooltip classes={{
                                 tooltip: classes.customTooltip,}} title="Delete" placement="top"><a className="downloadimg" onClick={() => openItemPopUp(v.id)} ><img src={Delete} /></a></Tooltip>
                                  </p>
@@ -133,10 +133,10 @@ const Viewassemblyreport = () => {
                 const file = new Blob([res], {
                     type: "application/pdf"
                 });
-               setDownloaderModal(!downloaderModal)
                 //Build a URL from the file
                 const fileURL = URL.createObjectURL(file);
                 download(fileURL);
+                setLoaderModal(false)
 
             })
            
@@ -165,6 +165,7 @@ const Viewassemblyreport = () => {
                 const fileURL = URL.createObjectURL(file);
                 //Open the URL on new Window
                 window.open(fileURL);
+                setLoaderModal(false)
 
 
             })
@@ -271,37 +272,17 @@ const Viewassemblyreport = () => {
             </Modal>
 
 
-            <Modal isOpen={downloaderModal} toggle={DownloaderToggleModal} className="connect-box" centered={true}>
-                <ModalHeader toggle={DownloaderToggleModal}><span className="ml-1 roititle font-weight-bold">Downloading</span></ModalHeader>
+            
+            <Modal isOpen={loaderModal} toggle={loaderToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={loaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
                 <ModalBody>
-                    <div className="modal-p">
-                        <div class="loading2">
-                            <div class="dot">L</div>
-                            <div class="dot">O</div>
-                            <div class="dot">A</div>
-                            <div class="dot">D</div>
-                            <div class="dot">I</div>
-                            <div class="dot">N</div>
-                            <div class="dot">G</div>
-                            <span class="text">Please Wait...</span>
-                        </div>
-                    </div>
-                </ModalBody>
-
-            </Modal>
-            <Modal isOpen={openModal} toggle={openToggleModal} className="connect-box" centered={true}>
-                <ModalHeader toggle={openToggleModal}><span className="ml-1 roititle font-weight-bold">Opening</span></ModalHeader>
-                <ModalBody>
-                    <div className="modal-p">
-                        <div class="loading2">
-                            <div class="dot">O</div>
-                            <div class="dot">P</div>
-                            <div class="dot">E</div>
-                            <div class="dot">N</div>
-                            <div class="dot">I</div>
-                            <div class="dot">N</div>
-                            <div class="dot">G</div>
-                            <span class="text">Please Wait...</span>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
                         </div>
                     </div>
                 </ModalBody>

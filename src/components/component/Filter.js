@@ -37,6 +37,9 @@ const Filter = () => {
     const selectedclientActive = localStorage.getItem('selectedclientActive');
     const selectedclientInactive = localStorage.getItem('selectedclientInactive');
     const [selectedHomework,setselectedHomework] = useState(localStorage.getItem('selectedHomework'));
+    const [selectedStandard,setselectedStandard] = useState(localStorage.getItem('selectedStandard'));
+
+    
     const userType = localStorage.getItem('userType');
 
     const accessToken = localStorage.getItem('accessToken');
@@ -250,9 +253,19 @@ const Filter = () => {
         }
 
 
-        if (_homework && _standard) {
-            _hw = 5;
+        if (cid2.current.checked) {
+            setselectedStandard(true)   ;
+            localStorage.setItem('selectedStandard', true);
         }
+        else {
+            setselectedStandard(false)   ;
+
+            localStorage.setItem('selectedStandard', false);
+
+        }
+
+
+     
 
         if(_homework && _standard){
             let url = API_URL + "/sessions/by/client?cid=" + _cid;
@@ -521,7 +534,7 @@ const Filter = () => {
                     <div className="main-checkbox">
                     <div className="checkbox-wrp">
                         <div class="custom-radios">
-                            <input type="checkbox" id="cid2" onChange={getSession} ref={cid2} defaultChecked={(selectedHomework === "false" ? true : false)} />
+                            <input type="checkbox" id="cid2" onChange={getSession} ref={cid2} defaultChecked={(selectedStandard === "true" ? true : false)} />
                             <label for="cid2">
                                 <span className="redious">
                                 </span>

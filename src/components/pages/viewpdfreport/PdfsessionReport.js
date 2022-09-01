@@ -27,10 +27,8 @@ const PdfsessionReport = () => {
     const [data, setData] = useState([]);
     const sessionid = localStorage.getItem('selectedSession');
     const Clientid = localStorage.getItem('selectedClient');
-    const [downloaderModal, setDownloaderModal] = useState(false);
-    const DownloaderToggleModal = () => setDownloaderModal(!downloaderModal);
-    const [openModal, setOpenModal] = useState(false);
-    const openToggleModal = () => setOpenModal(!openModal);
+    const [loaderModal, setLoaderModal] = useState(false);
+    const loaderToggleModal = () => setLoaderModal(!loaderModal);
 
 
 
@@ -78,7 +76,7 @@ const PdfsessionReport = () => {
                     let _pdfname = resp.pdfname;
                     let _sessionDate = resp.sessionDate;
                     downloadpdf(_clientName, _trainerName, resp.result, _pdfname, _sessionDate)
-                    DownloaderToggleModal();
+                    setLoaderModal(false);
                 });
             }
             else if (response.status == 401) {
@@ -135,7 +133,7 @@ const PdfsessionReport = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    openToggleModal()
+                    setLoaderModal(false)
                     let _clientName = resp.firstname + " " + resp.lastname;
                     let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _pdfname = resp.pdfname;
@@ -207,10 +205,10 @@ const PdfsessionReport = () => {
                             actions: <p><Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="View" placement="top"><a href="javascript:void" onClick={() => {Viewpdfdata(v.id); openToggleModal()}} className="downloadimg tooltip2" target="_blank"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
+                              }} title="View" placement="top"><a href="javascript:void" onClick={() => {Viewpdfdata(v.id); loaderToggleModal()}} className="downloadimg tooltip2" ><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="Download" placement="top"><a href='javascript:void' onClick={() => {pdfdata(v.id); DownloaderToggleModal()}} className="downloadimg"><img src={download} /></a></Tooltip></p>
+                              }} title="Download" placement="top"><a href='javascript:void' onClick={() => {pdfdata(v.id); loaderToggleModal()}} className="downloadimg"><img src={download} /></a></Tooltip></p>
                         })
                     })
                     setData(_temp);
@@ -318,39 +316,17 @@ const PdfsessionReport = () => {
                     </div>
                 </div>
             </div>
-
-
-            <Modal isOpen={downloaderModal} toggle={DownloaderToggleModal} className="connect-box" centered={true}>
-                <ModalHeader toggle={DownloaderToggleModal}><span className="ml-1 roititle font-weight-bold">Downloading</span></ModalHeader>
+            
+            <Modal isOpen={loaderModal} toggle={loaderToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={loaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
                 <ModalBody>
-                    <div className="modal-p">
-                        <div class="loading2">
-                            <div class="dot">L</div>
-                            <div class="dot">O</div>
-                            <div class="dot">A</div>
-                            <div class="dot">D</div>
-                            <div class="dot">I</div>
-                            <div class="dot">N</div>
-                            <div class="dot">G</div>
-                            <span class="text">Please Wait...</span>
-                        </div>
-                    </div>
-                </ModalBody>
-
-            </Modal>
-            <Modal isOpen={openModal} toggle={openToggleModal} className="connect-box" centered={true}>
-                <ModalHeader toggle={openToggleModal}><span className="ml-1 roititle font-weight-bold">Opening</span></ModalHeader>
-                <ModalBody>
-                    <div className="modal-p">
-                        <div class="loading2">
-                            <div class="dot">O</div>
-                            <div class="dot">P</div>
-                            <div class="dot">E</div>
-                            <div class="dot">N</div>
-                            <div class="dot">I</div>
-                            <div class="dot">N</div>
-                            <div class="dot">G</div>
-                            <span class="text">Please Wait...</span>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
                         </div>
                     </div>
                 </ModalBody>

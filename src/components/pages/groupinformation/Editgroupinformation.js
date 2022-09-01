@@ -33,6 +33,8 @@ const Editgroupinformation = () => {
     const associated_owner = localStorage.getItem('associated_owner');
     const [fillallfieldmodal, setFillallfieldModal] = useState(false);
     const fillallfieldtoggleModal = () => setFillallfieldModal(!fillallfieldmodal);
+    const [loaderModal, setLoaderModal] = useState(false);
+    const loaderToggleModal = () => setLoaderModal(!loaderModal);
 
     const { groupid } = useParams();
 
@@ -61,8 +63,9 @@ const Editgroupinformation = () => {
 
         if(groupName.current.value == "" || associateTrainer.current.value == "" || groupEmail.current.value == "" || associateHardwaretype.current.value == ""){
             fillallfieldtoggleModal();
-            setLoader(false);
             return false;
+        }else{
+            setLoaderModal(true)
         }
         fetch(API_URL+"/group/update/" + groupid, {
             method: 'POST',
@@ -78,7 +81,7 @@ const Editgroupinformation = () => {
                 response.json().then((resp) => {
                     // console.log("results", resp);
                     successToggleModal();
-                    setLoader(false)
+                    setLoaderModal(false)
 
                 });
             }
@@ -335,10 +338,7 @@ const Editgroupinformation = () => {
                                     </Modal>
                                     <div className="create-btn">
                                         <button type="submit" onClick={updateGroupprofile}>Update Group Information
-                                            {
-                                                Loader &&
-                                                <div id="loader"></div>
-                                            }
+                                           
                                         </button>
                                     </div>
                                 </div>
@@ -351,6 +351,22 @@ const Editgroupinformation = () => {
                 <ModalBody>
                     <div className="modal-error-p">
                         <p>Please fill all field</p>
+                    </div>
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={loaderModal} toggle={loaderToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={loaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
+                        </div>
                     </div>
                 </ModalBody>
 

@@ -60,13 +60,13 @@ const SessiondataReport = () => {
                         _temp.push({
                             report : v.name,
                             Createdate : new Date(v.added_on).toLocaleString(),
-                            actions : <p> <Tooltip classes={{
-                                tooltip: classes.customTooltip,
+                            // actions : <p> <Tooltip classes={{
+                            //     tooltip: classes.customTooltip,
                                 
-                              }} title="View" placement="top"><a href={type == 'single' ? '/view/report/'+sessionid+"/"+v.id+'/all' : '/view/group/report/'+sessionid+"/"+v.id+'/all'} className="downloadimg"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
-                                tooltip: classes.customTooltip,
+                            //   }} title="View" placement="top"><a href={type == 'single' ? '/view/report/'+sessionid+"/"+v.id+'/all' : '/view/group/report/'+sessionid+"/"+v.id+'/all'} className="downloadimg"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
+                            //     tooltip: classes.customTooltip,
                                 
-                              }} title="Download" placement="top"><a href='#' className="downloadimg" download><img src={download} /></a></Tooltip></p>
+                            //   }} title="Download" placement="top"><a href='#' className="downloadimg" download><img src={download} /></a></Tooltip></p>
                         })
                     })
                     setData(_temp);
@@ -133,11 +133,11 @@ const SessiondataReport = () => {
             title: t("Report-Name"), field: "report"
         },
         {
-            title: <span className="text-right">{t("Created-Date-Time")}</span>, field: "Createdate",align: "center"
+            title: <span className="text-right">{t("Created-Date-Time")}</span>, field: "Createdate",align: "right"
         },
-        {
-            title: <span className="text-right">{t("Actions")}</span>, field: "actions",align: "right"
-        }
+        // {
+        //     title: <span className="text-right">{t("Actions")}</span>, field: "actions",align: "right"
+        // }
     ]
 
 
@@ -155,10 +155,10 @@ const SessiondataReport = () => {
                             <span>{t("Back")}</span>
                         </Link>
                     </div>
-                <div className="head-demoreport">
+                {/* <div className="head-demoreport">
                     <h3>{t("Session-Data-Reports")}</h3>
                     <p>{type == "multi"? t("Multi"): type == "single"? t("Single") : type == "group"? t("group") : type == "homework"? t("homework") : null } {t("Sesseion-Report")}</p>
-                </div>
+                </div> */}
                 <div className="wrp-bankform">
                     <div style={{ maxWidth: '100%' }}>
                         <MaterialTable
