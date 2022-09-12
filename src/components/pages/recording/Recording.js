@@ -57,7 +57,7 @@ const Recording = () => {
                             action : <p> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="View" placement="top"><a href='#' className="downloadimg"><img src={preveiw} /></a></Tooltip></p>
+                              }} title="View" placement="top"><a href={v.recording} target={"_blank"} className="downloadimg"><img src={preveiw} /></a></Tooltip></p>
                         })
                     })
                     setData(_temp);
@@ -88,9 +88,9 @@ const Recording = () => {
         {
             title: t('Recording-Name'), field: "recordingname"
         },
-        {
-            title: t('Recording-Type'), field: "recordingtype"
-        },
+        // {
+        //     title: t('Recording-Type'), field: "recordingtype"
+        // },
         {
             title: t('Status'), field: "status"
         },
@@ -109,7 +109,7 @@ const Recording = () => {
                </div>
                <div className="right-section">
                 <div className="head-demoreport">
-                    <h3>{ t('Recordings')}</h3>
+                    <h3>{ t('Recording-by-Distributors')}</h3>
                 </div>
                 <div className="wrp-bankform">
                     <div style={{ maxWidth: '100%' }}>
@@ -117,6 +117,11 @@ const Recording = () => {
                         columns={columns}
                         data={data}
                         title=""
+                        options={{
+                            pageSize: 15,
+
+                            pageSizeOptions:[5,10,15,20]
+                        }}
                         />
                         
                     </div>

@@ -26,7 +26,7 @@ const Trainerinformation = () => {
     const country = useRef()
     const [successModal, setsuccessModal] = useState(false);
     const successToggleModal = () => setsuccessModal(!successModal);
-    const [trainer, settrainer] = useState({});
+    const [trainer, settrainer] = useState(null);
     const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
     const associated_owner = localStorage.getItem('associated_owner');
@@ -226,7 +226,7 @@ const Trainerinformation = () => {
                 </div>
                 <div className="right-section">
                     <div className="client-info-c">
-                        <h3>Add Trainer Information</h3>
+                        <h3>Edit Trainer Information</h3>
                         <div className="back-icon-wrp">
                             <Link to="/edit/trainer" className="backbtn-icon">
                                 <img src={backIcon} alt="backicon" />
@@ -235,6 +235,8 @@ const Trainerinformation = () => {
                         </div>
                         
                     </div>
+                    {
+                        trainer &&
                     <div className="client-info-box">
                             <div className="row">
                                 <div className="col-lg-6">
@@ -378,7 +380,7 @@ const Trainerinformation = () => {
                                         <div className="modal-p">
                                                 <div className="right-circle"><img src={right} /></div>
                                                 <h4>Saved!</h4>
-                                                <p>Your Form has been Updated Successfully</p>
+                                                <p>Trainer Profile Information has been updated successfully</p>
                                             </div>
                                         </ModalBody>
 
@@ -391,6 +393,7 @@ const Trainerinformation = () => {
                                 </div>
                             </div>
                         </div>
+                        }
                 </div>
             </div>
             <Modal isOpen={fillallfieldmodal} toggle={fillallfieldtoggleModal} className="connect-box" centered={true}>

@@ -60,16 +60,17 @@ const SessiondataReport = () => {
                         _temp.push({
                             report : v.name,
                             Createdate : new Date(v.added_on).toLocaleString(),
-                            // actions : <p> <Tooltip classes={{
-                            //     tooltip: classes.customTooltip,
+                            actions : <p> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
                                 
-                            //   }} title="View" placement="top"><a href={type == 'single' ? '/view/report/'+sessionid+"/"+v.id+'/all' : '/view/group/report/'+sessionid+"/"+v.id+'/all'} className="downloadimg"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
-                            //     tooltip: classes.customTooltip,
-                                
-                            //   }} title="Download" placement="top"><a href='#' className="downloadimg" download><img src={download} /></a></Tooltip></p>
+                              }} title="View" placement="top"><a href={type == 'single' ? '/view/report/'+v.other_config+'/'+sessionid+"/"+v.id+'/all' : '/view/group/report/'+sessionid+"/"+v.id+'/all'} className="downloadimg"><img src={preveiw} /></a></Tooltip> </p>
                         })
-                    })
+
+                        if(i == (resp.reports.length - 1)){
+
                     setData(_temp);
+                }
+                    })
 
                     // let len = reports.length;
                     //   console.warn(len);
@@ -133,11 +134,11 @@ const SessiondataReport = () => {
             title: t("Report-Name"), field: "report"
         },
         {
-            title: <span className="text-right">{t("Created-Date-Time")}</span>, field: "Createdate",align: "right"
+            title: <span className="">{t("Created-Date-Time")}</span>, field: "Createdate",align: "left"
         },
-        // {
-        //     title: <span className="text-right">{t("Actions")}</span>, field: "actions",align: "right"
-        // }
+        {
+            title: <span className="text-right">{t("Actions")}</span>, field: "actions",align: "right"
+        }
     ]
 
 
@@ -165,7 +166,11 @@ const SessiondataReport = () => {
                         columns={columns}
                         data={data}
                         title=""
-                        
+                        options={{
+                            pageSize: 15,
+
+                            pageSizeOptions:[5,10,15,20]
+                        }}
                       
                        
                         />

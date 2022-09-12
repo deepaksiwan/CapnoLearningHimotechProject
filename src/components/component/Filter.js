@@ -560,7 +560,7 @@ const Filter = () => {
                     
                     <div className="select-client">
                         <select ref={sessionSelected} onChange={updateselectedSecssion}>
-                            <option className="selected-bold">{t('Choose-a-session')}</option>
+                            <option className="selected-bold" value={""}>{t('Choose-a-session')}</option>
                             {
                                 sesstion.map((sesstion, i) =>
                                     <option className="selected-bold" selected={sesstion.id == selectedSession ? true : false} value={sesstion.id}>

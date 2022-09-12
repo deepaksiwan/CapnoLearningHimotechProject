@@ -10,6 +10,7 @@ import edit from '../../images/edit.png'
 import checks from '../../images/checks.png'
 import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
+import view from '../../images/eye.png';
 import { API_URL } from '../../../config';
 import backIcon from "../../images/back.png";
 
@@ -97,7 +98,9 @@ const Editgroup = () => {
                         _temp.push({
                             name: v.firstname,
                             status: v.status == 1 ? "Active" : "Inactive",
-                            action: <p> <Tooltip classes={{
+                            action: <p> 
+{/*                                 
+                                <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
                               }} title="Edit" placement="top"><a href={"/edit/group/information/" + v.id} className="downloadimg" ><img src={edit} /></a></Tooltip> <Tooltip classes={{
@@ -106,7 +109,12 @@ const Editgroup = () => {
                               }} title="Inactive" placement="top"><a href='#' className="downloadimg"><img src={checks} /></a></Tooltip> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="Delete" placement="top"><a  onClick={() => openItemPopUp(v.id)}  className="downloadimg"><img src={Delete} /></a></Tooltip> </p>
+                              }} title="Delete" placement="top"><a  onClick={() => openItemPopUp(v.id)}  className="downloadimg"><img src={Delete} /></a></Tooltip>  */}
+                                <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="View" placement="top"><a href={"/view/group/information/" + v.id} className="downloadimg" ><img src={view} /></a></Tooltip>
+                              </p>
                         })
                     })
                     setData(_temp);
@@ -141,7 +149,7 @@ const Editgroup = () => {
 
     const columns = [
         {
-            title: "name", field: "name"
+            title: "Name", field: "name"
         },
         {
             title: "Status", field: "status"
@@ -177,6 +185,8 @@ const Editgroup = () => {
                                 search: true,
                                 showTitle: false,
                                 toolbar: true,
+                                pageSize: (data.length > 10  ? 15 : 5),
+
                                 pageSizeOptions:[5,10,20,50,150,200]
                             }}
                                 columns={columns}

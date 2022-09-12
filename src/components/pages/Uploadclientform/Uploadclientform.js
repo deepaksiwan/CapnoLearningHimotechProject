@@ -72,7 +72,10 @@ const Uploadclientform = () => {
 
         let formData = new FormData();
         let client_id = localStorage.getItem('selectedClient');
-
+        if(formFile.current.files.length == 0){
+            alert("Please choose a file")
+            return false;
+        }
         formData.append('client_id', client_id);
         formData.append('form_id', formname.current.value);
         formData.append('form', formFile.current.files[0]);

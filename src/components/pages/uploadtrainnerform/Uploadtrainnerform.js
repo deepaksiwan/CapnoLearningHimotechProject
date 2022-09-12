@@ -60,11 +60,23 @@ const Uploadclientform = () => {
         let formData = new FormData();
         let client_id = localStorage.getItem('selectedClient');
         let session_id = localStorage.getItem('selectedSession');
-
+        let cureentId = formname.current.value ; 
+        if(formFile.current.files.length == 0){
+            alert("Please choose a file")
+            return false;
+        }
         formData.append('client_id', client_id);
         formData.append('form_id', formname.current.value);
         formData.append('form', formFile.current.files[0]);
-        formData.append('session_id', session_id);
+
+        if(cureentId == 9 || cureentId == 11 || cureentId == 12){
+            formData.append('session_id', null);
+        }
+        else{
+            formData.append('session_id', session_id);
+
+        }
+
 
       
 
@@ -489,6 +501,8 @@ const Uploadclientform = () => {
 
                                         <div className="select-client mrt-select">
                                             <select ref={formname} onChange={handleFormName}>
+                                            <option className="selected-bold" value="" >Choose a form</option>
+
                                                 {
                                                     blankform.map((bankforms, i) => {
                                                         return (

@@ -42,6 +42,11 @@ const Groupsessiondatareport = () => {
                         <MaterialTable
                         columns={columns}
                         data={data}
+                        options={{
+                            pageSize: 15,
+
+                            pageSizeOptions:[5,10,15,20]
+                        }}
                         title=""
                         />
                         

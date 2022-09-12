@@ -382,7 +382,7 @@ const Clientinformation = () => {
                                             <div className="modal-p">
                                                 <div className="right-circle"><img src={right} /></div>
                                                 <h4>Saved!</h4>
-                                                <p>Your Form has been Updated Successfully</p>
+                                                <p>Client profile information has been updated successfully</p>
                                             </div>
                                         </ModalBody>
 

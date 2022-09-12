@@ -206,7 +206,11 @@ const SubscribedUsers = () => {
                             search: true,
                             showTitle: false,
                             toolbar: true,
-                            pageSize:10
+                         
+                            pageSize: 15,
+
+                                pageSizeOptions:[5,10,15,20]
+                         
                         }}
                         columns={columns}
                         data={subscribeuser}

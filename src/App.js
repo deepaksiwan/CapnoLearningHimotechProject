@@ -70,6 +70,7 @@ import ViewGroupChartTable from './components/pages/chartTable/ViewGroupChartTab
 import MultiChartTable from './components/pages/chartTable/MultiChartTable';
 import Vieweditassemblyreport from './components/pages/sectionreportassembly/Vieweditassemblyreport';
 import Mantainance from './components/pages/login/Mantainance';
+import Viewgroupinformation from './components/pages/groupinformation/Viewgroupinformation';
 
 function App(){
 	return(
@@ -106,6 +107,7 @@ function App(){
 				<Route  path="/edit/trainer" element={<Edittrainer />} />
 				<Route  path="/group/information" element={<Groupinformation />} />
 				<Route  path="/edit/group/information/:groupid" element={<Editgroupinformation />} />
+				<Route  path="/view/group/information/:groupid" element={<Viewgroupinformation />} />
 				<Route  path="/edit/group" element={<Editgroup />} />
 				<Route  path="/createmultisession" element={<Createmultisession />} />
 				<Route  path="/create/group/session/report" element={<Creategroupsessetionreport />} />

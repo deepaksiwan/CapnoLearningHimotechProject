@@ -41,7 +41,8 @@ const Editprofile = () => {
     const userId = localStorage.getItem('user_id');
     const [emailalreadyExitmodal, setEmailalreadyExitmodal] = useState(false);
     const EmailalreadyExittoggleModal = () => setEmailalreadyExitmodal(!emailalreadyExitmodal);
-
+    const [loaderModal, setLoaderModal] = useState(false);
+    const loaderToggleModal = () => setLoaderModal(!loaderModal);
 
     const { tab } = useParams();
     const QuestionArray = [
@@ -72,7 +73,7 @@ const Editprofile = () => {
 
     const profileSave = () => {
         let data = {};
-
+        setLoaderModal(true);
         data['firstname'] = firstname.current.value;
         data['lastname'] = lastname.current.value;
         data['telephone'] = telephone.current.value;
@@ -104,6 +105,7 @@ const Editprofile = () => {
                 response.json().then((resp) => {
                     // console.log("results", resp);
                     successToggleModal();
+                    setLoaderModal(false);
 
                 });
             }
@@ -256,9 +258,9 @@ const Editprofile = () => {
                                 <img src={backIcon} alt="backicon" />
                                 <span>Back</span>
                             </Link>
-                            <div className="multi-lan">
+                            {/* <div className="multi-lan">
                                 <Multilanguage />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="wrp-editprofile">
@@ -274,7 +276,7 @@ const Editprofile = () => {
                                                     <div> <input class="form-check-input" type="radio" defaultChecked={owner[q.id] == "1" ? true : false} name={q.id} onChange={() => handleradio(q.id, 1)} defaultValue="1" /><span>{t('yes')}</span></div>
                                                 </div>
                                                 <div className="question-child2">
-                                                    <p><b>{q.questionbold}</b> {q.questiondisplay}</p>
+                                                    <p><b>*{q.questionbold}</b> {q.questiondisplay}</p>
                                                 </div>
                                             </div>
                                         </li>
@@ -288,16 +290,16 @@ const Editprofile = () => {
                         <div className="wrp-edit-form">
                             <div className="edit-input-wrp">
                                 <div className="edit-input">
-                                    <p>First Name:</p>
-                                    <input placeholder="Peter" defaultValue={owner.firstname} ref={firstname} />
+                                    <p>*First Name:</p>
+                                    <input placeholder="First Name" defaultValue={owner.firstname} ref={firstname} />
                                 </div>
                                 <div className="edit-input">
-                                    <p>Last Name:</p>
-                                    <input placeholder="Litchfield" defaultValue={owner.lastname} ref={lastname} />
+                                    <p>*Last Name:</p>
+                                    <input placeholder="Last Name" defaultValue={owner.lastname} ref={lastname} />
                                 </div>
                                 <div className="edit-input">
                                     <p>Name of business:</p>
-                                    <input placeholder="Peter" defaultValue={owner.business} ref={businessname} />
+                                    <input placeholder="Business" defaultValue={owner.business} ref={businessname} />
                                 </div>
 
 
@@ -308,7 +310,7 @@ const Editprofile = () => {
                                     <input placeholder="Email" defaultValue={owner.email} ref={email} />
                                 </div>
                                 <div className="edit-input">
-                                    <p>Password:</p>
+                                    <p>*Password:</p>
                                     <input placeholder="Password" defaultValue={owner.password} ref={password} />
                                 </div>
 
@@ -321,26 +323,26 @@ const Editprofile = () => {
                             <div className="edit-input-wrp">
                                 <div className="edit-input address-input">
 
-                                    <p>Address</p>
+                                    <p>*Address</p>
 
-                                    <input placeholder="7 Camino de Rey Cir" defaultValue={owner.address} ref={address} />
+                                    <input placeholder="Address " defaultValue={owner.address} ref={address} />
                                 </div>
                             </div>
                             <div className="edit-input-wrp wrp-city-input">
                                 <div className="edit-input">
-                                    <p>City</p>
-                                    <input placeholder="Santa Fe" defaultValue={owner.city} ref={city} />
+                                    <p>*City</p>
+                                    <input placeholder="City" defaultValue={owner.city} ref={city} />
                                 </div>
 
                                 <div className="edit-input">
-                                    <p>Postal-Code</p>
-                                    <input placeholder="87506" defaultValue={owner.zipcode} ref={postalcode} />
+                                    <p>*Postal Code</p>
+                                    <input placeholder="POstal Code" defaultValue={owner.zipcode} ref={postalcode} />
                                 </div>
                                 <div className="edit-input">
                                     <p>{t('State/Province')}</p>
                                     <div className="select-client5">
                                         <select name="state" id="state" ref={state}>
-                                            <option >Choose States/Province</option>
+                                            <option >*Choose States/Province</option>
 
                                             {
                                                 states.map((states, i) => {
@@ -353,7 +355,7 @@ const Editprofile = () => {
                                     </div>
                                 </div>
                                 <div className="edit-input">
-                                    <p>Country</p>
+                                    <p>*Country</p>
 
                                     <div className="select-client5">
                                         <select name="country" onChange={handleCountryUpdate} ref={country}>
@@ -377,7 +379,7 @@ const Editprofile = () => {
                                     <div className="modal-p">
                                         <div className="right-circle"><img src={right} /></div>
                                         <h4>Saved!</h4>
-                                        <p>Your Form has been Updated Successfully</p>
+                                        <p>Your profile has been updated successfully</p>
                                     </div>
                                 </ModalBody>
 
@@ -397,6 +399,22 @@ const Editprofile = () => {
                     </ModalBody>
 
                 </Modal>
+
+                <Modal isOpen={loaderModal} toggle={loaderToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={loaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
+                        </div>
+                    </div>
+                </ModalBody>
+
+            </Modal>
             </div>
         </div>
     )

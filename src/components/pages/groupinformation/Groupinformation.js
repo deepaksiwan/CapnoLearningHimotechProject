@@ -12,6 +12,8 @@ const Groupinformation = () => {
     const accessToken = localStorage.getItem('accessToken');
     const [trainers, setTrainer] = useState([]);
     const [clientList, setClientList] = useState([]);
+    const [serialList, setSerialList] = useState([]);
+    
     const [devicelist, setDeviceList] = useState({});
     const [clientCount, setClientCount] = useState(2);
     const userId = localStorage.getItem('user_id');
@@ -21,6 +23,8 @@ const Groupinformation = () => {
     const minclientToggleModal = () => setminclientModal(!minclientModal);
     const groupName = useRef();
     const groupEmail = useRef();
+    const groupPassword = useRef();
+    
     const associateTrainer = useRef();
     const associateHardwaretype = useRef();
     const [successModal, setsuccessModal] = useState(false);
@@ -29,10 +33,13 @@ const Groupinformation = () => {
     const [Loader, setLoader] = useState(false);
     const [fillallfieldmodal, setFillallfieldModal] = useState(false);
     const fillallfieldtoggleModal = () => setFillallfieldModal(!fillallfieldmodal);
+    const [data, setData] = useState([]);
 
 
     useEffect(() => {
         getTrainer();
+      
+
     }, [])
 
     const CreateGroupprofile = () => {
@@ -44,18 +51,20 @@ const Groupinformation = () => {
         data['associated_practioner'] = associateTrainer.current.value;
         data['email'] = groupEmail.current.value;
         data['device_type'] = associateHardwaretype.current.value;
-
-        if(groupName.current.value == "" || associateTrainer.current.value == "" || groupEmail.current.value == "" || associateHardwaretype.current.value == ""){
-            fillallfieldtoggleModal();
-            setLoader(false);
-            return false;
-        }
-
+        data['password'] = groupPassword.current.value;
+        
         let _temp = [];
         for (let i = 0; i < clientCount; i++) {
             _temp.push(devicelist[i + 1]);
         }
         data['devices'] = _temp;
+        if(groupName.current.value == "" || associateTrainer.current.value == "" || groupEmail.current.value == "" || associateHardwaretype.current.value == ""  ||  groupPassword.current.value == "" || devicelist.length < 2){
+            fillallfieldtoggleModal();
+            setLoader(false);
+            return false;
+        }
+
+     
         // // console.log(data)
 
 
@@ -156,18 +165,115 @@ const Groupinformation = () => {
         }
     }, [clientCount])
 
-    const handleClientList = (i, data) => {
+    const handleClientList = (i, data,serial) => {
         // console.log(i);
         // console.log(data);
-        let _temp = devicelist
-        _temp[i] = data;
-        setDeviceList(_temp);
-        // console.log(devicelist);
+        let _tempList = serialList ;
+        if(serial == ""){
+            return false;
+        }
+        if(_tempList.includes(serial)){
+            alert("Please choose a different serial number.")
+            return false;
+        }else{
+            _tempList.push(serial);
+            setSerialList(_tempList)
+            let _temp = devicelist
+            _temp[i] = data;
+            setDeviceList(_temp);
+            return true;
+
+        }
+      
     }
     const logout = () => {
         localStorage.clear();
         window.location.reload();
     }
+
+    
+    const updatedType = () => {
+        let _device = associateHardwaretype.current.value;
+        console.log("_device",_device)
+
+        if (_device == 1) {
+            get5Device();
+        }
+        else if (_device == 2) {
+        
+            get6Device();
+        }
+        else{
+            setData([]);
+         
+        }
+
+
+    }
+    const get5Device = () => {
+        fetch(API_URL + "/device/five/profile/" + userId,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    // console.log("result", resp);
+                    
+                    let _temp = resp.hardwareprofiles ;
+               
+                    setData(_temp);
+
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                console.log("network error")
+            }
+
+
+        })
+    }
+    const get6Device = () => {
+        fetch(API_URL + "/device/six/profile/" + userId,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    // console.log("result", resp);
+                
+                    let _temp = resp.hardwareprofiles ;
+               
+                    setData(_temp);
+                  
+
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                console.log("network error")
+            }
+
+
+        })
+    }
+
 
     return (
         <div className="demodata-bg">
@@ -189,24 +295,15 @@ const Groupinformation = () => {
                     </div>
                     <div className="client-info-box">
                             <div className="row">
-                                <div className="col-lg-6">
+                                <div className="col-lg-8">
                                     <div className="client-input">
-                                        <p>Group Name</p>
-                                        <input placeholder="Enter first name" ref={groupName} />
+                                        <p>Group Name*</p>
+                                        <input placeholder="Enter group name" ref={groupName} />
                                     </div>
                                 </div>
-                                <div className="col-lg-6">
+                                <div className="col-lg-4">
                                     <div className="client-input">
-                                        <p>Group Email</p>
-
-                                        <input type="gmail" placeholder="Gmail" ref={groupEmail} />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-lg-6">
-                                    <div className="client-input">
-                                        <p>Associate Trainer</p>
+                                        <p>Associate Trainer*</p>
                                         <select ref={associateTrainer}>
                                             <option>Select trainer</option>
                                             {
@@ -220,27 +317,50 @@ const Groupinformation = () => {
                                         </select>
                                     </div>
                                 </div>
-                                <div className="col-lg-6">
+                               
+                            </div>
+                            <div className="row">
+                            <div className="col-lg-4">
                                     <div className="client-input">
-                                        <p>Associate Hardware Type</p>
-                                        <select ref={associateHardwaretype}>
-                                            <option value="1">5.0 Devices</option>
-                                            <option value="2">6.0 Devices</option>
+                                        <p>Group Email*</p>
+
+                                        <input type="email" placeholder="Enter group email" ref={groupEmail} />
+                                    </div>
+                                </div>
+                                <div className="col-lg-4">
+                                    <div className="client-input">
+                                        <p>Group Password*</p>
+
+                                        <input type="password" placeholder="Enter group password" ref={groupPassword} />
+                                    </div>
+                                </div>
+                                <div className="col-lg-4">
+                                    <div className="client-input">
+                                        <p>Associate Instruments Type</p>
+                                        <select ref={associateHardwaretype} onChange={() => updatedType()}>
+                                            <option value="0">Choose instrument type</option>
+                                            <option value="1">CapnoTrainer 5.0 Instruments</option>
+                                            <option value="2">CapnoTrainer 6.0 Instruments</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
+                            {
+                                data.length > 0 &&
+                            <>
                             <div className="add-clients">
                                 <h3>Add Clients</h3>
                             </div>
-                            {/* {clientList.length} */}
+                      
                             {
                                 clientList.map((v, i) => {
                                     return (
-                                        <Addclientname index={v.count} handleClientList={handleClientList} />
+                                        <Addclientname index={v.count} list={data} handleClientList={handleClientList} />
                                     )
 
                                 })
+                            }   
+</>
                             }
 
 
@@ -248,35 +368,41 @@ const Groupinformation = () => {
 
                                 <div className="col-lg-6">
                                     <Modal isOpen={maxclientModal} toggle={maxclientToggleModal} className="connect-box" centered={true}>
-                                        <ModalHeader toggle={maxclientToggleModal}><span className="ml-1 roititle font-weight-bold">Max client limit</span></ModalHeader>
+                                        <ModalHeader toggle={maxclientToggleModal}><span className="ml-1 roititle font-weight-bold">Maximum client limit reached!</span></ModalHeader>
                                         <ModalBody>
                                             <div className="modal-p">
 
-                                                <h4>6!</h4>
-                                                <p>Max client limit is 6</p>
+                                                {/* <h6 className='text-center'>Maximum client limit reached!</h6> */}
+                                                <p>You can add a maximum of 6 clients in a group.</p>
                                             </div>
                                         </ModalBody>
 
                                     </Modal>
+                                    {
+                                data.length > 0 &&
                                     <div className="create-btn">
                                         <button type="submit" onClick={addclient}>Add Client</button>
                                     </div>
+}
                                 </div>
                                 <div className="col-lg-6">
                                     <Modal isOpen={minclientModal} toggle={minclientToggleModal} className="connect-box" centered={true}>
-                                        <ModalHeader toggle={minclientToggleModal}><span className="ml-1 roititle font-weight-bold">Min client limit</span></ModalHeader>
+                                        <ModalHeader toggle={minclientToggleModal}><span className="ml-1 roititle font-weight-bold">Minimum client limit reached!</span></ModalHeader>
                                         <ModalBody>
                                             <div className="modal-p">
 
-                                                <h4>2!</h4>
-                                                <p>Min client limit is 2</p>
+                                            <p> You need to have minimum 2 clients in a group.</p>
                                             </div>
                                         </ModalBody>
 
                                     </Modal>
+                                    {
+                                            data.length > 0 &&
                                     <div className="create-btn">
                                         <button type="submit" onClick={removeclient}>Remove Client</button>
                                     </div>
+                                    }
+
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="create-btn">

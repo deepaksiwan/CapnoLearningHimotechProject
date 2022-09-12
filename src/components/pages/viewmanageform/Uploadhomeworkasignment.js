@@ -6,6 +6,7 @@ import Header from '../../component/Header';
 import Sidebar from '../../component/Sidebar';
 import { API_URL } from "../../../config";
 import backIcon from "../../images/back.png";
+import { useTranslation } from "react-i18next";
 
 const Uploadhomeworkasignment = () => {
    
@@ -41,9 +42,11 @@ const Uploadhomeworkasignment = () => {
     const successToggleModal = () => setsuccessModal(!successModal);
     const [loaderModal, setLoaderModal] = useState(false);
     const loaderToggleModal = () => setLoaderModal(!loaderModal);
+    const { t } = useTranslation();
 
 
     useEffect(() => {
+        getTrainers()
         getClients();
         getSession();
 
@@ -52,11 +55,14 @@ const Uploadhomeworkasignment = () => {
 
 
     const submithomeworkform = () => {
-
+        
         let formData = new FormData();
         let client_id = localStorage.getItem('selectedClient');
         let session_id = localStorage.getItem('selectedSession');
-
+        if(formFile.current.files.length == 0){
+            alert("Please choose a file")
+            return false;
+        }
         formData.append('client_id', client_id);
         formData.append('form', formFile.current.files[0]);
         formData.append('session_id', session_id);
@@ -221,12 +227,87 @@ const Uploadhomeworkasignment = () => {
         })
     }
 
+    
+    const getTrainers = () => {
+
+        let url = API_URL+"/trainers?user_id=" + userId + "&status=2";
+        // // console.log(trainerActive);
+        let _trainerActive = trainerActive.current.checked;
+        let _trainerInactive = trainerInactive.current.checked;
+
+        if (trainerActive.current.checked) {
+            localStorage.setItem('selectedtrainerActive', true);
+        }
+        else {
+            localStorage.setItem('selectedtrainerActive', false);
+
+        }
+        if (trainerInactive.current.checked) {
+            localStorage.setItem('selectedtrainerInactive', true);
+        }
+        else {
+            localStorage.setItem('selectedtrainerInactive', false);
+
+        }
+
+        if (_trainerActive && !_trainerInactive) {
+            url = API_URL+"/trainers?user_id=" + userId + "&status=1";;
+        }
+        else if (!_trainerActive && _trainerInactive) {
+            url = API_URL+"/trainers?user_id=" + userId + "&status=0";
+        }
+        else if (_trainerActive && _trainerInactive) {
+            url = API_URL+"/trainers?user_id=" + userId;
+        }
+        fetch(url,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((result) => {
+                    // console.log(result.trainers)
+                    if (result.status) {
+                        settrainers(result.trainers)
+                        // getClients();
+                    }
+
+                    else {
+                        alert("no data error")
+                    }
+
+                })
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                console.log("network error")
+            }
+
+
+        }).catch(err => {
+            // // console.log(err)
+
+        })
+    }
+
     const updateSelectClient = () => {
         localStorage.setItem('selectedClient', clientSelected.current.value);
         getSession()
     }
  
+    const updateSelectTrainer = () => {
+        localStorage.setItem('selectedTrainer', trainerSelected.current.value);
+        localStorage.setItem('selectedClient', null);
 
+        getClients()
+    }
     const updateselectedSecssion = () => {
         localStorage.setItem('selectedSession', sessionSelected.current.value);
     }
@@ -250,7 +331,7 @@ const Uploadhomeworkasignment = () => {
                     <div className="container-fluid">
                         <div className="configer-head">
                             <div className="configer-child1">
-                                <h3>Upload Trainer Form</h3>
+                                <h3>Upload Homework Assignment</h3>
                             </div>
                             <div className="back-icon-wrp">
                             <Link to="/view/manageform" className="backbtn-icon">
@@ -262,7 +343,55 @@ const Uploadhomeworkasignment = () => {
                     </div>
                     <div className="container-fluid">
                         <div className="row">
-                           
+                        <div className="col-lg-3">
+                                <div className="trainerbox">
+                                    <div className="trainer-c"><p>{t("trainer")}:</p></div>
+                                    <div className="padding-box">
+                                        <div className="main-checkbox">
+
+                                            <div className="checkbox-wrp">
+                                                <div class="custom-radios">
+                                                    <input type="checkbox" id="6" onChange={getTrainers} ref={trainerActive} defaultChecked={(selectedtrainerActive === "true" ? true : false)} />
+                                                    <label for="6">
+                                                        <span className="redious">
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                                <div className="caption-cheeckbox">
+                                                <p>{t("Active")}</p>
+                                                </div>
+                                            </div>
+                                            <div className="checkbox-wrp">
+                                                <div class="custom-radios">
+                                                    <input type="checkbox" id="7" onChange={getTrainers} ref={trainerInactive} defaultChecked={(selectedtrainerInactive === "true" ? true : false)} />
+                                                    <label for="7">
+                                                        <span className="redious">
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                                <div className="caption-cheeckbox">
+                                                    <p>{t("Inactive")}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="select-client">
+                                            <select ref={trainerSelected} onChange={updateSelectTrainer}  >
+                                                <option className="selected-bold">Choose a trainer</option>
+                                                <option className="selected-bold" value={"all"}>All trainers</option>
+                                                {
+                                                    trainers.map((items) =>
+                                                        <option className="selected-bold" selected={items.id == selectedTrainer ? true : false} value={items.id}>
+                                                            {items.firstname} {items.lastname}
+                                                        </option>)
+                                                }
+
+
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div className="col-lg-3">
                                 <div className="trainerbox">
                                     <div className="trainer-c"><p>Client:</p></div>
@@ -343,7 +472,7 @@ const Uploadhomeworkasignment = () => {
                             <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
                             <ModalBody>
                                 <div className="modal-p">
-                                    <p>Form Submitted Successfully</p>
+                                    <p>Assignment Submitted Successfully</p>
                                 </div>
                             </ModalBody>
 

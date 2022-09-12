@@ -325,10 +325,11 @@ const Hardwareprofile = () => {
                     <div className="row mrb-option">
                         <div className="col-lg-3">
                             <div className="client-input">
-                                <p>Devices Type</p>
+                                <p>Instruments Type</p>
                                 <select onChange={updatedType} ref={updatedevice}>
-                                    <option value="1">5.0 Devices</option>
-                                    <option value="2">6.0 Devices</option>
+                                    <option value="1">CapnoTrainer 5.0 Instruments</option>
+                                    <option value="2">CapnoTrainer 6.0 Instruments</option>
+                                    
 
                                 </select>
                             </div>
@@ -370,6 +371,9 @@ const Hardwareprofile = () => {
                                     search: true,
                                     showTitle: false,
                                     toolbar: true,
+                                    pageSize: 15,
+
+
                                     pageSizeOptions:[5,10,20,50,150,200]
                                 }}
                                 columns={columns}

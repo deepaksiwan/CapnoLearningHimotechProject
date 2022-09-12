@@ -10,7 +10,11 @@ const Addclientname = (props) => {
     const handleChange = () => {
         // // console.log(props.index)
         // // console.log({"device":serialNumber.current.value,"client":clientname.current.value})
-        props.handleClientList(props.index,{"serialnumber":serialNumber.current.value,"name":clientname.current.value})
+       let _resp =  props.handleClientList(props.index,{"serialnumber":serialNumber.current.value,"name":clientname.current.value},serialNumber.current.value)
+        console.log("response" , _resp)
+       if(!_resp){
+            serialNumber.current.value = ""
+        }
     }
 
 
@@ -27,8 +31,18 @@ const Addclientname = (props) => {
                 <div className="col-lg-6">
                     <div className="client-input">
                         <p>CapnoTrainer Serial Number</p>
-                        <input placeholder="Write Serial Number" ref={serialNumber}  onChange={handleChange} />   
-                        
+                        {/* <input placeholder="Write Serial Number"  />    */}
+                        <select ref={serialNumber}  onChange={handleChange}>
+                            <option value={""}>Choose a serial number</option>
+                            {
+                                props.list && 
+                                props.list.map((v,i) => {
+                                        return (
+                                            <option value={v.serial_key} >{v.serial_key}</option>
+                                        )
+                                })
+                            }
+                        </select>
                     </div>
                 </div>
             </div>

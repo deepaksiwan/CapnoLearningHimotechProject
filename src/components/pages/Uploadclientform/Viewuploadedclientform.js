@@ -11,7 +11,7 @@ import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
-import { API_URL } from "../../../config";
+import { API_URL, SERVER_URL } from "../../../config";
 import backIcon from "../../images/back.png";
 
 
@@ -30,6 +30,8 @@ const Viewuploadedclientform = () => {
     const [itemId, setItemId] = useState(null);
     const [clients, setinclients] = useState([]);
     const [trainers, settrainers] = useState([]);
+    const [currentForm, setCurrentForm] = useState("all");
+    
     const [sesstion, setsesstion] = useState([]);
     const [blankform, setblankform] = useState([]);
     const [showSessionbox, setShowSessionbox] = useState(false);
@@ -41,6 +43,12 @@ const Viewuploadedclientform = () => {
     const clientActive = useRef()
     const clientInactive = useRef()
     const trainerSelected = useRef()
+    const [successModal, setsuccessModal] = useState(false);
+    const successToggleModal = () => setsuccessModal(!successModal);
+
+    const [loaderModal, setLoaderModal] = useState(false);
+    const loaderToggleModal = () => setLoaderModal(!loaderModal);
+
     const groupSelected = useRef()
     const cid = useRef()
     const sessionSelected = useRef()
@@ -78,6 +86,18 @@ const Viewuploadedclientform = () => {
     }, [selectedClient]);
 
 
+    useEffect(() => {
+        
+      
+
+        if(selectedClient != "null"){
+            getclientform();
+        }
+
+
+    }, [currentForm]);
+
+
     const blankForm = () => {
         let type = 2;
         fetch(API_URL + "/forms/blank/" + type,
@@ -93,7 +113,7 @@ const Viewuploadedclientform = () => {
                 response.json().then((resp) => {
                     // console.log("result", resp);
                     setblankform(resp.forms);
-
+                    // setCurrentForm(resp.forms[0].id)
 
 
                 });
@@ -365,7 +385,7 @@ const Viewuploadedclientform = () => {
     }
     const handleFormName = () => {
         let cureentId = formname.current.value;
-
+        setCurrentForm(cureentId)
         if (cureentId == 4) {
             setShowSessionbox(true);
         }
@@ -377,6 +397,8 @@ const Viewuploadedclientform = () => {
 
     const deleteUploadclient = () => {
         let id = itemId;
+        setLoaderModal(true)
+
         fetch(API_URL + "/forms/client/delete/" + id,
             {
                 method: 'POST',
@@ -389,6 +411,8 @@ const Viewuploadedclientform = () => {
             if (response.status == 200) {
                 getclientform();
                 setdeleteModal(!deleteModal)
+                setLoaderModal(false)
+                setsuccessModal(true)
 
             }
             else if (response.status == 401) {
@@ -405,7 +429,7 @@ const Viewuploadedclientform = () => {
     }
     const openItemPopUp = (id) => {
         setItemId(id);
-        setdeleteModal(!deleteModal)
+        setdeleteModal(true)
     }
     const columns = [
         {
@@ -420,6 +444,8 @@ const Viewuploadedclientform = () => {
     ]
    
     const getclientform = () => {
+        console.log("result ID", currentForm);
+
         fetch(API_URL + "/forms/client/" + selectedClient,
             {
                 method: 'GET',
@@ -431,25 +457,33 @@ const Viewuploadedclientform = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    // console.log("result", resp);
                     let _temp = [];
                     resp.data.map((v, i) => {
+                        
+                        if(v.form_name == currentForm || currentForm == "all"){
+                           
                         _temp.push({
                             formname: v.forms,
                             action: <p><Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="Download" placement="top"><a href='#' className="downloadimg tooltip2" download><img src={download} /> </a></Tooltip> <Tooltip classes={{
+                              }} title="Download" placement="top"><a href={SERVER_URL+'/client_forms/'+v.form} target={"_blank"} className="downloadimg tooltip2" download><img src={download} /> </a></Tooltip> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="View" placement="top"><a href='#' className="downloadimg tooltip2"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
+                              }} title="View" placement="top"><a href={SERVER_URL+'/client_forms/'+v.form} target={"_blank"} className="downloadimg tooltip2"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id)} className="downloadimg tooltip2"><img src={Delete} /></a></Tooltip></p>
+                              }} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id)}    className="downloadimg tooltip2"><img src={Delete} /></a></Tooltip></p>
 
                         })
+                         
+                    }
+
+                    if(i == (resp.data.length - 1)){
+                        setdata(_temp);
+
+                    }
                     })
-                    setdata(_temp);
 
 
 
@@ -591,7 +625,9 @@ const Viewuploadedclientform = () => {
                                     <div className="padding-box">
 
                                         <div className="select-client mrt-select">
-                                            <select ref={formname} onChange={handleFormName}>
+                                            <select ref={formname} onChange={() => handleFormName()}>
+                                            <option className="selected-bold" value="all" selected  >All</option>
+
                                                 {
                                                     blankform.map((bankforms, i) => {
                                                         return (
@@ -618,6 +654,11 @@ const Viewuploadedclientform = () => {
                                 columns={columns}
                                 data={data}
                                 title=""
+                                options={{
+                                    pageSize: 15,
+
+                                    pageSizeOptions:[5,10,15,20]
+                                }}
                                 // options={{
                                 //     fixedColumns: {
                                   
@@ -634,8 +675,8 @@ const Viewuploadedclientform = () => {
                         <ModalBody>
                             <div className="modal-p">
                                 <div className="right-circle cancel-circle"><img src={closeicon} /></div>
-                                <h4>Are You Sure?</h4>
-                                <p>Do you really want to delete this record?</p>
+                                <h4>Are you sure?</h4>
+                                <p>Do you really wish to delete this uploaded client form?</p>
                                 <div className="wrp-delete-btn">
                                     <div className="cancel-btn1" ><a onClick={deleteToggleModal}>Cancel</a></div>
                                     <div className="delete-btn1"><a onClick={deleteUploadclient}>Delete</a></div>
@@ -644,6 +685,34 @@ const Viewuploadedclientform = () => {
                         </ModalBody>
 
                     </Modal>
+
+                    
+                    <Modal isOpen={loaderModal} toggle={loaderToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={loaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
+                        </div>
+                    </div>
+                </ModalBody>
+
+            </Modal>
+
+
+            <Modal isOpen={successModal} toggle={successToggleModal} className="connect-box" centered={true}>
+                            <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
+                            <ModalBody>
+                                <div className="modal-p">
+                                    <p>Uploaded form deleted successfully.</p>
+                                </div>
+                            </ModalBody>
+
+                        </Modal>
                 </div>
             </div>
 

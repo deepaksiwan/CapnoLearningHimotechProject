@@ -82,16 +82,16 @@ const Createdata = (props) => {
                         <ul className="create-list">
 
                             <li>
-                                <div className="create-list-box"><Link to={(selectedSession === "null" || selectedGroup === "true") ? "" : "/choose/report/config"} className={(selectedSession === "null" || selectedGroup === "true") ? "deactivate" : ""}>{t('Create-&-Save-a-Session-Data-Report')}</Link></div>
+                                <div className="create-list-box"><Link to={(selectedSession === "" || selectedGroup === "true") ? "" : "/choose/report/config"} className={(selectedSession === "" || selectedGroup === "true") ? "deactivate" : ""}>{t('Create-&-Save-a-Session-Data-Report')}</Link></div>
 
                             </li>
 
                             <li>
-                                <div className="create-list-box"><Link to={selectedClient === "null" || selectedSession !== "null" || selectedGroup === "true" ? "" : "/createmultisession"} className={selectedClient === "null" || selectedSession !== "null" || selectedGroup === "true" ? "deactivate" : ""}>{t('Create-&-Save-a-Multisession-Report')}</Link></div>
+                                <div className="create-list-box"><Link to={selectedClient === "" || selectedSession !== "null" || selectedGroup === "true" ? "" : "/createmultisession"} className={selectedClient === "null" || selectedSession !== "" || selectedGroup === "true" ? "deactivate" : ""}>{t('Create-&-Save-a-Multisession-Report')}</Link></div>
 
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={selectedSession === "null" || selectedGroup === "false" ? "" : "/create/group/session/report"} className={selectedSession === "null" || selectedGroup === "false" ? "deactivate" : ""}>{t('Create-&-Save-a-Group-Session-Report')}</Link></div>
+                                <div className="create-list-box"><Link to={selectedSession === "" || selectedGroup === "false" ? "" : "/create/group/session/report"} className={selectedSession === "null" || selectedGroup === "false" ? "deactivate" : ""}>{t('Create-&-Save-a-Group-Session-Report')}</Link></div>
                             </li>
                             <li>
                                 <div className="create-list-box"><Link to="/demodatareport" >{t('PRACTICE:-Creating-Data-Reports-(Demo Data Only)')}</Link></div>

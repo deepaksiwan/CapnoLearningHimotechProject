@@ -57,11 +57,11 @@ const Subscriptionmanagement = () => {
 
         })
     }
-    const subscriptionSave = () => {
+    const subscriptionSave = (_autorenew,_autoupdate) => {
         let data = {};
 
-        data['autoupdate'] = autoupdate;
-        data['autorenew'] = autorenew;
+        data['autoupdate'] = _autoupdate;
+        data['autorenew'] = _autorenew;
 
 
         fetch(API_URL + "/owner/subscription/update/" + userId, {
@@ -97,12 +97,18 @@ const Subscriptionmanagement = () => {
 
     const handleAutoUpdate = (v) => {
         setAutoUpdate(v);
-        subscriptionSave();
+ 
+        subscriptionSave(autorenew,v);
+            
+    
     }
 
     const handleAutorenew = (v) => {
         setAutoRenew(v);
-        subscriptionSave();
+     
+            subscriptionSave(v,autoupdate);
+                
+           
     }
 
 

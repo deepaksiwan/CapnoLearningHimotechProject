@@ -248,6 +248,10 @@ const Viewassemblyreport = () => {
                                 columns={columns}
                                 data={data}
                                 title=""
+                                options={{
+                                    pageSize: 15,
+                                    pageSizeOptions:[5,10,15,20]
+                                }}
                             />
 
                         </div>

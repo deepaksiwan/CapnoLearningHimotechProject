@@ -15,6 +15,8 @@ const Assemblyreport = () => {
     const accessToken = localStorage.getItem('accessToken');
     const sessionid = localStorage.getItem('selectedSession');
     const Clientid = localStorage.getItem('selectedClient');
+    // const selectedSession = localStorage.getItem('selectedSession');
+    
     const [showsessiondate, setShowsessiondate] = useState(false)
     const handleClick = () => setShowsessiondate(!showsessiondate)
     const [completedForm, setCompletedForm] = useState(false)
@@ -54,7 +56,7 @@ const Assemblyreport = () => {
 
     function unCheck() {
         var x = document.getElementsByClassName("checkbox");
-        for (i = 0; i <= x.length; i++) {
+        for (i = 0; i < x.length; i++) {
             x[i].checked = false;
             x[i].value = 0;
         }
@@ -319,9 +321,11 @@ const Assemblyreport = () => {
 
                                     {
                                         practionerformsName.length > 0 && practionerformsName.map((value, i) => {
+                                            if(value.sessid == sessionid || (value.form_name ==  9 || value.form_name == 11 || value.form_name == 12)){
                                             return (
                                                 <li><p><input type="checkbox" onChange={checkboxHandlePractional} value={value.id} className="checkbox" /> {value.forms} </p></li>
                                             )
+                                            }
                                         })
                                     }
 

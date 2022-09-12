@@ -58,11 +58,14 @@ const Viewlive = () => {
     }, []);
 
     useEffect(() => {
-        livesessionNote();
-        livesessionImage();
-        zoomRecording();
-        
-        getZoomLinkbyid();
+        if(selectedSession){
+            livesessionNote();
+            livesessionImage();
+            zoomRecording();
+            
+            getZoomLinkbyid();
+        }
+   
 
     }, [selectedSession])
 
@@ -247,7 +250,7 @@ const Viewlive = () => {
                     let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _sessionDate = resp.sessionDate;
                     let _pdfname = resp.pdfname;
-                    downloadlivenote(_clientName, _trainerName, resp.result, _sessionDate)
+                    downloadlivenote(_clientName, _trainerName, resp.dataimg, _sessionDate)
                     setDownloaderModal(false);
                 });
             }
@@ -265,6 +268,7 @@ const Viewlive = () => {
     }
 
     const downloadlivenote = (_clientName, _trainerName, _notes, _sessionDate) => {
+        let _notesB = _notes.length > 0 ? _notes[_notes.length - 1].sessiondata : "No note found" ; 
 
         const doc = new jsPDF();
         doc.setTextColor(0, 0, 0);
@@ -282,9 +286,21 @@ const Viewlive = () => {
         doc.text("Client:", 10, 30);
         doc.text("Trainer:", 10, 35);
         doc.setFont(undefined, 'normal');
-        doc.text(_notes ? _notes : "No note found", 10, 52);
+ 
+        if(_notes.length > 0){
+            _notesB = _notes[_notes.length - 1].sessiondata.split("<br>");
+            _notesB.map((v,i) => {
+                doc.text(v, 10, 52+(i*1));
+
+            })
+
+        }
+        else{
+            doc.text("No note found", 10, 52);
+
+        }
         doc.setFontSize(13)
-        doc.text('Live Session Report Notes', 10, 45, { styles: { fontSize: 13, fontWeight: 'bold' } })
+        doc.text('Live Session Notes', 10, 45, { styles: { fontSize: 13, fontWeight: 'bold' } })
         doc.line(10, 47, 55, 47);
         doc.save(_sessionDate + ".pdf");
     }
@@ -310,7 +326,7 @@ const Viewlive = () => {
                     let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _sessionDate = resp.sessionDate;
                     let _pdfname = resp.pdfname;
-                    Viewlivenote(_clientName, _trainerName, resp.result, _sessionDate)
+                    Viewlivenote(_clientName, _trainerName, resp.dataimg, _sessionDate)
 
                 });
             }
@@ -328,7 +344,8 @@ const Viewlive = () => {
     }
 
     const Viewlivenote = (_clientName, _trainerName, _notes, _sessionDate) => {
-
+        let _notesB = _notes.length > 0 ? _notes[_notes.length - 1].sessiondata : "No note found" ; 
+       
         const doc = new jsPDF();
         doc.setTextColor(0, 0, 0);
         doc.text('Capnolearning Report', 10, 10,
@@ -345,9 +362,20 @@ const Viewlive = () => {
         doc.text("Client:", 10, 30);
         doc.text("Trainer:", 10, 35);
         doc.setFont(undefined, 'normal');
-        doc.text(_notes ? _notes : "No note found", 10, 52);
+        if(_notes.length > 0){
+            _notesB = _notes[_notes.length - 1].sessiondata.split("<br>");
+            _notesB.map((v,i) => {
+                doc.text(v, 10, 52+(i*1));
+
+            })
+
+        }
+        else{
+            doc.text("No note found", 10, 52);
+
+        }
         doc.setFontSize(13)
-        doc.text('Live Session Report Notes', 10, 45, { styles: { fontSize: 13, fontWeight: 'bold' } })
+        doc.text('Live Session Notes', 10, 45, { styles: { fontSize: 13, fontWeight: 'bold' } })
         doc.line(10, 47, 55, 47);
         window.open(doc.output('bloburl'))
     }
@@ -621,8 +649,8 @@ const Viewlive = () => {
                 <ModalBody>
                     <div className="modal-p">
                         <div className="right-circle"><img src={right} /></div>
-                        <h4>Save!</h4>
-                        <p>Zoom Link has been Added Successfully</p>
+                        <h4>Saved!</h4>
+                        <p>Zoom Link has been added successfully</p>
                     </div>
                 </ModalBody>
 
@@ -632,8 +660,8 @@ const Viewlive = () => {
                 <ModalBody>
                     <div className="modal-p">
                         <div className="right-circle"><img src={right} /></div>
-                        <h4>Save!</h4>
-                        <p>Zoom Link has been Updated Successfully</p>
+                        <h4>Saved!</h4>
+                        <p>Zoom Link has been updated successfully</p>
                     </div>
                 </ModalBody>
 

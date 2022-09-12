@@ -11,7 +11,7 @@ import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
-import { API_URL } from "../../../config";
+import { API_URL, SERVER_URL } from "../../../config";
 import backIcon from "../../images/back.png";
 
 
@@ -30,12 +30,15 @@ const Viewuploadedtrainerform = () => {
     const [blankform, setblankform] = useState([]);
     const accessToken = localStorage.getItem('accessToken');
     const selectedClient = localStorage.getItem('selectedClient');
-    const selectedSession = localStorage.getItem('selectedSession');
+    const [selectedSession,setSelectedSession] = useState(localStorage.getItem('selectedSession'));
     const [data, setdata] = useState([]);
+    const [ogdata, setOgdata] = useState([]);
     const [itemId, setItemId] = useState(null);
     const [deleteModal, setdeleteModal] = useState(false);
     const deleteToggleModal = () => setdeleteModal(!deleteModal);
+    const [currentForm, setCurrentForm] = useState("all");
 
+    const [showSessionbox, setShowSessionbox] = useState(false);
 
     const trainerActive = useRef()
     const formname = useRef()
@@ -57,6 +60,12 @@ const Viewuploadedtrainerform = () => {
     const selectedclientInactive = localStorage.getItem('selectedclientInactive');
     const selectedHomework = localStorage.getItem('selectedHomework');
     const userType = localStorage.getItem('userType');
+    const [successModal, setsuccessModal] = useState(false);
+    const successToggleModal = () => setsuccessModal(!successModal);
+
+    const [loaderModal, setLoaderModal] = useState(false);
+    const loaderToggleModal = () => setLoaderModal(!loaderModal);
+
 
     const classes = useStyles();
 
@@ -67,10 +76,46 @@ const Viewuploadedtrainerform = () => {
         blankForm();
         getSession();
         if(selectedClient != "null"){
-            viewtrainerform();
+            if(ogdata.length > 0 ){
+                reRender(ogdata)
+            }
+            else{
+                viewtrainerform();
+           
+            }
         }
 
     }, [selectedClient]);
+
+    useEffect(() => {
+        
+      
+        if(selectedClient != "null"){
+       if(ogdata.length > 0 ){
+            reRender(ogdata)
+        }
+        else{
+            viewtrainerform();
+       
+        }
+    }
+
+
+    }, [currentForm,selectedSession]);
+
+
+    const handleFormName = () => {
+        let cureentId = formname.current.value;
+        setCurrentForm(cureentId)
+        if(cureentId == 9 || cureentId == 11 || cureentId == 12){
+            setShowSessionbox(false);
+        }
+        else{
+            setShowSessionbox(true);
+        }
+
+    }
+
 
     const getTrainers = () => {
 
@@ -284,10 +329,14 @@ const Viewuploadedtrainerform = () => {
 
     const updateselectedSecssion = () => {
         localStorage.setItem('selectedSession', sessionSelected.current.value);
+        setSelectedSession(sessionSelected.current.value)
+        reRender(ogdata)
     }
 
     const deleteuploadtrainerform = () => {
         let id = itemId;
+        setLoaderModal(true)
+
         fetch(API_URL + "/forms/trainer/delete/" + id,
             {
                 method: 'POST',
@@ -299,7 +348,10 @@ const Viewuploadedtrainerform = () => {
         ).then((response) => {
             if (response.status == 200) {
                 viewtrainerform();
+
                 setdeleteModal(!deleteModal)
+                setLoaderModal(false)
+                setsuccessModal(true)
 
             }
             else if (response.status == 401) {
@@ -348,15 +400,15 @@ const Viewuploadedtrainerform = () => {
 
     const openItemPopUp = (id) => {
         setItemId(id);
-        setdeleteModal(!deleteModal)
+        setdeleteModal(true)
     }
     const columns = [
         {
             title: "Form Name", field: "formname"
         },
-        // {
-        //     title: "Client Name", field: "clientname"
-        // },
+        {
+            title: "Session Date", field: "session"
+        },
         {
             title: <span >Actions</span>, field: "action", align: "right"
         }
@@ -376,25 +428,13 @@ const Viewuploadedtrainerform = () => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    // // console.log("result", resp);
+                    console.log("resultSess", selectedSession);
+                    console.log("resultSess", currentForm);
                     let _temp = [];
-                    resp.data.map((v, i) => {
-                        _temp.push({
-                            formname: v.forms,
-                            action: <p><Tooltip classes={{
-                                tooltip: classes.customTooltip,
-
-                            }} title="Download" placement="top"><a href='#' className="downloadimg tooltip2" download><img src={download} /> </a></Tooltip> <Tooltip classes={{
-                                tooltip: classes.customTooltip,
-
-                            }} title="View" placement="top"><a href='#' className="downloadimg tooltip2"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
-                                tooltip: classes.customTooltip,
-
-                            }} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id)} className="downloadimg tooltip2"><img src={Delete} /></a></Tooltip></p>
-
-                        })
-                    })
-                    setdata(_temp);
+                    setOgdata(resp.data)
+                    reRender(resp.data)
+                   
+             
 
 
 
@@ -409,6 +449,46 @@ const Viewuploadedtrainerform = () => {
 
 
         })
+    }
+
+    const reRender = (_data) => {
+
+        let _temp = [];
+        if(_data.length > 0 ){
+        _data.map((v, i) => {
+            console.log("tempdatat formname",currentForm);
+            console.log("tempdatat sesssion",selectedSession);
+        
+
+            if((v.form_name == currentForm || currentForm == "all" ) && (v.sessid == selectedSession || selectedSession == "null" || (selectedSession != "null" && currentForm == "all" ) )  ){
+
+            _temp.push({
+                formname: v.forms+" "+v.form_name,
+                session: (v.session_name == "" || v.session_name == null ? "Not Applicable" : v.session_name) ,
+                action: <p><Tooltip classes={{
+                    tooltip: classes.customTooltip,
+
+                }} title="Download" placement="top"><a href={SERVER_URL+'/practioner_forms/'+v.form} target={"_blank"} className="downloadimg tooltip2" download><img src={download} /> </a></Tooltip> <Tooltip classes={{
+                    tooltip: classes.customTooltip,
+
+                }} title="View" placement="top"><a href={SERVER_URL+'/practioner_forms/'+v.form} target={"_blank"} className="downloadimg tooltip2"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
+                    tooltip: classes.customTooltip,
+
+                }} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id)} className="downloadimg tooltip2"><img src={Delete} /></a></Tooltip></p>
+
+            })
+        }
+            if(i == (_data.length - 1)){
+                console.log("tempdatat",_data);
+                setdata(_temp);
+
+            }
+        })
+    }
+    else{
+        setdata([]);
+
+    }
     }
     const logout = () => {
         localStorage.clear();
@@ -536,7 +616,9 @@ const Viewuploadedtrainerform = () => {
                                 <div className="padding-box">
 
                                     <div className="select-client mrt-select">
-                                        <select ref={formname}>
+                                        <select ref={formname} onChange={handleFormName}>
+                                        <option className="selected-bold" value="all" selected  >All</option>
+
                                             {
                                                 blankform.map((bankforms, i) => {
                                                     return (
@@ -550,7 +632,9 @@ const Viewuploadedtrainerform = () => {
                                 </div>
                             </div>
                         </div>
-                        
+                        {
+                            showSessionbox &&
+
                         <div className="col-lg-3">
 
                            <div className="trainerbox">
@@ -559,7 +643,7 @@ const Viewuploadedtrainerform = () => {
 
                                         <div className="select-client mrt-select">
                                             <select ref={sessionSelected} onChange={updateselectedSecssion}>
-                                                <option className="selected-bold">Choose a session</option>
+                                                <option className="selected-bold" value="null">Choose a session</option>
                                                 {
                                                     sesstion.map((sesstion, i) =>
                                                         <option className="selected-bold" selected={sesstion.id == selectedSession ? true : false} value={sesstion.id}>
@@ -574,6 +658,8 @@ const Viewuploadedtrainerform = () => {
                             
 
                         </div>
+                        }
+
                     </div>
                     </div>
                     <div className="wrp-bankform">
@@ -582,6 +668,11 @@ const Viewuploadedtrainerform = () => {
                                 columns={columns}
                                 data={data}
                                 title=""
+                                options={{
+                                    pageSize: 15,
+
+                                    pageSizeOptions:[5,10,15,20]
+                                }}
                             />
 
                         </div>
@@ -591,8 +682,8 @@ const Viewuploadedtrainerform = () => {
                         <ModalBody>
                             <div className="modal-p">
                                 <div className="right-circle cancel-circle"><img src={closeicon} /></div>
-                                <h4>Are You Sure?</h4>
-                                <p>Do you really want to delete this record?</p>
+                                <h4>Are you sure?</h4>
+                                <p>Do you really wish to delete this uploaded trainer form?</p>
                                 <div className="wrp-delete-btn">
                                     <div className="cancel-btn1" ><a onClick={deleteToggleModal}>Cancel</a></div>
                                     <div className="delete-btn1"><a onClick={deleteuploadtrainerform}>Delete</a></div>
@@ -601,6 +692,33 @@ const Viewuploadedtrainerform = () => {
                         </ModalBody>
 
                     </Modal>
+
+                    <Modal isOpen={loaderModal} toggle={loaderToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={loaderToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Your request is getting processed. Please wait.</p>
+                    <div className="wrp-chart-loader">
+                        <div class="loading">
+                            <div class="loading-1"></div>
+                            <div class="loading-2"></div>
+                            <div class="loading-3"></div>
+                            <div class="loading-4"></div>
+                        </div>
+                    </div>
+                </ModalBody>
+
+            </Modal>
+
+
+            <Modal isOpen={successModal} toggle={successToggleModal} className="connect-box" centered={true}>
+                            <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
+                            <ModalBody>
+                                <div className="modal-p">
+                                    <p>Uploaded form deleted successfully.</p>
+                                </div>
+                            </ModalBody>
+
+                        </Modal>
                 </div>
             </div>
 
