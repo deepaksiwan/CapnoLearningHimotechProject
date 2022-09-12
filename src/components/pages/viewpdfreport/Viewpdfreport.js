@@ -220,19 +220,19 @@ const Viewpdfreport = () =>{
                        <ul className="create-list">
                             <li>
                             
-                                <div className="create-list-box"><Link to={(pdfs.length == 0 || selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null" ) ? "": "/pdf/session/data/report/single" } className={(pdfs.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "deactivate": "" }> {t('pdf-Session-Data-Reports')}</Link></div>
+                                <div className="create-list-box"><Link to={(pdfs.length == 0 || selectedSession === "" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "" ) ? "": "/pdf/session/data/report/single" } className={(pdfs.length == 0 || (selectedSession === "" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "") ) ? "deactivate": "" }> {t('pdf-Session-Data-Reports')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(multiplepdfs.length == 0 || selectedClient === "null" || selectedGroup === "true" || selectedSession !== "null") ? "": "/pdf/session/data/report/multi" } className={(multiplepdfs.length == 0 || selectedClient === "null" || selectedGroup === "true" || selectedSession !== "null") ? "deactivate": "" }>{t('pdf-Multi-session-Data-Reports')}</Link></div>
+                                <div className="create-list-box"><Link to={(multiplepdfs.length == 0 || selectedClient === "" || selectedGroup === "true" || selectedSession !== "") ? "": "/pdf/session/data/report/multi" } className={(multiplepdfs.length == 0 || selectedClient === "" || selectedGroup === "true" || selectedSession !== "") ? "deactivate": "" }>{t('pdf-Multi-session-Data-Reports')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(grouplist.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" || selectedHomework === "true" ) ? "": "/pdf/session/data/report/group" } className={(grouplist.length == 0 || selectedSession === "null" || selectedGroup === "false" || selectedSession === "null" || selectedHomework === "true" ) ? "deactivate": "" }> {t('pdf-Group-Session-Data-Reports')} </Link></div>
+                                <div className="create-list-box"><Link to={(grouplist.length == 0 || selectedSession === "" || selectedGroup === "false" || selectedSession === "" || selectedHomework === "true" ) ? "": "/pdf/session/data/report/group" } className={(grouplist.length == 0 || selectedSession === "" || selectedGroup === "false" || selectedSession === "" || selectedHomework === "true" ) ? "deactivate": "" }> {t('pdf-Group-Session-Data-Reports')} </Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(homeworkdata.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "": "/pdf/session/data/report/homework" } className={(homeworkdata.length == 0 || selectedSession === "null" || selectedHomework === "false") ? "deactivate": "" }>{t('Client-Homework-Data-Session')}</Link></div>
+                                <div className="create-list-box"><Link to={(homeworkdata.length == 0 || selectedSession === "" || selectedHomework === "false") ? "": "/pdf/session/data/report/homework" } className={(homeworkdata.length == 0 || selectedSession === "" || selectedHomework === "false") ? "deactivate": "" }>{t('Client-Homework-Data-Session')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(sessionNotes.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "": "/pdf/sessetion/report/notes" } className={(sessionNotes.length == 0 || (selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "null") ) ? "deactivate": "" }>{t('Session-Report-Notes')}</Link></div>
+                                <div className="create-list-box"><Link to={(sessionNotes.length == 0 || (selectedSession === "" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "") ) ? "": "/pdf/sessetion/report/notes" } className={(sessionNotes.length == 0 || (selectedSession === "" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "") ) ? "deactivate": "" }>{t('Session-Report-Notes')}</Link></div>
                             </li>
                        </ul>
                    </div>

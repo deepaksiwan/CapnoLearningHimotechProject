@@ -526,20 +526,20 @@ const Viewlive = () => {
                     <div className="create-section">
                         <ul className="create-list">
                             <li>
-                                <div className="create-list-box"><a href="javascript:void" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => { Viewlivesessionnotes(); openToggleModal() }}>{t('View-Live-Session-Notes')}</a></div>
+                                <div className="create-list-box"><a href="javascript:void" className={(sessions.length == 0 || selectedSession === "") ? "deactivate" : ""} onClick={() => { Viewlivesessionnotes(); openToggleModal() }}>{t('View-Live-Session-Notes')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="#javascript:void" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => { downloadlivesessionnotes(); DownloaderToggleModal() }}>{t('Download-Live-Session-Notes')}</a></div>
+                                <div className="create-list-box"><a href="#javascript:void" className={(sessions.length == 0 || selectedSession === "") ? "deactivate" : ""} onClick={() => { downloadlivesessionnotes(); DownloaderToggleModal() }}>{t('Download-Live-Session-Notes')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="javascript:void" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => { ViewlivesessionImage(); openToggleModal() }}>{t('View-Live-Session-Images')}</a></div>
+                                <div className="create-list-box"><a href="javascript:void" className={(sessions.length == 0 || selectedSession === "") ? "deactivate" : ""} onClick={() => { ViewlivesessionImage(); openToggleModal() }}>{t('View-Live-Session-Images')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><a href="javascript:void" className={(sessions.length == 0 || selectedSession === "null") ? "deactivate" : ""} onClick={() => { downloadlivesessionImage(); DownloaderToggleModal() }}>{t('Download-Live-Session-Images')}</a></div>
+                                <div className="create-list-box"><a href="javascript:void" className={(sessions.length == 0 || selectedSession === "") ? "deactivate" : ""} onClick={() => { downloadlivesessionImage(); DownloaderToggleModal() }}>{t('Download-Live-Session-Images')}</a></div>
                             </li>
                             <li>
                                 <div className="create-list-box" >
-                                    <a href="javascript:void" className={(selectedSession === "null") ? "deactivate" : ""}>
+                                    <a href="javascript:void" className={(selectedSession === "") ? "deactivate" : ""}>
                                         {/* {session} */}
                                         {
                                             (zoomdata.length > 0) ?
