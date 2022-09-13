@@ -168,23 +168,28 @@ console.log("Clientid",Clientid)
                             <li>
                                 <div className="create-list-box"><Link to="/bankform">{t('Download-Fill-in-PDF-Blank-Forms')}</Link></div>
                             </li>
+                            <br />
                             <li>
                                 <div className="create-list-box"><Link to={(selectedClient === "" || selectedClient === "Choose a Client") ? "" : "/upload/client/form"} className={((selectedClient === "" || selectedClient === "Choose a Client")) ? "deactivate" : ""}>{t('Upload-Completed-Client-Forms')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(selectedClient === "" || selectedClient === "Choose a Client") ? "" : "/upload/trainner/form"} className={(selectedClient === "" || selectedClient === "Choose a Client") ? "deactivate" : ""}>{t('Upload-Completed-Trainer-Forms')}</Link></div>
-                            </li>
-                            <li>
                                 <div className="create-list-box"><Link to={(clientlength.length == 0) ? "" : "/view/uploaded/client/form"} className={(clientlength.length == 0) ? "deactivate" : ""} >{t('View-Completed-Client-Forms')}</Link></div>
                             </li>
+                            <br />
+                            <li>
+                                <div className="create-list-box"><Link to={(selectedClient === "" || selectedClient === "Choose a Client") ? "" : "/upload/trainner/form"} className={(selectedClient === "" || selectedClient === "Choose a Client") ? "deactivate" : ""}>{t('Upload-Completed-Trainer-Forms')}</Link></div>
+                            </li>
+                           
                             <li>
                                 <div className="create-list-box"><Link to={(trainerLength.length == 0) ? "" : "/view/uploaded/trainer/form"} className={(trainerLength.length == 0) ? "deactivate" : ""}>{t('View-Completed-Trainer-Forms')}</Link></div>
                             </li>
-                            <li>
-                                <div className="create-list-box"><Link to={(selectedHomework === "false") ? "" : "/view/completed/client/work"} className={(selectedHomework === "false") ? "deactivate" : ""}>{t('View-Homework-Assignment')}</Link></div>
-                            </li>
+                            <br />
+                           
                             <li>
                                 <div className="create-list-box"><Link to={(selectedHomework === "false" || selectedSession === "") ? "" : "/upload/homework/asignment"} className={(selectedHomework === "false" || selectedSession === "") ? "deactivate" : ""}>{t('Upload-Homework-Assignment')}</Link></div>
+                            </li>
+                            <li>
+                                <div className="create-list-box"><Link to={(selectedHomework === "false") ? "" : "/view/completed/client/work"} className={(selectedHomework === "false") ? "deactivate" : ""}>{t('View-Homework-Assignment')}</Link></div>
                             </li>
 
                         </ul>

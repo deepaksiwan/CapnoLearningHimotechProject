@@ -107,7 +107,7 @@ const Viewuploadedtrainerform = () => {
     const handleFormName = () => {
         let cureentId = formname.current.value;
         setCurrentForm(cureentId)
-        if(cureentId == 9 || cureentId == 11 || cureentId == 12){
+        if(cureentId == 9 || cureentId == 11 || cureentId == 12 || cureentId == "all"){
             setShowSessionbox(false);
         }
         else{

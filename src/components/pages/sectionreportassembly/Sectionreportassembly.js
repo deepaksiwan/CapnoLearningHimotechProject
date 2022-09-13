@@ -82,11 +82,11 @@ const Sectionreportassembly = () => {
                     <div className="create-section">
                         <ul className="create-list">
                             <li>
-                               
-                                <div className="create-list-box"><Link to={(selectedSession === "" || (selectedGroup === "true" || selectedClient === "") || selectedSession === "" ) ? "": "/assemblyreport" } className={(selectedSession === "" || (selectedGroup === "true" || selectedClient === "") || selectedSession === "" ) ? "deactivate": "" }>{t('Create-Session-Report')}</Link></div>
+                               {/* {selectedSession} */}
+                                <div className="create-list-box"><Link to={(selectedSession === "" || (selectedGroup === "true" || selectedClient === "") || selectedSession === "" || selectedSession === "null"   ) ? "": "/assemblyreport" } className={(selectedSession === "" || (selectedGroup === "true" || selectedClient === "") || selectedSession === "" ||selectedSession === "null" ) ? "deactivate": "" }>{t('Create-Session-Report')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={((selectedSession === "" || (selectedGroup === "true" || selectedClient === "") || selectedSession === "" ) ? "": "/view/assembly" )} className={(selectedSession === "" || (selectedGroup === "true" || selectedClient === "") || selectedSession === "" ) ? "deactivate": "" }>{t('View/Edit/Delete/Download Session Report')}</Link></div>
+                                <div className="create-list-box"><Link to={((selectedSession === "" || (selectedGroup === "true" || selectedClient === "") || selectedSession === "" || pdfs.length == 0 ||selectedSession === "null"  ) ? "": "/view/assembly" )} className={(selectedSession === "" || (selectedGroup === "true" || selectedClient === "" ) || selectedSession === "" || pdfs.length == 0 ||selectedSession === "null" ) ? "deactivate": "" }>{t('View/Edit/Delete/Download Session Report')}</Link></div>
                             </li>
 
                         </ul>

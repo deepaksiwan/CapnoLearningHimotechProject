@@ -200,7 +200,7 @@ const PdfsessionReport = () => {
                     resp.pdfs.map((v, i) => {
 
                         _temp.push({
-                            report: v.name + " - " + v.pdf_name,
+                            report: v.pdf_name,
                             Createdate: new Date(v.added_on).toLocaleString(),
                             actions: <p><Tooltip classes={{
                                 tooltip: classes.customTooltip,

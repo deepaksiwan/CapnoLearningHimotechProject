@@ -81,8 +81,8 @@ const Viewassemblyreport = () => {
                             Session: sessionDate,
                             dateCreated: new Date(v.created_at * 1000).toLocaleString(),
                             actions: <p>
-                                <Tooltip classes={{
-                                tooltip: classes.customTooltip,}} title="Preview" placement="top"><a href="#" onClick={() => {viewpdf(v.id); loaderToggleModal()}} className="downloadimg" ><img src={preveiw} /></a></Tooltip>
+                                {/* <Tooltip classes={{ */}
+                                {/* tooltip: classes.customTooltip,}} title="Preview" placement="top"><a href="#" onClick={() => {viewpdf(v.id); loaderToggleModal()}} className="downloadimg" ><img src={preveiw} /></a></Tooltip> */}
                                 <Tooltip classes={{
                                 tooltip: classes.customTooltip,}} title="Edit" placement="top"><a href={"/view/edit/assemblyreport/" + v.id} className="downloadimg" ><img src={edit} /></a></Tooltip>
                                  <Tooltip classes={{
@@ -191,6 +191,7 @@ const Viewassemblyreport = () => {
             if (response.status == 200) {
                 getassebllyList();
                 setdeleteModal(!deleteModal)
+                window.location.reload()
 
             }
             else if (response.status == 401) {
@@ -216,9 +217,9 @@ const Viewassemblyreport = () => {
         {
             title: <span className="text-right">{t("Report-Title")}</span>, field: "reportTitle"
         },
-        {
-            title: <span className="text-right">{t("Date-Created")}</span>, field: "dateCreated"
-        },
+        // {
+        //     title: <span className="text-right">{t("Date-Created")}</span>, field: "dateCreated"
+        // },
         {
             title: <span className="text-right">{t("Actions")}</span>, field: "actions",align: "right"
         }
@@ -265,7 +266,7 @@ const Viewassemblyreport = () => {
                     <div className="modal-p">
                         <div className="right-circle cancel-circle"><img src={closeicon} /></div>
                         <h4>Are You Sure?</h4>
-                        <p>Do you really want to delete this record?</p>
+                        <p>Do you really wish to delete this Session Assembly Report?</p>
                         <div className="wrp-delete-btn">
                             <div className="cancel-btn1" ><a onClick={deleteToggleModal}>Cancel</a></div>
                             <div className="delete-btn1"><a onClick={deleteClient}>Delete</a></div>

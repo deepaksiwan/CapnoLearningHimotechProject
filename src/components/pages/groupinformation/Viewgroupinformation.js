@@ -277,7 +277,7 @@ const Viewgroupinformation = () => {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="client-input">
-                                        <p>Associate Trainer</p>
+                                        <p>Trainer</p>
                                         <select disabled  ref={associateTrainer}>
                                             <option>Select trainer</option>
                                             {
@@ -295,8 +295,8 @@ const Viewgroupinformation = () => {
                                     <div className="client-input">
                                         <p>Associate Instrument Type</p>
                                         <select disabled ref={associateHardwaretype} defaultValue={group.device}>
-                                            <option value="1" selected={group.device == 1 ? true : false} >Capnotrainer 5.0 Instruments</option>
-                                            <option value="2" selected={group.device == 2 ? true : false}>Capnotrainer 6.0 Instruments</option>
+                                            <option value="1" selected={group.device == 1 ? true : false} >Capnotrainer® 5.0 Instruments</option>
+                                            <option value="2" selected={group.device == 2 ? true : false}>Capnotrainer® 6.0 Instruments</option>
                                         </select>
                                     </div>
                                 </div>

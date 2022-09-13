@@ -564,7 +564,7 @@ const Filter = () => {
                             {
                                 sesstion.map((sesstion, i) =>
                                     <option className="selected-bold" selected={sesstion.id == selectedSession ? true : false} value={sesstion.id}>
-                                        {sesstion.name}
+                                        {sesstion.name} {sesstion.hw == 1 ? " - HW" : ""}
                                     </option>)
                             }
 

@@ -26,7 +26,7 @@ const EditgroupProfile = (props) => {
                 </div>
                 <div className="col-lg-6">
                     <div className="client-input">
-                        <p>CapnoTrainer Serial Number</p>
+                        <p>CapnoTrainer® Serial Number</p>
                         <input placeholder="Write Serial Number" ref={serialNumber} disabled defaultValue={props.data.serialnumber} onChange={handleChange} />
                             
                         

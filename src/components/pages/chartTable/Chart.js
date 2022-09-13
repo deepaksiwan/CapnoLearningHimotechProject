@@ -113,7 +113,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
     const [thresholdvalue ,setThresholdvalue] = useState(otherConfig.tvalue);
     const [thresholdthick ,setThresholdthick] = useState(otherConfig.tthick);
     const [thresholdtLine ,setThresholdtLine] = useState(otherConfig.tline);
-    const [thresholdtcolor ,setThresholdtcolor] = useState(otherConfig.tcolor);
+    const [thresholdtcolor ,setThresholdtcolor] = useState(otherConfig.tcolor ? otherConfig.tcolor : "#FFFF00");
     
     const [point, setPoint] = useState(25);
     const [xrange, setXRange] = useState(otherConfig.xrange);

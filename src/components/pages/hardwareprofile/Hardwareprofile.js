@@ -327,8 +327,8 @@ const Hardwareprofile = () => {
                             <div className="client-input">
                                 <p>Instruments Type</p>
                                 <select onChange={updatedType} ref={updatedevice}>
-                                    <option value="1">CapnoTrainer 5.0 Instruments</option>
-                                    <option value="2">CapnoTrainer 6.0 Instruments</option>
+                                    <option value="1">CapnoTrainer® 5.0 Instruments</option>
+                                    <option value="2">CapnoTrainer® 6.0 Instruments</option>
                                     
 
                                 </select>

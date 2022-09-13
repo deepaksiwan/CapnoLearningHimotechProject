@@ -303,7 +303,7 @@ const Groupinformation = () => {
                                 </div>
                                 <div className="col-lg-4">
                                     <div className="client-input">
-                                        <p>Associate Trainer*</p>
+                                        <p>Trainer*</p>
                                         <select ref={associateTrainer}>
                                             <option>Select trainer</option>
                                             {
@@ -339,15 +339,13 @@ const Groupinformation = () => {
                                         <p>Associate Instruments Type</p>
                                         <select ref={associateHardwaretype} onChange={() => updatedType()}>
                                             <option value="0">Choose instrument type</option>
-                                            <option value="1">CapnoTrainer 5.0 Instruments</option>
-                                            <option value="2">CapnoTrainer 6.0 Instruments</option>
+                                            <option value="1">CapnoTrainer® 5.0 Instruments</option>
+                                            <option value="2">CapnoTrainer® 6.0 Instruments</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                            {
-                                data.length > 0 &&
-                            <>
+                          
                             <div className="add-clients">
                                 <h3>Add Clients</h3>
                             </div>
@@ -360,8 +358,7 @@ const Groupinformation = () => {
 
                                 })
                             }   
-</>
-                            }
+ 
 
 
                             <div className="row">

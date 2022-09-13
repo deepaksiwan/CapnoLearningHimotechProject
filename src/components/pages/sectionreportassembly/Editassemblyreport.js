@@ -38,7 +38,11 @@ const Editassemblyreport = () => {
     const [trainerName, setTrainerName] = useState([]);
     const [sessionDate, setSessionDate] = useState([]);
     const [completeForm, setCompleteForm] = useState([]);
+    const [completetForm, setCompletetForm] = useState([]);
+    
     const pdfUrl = "https://capnolearning.com/webroot/client_forms/";
+    const tpdfUrl = "https://capnolearning.com/webroot/practioner_forms/";
+    
     const [dataPdf, setDataPdf] = useState([]);
     const [liveImg, setLiveImg] = useState([]);
     const [assemblydata, setAssemblydata] = useState([]);
@@ -64,6 +68,7 @@ const Editassemblyreport = () => {
         livesessionImages();
         reportsesionnotes();
         getCompleteforms();
+        getCompletetforms();
         listAssemblyReportbyid()
 
 
@@ -299,6 +304,39 @@ const Editassemblyreport = () => {
         })
     }
 
+    
+
+    const getCompletetforms = () => {
+
+        fetch(API_URL + "/get/assembly/complete/tform/" + id + "/" + Clientid,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+
+                    setCompletetForm(resp.data);
+
+
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                console.log("network error")
+            }
+
+
+        })
+    }
+
 
     const getCompleteforms = () => {
 
@@ -500,17 +538,16 @@ const Editassemblyreport = () => {
                         }
 
                         {
-                            livessesionNotes.length > 0 && livessesionNotes.map((val, i) => {
-                                return (
+                            livessesionNotes.length > 0  &&
+                            
                                     <div className="report-notes">
                                         <>
                                             <label>{t("Live-Session-Notes")}</label>
-                                            <p dangerouslySetInnerHTML={{ __html: val.sessiondata ? val.sessiondata : "No live session notes available" }}></p>
+                                            <p dangerouslySetInnerHTML={{ __html: livessesionNotes[livessesionNotes.length - 1].sessiondata ? livessesionNotes[livessesionNotes.length - 1].sessiondata : "No live session notes available" }}></p>
 
                                         </>
                                     </div>
-                                )
-                            })
+                              
                         }
 
                         {
@@ -546,7 +583,7 @@ const Editassemblyreport = () => {
 
 
                         {
-                            completeForm.length > 0 &&
+                            (completeForm.length > 0 || completetForm.length > 0) &&
                             <p className="complete-forms"><b>{t("Completed-Forms")}</b></p>
                         }
 
@@ -558,6 +595,23 @@ const Editassemblyreport = () => {
                                         <div className="live-section-img">
                                             <label>{val.forms}</label>
                                             <embed src={pdfUrl + val.form} width="100%" height="1000px" />
+
+                                        </div>
+
+                                    </>
+                                )
+                            })
+
+                        }
+
+{
+                            completetForm.length > 0 && completetForm.map((val, index) => {
+
+                                return (
+                                    <>
+                                        <div className="live-section-img">
+                                            <label>{val.forms}</label>
+                                            <embed src={tpdfUrl + val.form} width="100%" height="1000px" />
 
                                         </div>
 
@@ -589,7 +643,7 @@ const Editassemblyreport = () => {
                     <div className="modal-p">
                         <div className="right-circle"><img src={right} /></div>
                         <h4>Saved!</h4>
-                        <p>Your Form has been Updated Successfully</p>
+                        <p>Your Session Assembly Report has been Updated Successfully</p>
                     </div>
                 </ModalBody>
 
