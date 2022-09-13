@@ -55,7 +55,27 @@ const Editassemblyreport = () => {
     const [loaderModal, setLoaderModal] = useState(false);
     const loaderToggleModal = () => setLoaderModal(!loaderModal);
 
+    const [pdfindex, setPdfindex] = useState()
+    const [liveimgindex, setLiveimgindex] = useState()
+    // const [toggleliveimgdes, setToggleliveimgdes] = useState(false)
 
+    
+
+
+    const handleTogglepdf = (index)=>{
+
+        setPdfindex(index)
+       
+      
+    }
+
+    const handleToggleliveimgdesc = (index)=>{
+
+        setLiveimgindex(index)
+      
+    }
+
+   
 
     const reportName = useRef();
     const summaryReportDes = useRef();
@@ -485,6 +505,7 @@ const Editassemblyreport = () => {
                 </div>
                 <div className="right-section">
                 <div className="back-icon-wrp">
+                
                         <Link to="/assemblyreport" className="backbtn-icon">
                             <img src={backIcon} alt="backicon" />
                             <span>Back</span>
@@ -526,8 +547,11 @@ const Editassemblyreport = () => {
                                         </div>
 
                                         <div className="text-areat-report">
-                                            <label>PDF Report Description ({index + 1})</label>
-                                            <textarea key={index} defaultValue={(PdfArrays[index] ? PdfArrays[index] : "")} onChange={handlepdfDescription(index)}></textarea>
+                                            <label>PDF Report Description ({index + 1}) <a href="javascript:void(0)" onClick={() => handleTogglepdf(index + 1)} className="plus-icon"><i class="fa fa-plus-circle" aria-hidden="true" ></i></a></label>
+                                            {
+                                                pdfindex == index +1?  <textarea key={index} defaultValue={(PdfArrays[index] ? PdfArrays[index] : "")} onChange={handlepdfDescription(index)}></textarea> : ""
+                                               
+                                            }
 
                                         </div>
 
@@ -559,8 +583,12 @@ const Editassemblyreport = () => {
                                             <img src={val.sessiondata} />
                                         </div>
                                         <div className="text-areat-report">
-                                            <label>Live Session Image Description ({index + 1})</label>
-                                            <textarea key={index} defaultValue={(livesessectionArray[index] ? livesessectionArray[index] : "")} onChange={handleLiveDescription(index)}></textarea>
+                                            <label>Live Session Image Description ({index + 1}) <a href="javascript:void(0)" onClick={() => handleToggleliveimgdesc(index + 1)} className="plus-icon"><i class="fa fa-plus-circle" aria-hidden="true" ></i></a></label>
+
+                                            {
+                                                liveimgindex == index +1? <textarea key={index} defaultValue={(livesessectionArray[index] ? livesessectionArray[index] : "")} onChange={handleLiveDescription(index)}></textarea> : ""
+                                                
+                                            }
 
                                         </div>
                                     </>
@@ -664,6 +692,7 @@ const Editassemblyreport = () => {
                 </ModalBody>
 
             </Modal>
+           
         </div>
 
     )
