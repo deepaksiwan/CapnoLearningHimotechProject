@@ -2321,9 +2321,31 @@ sub {
   justify-content: space-between;
   margin-bottom: 30px;
 }
+.underline-label > label{
+  font-size: 16px;
+  color: #000;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.not-underline-label > label{
+  font-size: 16px;
+  color: #000;
+  font-weight: 600;
+  /* text-decoration: underline; */
+}
+
+.bold-label > label{
+  font-size: 16px!important;
+  color: #000;
+  font-weight: 600;
+  /* text-decoration: underline; */
+}
 .report-input > label{
   font-size: 14px;
   color: #000;
+ 
+  /* text-decoration: underline; */
 }
 .report-input > input{
   display: block;
@@ -2367,7 +2389,7 @@ sub {
   margin-top: 25px;
 }
 .live-section-img > label{
-  font-size: 14px;
+  /* font-size: 14px; */
   color: #000;
 }
 .live-section-img > img{
@@ -2378,7 +2400,7 @@ sub {
   margin-top: 25px;
 }
 .report-notes > label{
-  font-size: 14px;
+  /* font-size: 14px; */
   color: #000;
 }
 .report-notes > p{

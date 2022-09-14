@@ -67,7 +67,7 @@ const Viewassemblyreport = () => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     console.warn("result", resp);
-                    const clientName = resp.firstname + resp.lastname
+                    const clientName = resp.firstname + " " + resp.lastname
                     const sessionDate = resp.sessionDate
 
                     // console.log(clientName)
@@ -86,7 +86,7 @@ const Viewassemblyreport = () => {
                                 <Tooltip classes={{
                                 tooltip: classes.customTooltip,}} title="Edit" placement="top"><a href={"/view/edit/assemblyreport/" + v.id} className="downloadimg" ><img src={edit} /></a></Tooltip>
                                  <Tooltip classes={{
-                                tooltip: classes.customTooltip,}} title="Download" placement="top"><a href='#' onClick={() => {downloadpdf(v.id); loaderToggleModal()}} className="downloadimg"><img src={downloads} /></a></Tooltip>
+                                tooltip: classes.customTooltip,}} title="Download" placement="top"><a   onClick={() => {downloadpdf(v.id); loaderToggleModal()}} className="downloadimg"><img src={downloads} /></a></Tooltip>
                                  <Tooltip classes={{
                                 tooltip: classes.customTooltip,}} title="Delete" placement="top"><a className="downloadimg" onClick={() => openItemPopUp(v.id)} ><img src={Delete} /></a></Tooltip>
                                  </p>

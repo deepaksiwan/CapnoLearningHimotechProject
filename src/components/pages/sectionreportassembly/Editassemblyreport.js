@@ -396,7 +396,12 @@ const Editassemblyreport = () => {
     const UpdateAssemblyreport = () => {
    
         let data = {};
-
+        if(reportName.current.value == "" || reportName.current.value == null){
+            alert("Please enter a report name if you wish to save it.");
+            return false;
+        }
+        else{
+            loaderToggleModal()
         data['name'] = reportName.current.value;
         data['summary'] = summaryReportDes.current.value;
         data['report_desc'] = dataPdf;
@@ -424,7 +429,8 @@ const Editassemblyreport = () => {
 
         })
 
-
+   
+    }
 
     }
     const saveAssemblyFullscreenshort = () => {
@@ -526,13 +532,13 @@ const Editassemblyreport = () => {
                                 <p><i class="fa fa-calendar" aria-hidden="true"></i> <span>{t("Date")}:</span> {sessionDate}</p>
                             </div>
                         </div>
-                        <div className="report-input">
-                            <label>{t("Name-of-Report")}</label>
-                            <input placeholder="Name of Report" defaultValue={assemblydata.name} ref={reportName} />
+                        <div className="report-input bold-label">
+                            <label>*{t("Name-of-Assembly-Report")}</label>
+                            <input placeholder="Name of Assembly Report" defaultValue={assemblydata.name} ref={reportName} />
                         </div>
-                        <div className="text-areat-report">
-                            <label>{t("Summary-of-Report")}</label>
-                            <textarea ref={summaryReportDes}  defaultValue={assemblydata.summary} placeholder="Write Summary of Report" ></textarea>
+                        <div className="text-areat-report bold-label">
+                            <label>{t("Summary-of-Assembly-Report")}</label>
+                            <textarea ref={summaryReportDes}  defaultValue={assemblydata.summary} placeholder="Write Summary of Assembly Report" ></textarea>
                         </div>
 
                         {
@@ -544,13 +550,13 @@ const Editassemblyreport = () => {
 
                                 return (
                                     <>
-                                        <div className="live-section-img">
-                                            <label>PDF Report ({index + 1})</label>
+                                        <div className="live-section-img underline-label">
+                                            <label>PDF DATA REPORT ({index + 1})</label>
                                             <img src={pdfV.data} />
                                         </div>
 
-                                        <div className="text-areat-report">
-                                            <label>PDF Report Description ({index + 1}) <a href="javascript:void(0)" onClick={() => handleTogglepdf(index + 1)} className="plus-icon"> {pdfindex == index +1 && togglepdf?<i class="fa fa-minus-circle" aria-hidden="true"></i>: <i class="fa fa-plus-circle" aria-hidden="true" ></i>}</a></label>
+                                        <div className="text-areat-report not-underline-label">
+                                            <label>Click here to enter a description of the above image. <a href="javascript:void(0)" onClick={() => handleTogglepdf(index + 1)} className="plus-icon"> {pdfindex == index +1 && togglepdf?<i class="fa fa-minus-circle" aria-hidden="true"></i>: <i class="fa fa-plus-circle" aria-hidden="true" ></i>}</a></label>
                                             {
                                                 pdfindex == index +1 && togglepdf &&  <textarea placeholder="Write PDF Report Description" key={index} defaultValue={(PdfArrays[index] ? PdfArrays[index] : "")} onChange={handlepdfDescription(index)}></textarea>
                                                
@@ -567,7 +573,7 @@ const Editassemblyreport = () => {
                         {
                             livessesionNotes.length > 0  &&
                             
-                                    <div className="report-notes">
+                                    <div className="report-notes underline-label">
                                         <>
                                             <label>{t("Live-Session-Notes")}</label>
                                             <p dangerouslySetInnerHTML={{ __html: livessesionNotes[livessesionNotes.length - 1].sessiondata ? livessesionNotes[livessesionNotes.length - 1].sessiondata : "No live session notes available" }}></p>
@@ -581,12 +587,12 @@ const Editassemblyreport = () => {
                             livessesionImages.length > 0 && livessesionImages.map((val, index) => {
                                 return (
                                     <>
-                                        <div className="live-section-img">
-                                            <label>Live Session Image ({index + 1})</label>
+                                        <div className="live-section-img underline-label">
+                                            <label>LIVE SESSION IMAGE ({index + 1})</label>
                                             <img src={val.sessiondata} />
                                         </div>
-                                        <div className="text-areat-report">
-                                            <label>Live Session Image Description ({index + 1}) <a href="javascript:void(0)" onClick={() => handleToggleliveimgdesc(index + 1)} className="plus-icon">{liveimgindex == index +1 && toggleliveimgdes?<i class="fa fa-minus-circle" aria-hidden="true"></i>: <i class="fa fa-plus-circle" aria-hidden="true" ></i>}</a></label>
+                                        <div className="text-areat-report not-underline-label">
+                                            <label>Click here to enter a description of the above image. <a href="javascript:void(0)" onClick={() => handleToggleliveimgdesc(index + 1)} className="plus-icon">{liveimgindex == index +1 && toggleliveimgdes?<i class="fa fa-minus-circle" aria-hidden="true"></i>: <i class="fa fa-plus-circle" aria-hidden="true" ></i>}</a></label>
 
                                             {
                                                 liveimgindex == index +1 && toggleliveimgdes && <textarea placeholder="Write Live Session Image Description" key={index} defaultValue={(livesessectionArray[index] ? livesessectionArray[index] : "")} onChange={handleLiveDescription(index)}></textarea>
@@ -602,7 +608,7 @@ const Editassemblyreport = () => {
                         {
                             reportSessionNotes.length > 0 && reportSessionNotes.map((val, i) => {
                                 return (
-                                    <div className="report-notes">
+                                    <div className="report-notes underline-label">
                                         <>
                                             <label>{t("Report-Notes")}</label>
                                             <p>{val.notes ? val.notes : "No report available"}</p>
@@ -615,7 +621,7 @@ const Editassemblyreport = () => {
 
                         {
                             (completeForm.length > 0 || completetForm.length > 0) &&
-                            <p className="complete-forms"><b>{t("Completed-Forms")}</b></p>
+                            <p className="complete-forms"><b><u>{t("Completed-Forms")}</u></b></p>
                         }
 
                         {
@@ -653,7 +659,7 @@ const Editassemblyreport = () => {
                         }
 
                         <div className="assembly-btn-wrp assembly-btn-wrp2">
-                            <div className="assembly-btn"><a href="javascript:void" onClick={()=>{UpdateAssemblyreport(); loaderToggleModal()}} >SAVE REPORT
+                            <div className="assembly-btn"><a href="javascript:void" onClick={()=>{UpdateAssemblyreport(); }} >SAVE REPORT
                                 {
                                     Loader2 &&
                                     <div id="loader"></div>

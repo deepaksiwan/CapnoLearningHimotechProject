@@ -19,6 +19,8 @@ const Assemblyreport = () => {
     // const selectedSession = localStorage.getItem('selectedSession');
     
     const [showsessiondate, setShowsessiondate] = useState(false)
+    const [showSessionForm, setShowSessionForm] = useState(false)
+    
     const [sessionForm, setSessionForm] = useState(false)
     const [generalForm, setGeneralForm] = useState(false)
     const handleClick = () => setShowsessiondate(!showsessiondate)
@@ -324,6 +326,12 @@ const Assemblyreport = () => {
                 response.json().then((resp) => {
 
                     setPractionerFormsName(resp.data);
+                    resp.data.length > 0 && resp.data.map((value, i) => {
+                        if(value.sessid == sessionid){
+                            setShowSessionForm(true)
+                        }
+                    })
+                    
 
                 });
             }
@@ -461,6 +469,7 @@ const Assemblyreport = () => {
                         <div className="assembly-content">
                             <h3>{t("Session-Assembly-Reports")}</h3>
                             <p>{t("assembly-report-p")}</p>
+                            <p>{t("assembly-report-p2")}</p>
                         </div>
                         <ul className="assembly-list">
                             <li><p>{t("a-SUMMARY-at-the-top-of-the-Report")}</p></li>
@@ -507,7 +516,11 @@ const Assemblyreport = () => {
                             <ul className="checkbox-assemblylist mt-0">
 
                             <li className="mrl-pdf"><p><input type="checkbox"  onChange={() => setGeneralForm(!generalForm)} value={'1'}  className="checkbox" /> General Forms</p></li>
+                            {
+                                 showSessionForm && 
                             <li className="mrl-pdf"><p><input type="checkbox" onChange={() => setSessionForm(!sessionForm)} value={'2'} className="checkbox" /> Session Forms</p></li>
+                        }
+
                             </ul>
                             }
                             {
@@ -525,8 +538,9 @@ const Assemblyreport = () => {
                                     }
 
 {
-                                        practionerformsName.length > 0 && practionerformsName.map((value, i) => {
-                                            if(value.form_name ==  9 || value.form_name == 11 || value.form_name == 12){
+                                       
+                                      practionerformsName.length > 0 && practionerformsName.map((value, i) => {
+                                        if(value.form_name ==  9 || value.form_name == 11 || value.form_name == 12){
                                             return (
                                                 <li><p><input type="checkbox" onChange={checkboxHandlePractional} value={value.id} className="checkbox" /> {value.forms} </p></li>
                                             )
