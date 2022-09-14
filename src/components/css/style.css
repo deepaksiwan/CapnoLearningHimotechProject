@@ -777,7 +777,10 @@ label{
 
 
 .active  {
-  background: linear-gradient(90deg,#a060c200,#60005c);
+  background: linear-gradient(90deg,#fff,#fff);
+}
+.active > p{
+  color: #800080;
 }
 
 .content-tabs {

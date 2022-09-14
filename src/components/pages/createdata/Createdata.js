@@ -80,6 +80,7 @@ const Createdata = (props) => {
                     <Filter />
                     <div className="create-section">
                         <ul className="create-list">
+                        <i class="fa fa-file-image" aria-hidden="true"></i>
 
                             <li>
                                 <div className="create-list-box"><Link to={(selectedSession === "" || selectedGroup === "true" || selectedSession === "null") ? "" : "/choose/report/config"} className={(selectedSession === "" || selectedGroup === "true" ||selectedSession === "null") ? "deactivate" : ""}>{t('Create-&-Save-a-Session-Data-Report')}</Link></div>
