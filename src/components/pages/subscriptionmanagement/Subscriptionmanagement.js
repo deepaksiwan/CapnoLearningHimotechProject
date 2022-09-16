@@ -57,7 +57,7 @@ const Subscriptionmanagement = () => {
 
         })
     }
-    const subscriptionSave = (_autorenew,_autoupdate) => {
+    const subscriptionSave = (_autorenew, _autoupdate) => {
         let data = {};
 
         data['autoupdate'] = _autoupdate;
@@ -97,18 +97,18 @@ const Subscriptionmanagement = () => {
 
     const handleAutoUpdate = (v) => {
         setAutoUpdate(v);
- 
-        subscriptionSave(autorenew,v);
-            
-    
+
+        subscriptionSave(autorenew, v);
+
+
     }
 
     const handleAutorenew = (v) => {
         setAutoRenew(v);
-     
-            subscriptionSave(v,autoupdate);
-                
-           
+
+        subscriptionSave(v, autoupdate);
+
+
     }
 
 
@@ -122,6 +122,7 @@ const Subscriptionmanagement = () => {
                 <div className="right-section">
 
                     <div className="subscription-content">
+                        <h3>Your subscription expiration date is: xx MONTH xxxx</h3>
                         <div className="software-updated-wrp">
                             <div className="software-updt-child1">
                                 <h3>{t('Auto-software-update')}</h3>
@@ -145,17 +146,27 @@ const Subscriptionmanagement = () => {
 
                             </div>
                         </div>
+
+                        <ul className="anual-renew-list">
+                            <li><h3>Annual Subscription renewal rates:</h3></li>
+                            <li><p>$175.00 per year for a single instrument.</p></li>
+                            <li><p>$60.00 per year for each additional instrument</p></li>
+
+                        </ul>
+
+                        <div className="renew-wrp">
+                        <p>{t('Click-here-to')} <a href="#">{t('RENEW')}</a> {t('now')}.</p>
                         <div className="software-updated-wrp">
                             <div className="software-updt-child1">
-                                <h3>{t('Auto-subscription-renewal-by-credit-card')}</h3>
+                                <h3>Automatic subscription renewal:</h3>
                             </div>
                             <div className="software-updt-child1">
                                 {
                                     owner.autorenew >= 0 ?
                                         <div className="checkbox-wrp">
-
-                                            <div className="radio-input"><input class="form-check-input" onChange={() => handleAutorenew(0)} type="radio" defaultChecked={owner.autorenew == 0 ? true : false} value="0" name="autorenew" /><span>No</span></div>
                                             <div className="radio-input"> <input class="form-check-input" name="autorenew" type="radio" defaultChecked={owner.autorenew == 1 ? true : false} value="1" onChange={() => handleAutorenew(1)} /><span>Yes</span></div>
+                                            <div className="radio-input"><input class="form-check-input" onChange={() => handleAutorenew(0)} type="radio" defaultChecked={owner.autorenew == 0 ? true : false} value="0" name="autorenew" /><span>No</span></div>
+
 
                                             {/* <div className="radio-input"><input class="form-check-input" onChange={() => handleAutorenew(0)} type="radio" defaultChecked={owner.autorenew == 0? true : false} value="0" name="autorenew" /><span>{t('no')}</span></div>
                            <div className="radio-input"> <input class="form-check-input" name="autorenew" type="radio" defaultChecked={owner.autorenew == 1? true : false} value="1" onChange={() => handleAutorenew(1)} /><span>{t('yes')}</span></div> */}
@@ -170,22 +181,22 @@ const Subscriptionmanagement = () => {
 
                             </div>
                         </div>
-                        <div className="notification-c">
-                            <p>{t('You-will-receive-a-notification-30-days-before-expiration-of-your-subscription')}</p>
-                            <div className="notify-step-p">
-                                <p>{t('take-note-that-your-credit-card-will-be-charged-on-the-due-date')}</p>
-                                <p>{t('make-payment-before-the-due-date-which-you-can-do-by-clicking-on-RENEWAL')}</p>
-                                <p>{t('instruction3')}</p>
-                                <p>{t('Click-here-to')} <a href="#">{t('RENEW')}</a> {t('now')}.</p>
-                            </div>
-                            <p><b>{t('Membership-Status')}</b> Active (<b>{t('Expiry-Date')}</b>: March 7,2022).</p>
                         </div>
-                        <ul className="anual-renew-list">
-                            <li><h3>{t('Annual-Renewal-Fees')}</h3></li>
-                            <li><p>{t('$175.00-for-one-instrument')}</p></li>
-                            <li><p>{t('$275.00-for-two-to-six-instruments')}</p></li>
-                            <li><p>{t('$375.00-for-more-than-six-instruments')}</p></li>
-                        </ul>
+
+                        <div className="notification-c">
+                            <p>If you choose to auto-renew, you will receive two emails, 30 days and 10 days before your expiration date, with a link for payment by credit card or PayPal.</p>
+                            <h3>If you fail to renew your subscription, three thigs will happen:</h3>
+                            <div className="notify-step-p">
+                                <p>(1) Your software will no longer update.</p>
+                                <p>(2) Your access to live tech support will terminate.</p>
+                                <p>(3) You will no longer be able to save data to your Cloud account, although you will continue to have access to your existing data.</p>
+
+                            </div>
+                           <div className="mebership-status">
+                           <p><b>{t('Membership-Status')}</b> Active (<b>{t('Expiry-Date')}</b>: March 7,2022).</p>
+                           </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -194,7 +205,7 @@ const Subscriptionmanagement = () => {
                 <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
                 <ModalBody>
                     <div className="modal-p">
-                        
+
                         <p>Subscription Updated Successfully</p>
                     </div>
                 </ModalBody>

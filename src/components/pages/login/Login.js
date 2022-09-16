@@ -1,6 +1,7 @@
 import { removeData } from 'jquery';
-import React, { useState } from 'react'
+import React, { useState,useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { ModalHeader, Modal, ModalBody } from "reactstrap";
 import i18n from "i18next";
 import { API_URL } from '../../../config';
 import { useTranslation, initReactI18next } from "react-i18next";
@@ -13,6 +14,20 @@ const Login = () => {
     const [alerts, setalerts] = useState(false)
     const [Loader, setLoader] = useState(false)
     const navigate = useNavigate();
+    const [passwordShown, setPasswordShown] = useState(false);
+    const [requiredemail, setRequiredemail] = useState(false)
+
+    const forgootEmail = useRef();
+    const [forgotModal, setforgotModal] = useState(false);
+    const forgotModalToggle = () => setforgotModal(!forgotModal);
+    const [SuccessModal, setSuccessModal] = useState(false);
+    const SuccessModalToggle = () => setSuccessModal(!SuccessModal);
+    const [unsuccessModal, setUnsuccessModal] = useState(false);
+    const unsuccessModalToggle = () => setUnsuccessModal(!unsuccessModal);
+
+    const togglePasswordVisiblity = () => {
+        setPasswordShown(passwordShown ? false : true);
+      };
 
     async function loginUser(event) {
         event.preventDefault()
@@ -78,6 +93,46 @@ const Login = () => {
         // alert('Logined')
     }
 
+
+    const ForgotPassword = ()=>{
+        let data ={};
+
+        data['email'] = forgootEmail.current.value;
+        
+        if(forgootEmail.current.value == ""){
+            setRequiredemail(true)
+        }
+       
+    
+        fetch(API_URL + "/forgot/password", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+        
+                },
+                body:JSON.stringify(data)
+            }).then((response) => {
+                if (response.status == 200) {
+                    response.json().then((resp) => {
+                        console.log("results", resp);
+                        SuccessModalToggle();
+                        forgotModalToggle();
+                       
+                        
+                    });
+                }else if(response.status == 400){
+                    unsuccessModalToggle();
+                }
+                else {
+                   console.log("network error")
+                }
+               
+            })
+    
+          
+       
+    }
+
     console.warn('user');
     return (
         <div className='login-bg'>
@@ -99,14 +154,19 @@ const Login = () => {
                                 placeholder="Email"
                             />
                         </div>
-                        <div className="wrp-label mrt-input">
+                        <div className="wrp-label mrt-input password-input">
                             <label>Password</label>
                             <input
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                type="password"
+                                type={passwordShown ? "text" : "password"}
                                 placeholder="Password"
+                                
                             />
+                            <p className="forgot-password"><a href="#" onClick={forgotModalToggle}>Forgot Password</a></p>
+                                
+                                <i className="fa fa-eye pass-eye" aria-hidden="true" onClick={togglePasswordVisiblity}></i>
+                            
                         </div>
                         {
                             alerts &&
@@ -123,6 +183,51 @@ const Login = () => {
                     </div>
                 </form>
             </div>
+
+
+            <Modal isOpen={forgotModal} toggle={forgotModalToggle} centered={true}>
+                <ModalHeader toggle={forgotModalToggle}><span className="ml-1 roititle ">Forgot Password</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-p">
+                        <div>
+                            <div className="wrp-label">
+                                <label>Email Address</label>
+                                <input
+                                    ref={forgootEmail}
+                                    type="email"
+                                    placeholder="Email"
+                                    
+                                />
+
+                                {
+                                    requiredemail && <p className='require-email'>Email is Required</p>
+                                }
+                                
+                            </div>
+                            <button className="login-btn" type="submit" onClick={ForgotPassword} >submit</button>
+                        </div>
+                    </div>
+                </ModalBody>
+
+            </Modal>
+            <Modal isOpen={SuccessModal} toggle={SuccessModalToggle} centered={true}>
+                <ModalHeader toggle={SuccessModalToggle}><span className="ml-1 roititle">Submit Successfully</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-p">
+                        <p>Please check your email and click on reset password</p>
+                    </div>
+                </ModalBody>
+
+            </Modal>
+            <Modal isOpen={unsuccessModal} toggle={unsuccessModalToggle} centered={true}>
+                <ModalHeader toggle={unsuccessModalToggle}><span className="ml-1 roititle">Error</span></ModalHeader>
+                <ModalBody>
+                    <div className="modal-p">
+                        <p>your email not exit my database</p>
+                    </div>
+                </ModalBody>
+
+            </Modal>
         </div>
     );
 }

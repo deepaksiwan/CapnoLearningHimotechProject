@@ -71,6 +71,7 @@ import MultiChartTable from './components/pages/chartTable/MultiChartTable';
 import Vieweditassemblyreport from './components/pages/sectionreportassembly/Vieweditassemblyreport';
 import Mantainance from './components/pages/login/Mantainance';
 import Viewgroupinformation from './components/pages/groupinformation/Viewgroupinformation';
+import ResetPassword from './components/pages/resetpassword/ResetPassword';
 
 function App(){
 	return(
@@ -152,8 +153,11 @@ function App(){
 			 	<Route path="" element={<Privateroutelogin />}>
 		 
 				<Route path="/login" element={<Login />} />
+				
+				
 				{/* <Route path="/login" element={<Mantainance />} /> */}
 				</Route>
+				<Route path="/reset/password" element={<ResetPassword />} />
 				
 			</Routes>
 	</BrowserRouter>
