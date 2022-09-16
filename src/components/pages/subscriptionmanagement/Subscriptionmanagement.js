@@ -175,6 +175,7 @@ const Subscriptionmanagement = () => {
                             <div className="notify-step-p">
                                 <p>{t('take-note-that-your-credit-card-will-be-charged-on-the-due-date')}</p>
                                 <p>{t('make-payment-before-the-due-date-which-you-can-do-by-clicking-on-RENEWAL')}</p>
+                                <p>{t('instruction3')}</p>
                                 <p>{t('Click-here-to')} <a href="#">{t('RENEW')}</a> {t('now')}.</p>
                             </div>
                             <p><b>{t('Membership-Status')}</b> Active (<b>{t('Expiry-Date')}</b>: March 7,2022).</p>

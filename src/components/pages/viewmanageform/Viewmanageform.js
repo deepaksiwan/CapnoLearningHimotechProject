@@ -24,6 +24,9 @@ const Viewmanageform = () => {
     const [selectedHomework,setselectedHomework] = useState('selectedHomework');
     const [homeworklist, setHomeworklist] = useState([])
     const [userType, setUserType] = useState();
+    const [sessionLength, setSessionLength] = useState([]);
+    
+
 
 console.log("selectedClient",selectedClient)
 console.log("Clientid",Clientid)
@@ -36,7 +39,6 @@ console.log("Clientid",Clientid)
         }, 1000);
 
        
-
     }, []);
 
     useEffect(() => {
@@ -45,7 +47,9 @@ console.log("Clientid",Clientid)
         if(selectedClient !== "null"){
             getclientform();
             viewtrainerform();
-            // Homeworklist();
+            Homeworklist();
+        getSession();
+
         }
         
 
@@ -99,8 +103,17 @@ console.log("Clientid",Clientid)
             if (response.status == 200) {
                 response.json().then((resp) => {
                     // // console.log("result", resp);
+                    let _temp = [] ;
+                    resp.data.map((v,i) => {
+                        if(v.sessid == selectedSession || v.sessid == null){
+                            _temp.push(v)
+                        }
+                        if(i == (resp.data.length - 1)){
+                            setTrainerLength(_temp);
+                        }
 
-                    setTrainerLength(resp.data);
+
+                    })
 
 
 
@@ -115,6 +128,59 @@ console.log("Clientid",Clientid)
 
 
         })
+    }
+
+
+    
+    const getSession = () => {
+        const _cid = localStorage.getItem('selectedClient');
+ 
+         let   _hw = 1;
+          
+     
+ 
+            let url = API_URL + "/sessions?cid=" + _cid + "&hw=" + _hw;
+            fetch(url,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-access-token': accessToken,
+                    },
+                }
+    
+            ).then((response) => {
+                if (response.status == 200) {
+                    response.json().then((result) => {
+                        // // console.log(result.sesstion)
+                        if (result.status) {
+                            setSessionLength(result.sessions)
+                            // // console.log(setsesstion)
+                        }
+    
+    
+                        else {
+                            alert("no data error")
+                        }
+    
+                    })
+                }
+                else if (response.status == 401) {
+                    logout()
+                }
+                else {
+                    alert("network error")
+                }
+    
+    
+            }).catch(err => {
+                // // console.log(err)
+    
+            })
+     
+
+
+        
     }
 
     const Homeworklist = () => {
@@ -148,10 +214,19 @@ console.log("Clientid",Clientid)
         })
     }
 
+    const setHomework = () => {
+        if(selectedHomework === "false" && sessionLength.length > 0){
+            localStorage.setItem("selectedHomework" , true)
+            localStorage.setItem("selectedStandard" , false)
+            localStorage.setItem("selectedSession" , null)
+            window.location.reload()
+        }
+
+    }
 
     const logout = () => {
         localStorage.clear();
-        alert("You Logout successful")
+        // alert("You Logout successful")
     }
 
     return (
@@ -186,10 +261,10 @@ console.log("Clientid",Clientid)
                             <br />
                            
                             <li>
-                                <div className="create-list-box"><Link to={(selectedHomework === "false" || selectedSession === "") ? "" : "/upload/homework/asignment"} className={(selectedHomework === "false" || selectedSession === "") ? "deactivate" : ""}>{t('Upload-Homework-Assignment')}</Link></div>
+                                <div className="create-list-box"  onClick={ () => setHomework() }><Link to={(selectedHomework === "false" || selectedSession === "" || sessionLength.length == 0) ? "" : "/upload/homework/asignment"} className={(selectedHomework === "false" || selectedSession === "" || sessionLength.length == 0) ? "deactivate" : ""}>{t('Upload-Homework-Assignment')}</Link></div>
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={(selectedHomework === "false") ? "" : "/view/completed/client/work"} className={(selectedHomework === "false") ? "deactivate" : ""}>{t('View-Homework-Assignment')}</Link></div>
+                                <div className="create-list-box" onClick={ () => setHomework() }><Link  to={(selectedHomework === "false" || selectedSession === "" || selectedSession === "null" || sessionLength.length == 0 || homeworklist.length == 0) ? "" : "/view/completed/client/work"} className={(selectedHomework === "false" || selectedSession === "" || selectedSession === "null" || sessionLength.length == 0 || homeworklist.length == 0) ? "deactivate" : ""}>{t('View-Homework-Assignment')}</Link></div>
                             </li>
 
                         </ul>

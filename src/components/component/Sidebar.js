@@ -88,10 +88,11 @@ const Sidebar = () => {
      
         <div class="header-child1 mrb-header"><h3>{t("Database-Dashboard")}</h3></div>
         <ul className="sidebar-list">
+         {/* "hi" {activeIndex} */}
           {
             tabArray.map(function (v, index) {
               return (
-                <li><NavLink to={v.links}  onClick={() => handleActive(index)}> {activeIndex == index?<div className="sidebar-icon-img"><img src={v.tabimg2} /></div>: <div className="sidebar-icon-img"><img src={v.tabimg} /></div>}<p>{v.tabDisplay}</p></NavLink></li>
+                <li><NavLink to={v.links}  onClick={() => handleActive(index)}> {activeIndex == index ? <div className="sidebar-icon-img"><img src={v.tabimg2} /></div> : <div className="sidebar-icon-img"><img src={v.tabimg} /></div>}<p>{v.tabDisplay}</p></NavLink></li>
               )
             }
 

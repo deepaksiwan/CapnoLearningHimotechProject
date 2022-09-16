@@ -205,7 +205,7 @@ const Viewlive = () => {
             {
                 method: 'GET',
                 headers: {
-                    "Content-Type": "application/pdf"
+                    "Content-Type": "application/json"
 
                 },
             }
@@ -510,7 +510,7 @@ const Viewlive = () => {
 
     const logout = () => {
         localStorage.clear();
-        alert("You Logout successful")
+        // alert("You Logout successful")
     }
 
     return (

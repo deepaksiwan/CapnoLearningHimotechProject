@@ -501,7 +501,7 @@ const Editassemblyreport = () => {
 
     const logout = () => {
         localStorage.clear();
-        alert("You Logout successful")
+        // alert("You Logout successful")
     }
 
 

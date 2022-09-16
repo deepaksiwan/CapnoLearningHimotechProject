@@ -44,7 +44,17 @@ const Filter = () => {
 
     const accessToken = localStorage.getItem('accessToken');
 
+    useEffect(() => {
+        setInterval(() => {
+    
+            setselectedHomework(localStorage.getItem('selectedHomework'));
+            setselectedStandard(localStorage.getItem('selectedStandard'));
 
+        }, 1000);
+
+       
+
+    }, []);
 
     useEffect(() => {
         if (userId && userType == 1) {
