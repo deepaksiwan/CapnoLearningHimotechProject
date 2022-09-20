@@ -157,7 +157,7 @@ function App(){
 				
 				{/* <Route path="/login" element={<Mantainance />} /> */}
 				</Route>
-				<Route path="/reset/password" element={<ResetPassword />} />
+				<Route path="/reset/password/:token" element={<ResetPassword />} />
 				
 			</Routes>
 	</BrowserRouter>

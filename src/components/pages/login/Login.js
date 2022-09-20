@@ -163,7 +163,7 @@ const Login = () => {
                                 placeholder="Password"
                                 
                             />
-                            <p className="forgot-password"><a href="#" onClick={forgotModalToggle}>Forgot Password</a></p>
+                            <p className="forgot-password"><a href="#" onClick={forgotModalToggle}>Forgot Password? </a></p>
                                 
                                 <i className="fa fa-eye pass-eye" aria-hidden="true" onClick={togglePasswordVisiblity}></i>
                             
@@ -186,7 +186,7 @@ const Login = () => {
 
 
             <Modal isOpen={forgotModal} toggle={forgotModalToggle} centered={true}>
-                <ModalHeader toggle={forgotModalToggle}><span className="ml-1 roititle ">Forgot Password</span></ModalHeader>
+                <ModalHeader toggle={forgotModalToggle}><span className="ml-1 roititle ">Forgot Password? Enter email to receive reset link.</span></ModalHeader>
                 <ModalBody>
                     <div className="modal-p">
                         <div>
@@ -195,7 +195,7 @@ const Login = () => {
                                 <input
                                     ref={forgootEmail}
                                     type="email"
-                                    placeholder="Email"
+                                    placeholder="Email Address"
                                     
                                 />
 
@@ -204,17 +204,17 @@ const Login = () => {
                                 }
                                 
                             </div>
-                            <button className="login-btn" type="submit" onClick={ForgotPassword} >submit</button>
+                            <button className="login-btn" type="submit" onClick={ForgotPassword} >Submit</button>
                         </div>
                     </div>
                 </ModalBody>
 
             </Modal>
             <Modal isOpen={SuccessModal} toggle={SuccessModalToggle} centered={true}>
-                <ModalHeader toggle={SuccessModalToggle}><span className="ml-1 roititle">Submit Successfully</span></ModalHeader>
+                <ModalHeader toggle={SuccessModalToggle}><span className="ml-1 roititle">Request Submitted Successfully</span></ModalHeader>
                 <ModalBody>
                     <div className="modal-p">
-                        <p>Please check your email and click on reset password</p>
+                        <p>Please check your email and click on reset password link</p>
                     </div>
                 </ModalBody>
 
@@ -223,7 +223,7 @@ const Login = () => {
                 <ModalHeader toggle={unsuccessModalToggle}><span className="ml-1 roititle">Error</span></ModalHeader>
                 <ModalBody>
                     <div className="modal-p">
-                        <p>your email not exit my database</p>
+                        <p>No Account found with this email.</p>
                     </div>
                 </ModalBody>
 

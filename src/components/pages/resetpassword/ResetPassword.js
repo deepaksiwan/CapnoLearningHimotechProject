@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState,useRef } from 'react';
 import { Link, useParams, Router,useNavigate } from 'react-router-dom';
 import { Button, Modal, ModalHeader, ModalBody, Row } from 'reactstrap';
-import { API } from "../../../config";
+import { API_URL } from "../../../config";
 
 
 const ResetPassword = (props) => {
@@ -22,7 +22,7 @@ const ResetPassword = (props) => {
         const confpass = e.target.value;
         setConfirmPass(confpass);
         if(pass != confpass){
-            setPasswordError("password should be match");
+            setPasswordError("password should match");
         }else{
             setPasswordError("");
         }
@@ -35,7 +35,7 @@ const ResetPassword = (props) => {
         
       
        
-        fetch(API+"/update/password", {
+        fetch(API_URL+"/update/password", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -44,13 +44,14 @@ const ResetPassword = (props) => {
                 body:JSON.stringify(data)
             }).then((response) => {
                 if (response.status == 200) {
+                    successfulResetpassModalToggle();
                     response.json().then((resp) => {
                         console.log("results", resp);
                         
                     });
                 }
                 else {
-                    alert("invalid login")
+                    // alert("invalid login")
                 }
                
             })
@@ -70,7 +71,7 @@ const ResetPassword = (props) => {
                             <p className='match-pass'>{passwordError}</p>
                             </li>
                             <li>
-                                <div className="submit-btn-reset" onClick={() => { ResttPass(); successfulResetpassModalToggle();}}><button>Submit</button></div>
+                                <div className="submit-btn-reset" onClick={() => { ResttPass(); }}><button>Submit</button></div>
                             </li>
                         </ul>
                     </div>
@@ -81,7 +82,7 @@ const ResetPassword = (props) => {
                 <ModalHeader toggle={successfulResetpassModalToggle}><span className="ml-1 roititle">Successfully Reset your Password</span></ModalHeader>
                 <ModalBody>
                     <div className="modal-p">
-                        <p><a href="/">Click here to back Home page</a></p>
+                        <p><a href="/">Click here to go to Cloud Login Page</a></p>
                     </div>
                 </ModalBody>
             </Modal>

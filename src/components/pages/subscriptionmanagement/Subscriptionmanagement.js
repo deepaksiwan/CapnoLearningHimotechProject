@@ -19,11 +19,12 @@ const Subscriptionmanagement = () => {
     const { t } = useTranslation();
     const accessToken = localStorage.getItem('accessToken');
     const userId = localStorage.getItem('user_id');
-    const [owner, setOwner] = useState([]);
+    // const [owner, setOwner] = useState([]);
     const [autoupdate, setAutoUpdate] = useState(0);
     const [autorenew, setAutoRenew] = useState(0);
     const [successModal, setsuccessModal] = useState(false);
     const successToggleModal = () => setsuccessModal(!successModal);
+    const [owner, setOwner] = useState([]);
 
     useEffect(() => {
         getOwnerProfile();
@@ -122,7 +123,7 @@ const Subscriptionmanagement = () => {
                 <div className="right-section">
 
                     <div className="subscription-content">
-                        <h3>Your subscription expiration date is: xx MONTH xxxx</h3>
+                        <h3>Your subscription expiration date is:  {owner.expire_account ? new Date(owner.expire_account*1e3).toDateString() : "NA"}</h3>
                         <div className="software-updated-wrp">
                             <div className="software-updt-child1">
                                 <h3>{t('Auto-software-update')}</h3>
@@ -155,7 +156,7 @@ const Subscriptionmanagement = () => {
                         </ul>
 
                         <div className="renew-wrp">
-                        <p>{t('Click-here-to')} <a href="#">{t('RENEW')}</a> {t('now')}.</p>
+                        <p>{t('Click-here-to')} <b><u><a href={"/subscription/renew/"+userId}>{t('RENEW')}</a></u></b> {t('now')}.</p>
                         <div className="software-updated-wrp">
                             <div className="software-updt-child1">
                                 <h3>Automatic subscription renewal:</h3>
@@ -184,7 +185,7 @@ const Subscriptionmanagement = () => {
                         </div>
 
                         <div className="notification-c">
-                            <p>If you choose to auto-renew, you will receive two emails, 30 days and 10 days before your expiration date, with a link for payment by credit card or PayPal.</p>
+                            <p>If you choose to auto-renew, you will receive two emails, 30 days and 3 days before your expiration date, with a link for payment by credit card or PayPal.</p>
                             <h3>If you fail to renew your subscription, three thigs will happen:</h3>
                             <div className="notify-step-p">
                                 <p>(1) Your software will no longer update.</p>
@@ -192,9 +193,9 @@ const Subscriptionmanagement = () => {
                                 <p>(3) You will no longer be able to save data to your Cloud account, although you will continue to have access to your existing data.</p>
 
                             </div>
-                           <div className="mebership-status">
+                           {/* <div className="mebership-status">
                            <p><b>{t('Membership-Status')}</b> Active (<b>{t('Expiry-Date')}</b>: March 7,2022).</p>
-                           </div>
+                           </div> */}
                         </div>
 
                     </div>
