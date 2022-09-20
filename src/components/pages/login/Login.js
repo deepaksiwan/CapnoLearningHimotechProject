@@ -1,5 +1,5 @@
 import { removeData } from 'jquery';
-import React, { useState,useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ModalHeader, Modal, ModalBody } from "reactstrap";
 import i18n from "i18next";
@@ -24,17 +24,18 @@ const Login = () => {
     const SuccessModalToggle = () => setSuccessModal(!SuccessModal);
     const [unsuccessModal, setUnsuccessModal] = useState(false);
     const unsuccessModalToggle = () => setUnsuccessModal(!unsuccessModal);
+    const [Loader2, setLoader2] = useState(false)
 
     const togglePasswordVisiblity = () => {
         setPasswordShown(passwordShown ? false : true);
-      };
+    };
 
     async function loginUser(event) {
         event.preventDefault()
         setalerts(false)
         setLoader(true)
 
-        const response = await fetch(API_URL+'/login', {
+        const response = await fetch(API_URL + '/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -44,9 +45,9 @@ const Login = () => {
                 password,
             }),
         })
-       
-       
-            
+
+
+
 
 
         const data = await response.json()
@@ -67,7 +68,7 @@ const Login = () => {
             localStorage.setItem('selectedclientActive', true);
             localStorage.setItem('selectedclientInactive', false);
             localStorage.setItem('selectedHomework', false);
-            
+
             localStorage.setItem('selectedTrainer', null);
             localStorage.setItem('selectedTrainerGroup', null);
             localStorage.setItem('selectedClient', data.user_id);
@@ -94,43 +95,47 @@ const Login = () => {
     }
 
 
-    const ForgotPassword = ()=>{
-        let data ={};
+    const ForgotPassword = () => {
+
+        setLoader2(true)
+        let data = {};
 
         data['email'] = forgootEmail.current.value;
-        
-        if(forgootEmail.current.value == ""){
-            setRequiredemail(true)
+
+        if (forgootEmail.current.value == "") {
+            setRequiredemail(true);
+            setLoader2(false)
+            return false;
         }
-       
-    
+
+
         fetch(API_URL + "/forgot/password", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-        
-                },
-                body:JSON.stringify(data)
-            }).then((response) => {
-                if (response.status == 200) {
-                    response.json().then((resp) => {
-                        console.log("results", resp);
-                        SuccessModalToggle();
-                        forgotModalToggle();
-                       
-                        
-                    });
-                }else if(response.status == 400){
-                    unsuccessModalToggle();
-                }
-                else {
-                   console.log("network error")
-                }
-               
-            })
-    
-          
-       
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+            body: JSON.stringify(data)
+        }).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    console.log("results", resp);
+                    SuccessModalToggle();
+                    forgotModalToggle();
+                    setLoader2(false)
+
+                });
+            } else if (response.status == 400) {
+                unsuccessModalToggle();
+            }
+            else {
+                console.log("network error")
+            }
+
+        })
+
+
+
     }
 
     console.warn('user');
@@ -140,7 +145,7 @@ const Login = () => {
                 <form onSubmit={loginUser}>
                     <div className="login-content">
                         <div className="login-database">
-                            <p>{ t('Login-to-CapnoTrainer-Cloud-Database')}</p>
+                            <p>{t('Login-to-CapnoTrainer-Cloud-Database')}</p>
                         </div>
                         <div className="user-img">
                             <img src={user} alt="user-img" />
@@ -161,12 +166,16 @@ const Login = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 type={passwordShown ? "text" : "password"}
                                 placeholder="Password"
-                                
+
                             />
                             <p className="forgot-password"><a href="#" onClick={forgotModalToggle}>Forgot Password? </a></p>
-                                
-                                <i className="fa fa-eye pass-eye" aria-hidden="true" onClick={togglePasswordVisiblity}></i>
-                            
+
+                            {
+                                passwordShown ? <i class="fa fa-eye-slash pass-eye" aria-hidden="true" onClick={togglePasswordVisiblity}></i> : <i className="fa fa-eye pass-eye" aria-hidden="true" onClick={togglePasswordVisiblity}></i>
+                            }
+
+
+
                         </div>
                         {
                             alerts &&
@@ -175,7 +184,7 @@ const Login = () => {
 
                         <button className="login-btn" type="submit" >Login
                             {
-                                Loader && 
+                                Loader &&
                                 <div id="loader"></div>
                             }
                         </button>
@@ -196,15 +205,19 @@ const Login = () => {
                                     ref={forgootEmail}
                                     type="email"
                                     placeholder="Email Address"
-                                    
+
                                 />
 
                                 {
                                     requiredemail && <p className='require-email'>Email is Required</p>
                                 }
-                                
+
                             </div>
-                            <button className="login-btn" type="submit" onClick={ForgotPassword} >Submit</button>
+                            <button className="login-btn" type="submit" onClick={ForgotPassword} >Submit {
+                                Loader2 &&
+                                <div id="loader"></div>
+                            }
+                            </button>
                         </div>
                     </div>
                 </ModalBody>

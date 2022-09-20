@@ -39,6 +39,15 @@ const Trainerinformation = () => {
     const [error, setError] = useState(false);
     const [loaderModal, setLoaderModal] = useState(false);
     const loaderToggleModal = () => setLoaderModal(!loaderModal);
+    const [passwordShown, setPasswordShown] = useState(false);
+
+
+
+
+    
+    const togglePasswordVisiblity = () => {
+        setPasswordShown(passwordShown ? false : true);
+    };
 
     useEffect(() => {
         gettrainer();
@@ -299,7 +308,10 @@ const Trainerinformation = () => {
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Password *</p>
-                                        <input placeholder="Enter password" defaultValue={trainer.password} />
+                                        <input type={passwordShown ? "text" : "password"} placeholder="Enter password" defaultValue={trainer.password} />
+                                        {
+                                        passwordShown ? <i class="fa fa-eye-slash pass-eye2" aria-hidden="true" onClick={togglePasswordVisiblity}></i> : <i className="fa fa-eye pass-eye2" aria-hidden="true" onClick={togglePasswordVisiblity}></i>
+                                    }
                                     </div>
                                 </div>
                             </div>

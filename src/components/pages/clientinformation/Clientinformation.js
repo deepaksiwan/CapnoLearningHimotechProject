@@ -39,6 +39,16 @@ const Clientinformation = () => {
     const [error, setError] = useState(false);
     const [loaderModal, setLoaderModal] = useState(false);
     const loaderToggleModal = () => setLoaderModal(!loaderModal);
+    const [passwordShown, setPasswordShown] = useState(false);
+
+
+
+
+    
+    const togglePasswordVisiblity = () => {
+        setPasswordShown(passwordShown ? false : true);
+    };
+
     
 
     const { id } = useParams();
@@ -301,7 +311,10 @@ const Clientinformation = () => {
                                 <div className="col-lg-6">
                                     <div className="client-input">
                                         <p>Password *</p>
-                                        <input placeholder="Enter Password" defaultValue={client.password} />
+                                        <input type={passwordShown ? "text" : "password"} placeholder="Enter Password" defaultValue={client.password} />
+                                        {
+                                        passwordShown ? <i class="fa fa-eye-slash pass-eye2" aria-hidden="true" onClick={togglePasswordVisiblity}></i> : <i className="fa fa-eye pass-eye2" aria-hidden="true" onClick={togglePasswordVisiblity}></i>
+                                    }
                                     </div>
                                 </div>
                             </div>

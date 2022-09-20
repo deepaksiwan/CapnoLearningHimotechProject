@@ -38,13 +38,22 @@ const Addtrainer = () => {
     const [error, setError] = useState(false);
     const [loaderModal, setLoaderModal] = useState(false);
     const loaderToggleModal = () => setLoaderModal(!loaderModal);
+    const [passwordShown, setPasswordShown] = useState(false);
+
+
+
+
+    
+    const togglePasswordVisiblity = () => {
+        setPasswordShown(passwordShown ? false : true);
+    };
 
     useEffect(() => {
         getCountry();
     }, [])
 
     const getCountry = () => {
-        fetch(API_URL+"/countries",
+        fetch(API_URL + "/countries",
             {
                 method: 'GET',
                 headers: {
@@ -72,9 +81,9 @@ const Addtrainer = () => {
     }
     const getState = () => {
 
-    let countryid = country.current.value;
+        let countryid = country.current.value;
 
-        fetch(API_URL+"/states?country_id=" + countryid,
+        fetch(API_URL + "/states?country_id=" + countryid,
             {
                 method: 'GET',
                 headers: {
@@ -103,13 +112,13 @@ const Addtrainer = () => {
 
     const createtrainers = () => {
         setLoader(true)
-        let data ={};
-        
+        let data = {};
+
         data['firstname'] = firstname.current.value;
-        data["usertype"]  = 2;
+        data["usertype"] = 2;
         data['lastname'] = lastname.current.value;
         data['profession'] = profession.current.value;
-        data['degreescompleted'] = degreescompleted .current.value;
+        data['degreescompleted'] = degreescompleted.current.value;
         data['year_exp'] = year_exp.current.value;
         data['license'] = license.current.value;
         data['certificationscompleted'] = certificationscompleted.current.value;
@@ -123,20 +132,20 @@ const Addtrainer = () => {
         data['country'] = country.current.value;
         data['sendemail'] = true;
         data['associated_owner'] = associated_owner;
-     
-        if(firstname.current.value == "" || lastname.current.value == "" || email.current.value == "" ){
+
+        if (firstname.current.value == "" || lastname.current.value == "" || email.current.value == "") {
             fillallfieldtoggleModal();
             return false;
-        }else{
+        } else {
             setLoaderModal(true)
         }
-        fetch(API_URL+"/trainer/create", {
+        fetch(API_URL + "/trainer/create", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'x-access-token': accessToken,
             },
-            body:JSON.stringify(data)
+            body: JSON.stringify(data)
         }).then((response) => {
             if (response.status == 201) {
                 response.json().then((resp) => {
@@ -156,26 +165,26 @@ const Addtrainer = () => {
             else {
                 console.log("network error")
             }
-           
+
         })
 
-        
+
 
 
     }
 
     function isValidEmail(email) {
         return /\S+@\S+\.\S+/.test(email);
-      }
+    }
 
-    const handleEmail = ()=>{
+    const handleEmail = () => {
         if (!isValidEmail(email.current.value)) {
             setError(true);
-          } else {
+        } else {
             setError(false);
-          }
+        }
     }
-    
+
     const handleCountryUpdate = () => {
         getState(country.current.value)
     }
@@ -202,161 +211,164 @@ const Addtrainer = () => {
                         </div>
                     </div>
                     <div className="client-info-box">
-                            <div className="row">
-                                <div className="col-lg-6">
-                                    <div className="client-input">
-                                        <p>First Name *</p>
-                                        <input placeholder="Enter first name" ref={firstname} />
-                                    </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <div className="client-input">
-                                        <p>Last Name *</p>
-                                        <input placeholder="Enter last name" ref={lastname} />
-                                    </div>
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <div className="client-input">
+                                    <p>First Name *</p>
+                                    <input placeholder="Enter first name" ref={firstname} />
                                 </div>
                             </div>
-                            <div className="row">
-                                <div className="col-lg-4">
-                                    <div className="client-input">
-                                        <p>Profession</p>
-                                        <input placeholder="Enter profession"  ref={profession} />
-                                    </div>
-                                </div>
-                                <div className="col-lg-4">
-                                    <div className="client-input">
-                                        <p>Highest Degree Earned</p>
-                                        <input placeholder="Enter highest degree earned"  ref={degreescompleted} />
-                                    </div>
-                                </div>
-                                <div className="col-lg-4">
-                                    <div className="client-input">
-                                        <p>Years of Profession Experience</p>
-                                        <input placeholder="Enter number of years of experience"  ref={year_exp} />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-lg-6">
-                                    <div className="client-input">
-                                        <p>Licenses</p>
-                                        <input placeholder="Enter licenses"  ref={license} />
-                                    </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <div className="client-input">
-                                        <p>Certificate</p>
-                                        <input placeholder="Certificate"  ref={certificationscompleted} />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-lg-6">
-                                    <div className="client-input">
-                                        <p>Email *</p>
-                                        <input placeholder="Enter an email" onChange={handleEmail} ref={email} />
-                                        {
-                                            error && <p className='validemail'>invalid Email</p>
-                                        }
-                                    </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <div className="client-input">
-                                        <p>Password</p>
-                                        <input type="password" placeholder="Enter password" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-lg-12">
-                                    <div className="client-input">
-                                        <p>Telephone</p>
-                                        <input placeholder="Enter a telephone" ref={telephone} />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-lg-12">
-                                    <div className="client-input">
-                                        <p>Address</p>
-                                        <textarea name="address" placeholder="Enter physical adderss 1"  ref={address}></textarea>
-                                        <textarea name="address" placeholder="Enter physical adderss 2"  ref={address2}></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-lg-3">
-                                    <div className="client-input">
-                                        <p>City</p>
-                                        <input placeholder="Enter City" ref={city} />
-                                    </div>
-                                </div>
-                                <div className="col-lg-3">
-                                    <div className="client-input">
-                                        <p>Postal Code</p>
-                                        <input placeholder="Enter postal code"  ref={zipcode} />
-                                    </div>
-                                </div>
-                                <div className="col-lg-3">
-                                    <div className="client-input">
-                                        <p>State/Province</p>
-                                        <select name="state" id="state" ref={state}>
-                                            <option >Choose States/Province</option>
-
-                                            {
-                                               states.map((states, i)=>{
-                                                return(
-                                                 <option selected={states.id == trainer.state? true : false} value={states.id}>{states.name}</option>
-                                                )
-                                             }) 
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="col-lg-3">
-                                    <div className="client-input">
-                                        <p>Country</p>
-                                        <select name="country" onChange={handleCountryUpdate}  ref={country}>
-                                        <option value="">Choose Country</option>
-                                            {
-                                                countries.map((countries, i)=>{
-                                                   return(
-                                                    <option selected={trainer.country == countries.id ? true:false} value={countries.id}>{countries.name}</option>
-                                                   )
-                                                })
-                                            }
-                                           
-                                        
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-lg-6">
-                                    <div className="go-back">
-                                        <Link to="/viewcreate">Go Back</Link>
-                                    </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <Modal isOpen={successModal} toggle={successToggleModal} className="connect-box" centered={true}>
-                                        <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
-                                        <ModalBody>
-                                        <div className="modal-p">
-                                                <div className="right-circle"><img src={right} /></div>
-                                                <h4>Save!</h4>
-                                                <p>Your Form has been Submited Successfully</p>
-                                            </div>
-                                        </ModalBody>
-
-                                    </Modal>
-                                    <div className="create-btn">
-                                        <button type="submit" onClick={createtrainers}>Create
-                                        
-                                        </button>
-                                    </div>
+                            <div className="col-lg-6">
+                                <div className="client-input">
+                                    <p>Last Name *</p>
+                                    <input placeholder="Enter last name" ref={lastname} />
                                 </div>
                             </div>
                         </div>
+                        <div className="row">
+                            <div className="col-lg-4">
+                                <div className="client-input">
+                                    <p>Profession</p>
+                                    <input placeholder="Enter profession" ref={profession} />
+                                </div>
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="client-input">
+                                    <p>Highest Degree Earned</p>
+                                    <input placeholder="Enter highest degree earned" ref={degreescompleted} />
+                                </div>
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="client-input">
+                                    <p>Years of Profession Experience</p>
+                                    <input placeholder="Enter number of years of experience" ref={year_exp} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <div className="client-input">
+                                    <p>Licenses</p>
+                                    <input placeholder="Enter licenses" ref={license} />
+                                </div>
+                            </div>
+                            <div className="col-lg-6">
+                                <div className="client-input">
+                                    <p>Certificate</p>
+                                    <input placeholder="Certificate" ref={certificationscompleted} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <div className="client-input">
+                                    <p>Email *</p>
+                                    <input placeholder="Enter an email" onChange={handleEmail} ref={email} />
+                                    {
+                                        error && <p className='validemail'>invalid Email</p>
+                                    }
+                                </div>
+                            </div>
+                            <div className="col-lg-6">
+                                <div className="client-input">
+                                    <p>Password</p>
+                                    <input type={passwordShown ? "text" : "password"} placeholder="Enter password" />
+                                    {
+                                        passwordShown ? <i class="fa fa-eye-slash pass-eye2" aria-hidden="true" onClick={togglePasswordVisiblity}></i> : <i className="fa fa-eye pass-eye2" aria-hidden="true" onClick={togglePasswordVisiblity}></i>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <div className="client-input">
+                                    <p>Telephone</p>
+                                    <input placeholder="Enter a telephone" ref={telephone} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <div className="client-input">
+                                    <p>Address</p>
+                                    <textarea name="address" placeholder="Enter physical adderss 1" ref={address}></textarea>
+                                    <textarea name="address" placeholder="Enter physical adderss 2" ref={address2}></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-3">
+                                <div className="client-input">
+                                    <p>City</p>
+                                    <input placeholder="Enter City" ref={city} />
+                                </div>
+                            </div>
+                            <div className="col-lg-3">
+                                <div className="client-input">
+                                    <p>Postal Code</p>
+                                    <input placeholder="Enter postal code" ref={zipcode} />
+                                </div>
+                            </div>
+                            <div className="col-lg-3">
+                                <div className="client-input">
+                                    <p>State/Province</p>
+                                    <select name="state" id="state" ref={state}>
+                                        <option >Choose States/Province</option>
+
+                                        {
+                                            states.map((states, i) => {
+                                                return (
+                                                    <option selected={states.id == trainer.state ? true : false} value={states.id}>{states.name}</option>
+                                                )
+                                            })
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="col-lg-3">
+                                <div className="client-input">
+                                    <p>Country</p>
+                                    <select name="country" onChange={handleCountryUpdate} ref={country}>
+                                        <option value="">Choose Country</option>
+                                        {
+                                            countries.map((countries, i) => {
+                                                return (
+                                                    <option selected={trainer.country == countries.id ? true : false} value={countries.id}>{countries.name}</option>
+                                                )
+                                            })
+                                        }
+
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <div className="go-back">
+                                    <Link to="/viewcreate">Go Back</Link>
+                                </div>
+                            </div>
+                            <div className="col-lg-6">
+                                <Modal isOpen={successModal} toggle={successToggleModal} className="connect-box" centered={true}>
+                                    <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
+                                    <ModalBody>
+                                        <div className="modal-p">
+                                            <div className="right-circle"><img src={right} /></div>
+                                            <h4>Save!</h4>
+                                            <p>Your Form has been Submited Successfully</p>
+                                        </div>
+                                    </ModalBody>
+
+                                </Modal>
+                                <div className="create-btn">
+                                    <button type="submit" onClick={createtrainers}>Create
+
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <Modal isOpen={fillallfieldmodal} toggle={fillallfieldtoggleModal} className="connect-box" centered={true}>

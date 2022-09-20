@@ -34,6 +34,16 @@ const Groupinformation = () => {
     const [fillallfieldmodal, setFillallfieldModal] = useState(false);
     const fillallfieldtoggleModal = () => setFillallfieldModal(!fillallfieldmodal);
     const [data, setData] = useState([]);
+    const [passwordShown, setPasswordShown] = useState(false);
+
+
+
+
+    
+    const togglePasswordVisiblity = () => {
+        setPasswordShown(passwordShown ? false : true);
+    };
+
 
 
     useEffect(() => {
@@ -331,7 +341,10 @@ const Groupinformation = () => {
                                     <div className="client-input">
                                         <p>Group Password*</p>
 
-                                        <input type="password" placeholder="Enter group password" ref={groupPassword} />
+                                        <input type={passwordShown ? "text" : "password"} placeholder="Enter group password" ref={groupPassword} />
+                                        {
+                                        passwordShown ? <i class="fa fa-eye-slash pass-eye2" aria-hidden="true" onClick={togglePasswordVisiblity}></i> : <i className="fa fa-eye pass-eye2" aria-hidden="true" onClick={togglePasswordVisiblity}></i>
+                                    }
                                     </div>
                                 </div>
                                 <div className="col-lg-4">

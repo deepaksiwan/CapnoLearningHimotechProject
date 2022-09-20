@@ -1165,8 +1165,17 @@ strong {
 
 .edit-input {
   width: 32.3%;
+  position: relative;
 }
-
+.pass-eye3{
+  color: #800080;
+  position: absolute;
+  top: 39px;
+  font-size: 18px;
+  right: 14px;
+  z-index: 1;
+  cursor: pointer;
+}
 .filter-mrb {
   margin-bottom: 20px;
 }
@@ -1185,6 +1194,7 @@ strong {
   padding: 10px 15px;
   font-size: 13px;
   color: #000;
+  position: relative;
   box-shadow: 1px 1px 8px 1px #00000029;
 }
 
@@ -1310,8 +1320,17 @@ strong {
 .client-input>p {
   font-size: 14px;
   color: #000;
+  position: relative;
 }
-
+.pass-eye2{
+  color: #800080;
+  position: absolute;
+  top: 57px;
+  font-size: 18px;
+  right: 25px;
+  z-index: 1;
+  cursor: pointer;
+}
 .client-input>input {
   display: inline-block;
   width: 100%;
@@ -3067,13 +3086,14 @@ sub {
   cursor: pointer;
 }
 .forgot-password > a{
-  font-size: 14px;
+  font-size: 13px;
   display: inline-block;
   margin-top: 5px;
+  color: #800080;
 }
 .require-email{
   font-size: 14px;
-  color: red;
+  color: red! important;
   margin: 0px;
   margin-top: 3px;
 }
@@ -3090,6 +3110,21 @@ sub {
 }
 .reset-input-list > li{
   margin-bottom: 15px;
+  position: relative;
+}
+.pass-eye4 {
+  color: #800080;
+  position: absolute;
+  top: 10px;
+  font-size: 18px;
+  right: 12px;
+  z-index: 1;
+  cursor: pointer;
+}
+.reset-input-list > li > p{
+  font-size: 15px;
+    margin-top: 5px;
+    color: #800080;
 }
 .reset-input-list > li > input{
   display: inline-block;

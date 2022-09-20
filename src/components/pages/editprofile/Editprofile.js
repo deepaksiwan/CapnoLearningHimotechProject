@@ -43,6 +43,15 @@ const Editprofile = () => {
     const EmailalreadyExittoggleModal = () => setEmailalreadyExitmodal(!emailalreadyExitmodal);
     const [loaderModal, setLoaderModal] = useState(false);
     const loaderToggleModal = () => setLoaderModal(!loaderModal);
+    const [passwordShown, setPasswordShown] = useState(false);
+
+
+
+
+    
+    const togglePasswordVisiblity = () => {
+        setPasswordShown(passwordShown ? false : true);
+    };
 
     const { tab } = useParams();
     const QuestionArray = [
@@ -311,7 +320,10 @@ const Editprofile = () => {
                                 </div>
                                 <div className="edit-input">
                                     <p>*Password:</p>
-                                    <input placeholder="Password" defaultValue={owner.password} ref={password} />
+                                    <input type={passwordShown ? "text" : "password"} placeholder="Password" defaultValue={owner.password} ref={password} />
+                                    {
+                                        passwordShown ? <i class="fa fa-eye-slash pass-eye3" aria-hidden="true" onClick={togglePasswordVisiblity}></i> : <i className="fa fa-eye pass-eye3" aria-hidden="true" onClick={togglePasswordVisiblity}></i>
+                                    }
                                 </div>
 
                                 <div className="edit-input">
