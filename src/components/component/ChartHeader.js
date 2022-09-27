@@ -851,7 +851,7 @@ const ChartHeader = (props) => {
                                 <li>
                                 <ReactTooltip />
 
-                                <ExcelFile filename={"Statistics - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname  } element={<a href="javascript:void" onClick={exportExcel} data-tip="Export statistics to Excel."   ><i class="fa fa-upload" aria-hidden="true"></i></a>}>
+                                <ExcelFile filename={"Statistics - "+sessioninfo[0].name + "-" + sessioninfo[0].client_firstname+ " " + sessioninfo[0].client_lastname  } element={<a href="javascript:void" onClick={exportExcel} data-tip="Export Data."   ><i class="fa fa-upload" aria-hidden="true"></i></a>}>
                                
                                     {
                                        graphs.map((v,i) => {
@@ -875,23 +875,23 @@ const ChartHeader = (props) => {
             </li>
  
 }
-                                <li><a href="javascript:void" onClick={takeNotesToggle} data-tip="Take report notes."><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li>
-                                <li><a href="javascript:void" data-tip="Export report as PDF." onClick={savePdfModalToggle}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={takeNotesToggle} data-tip="Take Report Notes."><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" data-tip="Make PDF Copy." onClick={savePdfModalToggle}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 {
                                 !group && 
-                                <li><a href="javascript:void" onClick={saveReportConfig} data-tip="Save as alternate configuration."><i class="fa fa-sliders" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={saveReportConfig} data-tip="Save Alt Config."><i class="fa fa-sliders" aria-hidden="true"></i></a></li>
 }
-                                <li><a href="javascript:void" onClick={saveReport} data-tip="Save as report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={saveReport} data-tip="Save Report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
                             </ul>
                         </div>
                         <div className="view-opt" style={{width: "50%"}}>
                             <p>Viewing Options</p>
                             <ul className='action-list'>
-                                <li><a href="javascript:void" onClick={notesModalToggle} data-tip="View session notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
+                                <li><a href="javascript:void" onClick={notesModalToggle} data-tip="View Live Session Notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
                                 </li>
-                                <li><a href="javascript:void" onClick={ViewlivesessionImage} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={ViewlivesessionImage} data-tip="View Live Session Images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
 
-                                <li><a href="javascript:void" onClick={zoomModalToggle} data-tip="View zoom recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={zoomModalToggle} data-tip="View Zoom Session Recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
                                 <li><a href="javascript:void" onClick={getPreviousSessionPDF} data-tip="View PDF of previous session"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li>
                                {
                                 !group && 
@@ -904,7 +904,7 @@ const ChartHeader = (props) => {
                    
                
                </li>
-                                <li><a href="javascript:void" onClick={viewManual} data-tip="View help document"><i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={viewManual} data-tip="User Manual"><i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
                                 
                             </ul>
                         </div>

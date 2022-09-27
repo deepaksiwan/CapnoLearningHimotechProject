@@ -86,6 +86,7 @@ const Createdata = (props) => {
                                 <div className="create-list-box"><Link to={(selectedSession === "" || selectedGroup === "true" || selectedSession === "null") ? "" : "/choose/report/config"} className={(selectedSession === "" || selectedGroup === "true" ||selectedSession === "null") ? "deactivate" : ""}>{t('Create-&-Save-a-Session-Data-Report')}</Link></div>
 
                             </li>
+                        
 
                             <li>
                                 <div className="create-list-box"><Link to={selectedClient === "" || selectedSession !== "" || selectedSession !== "null" || selectedGroup === "true" ? "" : "/createmultisession"} className={selectedClient === "" || selectedSession !== "" || selectedGroup === "true" || selectedSession !== "null" ? "deactivate" : ""}>{t('Create-&-Save-a-Multisession-Report')}</Link></div>

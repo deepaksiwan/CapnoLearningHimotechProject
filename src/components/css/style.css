@@ -754,7 +754,7 @@ a:hover {
   display: flex;
   justify-content: space-between;
   margin-top: 40px;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
 }
 
 .step-box {
@@ -885,12 +885,14 @@ label {
 }
 
 
-.active {
+/* .active {
   background: linear-gradient(90deg, #fff, #fff);
-}
+} */
 
 .active>p {
   color: #800080;
+  background: #fff;
+    padding: 1px 5px;
 }
 
 .content-tabs {

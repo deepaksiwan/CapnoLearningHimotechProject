@@ -97,7 +97,7 @@ const ResetPassword = (props) => {
                                     passwordShown ? <i class="fa fa-eye-slash pass-eye4" aria-hidden="true" onClick={togglePasswordVisiblity}></i> : <i className="fa fa-eye pass-eye4" aria-hidden="true" onClick={togglePasswordVisiblity}></i>
                                 }
                             </li>
-                            <li><input placeholder="New Confirm Password" type={passwordShown2 ? "text" : "password"} value={confirmPass} onChange={(e) =>{ Checkvalidate(e);hanndaleOnchange()}} ref={password} />
+                            <li><input placeholder="Confirm New Password" type={passwordShown2 ? "text" : "password"} value={confirmPass} onChange={(e) =>{ Checkvalidate(e);hanndaleOnchange()}} ref={password} />
                                 {
                                     passwordShown2 ? <i class="fa fa-eye-slash pass-eye4" aria-hidden="true" onClick={togglePasswordVisiblity2}></i> : <i className="fa fa-eye pass-eye4" aria-hidden="true" onClick={togglePasswordVisiblity2}></i>
                                 }

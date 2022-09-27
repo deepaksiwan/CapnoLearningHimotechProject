@@ -15,6 +15,7 @@ import { setTextRange } from 'typescript';
 import { API_URL } from '../../../config';
 import arrowHeadRight from '../../images/turn_arrow.png'
 import Draggable from 'react-draggable';
+import { CollectionsOutlined } from '@material-ui/icons';
 const Chart = (props) => {
     // console.log("props",props)
     const session = props.session;
@@ -107,6 +108,8 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
     const [yAxis, setYaxis] = useState([]);
     const [yAxisOg, setYAxisOg] = useState([]);
     const [csvFile, setCsvFile] = useState([]);
+
+  
     
     const accessToken = localStorage.getItem('accessToken');
     const [value, setValue] = useState(props.thick); 
@@ -199,10 +202,10 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
         reserve_avg : "Parasympathetic Reserve",
         vlf_avg : "VLF Band",
         lf_avg : "LF Band",
-        emg1_avg : "EMG 1 Average",
-        emg2_avg : "EMG 2 Average",
-        emg3_avg : "EMG 3 Average",
-        emg4_avg : "EMG 4 Average",
+        emg1_avg : "EMG 1",
+        emg2_avg : "EMG 2",
+        emg3_avg : "EMG 3",
+        emg4_avg : "EMG 4",
         emg1_wave : "EMG 1 Raw Wave",
         emg2_wave : "EMG 2 Raw Wave",
         emg3_wave : "EMG 3 Raw Wave",
@@ -234,7 +237,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
             xmin : new Date(xAxisMin).getTime(),
             thick : value,
             xextreme : new Date(xAxis[xAxis.length-1]).getTime(),
-            xmax : xAxisMax == "full" ? new Date(xAxis[xAxis.length-1]).getTime() : new Date(xAxisMax).getTime(),
+            xmax : xAxisMax == "full" ? new Date(xAxis[xAxis.length-1]).getTime() : new Date(xAxis[0]).getTime() + xAxisMax,
             ymin : yAxisMin,
             ymax : yAxisMax,
             record : record,
@@ -263,6 +266,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
         // super(props);
         clearInterval(playTimer);
         getAlldata();
+        // console.log(xAxisMax)
        
     }, [])
 
@@ -277,7 +281,16 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
        })
        
     }, [thresholdvalue])
-
+    // useEffect(() => {
+    //     if(xAxis.length > 0){
+                
+    // let userTimeOffset = new Date().getTimezoneOffset() ; 
+ 
+    // userTimeOffset = userTimeOffset*60*1000 ; 
+    // console.log("b2b s" ,userTimeOffset)
+    //         // setXaxisMax(new Date(new Date(xAxis[0]).getTime() + xAxisMax + userTimeOffset))
+    //     }
+    // },[xAxis])
 
     const getMax = (arr) => {
         let len = arr.length;
@@ -398,6 +411,7 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
             let _temptask = [] ; 
             let _taskArray = [] ; 
             let _recordArray = [] ; 
+            let ignore = 0 ;
             let _tempAnnotation = textAnnotations ; 
             let _tempImages = [] ; 
             let lastRecord  ; 
@@ -426,7 +440,8 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
             
             // }
                 // _x.push(new Date(v.x));
-                if(v.z > 0 && (record == 'all' || record == v.r) && v.x > 0 ){
+                console.log()
+                if(v.z > 0 && v.z < 7 && (record == 'all' || record == v.r) && v.x > 0 ){
                 lastRecord = v.x ; 
                 
                 if(firstRecord == 0 ){
@@ -602,17 +617,26 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                     }
                 if(_npauseTime > 0){
                         // let xpData = new Date(parseInt((((v.x) - firstRecord - 2000) + (userTimeOffset) ) - _pauseTime  ))
+                        if(ignore == 0){
                         let _pTime = parseInt(_npauseTime/1000) ; 
-                        let _ptasks = [xData,xData,_pTime+"s Pause","Paused"]
-                        _allAnnotation.push(_ptasks);
-                        _allTasks.push(_ptasks);
-                        _ptasks = [] ;
+                            let _ptasks = [xData,xData,_pTime+"s Pause","Paused"]
+                            _allAnnotation.push(_ptasks);
+                            _allTasks.push(_ptasks);
+                            _ptasks = [] ;
+    
+                        }
                 }
                 _npauseTime = 0 ; 
-               
+                ignore = 0 ;
 
                 }
+                else if(v.z == 7 && _x.length > 0){
+                    // console.log("pause time")
+                    _npauseTime  = parseInt(v.x) -  parseInt(lastRecord) ; 
+                }
                 else if(v.z == 0 && _x.length > 0){
+                    // console.log("pause time")
+                    ignore = 1 ; 
                     _npauseTime  = parseInt(v.x) -  parseInt(lastRecord) ; 
                 }
               
@@ -853,35 +877,35 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                                 xref: 'x',
                                 yref: 'y',
                                 x: new Date(new Date(v[0]).getTime()) ,
-                                y: yAxisMax-(yAxisMax*0.022),  
+                                y: ymax-(ymax*0.022),  
                                 textangle: 0,
                                 text: '',
                                 showarrow: true,
                                 arrowhead: 1,
-                                ax: -20, 
+                                ax: -10, 
                                 bgcolor: "#fff",
                                 ay:0,
-                                arrowcolor: "#FF0000",                 
+                                arrowcolor: "#000000",                 
                             },
                           
                         );
-                        _tempAnnotation.push(
-                            {
-                                xref: 'x',
-                                yref: 'y',
-                                x: new Date(new Date(v[0]).getTime() + 1000) ,
-                                y: yAxisMax-(yAxisMax*0.18),  
-                                textangle: 270,
-                                text: v[1],
-                                showarrow: false,
-                                arrowhead: 1,
-                                ax: 0, 
-                                bgcolor: "#fff",
-                                ay:0,
-                                arrowcolor: "#FF0000",                 
-                            },
+                        // _tempAnnotation.push(
+                        //     {
+                        //         xref: 'x',
+                        //         yref: 'y',
+                        //         x: new Date(new Date(v[0]).getTime() + 1000) ,
+                        //         y: ymax-(ymax*0.18),  
+                        //         textangle: 270,
+                        //         text: v[1],
+                        //         showarrow: false,
+                        //         arrowhead: 1,
+                        //         ax: 0, 
+                        //         bgcolor: "#fff",
+                        //         ay:0,
+                        //         arrowcolor: "#FF0000",                 
+                        //     },
                           
-                        );
+                        // );
                         // }
                     })
                 }
@@ -1028,15 +1052,15 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
                    
 
                     setYAxisOg(_y);
-                    if(props.signal == "capin"){
+                    // if(props.signal == "capin"){
                         
-                        let ymin= Math.min(..._y) ;
-                     
-                            ymin -= ymin*0.25 ;
-                            setYaxisMin(ymin)
+                    //     let ymin= Math.min(..._y) ;
+                    //     alert(ymin);
+                    //         ymin -= ymin*0.25 ;
+                    //         setYaxisMin(ymin)
  
 
-                    }
+                    // }
                     // console.log("signal x:"+props.signal,_x)
                      
                     if( props.signal != "pco2wave"  && props.signal != "pco2b2b"  && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa" ){
@@ -1091,10 +1115,15 @@ const rawSignals = ["pco2wave","petco2","bpmhistory","pco2b2b","capin","capnia"]
         if(props.xmax == "full" ){
             setXaxisMax(new Date(new Date(xAxis[xAxis.length - 1])));
         }
-//         else{
-//             setXaxisMax(new Date(xAxisMax+userTimeOffset))
+        else{
+                let userTimeOffset = new Date().getTimezoneOffset() ; 
+ 
+    userTimeOffset = userTimeOffset*60*1000 ; 
+            let _max = new Date(parseInt(new Date(xAxis[0]).getTime()) + parseInt(props.xmax*1e3))
+            setXaxisMax(new Date(_max))
+            // console.log(props.signal,)
 
-//         }
+        }
 
 
          
@@ -1127,7 +1156,76 @@ useEffect(() => {
         moveGraph()
 },[play,xAxisMax,xAxisMin])
 
+
+const changeXRange = (v) =>{
+     
+    if(v == "0"){
+           
+    setXaxisMin(new Date(xAxis[0]))
+    setXaxisMax(new Date(xAxis[xAxis.length - 1]))
+    }
+    else if(v != "0"){
+        let _deviation = v*60000
+        let xAxisMilisecond = new Date(xAxisMin).getTime() + _deviation
+        if(new Date(xAxisMilisecond) <= new Date(xAxis[xAxis.length - 1]) ){
+            setXaxisMax(new Date(xAxisMilisecond))
+        }
+    }
+
+}
+
+
+
 const zoomIn = () => {
+    // let _x = xrange ;
+    // if(xrange == 0){
+    //     setXRange(3);
+    //     changeXRange(3);
+    // }
+    // else if(xrange == 3){
+    //     setXRange(1);
+    //     changeXRange(1);
+
+    // }
+    // else if(xrange == 1){
+    //     setXRange(2);
+    //     changeXRange(2);
+
+    // }
+
+    // else if(xrange == 2){
+    //     setXRange(5);
+    //     changeXRange(5);
+
+    // }
+    // else if(xrange == 5){
+    //     setXRange(10);
+    //     changeXRange(10);
+
+    // }
+    // else if(xrange == 10){
+    //     setXRange(15);
+    //     changeXRange(15);
+
+    // }
+    // else if(xrange == 15){
+    //     setXRange(20);
+    //     changeXRange(20);
+
+    // }
+    // else if(xrange == 30){
+    //     setXRange(20);
+    //     changeXRange(20);
+
+    // }
+    // else if(xrange == 60){
+    //     setXRange(30);
+    //     changeXRange(30);
+
+    // }
+
+     
+
     let _deviation = zommDeviation*length ; 
     // console.log(_deviation);
     // console.log(length);
@@ -1156,6 +1254,53 @@ const zoomIn = () => {
 
 
 const zoomOut = () => {
+
+    // if(xrange == 0){
+    //     setXRange(3);
+    //     changeXRange(3);
+    // }
+    // else if(xrange == 3){
+    //     setXRange(1);
+    //     changeXRange(1);
+
+    // }
+    // else if(xrange == 1){
+    //     setXRange(2);
+    //     changeXRange(2);
+
+    // }
+
+    // else if(xrange == 2){
+    //     setXRange(5);
+    //     changeXRange(5);
+
+    // }
+    // else if(xrange == 5){
+    //     setXRange(10);
+    //     changeXRange(10);
+
+    // }
+    // else if(xrange == 10){
+    //     setXRange(15);
+    //     changeXRange(15);
+
+    // }
+    // else if(xrange == 15){
+    //     setXRange(20);
+    //     changeXRange(20);
+
+    // }
+    // else if(xrange == 20){
+    //     setXRange(30);
+    //     changeXRange(30);
+
+    // }
+    // else if(xrange == 30){
+    //     setXRange(60);
+    //     changeXRange(60);
+
+    // }
+
     let _deviation = zommDeviation*length ; 
     // // console.log(_deviation);
     // // console.log(length);
@@ -1227,7 +1372,12 @@ const moveForward = () => {
 const reset = () => {
     
     setXaxisMin(new Date(xAxis[0]))
-    setXaxisMax(new Date(xAxis[xAxis.length - 1]))
+    let userTimeOffset = new Date().getTimezoneOffset() ; 
+ 
+    userTimeOffset = userTimeOffset*60*1000 ; 
+            let _max = new Date(parseInt(new Date(xAxis[0]).getTime()) + parseInt(props.xmax*1e3))
+            setXaxisMax(new Date(_max))
+    // setXaxisMax(new Date(xAxis[xAxis.length - 1]))
     setPlay(false);
 
  
@@ -1711,6 +1861,8 @@ const handletTline = (e) => {
 const handleKeypress = (e) => {
     // console.log("Relayouting",e)
 }
+// console.log(color);
+
     return (
         <div >
                                 <ReactTooltip />
@@ -1774,12 +1926,9 @@ const handleKeypress = (e) => {
                     <li><a  onClick={toggleTableModal}><i class="fa fa-thermometer-full" aria-hidden="true"></i></a></li>
                     <li><a  onClick={toggleannotationtModal}><i class="fa fa-comment"></i></a></li>
                 </ul> */}
-
-                {/* unit modal */}
-               {/* {// console.log(xAxisMin)} */}
-
-
-
+  {
+    // console.log(props.signal,xAxisMax)
+  }
 
                 <Plot className="plot-charts"
                 onClick={handleClick}
@@ -1797,7 +1946,7 @@ const handleKeypress = (e) => {
                             text: textTooltip,
                        
                             marker: { 
-                            color:  type == "obar" ?  color.hex ? color.hex+"43" : color+"43" : color ,
+                            color:  type == "obar" ?  color.hex ? color.hex+"00" : color+"00" : color ,
                             line: {
                                 color: color,
                                 dash: signalLinetype,
@@ -1849,7 +1998,7 @@ const handleKeypress = (e) => {
                             ticktext: ["-", "tick", "tick", "-"],
                             range: [
                                 xAxisMin,
-                                xAxisMax  ,
+                                xAxisMax,
                             ],
                             ticks: "outside",
                             tickcolor: "#000",
@@ -1893,7 +2042,7 @@ const handleKeypress = (e) => {
                     }}
 
                 />
-                {/* {xAxis[0]} */}
+           
 
           
 
@@ -2287,6 +2436,7 @@ const handleKeypress = (e) => {
 
                                         >
                                             <option value="0">Full Length</option>
+                                            <option value="3">30 Seconds</option>
                                             <option value="1">1 Minute</option>
                                             <option value="2">2 Minutes</option>
                                             <option value="5">5 Minutes</option>
@@ -2493,7 +2643,8 @@ const handleKeypress = (e) => {
                 
                 
                                             {
-                                                 statistics.length > 0 && statistics.map((v,i) => {
+                                                 statistics.length > 0  && statistics.map((v,i) => {
+                                                    // if(new Date(v.x) > new Date(xAxisMin) && new Date(v.x) < new Date(xAxisMax)){
                                                     return (
                                                         <tr>
                                                         <td>{v.x}</td>
@@ -2503,7 +2654,7 @@ const handleKeypress = (e) => {
                                                         </tr>
                             
                                                     )
-                
+                                                    // }
                                                 })
                                             }
                                         </tbody>

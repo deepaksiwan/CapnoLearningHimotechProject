@@ -239,8 +239,9 @@ const Addclient = () => {
                                 <div className="client-input">
                                     <p>Sex</p>
                                     <select ref={gender} >
-                                        <option>Male</option>
-                                        <option>Female</option>
+                                    <option value="1">Male</option>
+                                            <option value="2">Female</option>
+                                            <option value="3">Other</option>
                                     </select>
                                 </div>
                             </div>
