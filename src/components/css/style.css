@@ -892,7 +892,7 @@ label {
 .active>p {
   color: #800080;
   background: #fff;
-    padding: 1px 5px;
+  padding: 1px 5px;
 }
 
 .content-tabs {
@@ -1169,7 +1169,8 @@ strong {
   width: 32.3%;
   position: relative;
 }
-.pass-eye3{
+
+.pass-eye3 {
   color: #800080;
   position: absolute;
   top: 39px;
@@ -1178,6 +1179,7 @@ strong {
   z-index: 1;
   cursor: pointer;
 }
+
 .filter-mrb {
   margin-bottom: 20px;
 }
@@ -1324,7 +1326,8 @@ strong {
   color: #000;
   position: relative;
 }
-.pass-eye2{
+
+.pass-eye2 {
   color: #800080;
   position: absolute;
   top: 57px;
@@ -1333,6 +1336,7 @@ strong {
   z-index: 1;
   cursor: pointer;
 }
+
 .client-input>input {
   display: inline-block;
   width: 100%;
@@ -3074,7 +3078,8 @@ sub {
   font-size: 14px;
   margin-top: 20px;
 }
-.password-input{
+
+.password-input {
   position: relative;
 }
 
@@ -3087,15 +3092,17 @@ sub {
   z-index: 1;
   cursor: pointer;
 }
-.forgot-password > a{
+
+.forgot-password>a {
   font-size: 13px;
   display: inline-block;
   margin-top: 5px;
   color: #800080;
 }
-.require-email{
+
+.require-email {
   font-size: 14px;
-  color: red! important;
+  color: red ! important;
   margin: 0px;
   margin-top: 3px;
 }
@@ -3105,15 +3112,17 @@ sub {
 
 /* reset password page css open here */
 
-.reset-input-list{
+.reset-input-list {
   margin: 0px;
   padding: 0px;
   list-style: none;
 }
-.reset-input-list > li{
+
+.reset-input-list>li {
   margin-bottom: 15px;
   position: relative;
 }
+
 .pass-eye4 {
   color: #800080;
   position: absolute;
@@ -3123,12 +3132,14 @@ sub {
   z-index: 1;
   cursor: pointer;
 }
-.reset-input-list > li > p{
+
+.reset-input-list>li>p {
   font-size: 15px;
-    margin-top: 5px;
-    color: #800080;
+  margin-top: 5px;
+  color: #800080;
 }
-.reset-input-list > li > input{
+
+.reset-input-list>li>input {
   display: inline-block;
   width: 100%;
   padding: 8px 12px;
@@ -3139,7 +3150,8 @@ sub {
   border: 1px solid #c867c6;
   box-shadow: 0px 0px 8px 1px #1b1b1b40;
 }
-.submit-btn-reset > button{
+
+.submit-btn-reset>button {
   display: inline-block;
   padding: 7px 20px;
   width: 100%;
@@ -3152,9 +3164,102 @@ sub {
   border: 2px solid #f167ee;
   margin-top: 20px;
 }
-.reset-password-bg{
+
+.reset-password-bg {
   background-color: #efecec;
   min-height: 100vh;
   padding-top: 5%;
 }
+
 /* resent password page css closed here */
+
+
+/* configure table css open here */
+
+.pet-2 {
+  position: relative;
+  top: 3px;
+}
+
+.configure-list {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+
+.configure-wrp {
+  display: flex;
+}
+
+.configure-child2>span {
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.radio-mrl {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.configure-child2>input {
+  vertical-align: middle;
+}
+
+.configure-child1>p {
+  color: #000;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.configure-list>li:first-child {
+  margin-top: 0px;
+}
+
+.configure-list>li {
+  margin-top: 15px;
+}
+
+.configure-child1 {
+  width: 32%;
+}
+
+.time-input {
+  display: inline-block;
+  width: 50px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  color: #000;
+  font-size: 15px;
+  margin-right: 10px;
+
+}
+
+.select-option-time {
+  display: inline-block;
+  padding: 4px 30px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  color: #000;
+  font-size: 15px;
+  outline: none;
+}
+.data-point{
+  position: relative;
+  top: 6px;
+}
+.configtable-colse-btn{
+  display: inline-block;
+  width: 100%;
+  margin-top: 10px;
+  font-size: 15px;
+  color: #800080;
+  padding: 6px 20px;
+  background-color: transparent;
+  border: 2px solid #800080;
+  outline: none;
+  border-radius: 4px;
+}
+
+/* configure table css closed here */

@@ -80,7 +80,7 @@ const Createdata = (props) => {
                     <Filter />
                     <div className="create-section">
                         <ul className="create-list">
-                        <i class="fa fa-file-image" aria-hidden="true"></i>
+                        {/* <i class="fa fa-file-image" aria-hidden="true"></i> */}
 
                             <li>
                                 <div className="create-list-box"><Link to={(selectedSession === "" || selectedGroup === "true" || selectedSession === "null") ? "" : "/choose/report/config"} className={(selectedSession === "" || selectedGroup === "true" ||selectedSession === "null") ? "deactivate" : ""}>{t('Create-&-Save-a-Session-Data-Report')}</Link></div>
@@ -89,7 +89,7 @@ const Createdata = (props) => {
                         
 
                             <li>
-                                <div className="create-list-box"><Link to={selectedClient === "" || selectedSession !== "" || selectedSession !== "null" || selectedGroup === "true" ? "" : "/createmultisession"} className={selectedClient === "" || selectedSession !== "" || selectedGroup === "true" || selectedSession !== "null" ? "deactivate" : ""}>{t('Create-&-Save-a-Multisession-Report')}</Link></div>
+                                <div className="create-list-box"><Link to={(selectedClient === "" || selectedSession !== "" || selectedSession !== "null" || selectedGroup === "true")? "" : "/createmultisession"} className={(selectedClient === "" || selectedGroup === "true" || selectedSession !== "null")? "deactivate" : ""}>{t('Create-&-Save-a-Multisession-Report')}</Link></div>
 
                             </li>
                             <li>
