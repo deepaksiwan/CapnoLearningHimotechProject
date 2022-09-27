@@ -26,6 +26,7 @@ const Chart = (props) => {
     const sessionDate = props.sessionDate;
     const [textTooltip, setTextTooltip] = useState([]);
     const [statistics, setStatistics] = useState([]);
+    const [zoomEnabled, setZoomEnabled] = useState(false);
     // alert(new Date(parseInt(props.xmin)));
     let Utz = new Date().getTimezoneOffset();
     const [tableView, setTableView] = useState(props.showSignalStat);
@@ -859,9 +860,10 @@ const Chart = (props) => {
 
 
                         })
-                        let ymax = getMax(_y);
+                        let ymax = yAxisMax;
 
-                        if (yAxisMax == 0) {
+                        if (ymax == 0) {
+                              ymax = getMax(_y);
 
                             if (ymax == 0) {
                                 setYaxisMax(5)
@@ -885,10 +887,10 @@ const Chart = (props) => {
                                         x: new Date(new Date(v[0]).getTime()),
                                         y: ymax - (ymax * 0.022),
                                         textangle: 0,
-                                        text: '',
+                                        text: v[1],
                                         showarrow: true,
-                                        arrowhead: 1,
-                                        ax: -10,
+                                        arrowhead: 0,
+                                        ax: 30,
                                         bgcolor: "#fff",
                                         ay: 0,
                                         arrowcolor: "#000000",
@@ -1607,10 +1609,18 @@ const Chart = (props) => {
                 showGrid: true,
                 grid: value
             }))
-        } else {
+        } 
+        else if (value == 2) {
             setModal(prevState => ({
                 ...prevState,
                 showGrid: false,
+                grid: value
+            }))
+        }
+        else  {
+            setModal(prevState => ({
+                ...prevState,
+                showGrid: true,
                 grid: value
             }))
         }
@@ -1911,11 +1921,11 @@ const Chart = (props) => {
                                     :
                                     <li data-tip="Play"><a onClick={handlePlay}><i class="fa fa-play"></i></a></li>
                             }
-                            <li data-tip="Mouse Settings" className={(dragMode == 'zoom' ? "highlighted" : "")}  ><a onClick={()=>{handleSelection();toggleMouseSetingModal()}}><i class="fa fa-mouse-pointer" aria-hidden="true"></i></a></li>
+                            <li data-tip="Mouse Settings"  ><a onClick={() => { toggleMouseSetingModal() }}><i class="fa fa-mouse-pointer" aria-hidden="true"></i></a></li>
                             <li data-tip="Reset Graph"><a onClick={reset}><i class="fa fa-undo"></i></a></li>
                             {
                                 props.signal != "pco2wave" && props.signal != "pco2b2b" && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa" &&
-                                <li data-tip="Table Settings"><a onClick={() => {toogleTableView();toggleconfigureTableModal();}}><i class="fa fa-table" aria-hidden="true"></i></a></li>
+                                <li data-tip="Table Settings"><a onClick={() => { toogleTableView(); toggleconfigureTableModal(); }}><i class="fa fa-table" aria-hidden="true"></i></a></li>
 
                             }
                             {/*   <li><a  onClick={toggleannotationtModal}><i class="fa fa-comment"></i></a></li> */}
@@ -2009,14 +2019,14 @@ const Chart = (props) => {
                                     ticks: "outside",
                                     tickcolor: "#000",
                                     zeroline: false,
-                                    showgrid: modal.showGrid,
+                                    showgrid: (modal.showGrid && modal.grid == 4 ) || (modal.showGrid   &&  modal.grid == 1) ? true : false ,
 
                                     // visible : false
                                 },
                                 yaxis: {
                                     range: (modal.units === "mmHg" || modal.units === "") ? [yAxisMin, yAxisMax] : [yAxisMin, (yAxisMax + yAxisMax * 0.13)],
                                     fixedrange: true,
-                                    showgrid: modal.showGrid,
+                                    showgrid:  (modal.showGrid && modal.grid == 3 ) || (modal.showGrid   &&  modal.grid == 1)   ? true : false ,
                                     side: modal.position == "1" ? "left" : "right"
                                 },
                                 bargap: 0,
@@ -2037,7 +2047,7 @@ const Chart = (props) => {
                             }}
                             config={{
                                 displayModeBar: false,
-                                scrollZoom: true,
+                                scrollZoom: zoomEnabled,
                                 autosize: true,
 
                                 doubleClick: false,
@@ -2510,14 +2520,22 @@ const Chart = (props) => {
                                                     <span>Show Grid Line</span>
                                                 </Col>
                                                 <Col lg={7} xl={7}>
-
-                                                    <Radio.Group
+                                                    <select
+                                                        style={{ width: "100%" }}
                                                         onChange={handleGridLine}
                                                         value={modal.grid}
                                                     >
-                                                        <Radio value={1}> Yes</Radio>
-                                                        <Radio style={{ marginLeft: "20px" }} value={2}> No</Radio>
-                                                    </Radio.Group>
+
+                                                        <option value={1}>Both</option>
+                                                        <option value={3}>Horizontal Only</option>
+                                                        <option value={4}>Vertical Only</option>
+                                                        <option value={2}>None</option>
+
+
+
+
+                                                    </select>
+                                                    
 
                                                 </Col>
                                             </Row>
@@ -2591,7 +2609,7 @@ const Chart = (props) => {
 
                         {/* comment modal start */}
                         <Draggable handle=".handle">
-                            <Modal className='handle' isOpen={commentModal} toggle={toggleCommentModal} className="modal-box-wrp" centered={true}>
+                            <Modal isOpen={commentModal} toggle={toggleCommentModal} className="modal-box-wrp" centered={true}>
                                 <ModalHeader toggle={toggleCommentModal}><span className="ml-1 roititle modal-head">Add Comment</span></ModalHeader>
                                 <ModalBody>
                                     <textarea rows="8" style={{ width: "100%" }} value={reportComment} onChange={(e) => setReportComment(e.target.value)} ></textarea>
@@ -2683,130 +2701,132 @@ const Chart = (props) => {
                 </div>
             }
 
+            <Draggable handle=".handle">
 
-            <Modal className='handle' isOpen={configureTableModal} toggle={toggleconfigureTableModal}  centered={true}>
-                <ModalHeader toggle={toggleconfigureTableModal}><span className="ml-1 roititle modal-head">Configure Table Options for PetCO<span className='pet-2'>2</span> History</span></ModalHeader>
-                <ModalBody>
-                    <div>
-                        <ul className='configure-list'>
-                            <li>
-                                <div className='configure-wrp'>
-                                    <div className='configure-child1'>
-                                        <p>Show Table:</p>
+                <Modal isOpen={configureTableModal} toggle={toggleconfigureTableModal} centered={true}>
+                    <ModalHeader toggle={toggleconfigureTableModal}><span className="ml-1 roititle modal-head">Configure Table Options for PetCO<span className='pet-2'>2</span> History</span></ModalHeader>
+                    <ModalBody>
+                        <div>
+                            <ul className='configure-list'>
+                                <li>
+                                    <div className='configure-wrp'>
+                                        <div className='configure-child1'>
+                                            <p>Show Table:</p>
+                                        </div>
+                                        <div className='configure-child2'>
+                                            <input type="radio" name="yes" />
+                                            <span>Yes</span>
+                                            <input type="radio" className='radio-mrl' name="yes" />
+                                            <span>No</span>
+                                        </div>
                                     </div>
-                                    <div className='configure-child2'>
-                                        <input type="radio" name="yes" />
-                                        <span>Yes</span>
-                                        <input type="radio" className='radio-mrl' name="yes" />
-                                        <span>No</span>
+                                </li>
+                                <li>
+                                    <div className='configure-wrp'>
+                                        <div className='configure-child1'>
+                                            <p>Link With Graph:</p>
+                                        </div>
+                                        <div className='configure-child2'>
+                                            <input type="radio" name="no" />
+                                            <span>Yes</span>
+                                            <input type="radio" className='radio-mrl' name="no" />
+                                            <span>No</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div className='configure-wrp'>
-                                    <div className='configure-child1'>
-                                        <p>Link With Graph:</p>
+                                </li>
+                                <li>
+                                    <div className='configure-wrp'>
+                                        <div className='configure-child1'>
+                                            <p>Show Statistics:</p>
+                                        </div>
+                                        <div className='configure-child2'>
+                                            <input type="checkbox" name="mean" />
+                                            <span>Mean</span>
+                                            <input type="checkbox" className='radio-mrl' name="mediam" />
+                                            <span>Median</span>
+                                            <input type="checkbox" className='radio-mrl' name="mediam" />
+                                            <span>Standard Deviation</span>
+                                        </div>
                                     </div>
-                                    <div className='configure-child2'>
-                                        <input type="radio" name="no" />
-                                        <span>Yes</span>
-                                        <input type="radio" className='radio-mrl' name="no" />
-                                        <span>No</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div className='configure-wrp'>
-                                    <div className='configure-child1'>
-                                        <p>Show Statistics:</p>
-                                    </div>
-                                    <div className='configure-child2'>
-                                        <input type="checkbox" name="mean" />
-                                        <span>Mean</span>
-                                        <input type="checkbox" className='radio-mrl' name="mediam" />
-                                        <span>Median</span>
-                                        <input type="checkbox" className='radio-mrl' name="mediam" />
-                                        <span>Standard Deviation</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div className='configure-wrp'>
-                                    <div className='configure-child1'>
-                                        <p>Time Range:</p>
-                                    </div>
-                                    <div className='configure-child2'>
-                                        <input type="input" className='time-input' name="time" />
-                                        <input type="input" className='time-input' name="time2" />
-                                       
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div className='configure-wrp'>
-                                    <div className='configure-child1'>
-                                        <p className='data-point'>Data Point:</p>
-                                    </div>
-                                    <div className='configure-child2'>
-                                        <select className='select-option-time'>
-                                            <option>30 Seconds</option>
-                                            <option>15 Seconds</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <button onClick={toggleconfigureTableModal} className='configtable-colse-btn'>Close</button>
-                            </li>
-                        </ul>
-                    </div>
-                </ModalBody>
+                                </li>
+                                <li>
+                                    <div className='configure-wrp'>
+                                        <div className='configure-child1'>
+                                            <p>Time Range:</p>
+                                        </div>
+                                        <div className='configure-child2'>
+                                            <input type="input" className='time-input' name="time" />
+                                            <input type="input" className='time-input' name="time2" />
 
-            </Modal>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className='configure-wrp'>
+                                        <div className='configure-child1'>
+                                            <p className='data-point'>Data Point:</p>
+                                        </div>
+                                        <div className='configure-child2'>
+                                            <select className='select-option-time'>
+                                                <option>30 Seconds</option>
+                                                <option>15 Seconds</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <button onClick={toggleconfigureTableModal} className='configtable-colse-btn'>Close</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </ModalBody>
+
+                </Modal>
+            </Draggable>
+            <Draggable handle=".handle">
+
+                <Modal isOpen={mouseSetingModal} toggle={toggleMouseSetingModal} centered={true}>
+                    <ModalHeader toggle={toggleMouseSetingModal}><span className="ml-1 roititle modal-head">Mouse Settings </span></ModalHeader>
+                    <ModalBody>
+                        <div>
+                            <ul className='configure-list'>
+                                <li>
+                                    <div className='configure-wrp'>
+                                        <div className='configure-child1'>
+                                            <p>Mouse Wheel Scroll:</p>
+                                        </div>
+                                        <div className='configure-child2'>
+                                            <input type="radio" onClick={() => setZoomEnabled(true)} checked={zoomEnabled ? true : false} name="zoom" />
+                                            <span>Zoom In/Out</span>
+                                            <input type="radio" onClick={() => setZoomEnabled(false)} checked={zoomEnabled ? false : true} className='radio-mrl' name="zoom" />
+                                            <span>Scroll Page</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className='configure-wrp'>
+                                        <div className='configure-child1'>
+                                            <p>Mouse Left Click Drag:</p>
+                                        </div>
+                                        <div className='configure-child2'>
+                                            <input type="radio" onClick={() => handleSelection()} checked={dragMode == 'zoom' ? false : true} name="Pan" />
+                                            <span>X-Axis Pan</span>
+                                            <input type="radio" onClick={() => handleSelection()} checked={dragMode == 'zoom' ? true : false} className='radio-mrl' name="Pan" />
+                                            <span>X-Axis Selection</span>
+                                        </div>
+                                    </div>
+                                </li>
 
 
-            <Modal className='handle' isOpen={mouseSetingModal} toggle={toggleMouseSetingModal}  centered={true}>
-                <ModalHeader toggle={toggleMouseSetingModal}><span className="ml-1 roititle modal-head">Mouse Settings </span></ModalHeader>
-                <ModalBody>
-                    <div>
-                        <ul className='configure-list'>
-                            <li>
-                                <div className='configure-wrp'>
-                                    <div className='configure-child1'>
-                                        <p>Mouse Scroll:</p>
-                                    </div>
-                                    <div className='configure-child2'>
-                                        <input type="radio" name="zoom" />
-                                        <span>Zoom In/Out</span>
-                                        <input type="radio" className='radio-mrl' name="zoom" />
-                                        <span>Scroll Page</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div className='configure-wrp'>
-                                    <div className='configure-child1'>
-                                        <p>Mouse Drag:</p>
-                                    </div>
-                                    <div className='configure-child2'>
-                                        <input type="radio" name="Pan" />
-                                        <span>X-Axis Pan</span>
-                                        <input type="radio" className='radio-mrl' name="Pan" />
-                                        <span>X-Axis Selection</span>
-                                    </div>
-                                </div>
-                            </li>
-                           
-                            
-                           
-                            <li>
-                                <button onClick={toggleMouseSetingModal} className='configtable-colse-btn'>Close</button>
-                            </li>
-                        </ul>
-                    </div>
-                </ModalBody>
 
-            </Modal>
+
+                            </ul>
+                        </div>
+                    </ModalBody>
+
+                </Modal>
+
+            </Draggable>
         </div>
 
     )
