@@ -1478,7 +1478,13 @@ strong {
   background: linear-gradient(90deg, #a060c2, #c360a9);
   margin-top: 20px;
 }
-
+.group-pass-wrp{
+  display: flex;
+  justify-content: space-between;
+}
+.group-pass-child{
+  width: 48%;
+}
 .groupreport-list-head>h3 {
   font-size: 15px;
   color: #fff;
@@ -1591,7 +1597,28 @@ strong {
   display: flex;
   justify-content: space-between;
 }
-
+.datafileformat-wrp{
+  display: flex;
+  width: 100%;
+}
+.datafileformat-child1{
+  width: 42%;
+  align-self: center;
+}
+.datafileformat-child2 > input {
+  vertical-align: middle;
+}
+.datafileformat-child1 > p{
+  color: #000;
+  font-weight: 600;
+  font-size: 14px;
+}
+.datafileformat-child2 > span {
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 14px;
+  vertical-align: middle;
+}
 .modal-box-wrp {
   max-width: 35%;
 }
@@ -3193,11 +3220,14 @@ sub {
 
 .configure-child2>span {
   display: inline-block;
+  color: #212529;
   margin-left: 5px;
-  font-size: 14px;
+  font-size: 16px;
   vertical-align: middle;
 }
-
+.configure-child2{
+  width: 65%;
+}
 .radio-mrl {
   display: inline-block;
   margin-left: 10px;
@@ -3208,9 +3238,8 @@ sub {
 }
 
 .configure-child1>p {
-  color: #000;
-  font-weight: 600;
-  font-size: 14px;
+  color: #212529;
+  font-size: 16px;
 }
 
 .configure-list>li:first-child {
@@ -3218,7 +3247,7 @@ sub {
 }
 
 .configure-list>li {
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .configure-child1 {
@@ -3231,24 +3260,24 @@ sub {
 
 .time-input {
   display: inline-block;
-  width: 50px;
+  width: 48%;
   border: 1px solid #000;
-  border-radius: 4px;
+  border-radius: 0;
   color: #000;
   font-size: 15px;
-  margin-right: 10px;
 
 }
-
+.time-input-mr{
+  margin-right: 8px;
+}
 .select-option-time {
   display: inline-block;
-  padding: 4px 30px;
-  border: 1px solid #000;
-  border-radius: 4px;
+  width: 100%;
   color: #000;
   font-size: 15px;
   outline: none;
 }
+
 .data-point{
   position: relative;
   top: 6px;

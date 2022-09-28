@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useRef, useState } from 'react';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import { Radio } from 'antd';
+import $ from "jquery";
 import ReactTooltip from 'react-tooltip';
 // import Draggable from "react-draggable";
 import { Link, useParams, Router } from 'react-router-dom';
@@ -22,6 +23,9 @@ const Chart = (props) => {
     const record = props.record;
     const [xAxis, setXaxis] = useState([]);
     const [yAxis2, setYAxis2] = useState([]);
+    const [timeVal, setTimeVal] = useState()
+    const [timeVal2, setTimeVal2] = useState()
+ 
     const { showclock } = useParams();
     const sessionDate = props.sessionDate;
     const [textTooltip, setTextTooltip] = useState([]);
@@ -31,7 +35,32 @@ const Chart = (props) => {
     let Utz = new Date().getTimezoneOffset();
     const [tableView, setTableView] = useState(props.showSignalStat);
     // Utz = Utz*60*1000 ; 
+    const timerange = useRef();
+    const timerange2 = useRef();
+
+    console.log("timerange",timeVal)
+    console.log("timerange2",timeVal2)
+
+
+    const onchangeInput = ()=>{
+        var value = timerange.current.value
+        
+        value = value.replace(/\D/g, "").split(/(?:([\d]{2}))/g).filter(s => s.length > 0).join(":");
+        setTimeVal(value)
+        // $(this).val(value);
+    }
+    const onchangeInput2 = ()=>{
+        var value = timerange2.current.value
+        
+        value = value.replace(/\D/g, "").split(/(?:([\d]{2}))/g).filter(s => s.length > 0).join(":");
+        setTimeVal2(value)
+        // $(this).val(value);
+    }
+
+   
     useEffect(() => {
+
+
         // // console.log("signal sat" , props.showSignalStat)
          
             setTableView(props.showSignalStat)
@@ -276,6 +305,10 @@ const Chart = (props) => {
         clearInterval(playTimer);
         getAlldata();
         // console.log(xAxisMax)
+
+        
+       
+
 
     }, [])
 
@@ -2842,8 +2875,8 @@ const Chart = (props) => {
                                             <input type="checkbox" name="mean" />
                                             <span>Mean</span>
                                             <input type="checkbox" className='radio-mrl' name="mediam" />
-                                            <span>Median</span>
-                                            <input type="checkbox" className='radio-mrl' name="mediam" />
+                                            <span>Median</span><br></br>
+                                            <input type="checkbox"  name="mediam" />
                                             <span>Standard Deviation</span>
                                         </div>
                                     </div>
@@ -2854,8 +2887,8 @@ const Chart = (props) => {
                                             <p>Time Range:</p>
                                         </div>
                                         <div className='configure-child2'>
-                                            <input type="input" className='time-input' name="time" />
-                                            <input type="input" className='time-input' name="time2" />
+                                            <input type="number"  className='time-input time-input-mr' name="time" value={timeVal} onChange={onchangeInput} ref={timerange} />
+                                            <input type="number" className='time-input' name="time2" value={timeVal2} onChange={onchangeInput2} ref={timerange2} />
 
                                         </div>
                                     </div>

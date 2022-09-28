@@ -30,6 +30,8 @@ const Editclient = () => {
     const userId = localStorage.getItem('user_id');
     const [clients, setinclients] = useState([]);
     const [data, setData] = useState([]);
+    const [clientName, setClientName] = useState();
+    
     const [trainers, settrainers] = useState([]);
     const trainerSelected = useRef();
     const [itemId, setItemId] = useState(null);
@@ -93,7 +95,9 @@ const Editclient = () => {
         })
 
     }
-    const openItemPopUp = (id) => {
+    const openItemPopUp = (id,firstname,lastname) => {
+      
+        setClientName(firstname + " " + lastname)
         setItemId(id);
         setdeleteModal(true)
 
@@ -220,7 +224,7 @@ const Editclient = () => {
                               }} title={(v.status == 1 ? "Deactivate" : "Activate")}  placement="top"><a onClick={() => openStatusPopUp(v.id,v.status)} className="downloadimg"><img src={(v.status == 1 ? Cross : checks)} /></a></Tooltip> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></Tooltip></p>
+                              }} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id,v.firstname,v.lastname)} className="downloadimg"><img src={Delete} /></a></Tooltip></p>
                         })
                     })
                     setData(_temp);
@@ -354,7 +358,7 @@ const Editclient = () => {
                             <div className="modal-p">
                                 <div className="right-circle cancel-circle"><img src={closeicon} /></div>
                                 <h4>Are you sure?</h4>
-                                <p>Do you really wish to delete this client?</p>
+                                <p>Do you really wish to delete <b>“{clientName}”</b> client?</p>
                                 <div className="wrp-delete-btn">
                                     <div className="cancel-btn1" ><a onClick={deleteToggleModal}>Cancel</a></div>
                                     <div className="delete-btn1"><a onClick={deleteClient}>Delete</a></div>

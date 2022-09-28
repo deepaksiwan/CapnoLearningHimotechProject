@@ -27,6 +27,8 @@ const Editgroup = () => {
     const selectedTrainer = localStorage.getItem('selectedTrainer');
     const [clients, setinclients] = useState([]);
     const [data, setData] = useState([]);
+    const [groupName, setGroupName] = useState();
+    
     const [itemId, setItemId] = useState(null);
     const userId = localStorage.getItem('user_id');
     let _userId = localStorage.getItem('user_id');
@@ -99,17 +101,15 @@ const Editgroup = () => {
                             name: v.firstname,
                             status: v.status == 1 ? "Active" : "Inactive",
                             action: <p> 
-{/*                                 
+                              
                                 <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
                               }} title="Edit" placement="top"><a href={"/edit/group/information/" + v.id} className="downloadimg" ><img src={edit} /></a></Tooltip> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="Inactive" placement="top"><a href='#' className="downloadimg"><img src={checks} /></a></Tooltip> <Tooltip classes={{
-                                tooltip: classes.customTooltip,
-                                
-                              }} title="Delete" placement="top"><a  onClick={() => openItemPopUp(v.id)}  className="downloadimg"><img src={Delete} /></a></Tooltip>  */}
+                            
+                              }} title="Delete" placement="top"><a  onClick={() => openItemPopUp(v.id, v.firstname)}  className="downloadimg"><img src={Delete} /></a></Tooltip>
                                 <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
@@ -135,8 +135,9 @@ const Editgroup = () => {
 
     }
 
-    const openItemPopUp = (id) => {
+    const openItemPopUp = (id,firstname) => {
         setItemId(id);
+        setGroupName(firstname)
         setdeleteModal(!deleteModal)
     } 
 
@@ -205,7 +206,7 @@ const Editgroup = () => {
                         <div className="modal-p">
                             <div className="right-circle cancel-circle"><img src={closeicon} /></div>
                             <h4>Are You Sure?</h4>
-                            <p>Do you really want to delete this record?</p>
+                            <p>Do you really want to delete <b>“{groupName}”</b> record?</p>
                             <div className="wrp-delete-btn">
                                 <div className="cancel-btn1" ><a onClick={deleteToggleModal}>Cancel</a></div>
                                 <div className="delete-btn1"><a onClick={deleteGroup}>Delete</a></div>

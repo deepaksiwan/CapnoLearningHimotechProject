@@ -25,6 +25,7 @@ const Editgroupinformation = () => {
     const minclientToggleModal = () => setminclientModal(!minclientModal);
     const groupName = useRef();
     const groupEmail = useRef();
+    const password = useRef();
     const associateTrainer = useRef();
     const associateHardwaretype = useRef();
     const [successModal, setsuccessModal] = useState(false);
@@ -35,8 +36,14 @@ const Editgroupinformation = () => {
     const fillallfieldtoggleModal = () => setFillallfieldModal(!fillallfieldmodal);
     const [loaderModal, setLoaderModal] = useState(false);
     const loaderToggleModal = () => setLoaderModal(!loaderModal);
+    const [passwordShown, setPasswordShown] = useState(false);
 
     const { groupid } = useParams();
+
+
+    const togglePasswordVisiblity = () => {
+        setPasswordShown(passwordShown ? false : true);
+    };
 
     useEffect(() => {
         getTrainer();
@@ -54,6 +61,7 @@ const Editgroupinformation = () => {
         data['email'] = groupEmail.current.value;
         data['device_type'] = associateHardwaretype.current.value;
         data['status'] = 1;
+        data[password] = password.current.value;
         let _temp = [];
         for (let i = 0; i < clientCount; i++) {
             _temp.push(devicelist[i + 1]);
@@ -61,13 +69,13 @@ const Editgroupinformation = () => {
         data['devices'] = _temp;
         // // console.log(data)
 
-        if(groupName.current.value == "" || associateTrainer.current.value == "" || groupEmail.current.value == "" || associateHardwaretype.current.value == ""){
+        if (groupName.current.value == "" || associateTrainer.current.value == "" || groupEmail.current.value == "" || associateHardwaretype.current.value == "") {
             fillallfieldtoggleModal();
             return false;
-        }else{
+        } else {
             setLoaderModal(true)
         }
-        fetch(API_URL+"/group/update/" + groupid, {
+        fetch(API_URL + "/group/update/" + groupid, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -91,13 +99,13 @@ const Editgroupinformation = () => {
             else {
                 console.log("network error")
             }
-            
+
         })
 
     }
 
     const getGroup = () => {
-        fetch(API_URL+"/group/" + groupid,
+        fetch(API_URL + "/group/" + groupid,
             {
                 method: 'GET',
                 headers: {
@@ -128,7 +136,7 @@ const Editgroupinformation = () => {
 
     }
     const getProfileGroup = () => {
-        fetch(API_URL+"/group/profile/" + groupid,
+        fetch(API_URL + "/group/profile/" + groupid,
             {
                 method: 'GET',
                 headers: {
@@ -161,7 +169,7 @@ const Editgroupinformation = () => {
     }
 
     const getTrainer = () => {
-        fetch(API_URL+"/trainers?user_id=" + userId,
+        fetch(API_URL + "/trainers?user_id=" + userId,
             {
                 method: 'GET',
                 headers: {
@@ -259,91 +267,105 @@ const Editgroupinformation = () => {
                         </div>
                     </div>
                     <div className="client-info-box">
-                            <div className="row">
-                                <div className="col-lg-6">
-                                    <div className="client-input">
-                                        <p>Group Name</p>
-                                        <input placeholder="Enter first name" defaultValue={group.group_name} ref={groupName} />
-                                    </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <div className="client-input">
-                                        <p>Group Email</p>
-
-                                        <input type="gmail" placeholder="Gmail" defaultValue={group.email} ref={groupEmail} />
-                                    </div>
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <div className="client-input">
+                                    <p>Group Name</p>
+                                    <input placeholder="Enter first name" defaultValue={group.group_name} ref={groupName} />
                                 </div>
                             </div>
-                            <div className="row">
-                                <div className="col-lg-6">
-                                    <div className="client-input">
-                                        <p>Associate Trainer</p>
-                                        <select ref={associateTrainer}>
-                                            <option>Select trainer</option>
-                                            {
-                                                trainers.map((trainer, i) => {
-                                                    return (
-                                                        <option value={trainer.id} selected={md5(trainer.id.toString()) == group.associated_practioner ? true : false}>{trainer.firstname} {trainer.lastname}</option>
-                                                    )
-                                                })
-                                            }
-
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <div className="client-input">
-                                        <p>Associate Hardware Type</p>
-                                        <select ref={associateHardwaretype} defaultValue={group.device}>
-                                            <option value="1" selected={group.device == 1 ? true : false} >5.0 Devices</option>
-                                            <option value="2" selected={group.device == 2 ? true : false}>6.0 Devices</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="add-clients">
-                                <h3>Add Clients</h3>
-                            </div>
-                            {/* {clientList.length} */}
-                            {
-                                groupProfile.map((v, i) => {
-                                    return (
-                                        <EditgroupProfile index={i + 1} data={v} />
-                                    )
-
-                                })
-                            }
-
-
-                            <div className="row">
-
-
-
-                                <div className="col-lg-6">
-                                    <div className="create-btn">
-                                        <Link to="/viewcreate" >Go Back</Link>
-                                    </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <Modal isOpen={successModal} toggle={successToggleModal} className="connect-box" centered={true}>
-                                        <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
-                                        <ModalBody>
-                                            <div className="modal-p">
-                                                <div className="right-circle"><img src={right} /></div>
-                                                <h4>Saved!</h4>
-                                                <p>Your Form has been Updated Successfully</p>
-                                            </div>
-                                        </ModalBody>
-
-                                    </Modal>
-                                    <div className="create-btn">
-                                        <button type="submit" onClick={updateGroupprofile}>Update Group Information
+                            <div className="col-lg-6">
+                                <div className='group-pass-wrp'>
+                                    <div className='group-pass-child'>
+                                        <div className="client-input">
+                                            <p>Group Email</p>
                                            
-                                        </button>
+                                            <input type="gmail" placeholder="Gmail" defaultValue={group.email} ref={groupEmail} />
+                                        </div>
                                     </div>
+                                   <div className='group-pass-child'>
+                                   <div className="client-input">
+                                        <p>Group Password</p>
+                                       
+                                        <input type={passwordShown ? "text" : "password"} placeholder="Password" defaultValue={group.password} ref={password} />
+                                        {
+                                        passwordShown ? <i class="fa fa-eye-slash pass-eye2" aria-hidden="true" onClick={togglePasswordVisiblity}></i> : <i className="fa fa-eye pass-eye2" aria-hidden="true" onClick={togglePasswordVisiblity}></i>
+                                    }
+                                    </div>
+                                   </div>
                                 </div>
                             </div>
                         </div>
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <div className="client-input">
+                                    <p>Associate Trainer</p>
+                                    <select ref={associateTrainer}>
+                                        <option>Select trainer</option>
+                                        {
+                                            trainers.map((trainer, i) => {
+                                                return (
+                                                    <option value={trainer.id} selected={md5(trainer.id.toString()) == group.associated_practioner ? true : false}>{trainer.firstname} {trainer.lastname}</option>
+                                                )
+                                            })
+                                        }
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="col-lg-6">
+                                <div className="client-input">
+                                    <p>Associate Hardware Type</p>
+                                    <select ref={associateHardwaretype} defaultValue={group.device}>
+                                        <option value="1" selected={group.device == 1 ? true : false} >5.0 Devices</option>
+                                        <option value="2" selected={group.device == 2 ? true : false}>6.0 Devices</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="add-clients">
+                            <h3>Add Clients</h3>
+                        </div>
+                        {/* {clientList.length} */}
+                        {
+                            groupProfile.map((v, i) => {
+                                return (
+                                    <EditgroupProfile index={i + 1} data={v} />
+                                )
+
+                            })
+                        }
+
+
+                        <div className="row">
+
+
+
+                            <div className="col-lg-6">
+                                <div className="create-btn">
+                                    <Link to="/edit/group" >Go Back</Link>
+                                </div>
+                            </div>
+                            <div className="col-lg-6">
+                                <Modal isOpen={successModal} toggle={successToggleModal} className="connect-box" centered={true}>
+                                    <ModalHeader toggle={successToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
+                                    <ModalBody>
+                                        <div className="modal-p">
+                                            <div className="right-circle"><img src={right} /></div>
+                                            <h4>Saved!</h4>
+                                            <p>Your Form has been Updated Successfully</p>
+                                        </div>
+                                    </ModalBody>
+
+                                </Modal>
+                                <div className="create-btn">
+                                    <button type="submit" onClick={updateGroupprofile}>Update Group Information
+
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <Modal isOpen={fillallfieldmodal} toggle={fillallfieldtoggleModal} className="connect-box" centered={true}>
