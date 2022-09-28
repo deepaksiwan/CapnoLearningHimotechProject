@@ -1609,14 +1609,13 @@ strong {
   vertical-align: middle;
 }
 .datafileformat-child1 > p{
-  color: #000;
-  font-weight: 600;
-  font-size: 14px;
+  color: #212529;
+  font-size: 16px;
 }
 .datafileformat-child2 > span {
   display: inline-block;
   margin-left: 5px;
-  font-size: 14px;
+  font-size: 16px;
   vertical-align: middle;
 }
 .modal-box-wrp {
