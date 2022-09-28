@@ -1555,7 +1555,7 @@ strong {
   font-size: 14px;
   color: #000;
   margin-top: 4px;
-  margin-left: 15px;
+  margin-left: 5px;
 }
 
 .signals-list>li {
@@ -3223,6 +3223,10 @@ sub {
 
 .configure-child1 {
   width: 45%;
+}
+
+.specialwidth{
+  width: 35%;
 }
 
 .time-input {

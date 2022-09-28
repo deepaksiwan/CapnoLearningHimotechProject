@@ -328,7 +328,8 @@ const ChartTable = () => {
 
 
     return (
-        <div onContextMenu={(e) => e.preventDefault()   } >
+        // <div onContextMenu={(e) => e.preventDefault()   } >
+        <div  >
             {
                 graphs.length > 0  && showHeader &&
                 <ChartHeader group={false} showHeader={showHeader}  showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={config} />

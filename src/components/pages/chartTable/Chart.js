@@ -33,9 +33,10 @@ const Chart = (props) => {
     // Utz = Utz*60*1000 ; 
     useEffect(() => {
         // // console.log("signal sat" , props.showSignalStat)
-        if (!props.showSignalStat) {
+         
             setTableView(props.showSignalStat)
-        }
+            setShowSignalStat(props.showSignalStat)
+        
     }, [props.showSignalStat])
 
     const [unitArray, setunitArray] = useState({
@@ -153,8 +154,8 @@ const Chart = (props) => {
 
     const [updateCommentModal, setUpdateCommentModal] = useState(false);
     const toggleUpdateCommentModal = () => setUpdateCommentModal(!updateCommentModal);
-    // const [showSignalStat ,setShowSignalStat ] = useState(props.showSignalStat) ; 
-    const showSignalStat = props.showSignalStat;
+    const [showSignalStat ,setShowSignalStat ] = useState(props.showSignalStat) ; 
+    // const showSignalStat = props.showSignalStat;
 
     const [annotationtModal, setannotationtModal] = useState(false);
     const toggleannotationtModal = () => setannotationtModal(!annotationtModal);
@@ -174,7 +175,8 @@ const Chart = (props) => {
         signalType: props.type == "line" ? 1 : props.type == "bar" ? 2 : 3,
         disabledType: props.type == "line" ? true : false,
         stat: otherConfig.stat,
-        signal: 1
+        signal: 1,
+        movingAverage: 0
     })
     const [average, setAverage] = useState(30)
     const [comment, setComment] = useState((props.comment == "{}" || props.comment == "[]" || props.comment == null ? [] : JSON.parse(props.comment)))
@@ -568,7 +570,7 @@ const Chart = (props) => {
 
                         if (v.r != prevRecord) {
                             recId++;
-                            let _recName = "Rec - " + recId;
+                            let _recName = "Rec-" + recId;
                             _recordArray.push([xData, v.rname == "Normal" ? _recName : v.rname]);
 
 
@@ -887,7 +889,7 @@ const Chart = (props) => {
                                         x: new Date(new Date(v[0]).getTime()),
                                         y: ymax - (ymax * 0.022),
                                         textangle: 0,
-                                        text: v[1],
+                                        text: v[1] ,
                                         showarrow: true,
                                         arrowhead: 0,
                                         ax: 30,
@@ -1095,7 +1097,7 @@ const Chart = (props) => {
 
 
     const toogleTableView = () => {
-        // setShowSignalStat(!showSignalStat);
+        setShowSignalStat(!tableView);
         setTableView(!tableView);
 
     }
@@ -1879,6 +1881,61 @@ const Chart = (props) => {
     }
     // console.log(color);
 
+    const movingAverage = (e) => {
+        const arr = yAxisOg;
+        console.log(yAxisOg);
+        let avg = e.target.value ; 
+    
+        setSignalModalData(prevState => ({
+            ...prevState,
+            movingAverage: avg
+        }))
+        if(avg == 0){
+            setYaxis(yAxisOg);
+        }
+        else{
+
+           const res = [];
+           const res2 = [];
+           let sum = 0;
+           let count = 0;
+           let counter = 1 ;
+           for(let i = 0; i < arr.length; i++){
+              
+            
+
+              if(i > avg){
+                let min = i - avg ; 
+                for(let j = i ; j >  min ; j--){
+                    const el = arr[j];
+                    sum += parseFloat(el);
+                                    
+                }
+
+                const curr = sum / parseFloat(avg);
+
+                sum = 0 ;
+                res[i] = curr;
+                counter = 0 ;                
+              }
+              else{
+                res[i] = arr[i];
+
+              }
+              counter++ ;
+            //   res2[i] = el;
+              if(i == (arr.length - 1)){
+                console.log("movng avg" ,avg)
+                console.log("movng avg" ,res)
+                // console.log("movng avg" ,res2)
+               setYaxis(res);
+              }
+           }
+        }
+
+    
+    }
+
     return (
         <div >
             <ReactTooltip />
@@ -1925,7 +1982,7 @@ const Chart = (props) => {
                             <li data-tip="Reset Graph"><a onClick={reset}><i class="fa fa-undo"></i></a></li>
                             {
                                 props.signal != "pco2wave" && props.signal != "pco2b2b" && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa" &&
-                                <li data-tip="Table Settings"><a onClick={() => { toogleTableView(); toggleconfigureTableModal(); }}><i class="fa fa-table" aria-hidden="true"></i></a></li>
+                                <li data-tip="Table Settings"><a onClick={() => { toggleconfigureTableModal(); }}><i class="fa fa-table" aria-hidden="true"></i></a></li>
 
                             }
                             {/*   <li><a  onClick={toggleannotationtModal}><i class="fa fa-comment"></i></a></li> */}
@@ -1955,18 +2012,21 @@ const Chart = (props) => {
                             //  onUpdate={handleRelayout}
                             //  onKeyDown={() => handleKeypress}
                             onInitialized={handleInitial}
+                            
                             data={[
                                 {
                                     x: xAxis,
                                     y: yAxis,
                                     text: textTooltip,
-
+                                    
+                                    
                                     marker: {
                                         color: type == "obar" ? color.hex ? color.hex + "00" : color + "00" : color,
                                         line: {
                                             color: color,
                                             dash: signalLinetype,
-                                            width: value
+                                            width: value,
+                                            
                                         },
                                     },
                                     line: {
@@ -1975,7 +2035,9 @@ const Chart = (props) => {
                                         width: value
                                     },
                                     textposition: "none",
-                                    type: type == "obar" ? "bar" : type,
+                                    type: type == "obar" ? "bar" : type == "line" ? "scatter": type,
+                            
+
 
                                     hovertemplate: '<b>' + ((props.signal != "pco2wave" && props.signal != "pco2b2b" && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa") ? signalModalData.stat.toUpperCase() : 'Raw Data') + '</b><br><i>Y</i>: %{y:.2f}' +
                                         '<br><b>X</b>: %{x}<br>' +
@@ -2004,6 +2066,7 @@ const Chart = (props) => {
                                 yaxis: { rangemode: 'tozero' },
                                 xaxis: { rangemode: 'tozero' },
                                 hovermode: true,
+                                
                                 images: images,
                                 dragmode: dragMode,
                                 showlegend: false,
@@ -2049,6 +2112,7 @@ const Chart = (props) => {
                                 displayModeBar: false,
                                 scrollZoom: zoomEnabled,
                                 autosize: true,
+                                
 
                                 doubleClick: false,
                                 transition: {
@@ -2308,6 +2372,9 @@ const Chart = (props) => {
                                                         </Col>
                                                     </Row>
                                                 </li>
+                                                
+                                        
+                                      
                                                 <li>
                                                     <Row justify="space-between" style={{ height: rowHeight }}>
                                                         <Col lg={5} xl={5}>
@@ -2348,7 +2415,9 @@ const Chart = (props) => {
                                                 </Col>
                                             </Row>
                                         </li>
-                                        {signalModalData.disabledType && <li>
+                                        {signalModalData.disabledType && 
+                                        <>
+                                        <li>
                                             <Row justify="space-between" style={{ height: rowHeight }}>
                                                 <Col lg={5} xl={5}>
                                                     <span>Signal Line Type</span>
@@ -2366,7 +2435,35 @@ const Chart = (props) => {
 
                                                 </Col>
                                             </Row>
-                                        </li>}
+                                        </li>
+                                        <li>
+                                            <Row justify="space-between" style={{ height: rowHeight }}>
+                                                <Col lg={5} xl={5}>
+                                                    <span>Moving Average</span>
+                                                </Col>
+                                                <Col lg={7} xl={7}>
+                                                <select
+                                                        style={{ width: "100%" }}
+
+                                                        onChange={(e) => movingAverage(e)}
+                                                        value={signalModalData.movingAverage}
+                                                        
+
+                                                    >
+                                                        <option value="0">No Averages</option>
+                                                        <option value="2">2 Averages</option>
+                                                        <option value="3">3 Averages</option>
+                                                        <option value="4">4 Averages</option>
+                                                        <option value="5">5 Averages</option>
+                                                      
+                                                    </select>
+                                                   
+
+                                                </Col>
+                                            </Row>
+                                        </li>
+                                        </>
+                                        }
                                         <li>
                                             <Row justify="space-between" style={{ height: rowHeight }}>
                                                 <Col lg={5} xl={5}>
@@ -2517,7 +2614,7 @@ const Chart = (props) => {
                                         <li>
                                             <Row justify="space-between">
                                                 <Col lg={5} xl={5}>
-                                                    <span>Show Grid Line</span>
+                                                    <span>Show Grid Lines</span>
                                                 </Col>
                                                 <Col lg={7} xl={7}>
                                                     <select
@@ -2567,18 +2664,20 @@ const Chart = (props) => {
                                                 <Col lg={7} xl={7}>
                                                     <div className="wrp-axis">
                                                         <div className='min-axis'>
-                                                            <input placeholder='0' value={yAxisMin} onChange={(e) => {
+                                                             <input placeholder='0' value={yAxisMin} onChange={(e) => {
                                                                 let { value = "" } = e.target
                                                                 setYaxisMin(value)
                                                             }} />
-                                                            <span>Min</span>
+                                                             
+                                                       
+                                                            {/* <span>Min</span> */}
                                                         </div>
                                                         <div className='max-axis'>
                                                             <input placeholder='0' value={yAxisMax} onChange={(e) => {
                                                                 let { value = "" } = e.target
                                                                 setYaxisMax(parseFloat(value))
                                                             }} />
-                                                            <span>Max</span>
+                                                            
                                                         </div>
                                                     </div>
                                                 </Col>
@@ -2609,8 +2708,8 @@ const Chart = (props) => {
 
                         {/* comment modal start */}
                         <Draggable handle=".handle">
-                            <Modal isOpen={commentModal} toggle={toggleCommentModal} className="modal-box-wrp" centered={true}>
-                                <ModalHeader toggle={toggleCommentModal}><span className="ml-1 roititle modal-head">Add Comment</span></ModalHeader>
+                            <Modal isOpen={commentModal}  toggle={toggleCommentModal} className="modal-box-wrp" centered={true}>
+                                <ModalHeader className='handle' toggle={toggleCommentModal}><span className="ml-1 roititle modal-head">Add Comment</span></ModalHeader>
                                 <ModalBody>
                                     <textarea rows="8" style={{ width: "100%" }} value={reportComment} onChange={(e) => setReportComment(e.target.value)} ></textarea>
 
@@ -2652,8 +2751,8 @@ const Chart = (props) => {
 
                     </div>
                     {
-                        (props.signal != "pco2wave" && props.signal != "pco2b2b" && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa") && (showSignalStat || tableView) ?
-                            <table className='table table-resposnive table-hover statTable mt-5' style={{ display: (showSignalStat || tableView) ? "" : "none" }} >
+                        (props.signal != "pco2wave" && props.signal != "pco2b2b" && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa") && (showSignalStat && tableView  ) ?
+                            <table className='table table-resposnive table-hover statTable mt-5' style={{ display: (showSignalStat && tableView) ? "" : "none" }} >
                                 <thead className='thead-dark'>
                                     <tr>
                                         <th>X</th>
@@ -2704,26 +2803,26 @@ const Chart = (props) => {
             <Draggable handle=".handle">
 
                 <Modal isOpen={configureTableModal} toggle={toggleconfigureTableModal} centered={true}>
-                    <ModalHeader toggle={toggleconfigureTableModal}><span className="ml-1 roititle modal-head">Configure Table Options for PetCO<span className='pet-2'>2</span> History</span></ModalHeader>
+                    <ModalHeader className='handle' toggle={toggleconfigureTableModal}><span className="ml-1 roititle modal-head">Table Settings (<span dangerouslySetInnerHTML={{ __html: props && signalName[props.signal] }} ></span>)</span> </ModalHeader>
                     <ModalBody>
                         <div>
                             <ul className='configure-list'>
                                 <li>
                                     <div className='configure-wrp'>
-                                        <div className='configure-child1'>
+                                        <div className='configure-child1 specialwidth'>
                                             <p>Show Table:</p>
                                         </div>
                                         <div className='configure-child2'>
-                                            <input type="radio" name="yes" />
+                                            <input onClick={() => toogleTableView()} type="radio" checked={tableView ? true : false}  name="tableview" />
                                             <span>Yes</span>
-                                            <input type="radio" className='radio-mrl' name="yes" />
+                                            <input onClick={() => toogleTableView()} type="radio" checked={tableView ? false : true}  className='radio-mrl' name="tableview" />
                                             <span>No</span>
                                         </div>
                                     </div>
                                 </li>
                                 <li>
                                     <div className='configure-wrp'>
-                                        <div className='configure-child1'>
+                                        <div className='configure-child1 specialwidth'>
                                             <p>Link With Graph:</p>
                                         </div>
                                         <div className='configure-child2'>
@@ -2736,7 +2835,7 @@ const Chart = (props) => {
                                 </li>
                                 <li>
                                     <div className='configure-wrp'>
-                                        <div className='configure-child1'>
+                                        <div className='configure-child1 specialwidth'>
                                             <p>Show Statistics:</p>
                                         </div>
                                         <div className='configure-child2'>
@@ -2751,7 +2850,7 @@ const Chart = (props) => {
                                 </li>
                                 <li>
                                     <div className='configure-wrp'>
-                                        <div className='configure-child1'>
+                                        <div className='configure-child1 specialwidth'>
                                             <p>Time Range:</p>
                                         </div>
                                         <div className='configure-child2'>
@@ -2763,7 +2862,7 @@ const Chart = (props) => {
                                 </li>
                                 <li>
                                     <div className='configure-wrp'>
-                                        <div className='configure-child1'>
+                                        <div className='configure-child1 specialwidth'>
                                             <p className='data-point'>Data Point:</p>
                                         </div>
                                         <div className='configure-child2'>
@@ -2774,9 +2873,9 @@ const Chart = (props) => {
                                         </div>
                                     </div>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <button onClick={toggleconfigureTableModal} className='configtable-colse-btn'>Close</button>
-                                </li>
+                                </li> */}
                             </ul>
                         </div>
                     </ModalBody>
@@ -2786,7 +2885,7 @@ const Chart = (props) => {
             <Draggable handle=".handle">
 
                 <Modal isOpen={mouseSetingModal} toggle={toggleMouseSetingModal} centered={true}>
-                    <ModalHeader toggle={toggleMouseSetingModal}><span className="ml-1 roititle modal-head">Mouse Settings </span></ModalHeader>
+                    <ModalHeader className='handle' toggle={toggleMouseSetingModal}><span className="ml-1 roititle modal-head">Mouse Settings (<span dangerouslySetInnerHTML={{ __html: props && signalName[props.signal] }} ></span>) </span></ModalHeader>
                     <ModalBody>
                         <div>
                             <ul className='configure-list'>
