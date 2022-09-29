@@ -5,6 +5,7 @@ import { jsPDF } from "jspdf";
 import ReactExport from "react-export-excel";
 import ReactTooltip from 'react-tooltip';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
+import { API_URL } from '../../config';
 
 //import { ContactPageSharp } from '@mui/icons-material';
 const ChartExportedHeader = (props) => {
@@ -53,7 +54,7 @@ const ChartExportedHeader = (props) => {
         // SaveImage();
     }, []);
     const getRcord = () => {
-        fetch("https://capno-api.herokuapp.com/api/session/record?session_id=" + sessionid,
+        fetch(API_URL+"/session/record?session_id=" + sessionid,
             {
                 method: 'GET',
                 headers: {

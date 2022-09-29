@@ -15,6 +15,7 @@ const ChartHeader = (props) => {
     const sessionid = localStorage.getItem('selectedSession');
     const clientId = localStorage.getItem('selectedClient');
 
+    const [action, setAction] = useState();
     const [records, setrecords] = useState([]);
     const [sessionDate, setsessionDate] = useState([]);
     const [clientName, setClientName] = useState([]);
@@ -44,6 +45,21 @@ const ChartHeader = (props) => {
 
     const [savePdfModal, setSavePdfModal] = useState(false);
     const savePdfModalToggle = () => setSavePdfModal(!savePdfModal);
+
+    
+    const [confirmLeaveModal, setConfirmLeaveModal] = useState(false);
+    const confirmLeaveModalToggle = () => {
+        setConfirmLeaveModal(!confirmLeaveModal);
+        if(action == "reportConfig"){
+            reportconfig.current.value = config
+        }
+        if(action == "altConfig"){
+            alternateconfig.current.value = currentConfig
+        }
+        if(action == "record"){
+            reportRecord.current.value = record
+        }
+    }
 
     const [zoomRecording, setZoomRecording] = useState(null);
 
@@ -534,8 +550,30 @@ const ChartHeader = (props) => {
 
         window.location.href = "/create/report/" + moveClock + "/" + config + "/" + session + "/" + record + "/" + config;
     }
+    const confirmLeave = (v) => {
+        setAction(v)
+        confirmLeaveModalToggle();
+
+    }
+
+    const performAction = () => {
+        if(action == "reportConfig"){
+            reportconfigupdate() ; 
+        }
+        else if(action == "altConfig"){
+            reportconfigalternateupdate() ; 
+        }
+        else if(action == "record"){
+            reportrecordupdate() ; 
+        }
+        else if(action == "dashboard"){
+            window.location.href = "/" ; 
+        }
+        
+    }
 
     const reportconfigupdate = () => {
+
         let _configId = reportconfig.current.value;
         window.location.href = "/create/report/" + showclock + "/" + _configId + "/" + session + "/all/" + _configId;
     }
@@ -854,28 +892,8 @@ const ChartHeader = (props) => {
 
                                     <li>
                                         <ReactTooltip />
-
-                                        <ExcelFile filename={"Statistics - " + sessioninfo[0].name + "-" + sessioninfo[0].client_firstname + " " + sessioninfo[0].client_lastname} element={<a href="javascript:void" onClick={ ()=>{datafileModalToggle();}} data-tip="Export Data."   ><i class="fa fa-upload" aria-hidden="true"></i></a>}>
-
-                                            {
-                                                graphs.map((v, i) => {
-                                                    //   // console.log("excel data "+v.signal_name );
-
-                                                    return (
-
-                                                        <ExcelSheet data={signalStat[v.signal_name] ? signalStat[v.signal_name] : []} name={v.signal_name}>
-                                                            <ExcelColumn label="X" value="x" />
-                                                            <ExcelColumn label="Mean" value="mean" />
-                                                            <ExcelColumn label="Median" value="median" />
-                                                            <ExcelColumn label="Standard Deviation" value="sd" />
-                                                        </ExcelSheet>)
-
-
-                                                })
-                                            }
-
-
-                                        </ExcelFile>
+                                        <a href="javascript:void" onClick={ ()=>{datafileModalToggle();}} data-tip="Export Data."   ><i class="fa fa-upload" aria-hidden="true"></i></a>
+                                        
                                     </li>
 
                                 }
@@ -917,7 +935,7 @@ const ChartHeader = (props) => {
                 <div className="chart-header-c2">
                     <div className="wrp-select-row">
                         <div className="select-row">
-                            <select className="selected-raw-c" onChange={reportconfigupdate} ref={reportconfig}>
+                            <select className="selected-raw-c"  onChange={() =>{ confirmLeave('reportConfig'); return false}} ref={reportconfig}>
 
                                 {
                                     sessions.map((sessions) => {
@@ -936,7 +954,7 @@ const ChartHeader = (props) => {
                             !group &&
 
                             <div className="select-row">
-                                <select onChange={reportconfigalternateupdate} ref={alternateconfig}>
+                                <select    onChange={() =>{ confirmLeave('altConfig'); return false}} ref={alternateconfig}>
                                     <option value={config} selected={config == currentConfig ? "selected" : ""} >Default</option>
                                     {
                                         alternate.length > 0 && alternate.map((v, i) => {
@@ -950,13 +968,13 @@ const ChartHeader = (props) => {
 
                         }
                         <div className="select-row">
-                            <select value={record} onChange={reportrecordupdate} ref={reportRecord}>
-                                <option value={'all'}   >All Records</option>
+                            <select   onChange={() =>{ confirmLeave('record')}} ref={reportRecord}>
+                                <option value={'all'} selected={records.number == 'all' ? "selected" : ""}   >All Records</option>
 
                                 {
                                     records.map((records) => {
                                         return (
-                                            <option value={records.number}>{records.name}</option>
+                                            <option selected={records.number == record ? "selected" : ""} value={records.number}>{records.name}</option>
                                         )
                                     })
                                 }
@@ -997,7 +1015,7 @@ const ChartHeader = (props) => {
                 </div>
                 <div className="chart-header-c4">
                     <div className="dashboard-back">
-                        <Link to="/"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Dashboard</Link>
+                        <a onClick={() => confirmLeave("dashboard")} href="javascript:void"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Dashboard</a>
                     </div>
                 </div>
             </div>
@@ -1074,7 +1092,8 @@ const ChartHeader = (props) => {
                                             <p>Choose Data File Format:</p>
                                         </div>
                                         <div className='datafileformat-child2'>
-                                            <input type="radio" name="CSV" />
+                                      
+                                        <input type="radio" className='radio-mrl' name="CSV" />
                                             <span>CSV.</span>
                                             <input type="radio" className='radio-mrl' name="CSV" />
                                             <span>EXCEL.</span>
@@ -1090,6 +1109,24 @@ const ChartHeader = (props) => {
                 </ModalBody>
 
             </Modal>
+
+            
+            <Modal isOpen={confirmLeaveModal} toggle={confirmLeaveModalToggle} className="modal-box-wrp" centered={true}>
+                <ModalHeader toggle={confirmLeaveModalToggle}><span className="ml-1 roititle modal-head"> Confirm ?</span></ModalHeader>
+                <ModalBody>
+                    <p className=''>Are you sure you want to leave this screen, please save your changes before leaving ?</p>
+                   
+
+                    <div className='d-flex justify-content-around mt-3'>
+                        <button className='lightbtn w-100' onClick={confirmLeaveModalToggle} >Cancel</button>
+
+                        <button className='darktbtn w-100 ml-1' onClick={performAction} >Confirm</button>
+
+                    </div>
+                </ModalBody>
+
+            </Modal>
+
         </div>
     )
 }

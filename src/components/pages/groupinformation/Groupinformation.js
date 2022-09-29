@@ -349,7 +349,7 @@ const Groupinformation = () => {
                                 </div>
                                 <div className="col-lg-4">
                                     <div className="client-input">
-                                        <p>Associate Instruments Type</p>
+                                        <p>Associate Instrument Type</p>
                                         <select ref={associateHardwaretype} onChange={() => updatedType()}>
                                             <option value="0">Choose instrument type</option>
                                             <option value="1">CapnoTrainer® 5.0 Instruments</option>

@@ -24,8 +24,8 @@ const Editgroupinformation = () => {
     const [minclientModal, setminclientModal] = useState(false);
     const minclientToggleModal = () => setminclientModal(!minclientModal);
     const groupName = useRef();
-    const groupEmail = useRef();
-    const password = useRef();
+    const [groupEmail, setGroupEmail ] = useState();
+    const [password, setPassword] = useState();
     const associateTrainer = useRef();
     const associateHardwaretype = useRef();
     const [successModal, setsuccessModal] = useState(false);
@@ -58,10 +58,10 @@ const Editgroupinformation = () => {
         data['name'] = groupName.current.value;
         data['associated_owner'] = associated_owner;
         data['associated_practioner'] = associateTrainer.current.value;
-        data['email'] = groupEmail.current.value;
+        data['email'] = groupEmail;
         data['device_type'] = associateHardwaretype.current.value;
         data['status'] = 1;
-        data[password] = password.current.value;
+        data['password'] = password;
         let _temp = [];
         for (let i = 0; i < clientCount; i++) {
             _temp.push(devicelist[i + 1]);
@@ -69,7 +69,7 @@ const Editgroupinformation = () => {
         data['devices'] = _temp;
         // // console.log(data)
 
-        if (groupName.current.value == "" || associateTrainer.current.value == "" || groupEmail.current.value == "" || associateHardwaretype.current.value == "") {
+        if (groupName.current.value == "" || associateTrainer.current.value == "" || groupEmail == "" || associateHardwaretype.current.value == "") {
             fillallfieldtoggleModal();
             return false;
         } else {
@@ -118,6 +118,8 @@ const Editgroupinformation = () => {
                 response.json().then((resp) => {
                     // // console.log("result", resp);
                     setgroup(resp.group[0]);
+                    setGroupEmail(resp.group[0].group_email)
+                    setPassword(resp.group[0].password)
 
 
 
@@ -252,6 +254,7 @@ const Editgroupinformation = () => {
     return (
         <div className="demodata-bg">
             <Header />
+           
             <div className="wrp-dashbord">
                 <div className="sidebar-section">
                     <Sidebar />
@@ -280,14 +283,14 @@ const Editgroupinformation = () => {
                                         <div className="client-input">
                                             <p>Group Email</p>
                                            
-                                            <input type="gmail" placeholder="Gmail" defaultValue={group.email} ref={groupEmail} />
+                                            <input type="text" placeholder="" value={groupEmail} onChange={(e) => setGroupEmail(e.target.value) }/>
                                         </div>
                                     </div>
                                    <div className='group-pass-child'>
                                    <div className="client-input">
                                         <p>Group Password</p>
                                        
-                                        <input type={passwordShown ? "text" : "password"} placeholder="Password" defaultValue={group.password} ref={password} />
+                                        <input type={passwordShown ? "text" : "password"}  value={password} onChange={(e) => setPassword(e.target.value) }/>
                                         {
                                         passwordShown ? <i class="fa fa-eye-slash pass-eye2" aria-hidden="true" onClick={togglePasswordVisiblity}></i> : <i className="fa fa-eye pass-eye2" aria-hidden="true" onClick={togglePasswordVisiblity}></i>
                                     }
@@ -299,7 +302,7 @@ const Editgroupinformation = () => {
                         <div className="row">
                             <div className="col-lg-6">
                                 <div className="client-input">
-                                    <p>Associate Trainer</p>
+                                    <p>Trainer</p>
                                     <select ref={associateTrainer}>
                                         <option>Select trainer</option>
                                         {
@@ -315,10 +318,12 @@ const Editgroupinformation = () => {
                             </div>
                             <div className="col-lg-6">
                                 <div className="client-input">
-                                    <p>Associate Hardware Type</p>
+                                    <p>Associate Instrument Type</p>
                                     <select ref={associateHardwaretype} defaultValue={group.device}>
-                                        <option value="1" selected={group.device == 1 ? true : false} >5.0 Devices</option>
-                                        <option value="2" selected={group.device == 2 ? true : false}>6.0 Devices</option>
+                                        <option value="1" selected={group.device == 1 ? true : false} >CapnoTrainer® 5.0 Instruments</option>
+                                        <option value="2" selected={group.device == 2 ? true : false}>CapnoTrainer® 6.0 Instruments</option> 
+                                   
+
                                     </select>
                                 </div>
                             </div>
@@ -353,13 +358,13 @@ const Editgroupinformation = () => {
                                         <div className="modal-p">
                                             <div className="right-circle"><img src={right} /></div>
                                             <h4>Saved!</h4>
-                                            <p>Your Form has been Updated Successfully</p>
+                                            <p>Group Profile has been Updated Successfully</p>
                                         </div>
                                     </ModalBody>
 
                                 </Modal>
                                 <div className="create-btn">
-                                    <button type="submit" onClick={updateGroupprofile}>Update Group Information
+                                    <button   onClick={updateGroupprofile}>Update Group Information
 
                                     </button>
                                 </div>
@@ -368,6 +373,7 @@ const Editgroupinformation = () => {
                     </div>
                 </div>
             </div>
+    
             <Modal isOpen={fillallfieldmodal} toggle={fillallfieldtoggleModal} className="connect-box" centered={true}>
                 <ModalHeader toggle={fillallfieldtoggleModal}><span className="ml-1 roititle font-weight-bold">Error</span></ModalHeader>
                 <ModalBody>

@@ -23,13 +23,19 @@ const Chart = (props) => {
     const record = props.record;
     const [xAxis, setXaxis] = useState([]);
     const [yAxis2, setYAxis2] = useState([]);
-    const [timeVal, setTimeVal] = useState()
-    const [timeVal2, setTimeVal2] = useState()
- 
+    const [timeVal, setTimeVal] = useState();
+    const [timeVal2, setTimeVal2] = useState();
+    const [sdShow, setSdShow] = useState(true);
+    const [medianShow, setMedianShow] = useState(true);
+    const [meanShow, setMeanShow] = useState(true);
+    const [txRange,setTxRange] = useState(0);
+
     const { showclock } = useParams();
     const sessionDate = props.sessionDate;
     const [textTooltip, setTextTooltip] = useState([]);
     const [statistics, setStatistics] = useState([]);
+    const [statisticsOg, setStatisticsOg] = useState([]);
+    
     const [zoomEnabled, setZoomEnabled] = useState(false);
     // alert(new Date(parseInt(props.xmin)));
     let Utz = new Date().getTimezoneOffset();
@@ -38,34 +44,34 @@ const Chart = (props) => {
     const timerange = useRef();
     const timerange2 = useRef();
 
-    console.log("timerange",timeVal)
-    console.log("timerange2",timeVal2)
+    console.log("timerange", timeVal)
+    console.log("timerange2", timeVal2)
 
 
-    const onchangeInput = ()=>{
+    const onchangeInput = () => {
         var value = timerange.current.value
-        
+
         value = value.replace(/\D/g, "").split(/(?:([\d]{2}))/g).filter(s => s.length > 0).join(":");
         setTimeVal(value)
         // $(this).val(value);
     }
-    const onchangeInput2 = ()=>{
+    const onchangeInput2 = () => {
         var value = timerange2.current.value
-        
+
         value = value.replace(/\D/g, "").split(/(?:([\d]{2}))/g).filter(s => s.length > 0).join(":");
         setTimeVal2(value)
         // $(this).val(value);
     }
 
-   
+
     useEffect(() => {
 
 
         // // console.log("signal sat" , props.showSignalStat)
-         
-            setTableView(props.showSignalStat)
-            setShowSignalStat(props.showSignalStat)
-        
+
+        setTableView(props.showSignalStat)
+        setShowSignalStat(props.showSignalStat)
+
     }, [props.showSignalStat])
 
     const [unitArray, setunitArray] = useState({
@@ -110,10 +116,15 @@ const Chart = (props) => {
         // // console.log("newMin", new Date(parseInt(props.xmin*1e3)));
     }
     const [xAxisMax, setXaxisMax] = useState(props.xmax == "full" ? props.xmax : new Date(parseInt(props.xmax * 1e3)));
+    const [txaxisMax, setTxaxisMax] = useState(props.xmax == "full" ? props.xmax : new Date(parseInt(props.xmax * 1e3)));
+    const [txaxisMin, setTxaxisMin] = useState(props.xmin == 0 ? props.xmin : new Date(parseInt(props.xmin * 1e3)));
     const [yAxisMin, setYaxisMin] = useState(parseFloat(props.ymin));
     const [yAxisMax, setYaxisMax] = useState(parseFloat(props.ymax));
     const unit = useRef(0);
     const [color, setColor] = useState(props.color);
+    const [taverage, setTaverage] = useState(30);
+    
+
     const group = props.group;
     const clientSerial = props.clientSerial;
     const [reportComment, setReportComment] = useState(null);
@@ -134,6 +145,7 @@ const Chart = (props) => {
         tcolor: "#FF0000",
         tthick: 1,
         tvalue: 35,
+        tableLinked: true,
     };
     const [yAxis, setYaxis] = useState([]);
     const [yAxisOg, setYAxisOg] = useState([]);
@@ -156,7 +168,7 @@ const Chart = (props) => {
     const [currentPoint, setCurrentPoint] = useState(null);
     const [currentAnnotation, setCurrentAnnotation] = useState(null);
 
-    // const [liveAnnotation,setLiveAnnotation] = useState([]) ; 
+    const [tableLinked, setTablLinked] = useState(otherConfig.tableLinked);
 
     const [configureTableModal, setConfigureTableModal] = useState(false);
     const toggleconfigureTableModal = () => setConfigureTableModal(!configureTableModal);
@@ -183,7 +195,7 @@ const Chart = (props) => {
 
     const [updateCommentModal, setUpdateCommentModal] = useState(false);
     const toggleUpdateCommentModal = () => setUpdateCommentModal(!updateCommentModal);
-    const [showSignalStat ,setShowSignalStat ] = useState(props.showSignalStat) ; 
+    const [showSignalStat, setShowSignalStat] = useState(props.showSignalStat);
     // const showSignalStat = props.showSignalStat;
 
     const [annotationtModal, setannotationtModal] = useState(false);
@@ -210,7 +222,7 @@ const Chart = (props) => {
     const [average, setAverage] = useState(30)
     const [comment, setComment] = useState((props.comment == "{}" || props.comment == "[]" || props.comment == null ? [] : JSON.parse(props.comment)))
     const [signalLinetype, setSignalLinetype] = useState(otherConfig.lineType)
-    // const [hideThresholdLine,setHideThresholdLine] = useState(true)
+    const [hideThresholdLine, setHideThresholdLine] = useState(true)
     const [showThresholdLine, setShowThresholdLine] = useState(false)
     const setConfig = props.setConfig;
     const setStats = props.setStats;
@@ -261,6 +273,26 @@ const Chart = (props) => {
     colorCodes['BR-6'] = "#FFF000"
     colorCodes['Paused'] = "#FF0000"
     useEffect(() => {
+        if(tableLinked){
+            setTxaxisMax(xAxisMax);
+            setTxaxisMin(xAxisMin);    
+        }
+    }, [xAxisMax, xAxisMin, tableLinked])
+    useEffect(() => {
+        if(!tableLinked){
+            setTxaxisMin(new Date(xAxis[0]))
+            setTxaxisMax(new Date(xAxis[xAxis.length - 1]))
+
+           calculate_history_sample_table(taverage)
+            
+        }
+        if(tableLinked){
+           setTxRange(0)
+           setTaverage(30)
+           calculate_history_sample_table(average)
+        }
+    }, [tableLinked])
+    useEffect(() => {
         // super(props);
         // // console.log("max" ,xAxisMax)
 
@@ -295,7 +327,8 @@ const Chart = (props) => {
             thresholdtcolor: thresholdtLine,
             stat: signalModalData.stat,
             thresholdthick: thresholdthick,
-            thresholdvalue: thresholdvalue
+            thresholdvalue: thresholdvalue,
+
         }
         group ? clientSerial ? setConfig(clientSerial, _temp) : setConfig(props.profile.name, _temp) : props.multi ? setConfig(props.signal + "_" + props.session, _temp) : setConfig(props.signal, _temp)
     }, [color, type, average, xAxisMin, value, xAxisMax, yAxisMin, yAxisMax, record, comment, signalLinetype, modal]);
@@ -306,8 +339,8 @@ const Chart = (props) => {
         getAlldata();
         // console.log(xAxisMax)
 
-        
-       
+
+
 
 
     }, [])
@@ -373,6 +406,24 @@ const Chart = (props) => {
 
 
         })
+    }
+
+    const handleTxrange = (e) => {
+      
+        let { value = "" } = e.target || {}
+         
+        setTxRange(value)
+ 
+        if (value == "0") {
+
+            setTxaxisMin(new Date(xAxis[0]))
+            setTxaxisMax(new Date(xAxis[xAxis.length - 1]))
+        }
+        else if (value != "0") {
+            let _deviation = value * 60000
+            let xAxisMilisecond = new Date(xAxisMin).getTime() + _deviation
+            setTxaxisMax(new Date(xAxisMilisecond))
+        }
     }
 
     const getAlldata = () => {
@@ -596,6 +647,7 @@ const Chart = (props) => {
 
                         _tempStats.push({
                             x: xData.getHours() + ":" + xData.getMinutes() + ":" + xData.getSeconds() + ":" + xData.getMilliseconds(),
+                            xdate: xData,
                             mean: parseFloat(v.y).toFixed(2),
                             median: parseFloat(v.median).toFixed(2),
                             sd: parseFloat(v.std).toFixed(2),
@@ -898,7 +950,7 @@ const Chart = (props) => {
                         let ymax = yAxisMax;
 
                         if (ymax == 0) {
-                              ymax = getMax(_y);
+                            ymax = getMax(_y);
 
                             if (ymax == 0) {
                                 setYaxisMax(5)
@@ -922,7 +974,7 @@ const Chart = (props) => {
                                         x: new Date(new Date(v[0]).getTime()),
                                         y: ymax - (ymax * 0.022),
                                         textangle: 0,
-                                        text: v[1] ,
+                                        text: v[1],
                                         showarrow: true,
                                         arrowhead: 0,
                                         ax: 30,
@@ -1109,6 +1161,7 @@ const Chart = (props) => {
                         if (props.signal != "pco2wave" && props.signal != "pco2b2b" && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa") {
                             setStats(props.signal, _tempStats)
                             setStatistics(_tempStats)
+                            setStatisticsOg(_tempStats)
 
                         }
 
@@ -1146,6 +1199,7 @@ const Chart = (props) => {
         // // console.log("initial" , new Date(e.layout.xaxis.range[1]))
         if (props.xmin == 0) {
             setXaxisMin(new Date(xAxis[0]))
+            setTxaxisMin(new Date(xAxis[0]))
         }
         //         else{
 
@@ -1157,6 +1211,7 @@ const Chart = (props) => {
 
         if (props.xmax == "full") {
             setXaxisMax(new Date(new Date(xAxis[xAxis.length - 1])));
+            setTxaxisMax(new Date(new Date(xAxis[xAxis.length - 1])));
         }
         else {
             let userTimeOffset = new Date().getTimezoneOffset();
@@ -1164,6 +1219,9 @@ const Chart = (props) => {
             userTimeOffset = userTimeOffset * 60 * 1000;
             let _max = new Date(parseInt(new Date(xAxis[0]).getTime()) + parseInt(props.xmax * 1e3))
             setXaxisMax(new Date(_max))
+            setTxaxisMax(new Date(_max))
+      
+
             // console.log(props.signal,)
 
         }
@@ -1587,6 +1645,70 @@ const Chart = (props) => {
     }
 
 
+    
+    const calculate_history_sample_table = (sample) => {
+        let first = 0;
+        var num = sample / 30;
+        var next = num - 1;
+        var data = statisticsOg;
+     
+        if (sample == 30) {
+            setStatistics(data)
+
+
+        }
+        else {
+            var totalsum = 0;
+            var totalsumM = 0;
+            var totalsumS = 0;
+        let _tempStats = [];
+           
+            var c = 1;
+           
+            for (var i = 0; i < data.length; i++) {
+                if (first == 0) {
+                    first = i;
+                }
+                if (i < next) {
+                    c++;
+                    totalsum += parseFloat(data[i].mean);
+                    totalsumM += parseFloat(data[i].median);
+                    totalsumS += parseFloat(data[i].sd);
+                }
+                else if (i == next || i == (data.length - 1)) {
+                    totalsum += parseFloat(data[i].mean);
+                    totalsumM += parseFloat(data[i].median);
+                    totalsumS += parseFloat(data[i].sd);
+
+                    // console.log(totalsum);
+                    var avgvalue = parseFloat(totalsum / num);
+                    var avgvalueM = parseFloat(totalsumM / num);
+                    var avgvalueS = parseFloat(totalsumS / num);
+                    // // console.log(data[i][0]);
+                    // // console.log(avgvalue);
+                    
+                    _tempStats.push({
+                        x: data[i].x,
+                        xdate: data[i].xdate,
+                        mean: parseFloat(avgvalue).toFixed(2),
+                        median: parseFloat(avgvalueM).toFixed(2),
+                        sd: parseFloat(avgvalueS).toFixed(2),
+                    })
+
+
+                    next = next + num;
+                    totalsum = 0;
+
+                    c = 1;
+                }
+                if (i == (data.length - 1)) {
+                    // // console.log("Average" , [newdataX,newdataY]);
+                    setStatistics(_tempStats)
+                }
+            }
+        }
+    }
+
     const handleUnitChange = (e) => {
 
         let { value = "" } = e.target || {}
@@ -1644,7 +1766,7 @@ const Chart = (props) => {
                 showGrid: true,
                 grid: value
             }))
-        } 
+        }
         else if (value == 2) {
             setModal(prevState => ({
                 ...prevState,
@@ -1652,7 +1774,7 @@ const Chart = (props) => {
                 grid: value
             }))
         }
-        else  {
+        else {
             setModal(prevState => ({
                 ...prevState,
                 showGrid: true,
@@ -1917,56 +2039,56 @@ const Chart = (props) => {
     const movingAverage = (e) => {
         const arr = yAxisOg;
         console.log(yAxisOg);
-        let avg = e.target.value ; 
-    
+        let avg = e.target.value;
+
         setSignalModalData(prevState => ({
             ...prevState,
             movingAverage: avg
         }))
-        if(avg == 0){
+        if (avg == 0) {
             setYaxis(yAxisOg);
         }
-        else{
+        else {
 
-           const res = [];
-           const res2 = [];
-           let sum = 0;
-           let count = 0;
-           let counter = 1 ;
-           for(let i = 0; i < arr.length; i++){
-              
-            
+            const res = [];
+            const res2 = [];
+            let sum = 0;
+            let count = 0;
+            let counter = 1;
+            for (let i = 0; i < arr.length; i++) {
 
-              if(i > avg){
-                let min = i - avg ; 
-                for(let j = i ; j >  min ; j--){
-                    const el = arr[j];
-                    sum += parseFloat(el);
-                                    
+
+
+                if (i > avg) {
+                    let min = i - avg;
+                    for (let j = i; j > min; j--) {
+                        const el = arr[j];
+                        sum += parseFloat(el);
+
+                    }
+
+                    const curr = sum / parseFloat(avg);
+
+                    sum = 0;
+                    res[i] = curr;
+                    counter = 0;
                 }
+                else {
+                    res[i] = arr[i];
 
-                const curr = sum / parseFloat(avg);
-
-                sum = 0 ;
-                res[i] = curr;
-                counter = 0 ;                
-              }
-              else{
-                res[i] = arr[i];
-
-              }
-              counter++ ;
-            //   res2[i] = el;
-              if(i == (arr.length - 1)){
-                console.log("movng avg" ,avg)
-                console.log("movng avg" ,res)
-                // console.log("movng avg" ,res2)
-               setYaxis(res);
-              }
-           }
+                }
+                counter++;
+                //   res2[i] = el;
+                if (i == (arr.length - 1)) {
+                    console.log("movng avg", avg)
+                    console.log("movng avg", res)
+                    // console.log("movng avg" ,res2)
+                    setYaxis(res);
+                }
+            }
         }
 
-    
+
     }
 
     return (
@@ -2045,21 +2167,21 @@ const Chart = (props) => {
                             //  onUpdate={handleRelayout}
                             //  onKeyDown={() => handleKeypress}
                             onInitialized={handleInitial}
-                            
+
                             data={[
                                 {
                                     x: xAxis,
                                     y: yAxis,
                                     text: textTooltip,
-                                    
-                                    
+
+
                                     marker: {
                                         color: type == "obar" ? color.hex ? color.hex + "00" : color + "00" : color,
                                         line: {
                                             color: color,
                                             dash: signalLinetype,
                                             width: value,
-                                            
+
                                         },
                                     },
                                     line: {
@@ -2068,8 +2190,8 @@ const Chart = (props) => {
                                         width: value
                                     },
                                     textposition: "none",
-                                    type: type == "obar" ? "bar" : type == "line" ? "scatter": type,
-                            
+                                    type: type == "obar" ? "bar" : type == "line" ? "scatter" : type,
+
 
 
                                     hovertemplate: '<b>' + ((props.signal != "pco2wave" && props.signal != "pco2b2b" && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa") ? signalModalData.stat.toUpperCase() : 'Raw Data') + '</b><br><i>Y</i>: %{y:.2f}' +
@@ -2099,7 +2221,7 @@ const Chart = (props) => {
                                 yaxis: { rangemode: 'tozero' },
                                 xaxis: { rangemode: 'tozero' },
                                 hovermode: true,
-                                
+
                                 images: images,
                                 dragmode: dragMode,
                                 showlegend: false,
@@ -2115,14 +2237,14 @@ const Chart = (props) => {
                                     ticks: "outside",
                                     tickcolor: "#000",
                                     zeroline: false,
-                                    showgrid: (modal.showGrid && modal.grid == 4 ) || (modal.showGrid   &&  modal.grid == 1) ? true : false ,
+                                    showgrid: (modal.showGrid && modal.grid == 4) || (modal.showGrid && modal.grid == 1) ? true : false,
 
                                     // visible : false
                                 },
                                 yaxis: {
                                     range: (modal.units === "mmHg" || modal.units === "") ? [yAxisMin, yAxisMax] : [yAxisMin, (yAxisMax + yAxisMax * 0.13)],
                                     fixedrange: true,
-                                    showgrid:  (modal.showGrid && modal.grid == 3 ) || (modal.showGrid   &&  modal.grid == 1)   ? true : false ,
+                                    showgrid: (modal.showGrid && modal.grid == 3) || (modal.showGrid && modal.grid == 1) ? true : false,
                                     side: modal.position == "1" ? "left" : "right"
                                 },
                                 bargap: 0,
@@ -2132,20 +2254,20 @@ const Chart = (props) => {
                                 margin: {
                                     l: 30,
                                     r: 30,
-                                    b: 20,
+                                    b: 30,
                                     t: 0,
                                     pad: 0
                                 },
                                 padding: {
                                     top: 0
                                 },
-                                autosize: true
+                                // autosize: true
                             }}
                             config={{
                                 displayModeBar: false,
                                 scrollZoom: zoomEnabled,
-                                autosize: true,
-                                
+                                // autosize: true,
+
 
                                 doubleClick: false,
                                 transition: {
@@ -2387,6 +2509,9 @@ const Chart = (props) => {
 
                                                                     setAverage(value);
                                                                     let _data = calculate_history_sample([xAxis, yAxis], value)
+                                                                    if(tableLinked){
+                                                                        calculate_history_sample_table(value)
+                                                                    }
 
                                                                     setXaxis(_data[0]);
                                                                     setYaxis(_data[1]);
@@ -2405,9 +2530,9 @@ const Chart = (props) => {
                                                         </Col>
                                                     </Row>
                                                 </li>
-                                                
-                                        
-                                      
+
+
+
                                                 <li>
                                                     <Row justify="space-between" style={{ height: rowHeight }}>
                                                         <Col lg={5} xl={5}>
@@ -2448,54 +2573,54 @@ const Chart = (props) => {
                                                 </Col>
                                             </Row>
                                         </li>
-                                        {signalModalData.disabledType && 
-                                        <>
-                                        <li>
-                                            <Row justify="space-between" style={{ height: rowHeight }}>
-                                                <Col lg={5} xl={5}>
-                                                    <span>Signal Line Type</span>
-                                                </Col>
-                                                <Col lg={7} xl={7}>
+                                        {signalModalData.disabledType &&
+                                            <>
+                                                <li>
+                                                    <Row justify="space-between" style={{ height: rowHeight }}>
+                                                        <Col lg={5} xl={5}>
+                                                            <span>Signal Line Type</span>
+                                                        </Col>
+                                                        <Col lg={7} xl={7}>
 
-                                                    <Radio.Group
-                                                        onChange={handleLine}
-                                                        value={signalModalData.signal}
-                                                    >
-                                                        <Radio value={1} style={{ marginRight: "20px" }} > Solid </Radio>
-                                                        <Radio value={2} style={{ marginRight: "20px" }} > Dotted </Radio>
-                                                        <Radio value={3} > Dashed </Radio>
-                                                    </Radio.Group>
+                                                            <Radio.Group
+                                                                onChange={handleLine}
+                                                                value={signalModalData.signal}
+                                                            >
+                                                                <Radio value={1} style={{ marginRight: "20px" }} > Solid </Radio>
+                                                                <Radio value={2} style={{ marginRight: "20px" }} > Dotted </Radio>
+                                                                <Radio value={3} > Dashed </Radio>
+                                                            </Radio.Group>
 
-                                                </Col>
-                                            </Row>
-                                        </li>
-                                        <li>
-                                            <Row justify="space-between" style={{ height: rowHeight }}>
-                                                <Col lg={5} xl={5}>
-                                                    <span>Moving Average</span>
-                                                </Col>
-                                                <Col lg={7} xl={7}>
-                                                <select
-                                                        style={{ width: "100%" }}
+                                                        </Col>
+                                                    </Row>
+                                                </li>
+                                                <li>
+                                                    <Row justify="space-between" style={{ height: rowHeight }}>
+                                                        <Col lg={5} xl={5}>
+                                                            <span>Moving Average</span>
+                                                        </Col>
+                                                        <Col lg={7} xl={7}>
+                                                            <select
+                                                                style={{ width: "100%" }}
 
-                                                        onChange={(e) => movingAverage(e)}
-                                                        value={signalModalData.movingAverage}
-                                                        
+                                                                onChange={(e) => movingAverage(e)}
+                                                                value={signalModalData.movingAverage}
 
-                                                    >
-                                                        <option value="0">No Averages</option>
-                                                        <option value="2">2 Averages</option>
-                                                        <option value="3">3 Averages</option>
-                                                        <option value="4">4 Averages</option>
-                                                        <option value="5">5 Averages</option>
-                                                      
-                                                    </select>
-                                                   
 
-                                                </Col>
-                                            </Row>
-                                        </li>
-                                        </>
+                                                            >
+                                                                <option value="0">No Averages</option>
+                                                                <option value="2">2 Averages</option>
+                                                                <option value="3">3 Averages</option>
+                                                                <option value="4">4 Averages</option>
+                                                                <option value="5">5 Averages</option>
+
+                                                            </select>
+
+
+                                                        </Col>
+                                                    </Row>
+                                                </li>
+                                            </>
                                         }
                                         <li>
                                             <Row justify="space-between" style={{ height: rowHeight }}>
@@ -2582,7 +2707,7 @@ const Chart = (props) => {
 
                                                     >
                                                         <option value="0">Full Length</option>
-                                                        <option value="3">30 Seconds</option>
+                                                        <option value="0.5">30 Seconds</option>
                                                         <option value="1">1 Minute</option>
                                                         <option value="2">2 Minutes</option>
                                                         <option value="5">5 Minutes</option>
@@ -2665,7 +2790,7 @@ const Chart = (props) => {
 
 
                                                     </select>
-                                                    
+
 
                                                 </Col>
                                             </Row>
@@ -2697,12 +2822,12 @@ const Chart = (props) => {
                                                 <Col lg={7} xl={7}>
                                                     <div className="wrp-axis">
                                                         <div className='min-axis'>
-                                                             <input placeholder='0' value={yAxisMin} onChange={(e) => {
+                                                            <input placeholder='0' value={yAxisMin} onChange={(e) => {
                                                                 let { value = "" } = e.target
                                                                 setYaxisMin(value)
                                                             }} />
-                                                             
-                                                       
+
+
                                                             {/* <span>Min</span> */}
                                                         </div>
                                                         <div className='max-axis'>
@@ -2710,7 +2835,7 @@ const Chart = (props) => {
                                                                 let { value = "" } = e.target
                                                                 setYaxisMax(parseFloat(value))
                                                             }} />
-                                                            
+
                                                         </div>
                                                     </div>
                                                 </Col>
@@ -2741,7 +2866,7 @@ const Chart = (props) => {
 
                         {/* comment modal start */}
                         <Draggable handle=".handle">
-                            <Modal isOpen={commentModal}  toggle={toggleCommentModal} className="modal-box-wrp" centered={true}>
+                            <Modal isOpen={commentModal} toggle={toggleCommentModal} className="modal-box-wrp" centered={true}>
                                 <ModalHeader className='handle' toggle={toggleCommentModal}><span className="ml-1 roititle modal-head">Add Comment</span></ModalHeader>
                                 <ModalBody>
                                     <textarea rows="8" style={{ width: "100%" }} value={reportComment} onChange={(e) => setReportComment(e.target.value)} ></textarea>
@@ -2784,14 +2909,23 @@ const Chart = (props) => {
 
                     </div>
                     {
-                        (props.signal != "pco2wave" && props.signal != "pco2b2b" && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa") && (showSignalStat && tableView  ) ?
+                        (props.signal != "pco2wave" && props.signal != "pco2b2b" && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa") && (showSignalStat && tableView) ?
                             <table className='table table-resposnive table-hover statTable mt-5' style={{ display: (showSignalStat && tableView) ? "" : "none" }} >
                                 <thead className='thead-dark'>
                                     <tr>
                                         <th>X</th>
-                                        <th>Mean {modal.units == "" ? "" : "(" + modal.units + ")"}</th>
-                                        <th>Median {modal.units == "" ? "" : "(" + modal.units + ")"}</th>
-                                        <th>SD {modal.units == "" ? "" : "(" + modal.units + ")"}</th>
+                                        {
+                                            meanShow &&
+                                            <th>Mean {modal.units == "" ? "" : "(" + modal.units + ")"}</th>
+                                        }
+                                        {
+                                            medianShow &&
+                                            <th>Median {modal.units == "" ? "" : "(" + modal.units + ")"}</th>
+                                        }
+                                        {
+                                            sdShow &&
+                                            <th>SD {modal.units == "" ? "" : "(" + modal.units + ")"}</th>
+                                        }
 
                                     </tr>
                                 </thead>
@@ -2800,17 +2934,27 @@ const Chart = (props) => {
 
                                     {
                                         statistics.length > 0 && statistics.map((v, i) => {
-                                            // if(new Date(v.x) > new Date(xAxisMin) && new Date(v.x) < new Date(xAxisMax)){
-                                            return (
-                                                <tr>
-                                                    <td>{v.x}</td>
-                                                    <td>{v.mean}</td>
-                                                    <td>{v.median}</td>
-                                                    <td>{v.sd}</td>
-                                                </tr>
+                                            if (new Date(v.xdate) >= new Date(txaxisMin) && new Date(v.xdate) <= new Date(txaxisMax) ) {
+                                                return (
+                                                    <tr>
+                                                        <td>{v.x}</td>
+                                                        {
+                                                            meanShow &&
+                                                            <td>{v.mean}</td>
+                                                        }
+                                                        {
+                                                            medianShow &&
+                                                            <td>{v.median}</td>
+                                                        }
+                                                        {
+                                                            sdShow &&
+                                                            <td>{v.sd}</td>
 
-                                            )
-                                            // }
+                                                        }
+                                                    </tr>
+
+                                                )
+                                            }
                                         })
                                     }
                                 </tbody>
@@ -2846,9 +2990,9 @@ const Chart = (props) => {
                                             <p>Show Table:</p>
                                         </div>
                                         <div className='configure-child2'>
-                                            <input onClick={() => toogleTableView()} type="radio" checked={tableView ? true : false}  name="tableview" />
+                                            <input onClick={() => toogleTableView()} type="radio" checked={tableView ? true : false} name="tableview" />
                                             <span>Yes</span>
-                                            <input onClick={() => toogleTableView()} type="radio" checked={tableView ? false : true}  className='radio-mrl' name="tableview" />
+                                            <input onClick={() => toogleTableView()} type="radio" checked={tableView ? false : true} className='radio-mrl' name="tableview" />
                                             <span>No</span>
                                         </div>
                                     </div>
@@ -2859,9 +3003,9 @@ const Chart = (props) => {
                                             <p>Link With Graph:</p>
                                         </div>
                                         <div className='configure-child2'>
-                                            <input type="radio" name="no" />
+                                            <input type="radio" onClick={() => setTablLinked(true)} checked={tableLinked ? true : false} name="tableLinked" />
                                             <span>Yes</span>
-                                            <input type="radio" className='radio-mrl' name="no" />
+                                            <input type="radio" onClick={() => setTablLinked(false)} checked={tableLinked ? false : true} className='radio-mrl' name="tableLinked" />
                                             <span>No</span>
                                         </div>
                                     </div>
@@ -2872,36 +3016,82 @@ const Chart = (props) => {
                                             <p>Show Statistics:</p>
                                         </div>
                                         <div className='configure-child2'>
-                                            <input type="checkbox" name="mean" />
+                                            <input type="checkbox" name="mean" onClick={() => setMeanShow(!meanShow)} checked={meanShow ? true : false} />
                                             <span>Mean</span>
-                                            <input type="checkbox" className='radio-mrl' name="mediam" />
-                                            <span>Median</span><br></br>
-                                            <input type="checkbox"  name="mediam" />
-                                            <span>Standard Deviation</span>
+                                            <input type="checkbox" className='radio-mrl' onClick={() => setMedianShow(!medianShow)} checked={medianShow ? true : false} name="median" />
+                                            <span>Median</span>
+                                            <input type="checkbox" className='radio-mrl' onClick={() => setSdShow(!sdShow)} checked={sdShow ? true : false} name="sd" />
+                                            <span>SD</span>
                                         </div>
                                     </div>
                                 </li>
+
                                 <li>
+                                <div className='configure-wrp'>
+                                        <div className='configure-child1 specialwidth'>
+                                            <p>X Column Range:</p>
+                                        </div>
+                                        <div className='configure-child2'>
+                                <select
+                                disabled={tableLinked ? true : false}
+                                                        style={{ width: "100%" }}
+
+                                                        onChange={(e) => handleTxrange(e)}
+                                                        value={txRange}
+
+                                                    >
+                                                        <option value="0">Full Length</option>
+                                                        <option value="0.5">30 Seconds</option>
+                                                        <option value="1">1 Minute</option>
+                                                        <option value="2">2 Minutes</option>
+                                                        <option value="5">5 Minutes</option>
+                                                        <option value="10">10 Minutes</option>
+                                                        <option value="15">15 Minutes</option>
+                                                        <option value="20">20 Minutes</option>
+                                                        <option value="30">30 Minutes</option>
+                                                        <option value="60">60 Minutes</option>
+                                                       
+                                                    </select>
+
+                                                    </div>
+                                                    </div>
+
+                                </li>
+
+
+                                {/* <li>
                                     <div className='configure-wrp'>
                                         <div className='configure-child1 specialwidth'>
                                             <p>Time Range:</p>
                                         </div>
                                         <div className='configure-child2'>
-                                            <input type="number"  className='time-input time-input-mr' name="time" value={timeVal} onChange={onchangeInput} ref={timerange} />
-                                            <input type="number" className='time-input' name="time2" value={timeVal2} onChange={onchangeInput2} ref={timerange2} />
+                                            <input type="text" className='time-input time-input-mr' maxLength={8} name="time" value={timeVal} onChange={onchangeInput} ref={timerange} />
+                                            <input type="text" className='time-input' name="time2" maxLength={8} value={timeVal2} onChange={onchangeInput2} ref={timerange2} />
 
                                         </div>
                                     </div>
-                                </li>
+                                </li> */}
                                 <li>
                                     <div className='configure-wrp'>
                                         <div className='configure-child1 specialwidth'>
                                             <p className='data-point'>Data Point:</p>
                                         </div>
                                         <div className='configure-child2'>
-                                            <select className='select-option-time'>
-                                                <option>30 Seconds</option>
-                                                <option>15 Seconds</option>
+                                            <select     disabled={tableLinked ? true : false} className='select-option-time'
+                                           
+                                                                onChange={(e) => {
+
+                                                                    let { value = "" } = e.target || {}
+                                                                     calculate_history_sample_table(value)
+                                                                    setTaverage(value)
+                                                                }}
+                                                               
+                                                                value={taverage}
+                                                            >
+                                                                <option value="30">30 Seconds</option>
+                                                                <option value="60">60 Seconds</option>
+                                                                <option value="90">90 Seconds</option>
+                                                                <option value="120">120 Seconds</option>
                                             </select>
                                         </div>
                                     </div>
