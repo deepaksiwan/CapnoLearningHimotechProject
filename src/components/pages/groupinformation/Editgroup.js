@@ -8,6 +8,7 @@ import Header from '../../component/Header';
 import MaterialTable from 'material-table';
 import edit from '../../images/edit.png'
 import checks from '../../images/checks.png'
+import Cross from '../../images/cross.png';
 import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
 import view from '../../images/eye.png';
@@ -28,7 +29,12 @@ const Editgroup = () => {
     const [clients, setinclients] = useState([]);
     const [data, setData] = useState([]);
     const [groupName, setGroupName] = useState();
+    const [status, setStatus] = useState(0);
+    const [statssuccessModal, setstatssuccessModal] = useState(false);
+    const statussuccessToggleModal = () => setstatssuccessModal(!statssuccessModal);
     
+    const [statusModal, setStatusModal] = useState(false);
+    const statusToggleModal = () => setStatusModal(!statusModal);
     const [itemId, setItemId] = useState(null);
     const userId = localStorage.getItem('user_id');
     let _userId = localStorage.getItem('user_id');
@@ -107,11 +113,14 @@ const Editgroup = () => {
                                 
                               }} title="Edit" placement="top"><a href={"/edit/group/information/" + v.id} className="downloadimg" ><img src={edit} /></a></Tooltip> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
-                                
+                            }} title={(v.status == 1 ? "Deactivate" : "Activate")}  placement="top"><a  onClick={() => openStatusPopUp(v.id,v.status)} className="downloadimg"><img src={(v.status == 1 ? Cross : checks)}  /></a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
                             
                               }} title="Delete" placement="top"><a  onClick={() => openItemPopUp(v.id, v.firstname)}  className="downloadimg"><img src={Delete} /></a></Tooltip>
                                 <Tooltip classes={{
                                 tooltip: classes.customTooltip,
+
+                                
                                 
                               }} title="View" placement="top"><a href={"/view/group/information/" + v.id} className="downloadimg" ><img src={view} /></a></Tooltip>
                               </p>
@@ -135,11 +144,53 @@ const Editgroup = () => {
 
     }
 
+
+    const updateGroup = () => {
+
+        let id = itemId;
+        let url = API_URL+"/group/activate/" + id ;
+
+        if(status == 1){
+            url = API_URL+"/group/deactivateGroup/" + id ;
+        }
+        fetch(url,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                getGroups();
+                setStatusModal(!statusModal)
+                setstatssuccessModal(true)
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                console.log("network error")
+            }
+
+
+
+        })
+    }
+
     const openItemPopUp = (id,firstname) => {
         setItemId(id);
         setGroupName(firstname)
         setdeleteModal(!deleteModal)
-    } 
+      
+    }
+
+    const openStatusPopUp = (id,status)=>{
+        setItemId(id);
+        setStatus(status)
+        setStatusModal(true)
+    }
 
     const logout = () => {
         localStorage.clear();
@@ -215,6 +266,31 @@ const Editgroup = () => {
                     </ModalBody>
 
                 </Modal>
+
+                <Modal isOpen={statusModal} toggle={statusToggleModal} className="connect-box" centered={true}>
+                    <ModalHeader toggle={statusToggleModal}><span className="ml-1 roititle font-weight-bold">{(status == 1 ? "Deactivate" : "Activate")}</span></ModalHeader>
+                    <ModalBody>
+                        <div className="modal-p">
+                            {/* <div className="right-circle cancel-circle"><img src={(status == 1 ? Cross : checks)} /></div> */}
+                            <h4>Are you sure?</h4>
+                            <p>Do you really wish to {(status == 1 ? "deactivate" : "activate")} this Group?</p>
+                            <div className="wrp-delete-btn">
+                                <div className="cancel-btn1" ><a onClick={statusToggleModal}>Cancel</a></div>
+                                <div className="delete-btn1"><a onClick={updateGroup}>{(status == 1 ? "Deactivate" : "Activate")}</a></div>
+                            </div>
+                        </div>
+                    </ModalBody>
+
+                </Modal>
+                <Modal isOpen={statssuccessModal} toggle={statussuccessToggleModal} className="connect-box" centered={true}>
+                            <ModalHeader toggle={statussuccessToggleModal}><span className="ml-1 roititle font-weight-bold">Successfull</span></ModalHeader>
+                            <ModalBody>
+                                <div className="modal-p">
+                                    <p>Group status updated successfully.</p>
+                                </div>
+                            </ModalBody>
+
+                        </Modal>
             </div>
 
         </div>
