@@ -235,13 +235,14 @@ const Viewassemblyreport = () => {
                 </div>
                 <div className="right-section">
                     <div className="head-demoreport">
-                        <h3>{t("Session-Assembly-Reports")}</h3>
+                        
                         <div className="back-icon-wrp">
                         <Link to="/section/report/assembly" className="backbtn-icon">
                             <img src={backIcon} alt="backicon" />
                             <span>Back</span>
                         </Link>
                     </div>
+                    <h3>{t("Session-Assembly-Reports")}</h3>
                     </div>
                     <div className="wrp-bankform">
                         <div style={{ maxWidth: '100%' }}>

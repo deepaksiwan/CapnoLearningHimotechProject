@@ -201,7 +201,7 @@ option {
 /* menu css open here */
 .menu-list-wrp {
   padding: 30px 20px 30px 20px;
-  background-color: #153d7b;
+  background-color: #fff;
   position: fixed;
   top: 0px;
   height: 100vh;
@@ -529,13 +529,16 @@ a:hover {
 
 .configer-head {
   display: flex;
-  justify-content: space-between;
+  
 }
-
+.configer-child1{
+  align-self: center;
+}
 .configer-child1>h3 {
   color: #000;
   font-weight: 300;
   font-size: 28px;
+  margin-left: 15px;
 
 }
 
@@ -617,6 +620,9 @@ a:hover {
   font-size: 20px;
   color: #fff;
 }
+.mrb-header > h3{
+  color: #800080! important;
+}
 
 .search-wrp {
   background-color: #670d68;
@@ -684,14 +690,14 @@ a:hover {
 /* sidebar css open here */
 .sidebar {
   width: 285px;
-  background-color: #800080;
+  background-color: #ffffff;
   min-height: 100vh;
   padding: 20px 0px 0px 40px;
   position: fixed;
 }
 
 .mrb-header {
-  margin-bottom: 10px;
+  margin-bottom: 28px;
 }
 
 .sidebar-list {
@@ -701,16 +707,25 @@ a:hover {
 }
 
 .sidebar-list>li {
-  padding-top: 5px;
+  padding-top: 8px;
 }
 
 .sidebar-list>li>a {
-  color: #fff;
+  color: #800080;
   font-size: 14px;
   display: block;
-  padding: 12px 0px;
+  padding: 8px 10px;
   display: flex;
   padding-right: 10px;
+}
+.sidebar-list > li > .active{
+  color: #fff;
+  border-radius: 4px;
+  background-color: #800080;
+}
+.sidebar-icon-img > svg{
+  font-size: 20px;
+    margin-right: 5px;
 }
 
 .sidebar-icon-img img {
@@ -889,11 +904,7 @@ label {
   background: linear-gradient(90deg, #fff, #fff);
 } */
 
-.active>p {
-  color: #800080;
-  background: #fff;
-  padding: 1px 5px;
-}
+
 
 .content-tabs {
   flex-grow: 1;
@@ -1022,13 +1033,15 @@ label {
 .head-demoreport {
   margin-bottom: 20px;
   display: flex;
-  justify-content: space-between;
+  
 }
 
 .head-demoreport>h3 {
   color: #000;
   font-weight: 300;
   font-size: 28px;
+  margin-left: 15px;
+  align-self: center;
 }
 
 /* data data page css closed here */
@@ -1310,7 +1323,8 @@ strong {
   color: #000;
   font-weight: 300;
   font-size: 28px;
-  margin-bottom: 20px;
+  margin-left: 15px;
+
 }
 
 .client-info-box {
@@ -3042,9 +3056,7 @@ sub {
   font-weight: 500;
 }
 
-.back-icon-wrp {
-  text-align: right;
-}
+
 
 .backbtn-icon:hover {
   background-color: #8000803d;
@@ -3053,7 +3065,7 @@ sub {
 
 .client-info-c {
   display: flex;
-  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .multi-lan {
@@ -3097,6 +3109,9 @@ sub {
   color: #000;
   margin-bottom: 12px;
   margin-top: 25px;
+}
+.wrp-bankform{
+  margin-top: 20px;
 }
 
 .mebership-status>p {

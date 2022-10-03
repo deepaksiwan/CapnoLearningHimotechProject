@@ -10,6 +10,7 @@ import MaterialTable from 'material-table';
 import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 import { API_URL } from '../../../config';
+import backIcon from "../../images/back.png";
 
 const useStyles = makeStyles(() => ({
     customTooltip: {
@@ -109,6 +110,7 @@ const Recording = () => {
                </div>
                <div className="right-section">
                 <div className="head-demoreport">
+               
                     <h3>{ t('Recording-by-Distributors')}</h3>
                 </div>
                 <div className="wrp-bankform">

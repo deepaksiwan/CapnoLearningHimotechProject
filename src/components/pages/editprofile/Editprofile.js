@@ -256,12 +256,7 @@ const Editprofile = () => {
 
                     <div className="head-demoreport">
 
-                        <div className="wrp-head-profile">
-                            <div className="head-demoreport">
-                                <h3>{t('edit-profile')}</h3>
-
-                            </div>
-                        </div>
+                       
                         <div className="back-icon-wrp">
                             <Link to="/viewcreate" className="backbtn-icon">
                                 <img src={backIcon} alt="backicon" />
@@ -270,6 +265,12 @@ const Editprofile = () => {
                             {/* <div className="multi-lan">
                                 <Multilanguage />
                             </div> */}
+                        </div>
+                        <div className="wrp-head-profile">
+                            <div className="head-demoreport">
+                                <h3>{t('edit-profile')}</h3>
+
+                            </div>
                         </div>
                     </div>
                     <div className="wrp-editprofile">

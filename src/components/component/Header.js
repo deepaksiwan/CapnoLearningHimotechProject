@@ -7,15 +7,16 @@ import '../css/style.css'
 // import '../css/style2.scss'
 import '../css/responsive.css'
 import $ from "jquery";
-import sidebarmenu1 from '../images/sidebarmenu1.png'
-import sidebarmenu2 from '../images/sidebarmenu2.png'
-import sidebarmenu3 from '../images/sidebarmenu3.png'
-import sidebarmenu4 from '../images/sidebarmenu4.png'
-import sidebarmenu5 from '../images/sidebarmenu5.png'
-import sidebarmenu6 from '../images/sidebarmenu6.png'
-import sidebarmenu7 from '../images/sidebarmenu7.png'
-import sidebarmenu8 from '../images/sidebarmenu8.png'
-import sidebarmenu9 from '../images/sidebarmenu9.png'
+import BorderColorIcon from '@mui/icons-material/BorderColor';
+import PageviewIcon from '@mui/icons-material/Pageview';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import StreamIcon from '@mui/icons-material/Stream';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import ReportIcon from '@mui/icons-material/Report';
+import VideocamIcon from '@mui/icons-material/Videocam';
+import TouchAppIcon from '@mui/icons-material/TouchApp';
+import LogoutIcon from '@mui/icons-material/Logout';
 import logo from '../images/logo.png';
 import burger from '../images/burger.png';
 import connect from '../images/connect.png';
@@ -62,37 +63,42 @@ const Header = () => {
 
     const tabArray = [
         {
-          links: "/", tabDisplay: "Create Data Report", "tabimg": sidebarmenu1
+          links: "/", tabDisplay: t('Create-Data-Report'), "tabimg": <BorderColorIcon />
         },
         {
-          links: "/view/data/report", tabDisplay: "View & Edit Data Report", "tabimg": sidebarmenu2
+          links: "/view/data/report", tabDisplay: t('View-&-Edit-Data-Report'), "tabimg":<PageviewIcon />
         },
         {
-          links: "/view/pdf/report", tabDisplay: "View PDF Report", "tabimg": sidebarmenu3
+          links: "/view/pdf/report", tabDisplay: t('View-PDF-Report'), "tabimg": <PictureAsPdfIcon />
         },
         {
-          links: "/view/live", tabDisplay: "View Live Session Info", "tabimg": sidebarmenu4
+          links: "/view/live", tabDisplay: t('View-Live-Session-Info'), "tabimg": <StreamIcon />
         },
         {
-          links: "/view/manageform", tabDisplay: "View/Manage Forms", "tabimg": sidebarmenu1
+          links: "/view/manageform", tabDisplay: t('View/Manage-Forms'), "tabimg": <ManageAccountsIcon />
         },
         {
-          links: "/viewcreate", tabDisplay: "View, Create, Edit Profile", "tabimg": sidebarmenu5
+          links: "/viewcreate", tabDisplay: t('View-Create-Edit-Profile'), "tabimg": <PersonAddIcon />
         },
         {
-          links: "/section/report/assembly", tabDisplay: "Session Report Assembly", "tabimg": sidebarmenu6
+          links: "/section/report/assembly", tabDisplay: t('Session-Report-Assembly'), "tabimg": <ReportIcon />
         },
         {
-          links: "/recording", tabDisplay: "Recording by Distributors", "tabimg": sidebarmenu7
+          links: "/recording", tabDisplay: t('Recording-by-Distributors'), "tabimg": <VideocamIcon />
         },
         {
-          links: "/subscription/management", tabDisplay: "Subscription Management", "tabimg": sidebarmenu8
+          links: "/subscription/management", tabDisplay: t('Subscription-Management'), "tabimg": <TouchAppIcon />
         },
+        // {
+        //   links: "/subscribe/user", tabDisplay: t('Subscribed Users'), "tabimg": sidebarmenu8
+        // },
     
-    
+      // {
+      //     links: "/", tabDisplay: t('Group-Subscription-Management'), "tabimg": <PictureAsPdfIcon />
+      //   },
     
       ];
-    const auth = localStorage.getItem('user');
+    const auth = localStorage.getItem('user_id');
     const userType = localStorage.getItem('userType'); 
     const logout = () => {
         localStorage.clear();
@@ -126,14 +132,14 @@ const Header = () => {
                         {
                             tabArray.map(function (v, i) {
                                 return (
-                                    <li><NavLink to={v.links} className="close-menu" ><div className="sidebar-icon-img"><img src={v.tabimg} /></div><p>{v.tabDisplay}</p></NavLink></li>
+                                    <li><NavLink to={v.links} className="close-menu" ><div className="sidebar-icon-img">{v.tabimg}</div><p>{v.tabDisplay}</p></NavLink></li>
                                 )
                             }
 
                             )
                         }
                         <li>{
-                            auth ? <Link to="/login" onClick={logout} className="tabs close-menu"><div className="sidebar-icon-img"><img src={sidebarmenu9} /></div> <p>Logout</p></Link> : null
+                            auth ? <Link to="/login" onClick={logout} className="tabs close-menu"><div className="sidebar-icon-img"><LogoutIcon /></div> <p>Logout</p></Link> : null
                         }</li>
 
 

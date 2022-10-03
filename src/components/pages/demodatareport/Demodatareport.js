@@ -32,12 +32,13 @@ const Demodatareport = () => {
                </div>
                <div className="right-section">
                 <div className="head-demoreport">
-                    <h3>{t("Demo-Data-Reports")}</h3>
-                    <div className="back-icon-wrp">
-                        <Link to="/" className="backbtn-icon">
+                <Link to="/" className="backbtn-icon">
                             <img src={backIcon} alt="backicon" />
                             <span>{t("Back")}</span>
                         </Link>
+                    <h3>{t("Demo-Data-Reports")}</h3>
+                    <div className="back-icon-wrp">
+                       
                     </div>
                 </div>
                 <div className="wrp-r-listbox">

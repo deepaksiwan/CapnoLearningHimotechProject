@@ -235,13 +235,14 @@ const Trainerinformation = () => {
                 </div>
                 <div className="right-section">
                     <div className="client-info-c">
-                        <h3>Edit Trainer Information</h3>
+                       
                         <div className="back-icon-wrp">
                             <Link to="/edit/trainer" className="backbtn-icon">
                                 <img src={backIcon} alt="backicon" />
                                 <span>Back</span>
                             </Link>
                         </div>
+                        <h3>Edit Trainer Information</h3>
                         
                     </div>
                     {

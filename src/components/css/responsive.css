@@ -209,6 +209,9 @@
     
 }
 @media(max-width: 767px){
+    .header-child1>h3{
+        font-size: 16px;
+    }
     .expridate-filter > select {
         font-size: 14px;
         margin-top: 20px;

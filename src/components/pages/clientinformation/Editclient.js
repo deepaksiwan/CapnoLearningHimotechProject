@@ -281,13 +281,14 @@ const Editclient = () => {
                 </div>
                 <div className="right-section">
                     <div className="head-demoreport">
-                        <h3>Clients</h3>
+                        
                         <div className="back-icon-wrp">
                             <Link to="/viewcreate" className="backbtn-icon">
                                 <img src={backIcon} alt="backicon" />
                                 <span>Back</span>
                             </Link>
                         </div>
+                        <h3>Clients</h3>
                     </div>
                     <div className="choose-trainer">
                         <label>Trainer</label>

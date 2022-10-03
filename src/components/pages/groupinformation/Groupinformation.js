@@ -294,13 +294,14 @@ const Groupinformation = () => {
                 </div>
                 <div className="right-section">
                     <div className="client-info-c">
-                        <h3>New Group Information</h3>
+                       
                         <div className="back-icon-wrp">
                             <Link to="/viewcreate" className="backbtn-icon">
                                 <img src={backIcon} alt="backicon" />
                                 <span>Back</span>
                             </Link>
                         </div>
+                        <h3>New Group Information</h3>
                         
                     </div>
                     <div className="client-info-box">

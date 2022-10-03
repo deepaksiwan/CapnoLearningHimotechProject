@@ -230,13 +230,14 @@ const PdfsessetionreportNotes = () => {
                <div className="right-section">
               
                 <div className="head-demoreport">
-                    <h3>Session Report Notes</h3>
+                    
                     <div className="back-icon-wrp">
                         <Link to="/view/pdf/report" className="backbtn-icon">
                             <img src={backIcon} alt="backicon" />
                             <span>Back</span>
                         </Link>
                     </div>
+                    <h3>Session Report Notes</h3>
                 </div>
                 <div className="wrp-bankform">
                     <div style={{ maxWidth: '100%' }}>

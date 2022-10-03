@@ -330,15 +330,16 @@ const Uploadhomeworkasignment = () => {
 
                     <div className="container-fluid">
                         <div className="configer-head">
-                            <div className="configer-child1">
-                                <h3>Upload Homework Assignment</h3>
-                            </div>
+                            
                             <div className="back-icon-wrp">
                             <Link to="/view/manageform" className="backbtn-icon">
                                 <img src={backIcon} alt="backicon" />
                                 <span>Back</span>
                             </Link>
                         </div>
+                        <div className="configer-child1">
+                                <h3>Upload Homework Assignment</h3>
+                            </div>
                         </div>
                     </div>
                     <div className="container-fluid">

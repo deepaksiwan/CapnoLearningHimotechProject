@@ -456,13 +456,14 @@ console.log("Sessionid",Sessionid)
                 </div>
                 <div className="right-section">
                     <div className="head-demoreport">
-                        <h3>View Completed Client Homework</h3>
+                       
                         <div className="back-icon-wrp">
                             <Link to="/view/manageform" className="backbtn-icon">
                                 <img src={backIcon} alt="backicon" />
                                 <span>Back</span>
                             </Link>
                         </div>
+                        <h3>View Completed Client Homework</h3>
                     </div>
                     <div className="filter-mrb">
                    

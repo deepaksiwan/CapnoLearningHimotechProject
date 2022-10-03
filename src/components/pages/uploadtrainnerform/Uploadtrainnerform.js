@@ -385,14 +385,15 @@ const Uploadclientform = () => {
 
                     <div className="container-fluid">
                         <div className="configer-head">
-                            <div className="configer-child1">
-                                <h3>{t("Upload-Trainer-Form")}</h3>
-                            </div>
+                            
                             <div className="back-icon-wrp">
                                 <Link to="/view/manageform" className="backbtn-icon">
                                     <img src={backIcon} alt="backicon" />
                                     <span>{t("Back")}</span>
                                 </Link>
+                            </div>
+                            <div className="configer-child1">
+                                <h3>{t("Upload-Trainer-Form")}</h3>
                             </div>
                         </div>
                     </div>

@@ -103,13 +103,14 @@ const Bankform = () => {
                </div>
                <div className="right-section">
                 <div className="head-demoreport">
-                    <h3>{t("Blank-forms")}</h3>
+                    
                     <div className="back-icon-wrp">
                         <Link to="/view/manageform" className="backbtn-icon">
                             <img src={backIcon} alt="backicon" />
                             <span>{t("Back")}</span>
                         </Link>
                     </div>
+                    <h3>{t("Blank-forms")}</h3>
                 </div>
                 <div className="wrp-bankform">
                     <div style={{ maxWidth: '100%' }}>

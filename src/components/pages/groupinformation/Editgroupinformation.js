@@ -261,13 +261,14 @@ const Editgroupinformation = () => {
                 </div>
                 <div className="right-section">
                     <div className="client-info-c">
-                        <h3>Edit Group Information</h3>
+                        
                         <div className="back-icon-wrp">
                             <Link to="/edit/group" className="backbtn-icon">
                                 <img src={backIcon} alt="backicon" />
                                 <span>Back</span>
                             </Link>
                         </div>
+                        <h3>Edit Group Information</h3>
                     </div>
                     <div className="client-info-box">
                         <div className="row">

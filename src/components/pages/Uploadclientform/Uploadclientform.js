@@ -72,7 +72,7 @@ const Uploadclientform = () => {
 
         let formData = new FormData();
         let client_id = localStorage.getItem('selectedClient');
-        if(formFile.current.files.length == 0){
+        if (formFile.current.files.length == 0) {
             alert("Please choose a file")
             return false;
         }
@@ -82,12 +82,12 @@ const Uploadclientform = () => {
 
 
         if (client_id == "" || formname.current.value == "" || !formFile.current.files[0]) {
-            
+
             toggleModal();
             return false;
-            
 
-        }else{
+
+        } else {
             setLoaderModal(true)
         }
         formFile.current.value = "";
@@ -395,14 +395,15 @@ const Uploadclientform = () => {
 
                     <div className="container-fluid">
                         <div className="configer-head">
-                            <div className="configer-child1">
-                                <h3>{t("Upload-Client-Form")}</h3>
-                            </div>
+                           
                             <div className="back-icon-wrp">
                                 <Link to="/view/manageform" className="backbtn-icon">
                                     <img src={backIcon} alt="backicon" />
                                     <span>{t("Back")}</span>
                                 </Link>
+                            </div>
+                            <div className="configer-child1">
+                                <h3>{t("Upload-Client-Form")}</h3>
                             </div>
 
                         </div>

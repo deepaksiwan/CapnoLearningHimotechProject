@@ -293,13 +293,12 @@ const PdfsessionReport = () => {
                     <Sidebar />
                 </div>
                 <div className="right-section">
-                <div className="back-icon-wrp">
-                        <Link to="/view/pdf/report" className="backbtn-icon">
+               
+                    <div className="head-demoreport">
+                    <Link to="/view/pdf/report" className="backbtn-icon">
                             <img src={backIcon} alt="backicon" />
                             <span>Back</span>
                         </Link>
-                    </div>
-                    <div className="head-demoreport">
                         <h3>{t("Session-Data-Reports")}</h3>
 
                         {/* <p>{pdftype == "multi" ? t("Multi") : pdftype == "single" ? t("Single") : pdftype == "group" ? t("group") : pdftype == "homework" ? t("homework") : null} Pdf {t("Sesseion-Report")}</p> */}
