@@ -532,8 +532,9 @@ const Chart = (props) => {
 
 
                     // }
+                    
                     // _x.push(new Date(v.x));
-                    console.log()
+                    // console.log()
                     if (v.z > 0 && v.z < 7 && (record == 'all' || record == v.r) && v.x > 0) {
                         lastRecord = v.x;
 
@@ -734,8 +735,11 @@ const Chart = (props) => {
                         _npauseTime = parseInt(v.x) - parseInt(lastRecord);
                     }
 
+                    
 
                     if (i == (data.length - 1)) {
+                        console.log("Reached Data "+props.signal , data.length)
+
                         // alert("here");
                         // // console.log(_x.length)
                         // // console.log("records",_recordArray)
@@ -1133,14 +1137,18 @@ const Chart = (props) => {
                         setImages(_tempImages)
                         setTextTooltip(_toolText);
                         setYAxis2(_threshold)
+
                         if (average == 30) {
                             // console.log("axis x" , _x.length)
                             // console.log("axis y" , _tempY.length)
                             setYaxis(_tempY);
                             setXaxis(_x);
+                            console.log(props.signal,[_x,_tempY])
+
                         }
                         else {
-                            let _data = calculate_history_sample([_x, _tempY], average)
+                            let _data = calculate_history_sample([_x, _tempY], average);
+                            console.log(props.signal,_data)
                             setYaxis(_data[1]);
                             setXaxis(_data[0]);
                         }
