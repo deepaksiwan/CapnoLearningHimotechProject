@@ -515,7 +515,7 @@ const Chart = (props) => {
             let endTask = 0;
             // // console.log(data[0]);
             data.map((v, i) => {
-                if (i == 0 || v.x != data[i - 1].x) {
+                if (i == 0 || v.x != data[i - 1].x || i == (data.length - 1)) {
 
                     if (v.z > 0 && vfirstRecord == 0 && v.x > 0) {
 
@@ -532,7 +532,7 @@ const Chart = (props) => {
 
 
                     // }
-                    
+
                     // _x.push(new Date(v.x));
                     // console.log()
                     if (v.z > 0 && v.z < 7 && (record == 'all' || record == v.r) && v.x > 0) {
@@ -544,7 +544,7 @@ const Chart = (props) => {
                             firstRecord = v.x;
 
 
-                        }
+                        }  
 
 
 
@@ -661,7 +661,7 @@ const Chart = (props) => {
 
 
                         }
-                        prevRecord = v.r
+                        prevRecord = v.r ;
 
 
                         if (v.rname != "Normal") {
@@ -736,7 +736,7 @@ const Chart = (props) => {
                     }
 
                     
-
+                    console.log("Reached Data "+props.signal , i,data.length );
                     if (i == (data.length - 1)) {
                         console.log("Reached Data "+props.signal , data.length)
 
