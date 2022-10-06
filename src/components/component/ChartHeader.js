@@ -1112,15 +1112,16 @@ const ChartHeader = (props) => {
 
             
             <Modal isOpen={confirmLeaveModal} toggle={confirmLeaveModalToggle} className="modal-box-wrp" centered={true}>
-                <ModalHeader toggle={confirmLeaveModalToggle}><span className="ml-1 roititle modal-head"> Confirm ?</span></ModalHeader>
+                <ModalHeader toggle={confirmLeaveModalToggle}><span className="ml-1 roititle modal-head">Please Confirm </span></ModalHeader>
                 <ModalBody>
-                    <p className=''>Are you sure you want to leave this screen, please save your changes before leaving ?</p>
+                    {/* <p className=''>Are you sure you want to leave this screen, please save your changes before leaving ?</p> */}
                    
 
                     <div className='d-flex justify-content-around mt-3'>
-                        <button className='lightbtn w-100' onClick={confirmLeaveModalToggle} >Cancel</button>
+                        {/* <button className='lightbtn w-100' onClick={confirmLeaveModalToggle} >Cancel</button> */}
+                        <button className='lightbtn w-100 ml-1' onClick={performAction} >Discard & Exit</button>
 
-                        <button className='darktbtn w-100 ml-1' onClick={performAction} >Confirm</button>
+                        <button className='darktbtn w-100 ml-1' onClick={() => { saveReport() ; confirmLeaveModalToggle(); }} >Save & Exit</button>
 
                     </div>
                 </ModalBody>

@@ -14,6 +14,7 @@ const ViewChartHeader = (props) => {
     const [sessions, setsessions] = useState([]);
     const sessionid = localStorage.getItem('selectedSession');
     const clientId = localStorage.getItem('selectedClient');
+    const [action, setAction] = useState();
     
     const [reportDetails, setReportDetails] = useState([]);
     const [records, setrecords] = useState([]);
@@ -468,6 +469,43 @@ const ViewChartHeader = (props) => {
     })
     }
 
+    
+    const [confirmLeaveModal, setConfirmLeaveModal] = useState(false);
+    const confirmLeaveModalToggle = () => {
+        setConfirmLeaveModal(!confirmLeaveModal);
+        if(action == "reportConfig"){
+            reportconfig.current.value = config
+        }
+        if(action == "altConfig"){
+            alternateconfig.current.value = currentConfig
+        }
+        if(action == "record"){
+            reportRecord.current.value = record
+        }
+    }
+
+    const confirmLeave = (v) => {
+        setAction(v)
+        confirmLeaveModalToggle();
+
+    }
+
+    const performAction = () => {
+        if(action == "reportConfig"){
+            reportconfigupdate() ; 
+        }
+        else if(action == "altConfig"){
+            reportconfigalternateupdate() ; 
+        }
+        else if(action == "record"){
+            reportrecordupdate() ; 
+        }
+        else if(action == "dashboard"){
+            window.location.href = "/" ; 
+        }
+        
+    }
+
     const getPreviousSessionPDF = () => {
         setrequestProcessingModal(true);
 
@@ -786,7 +824,7 @@ const ViewChartHeader = (props) => {
                 </div>
                 <div className="chart-header-c4">
                     <div className="dashboard-back">
-                        <Link to="/"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Dashboard</Link>
+                        <a href="javascript:void" onClick={() => confirmLeave("dashboard")}><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Dashboard</a>
                     </div>
                 </div>
             </div>
@@ -832,6 +870,23 @@ const ViewChartHeader = (props) => {
                         </ModalBody>
 
                     </Modal>
+
+                    <Modal isOpen={confirmLeaveModal} toggle={confirmLeaveModalToggle} className="modal-box-wrp" centered={true}>
+                <ModalHeader toggle={confirmLeaveModalToggle}><span className="ml-1 roititle modal-head">Please Confirm </span></ModalHeader>
+                <ModalBody>
+                    {/* <p className=''>Are you sure you want to leave this screen, please save your changes before leaving ?</p> */}
+                   
+
+                    <div className='d-flex justify-content-around mt-3'>
+                        {/* <button className='lightbtn w-100' onClick={confirmLeaveModalToggle} >Cancel</button> */}
+                        <button className='lightbtn w-100 ml-1' onClick={performAction} >Discard & Exit</button>
+
+                        <button className='darktbtn w-100 ml-1' onClick={() => { saveReport() ; confirmLeaveModalToggle(); }} >Save & Exit</button>
+
+                    </div>
+                </ModalBody>
+
+            </Modal>
 
         </div>
     )

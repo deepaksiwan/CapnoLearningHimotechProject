@@ -36,7 +36,7 @@ const Chart = (props) => {
     const [statistics, setStatistics] = useState([]);
     const [statisticsOg, setStatisticsOg] = useState([]);
     
-    const [zoomEnabled, setZoomEnabled] = useState(false);
+    const [zoomEnabled, setZoomEnabled] = useState(true);
     // alert(new Date(parseInt(props.xmin)));
     let Utz = new Date().getTimezoneOffset();
     const [tableView, setTableView] = useState(props.showSignalStat);
@@ -1948,11 +1948,12 @@ const Chart = (props) => {
             textangle: 270,
             text: reportComment,
             font: {
-                color: '#ffffff'
+                color: '#FF0000'
             },
             showarrow: true,
-            bgcolor: "#FF0000",
+            bgcolor: "#FFffff60",
             arrowcolor: "#FF0000",
+            
             arrowhead: 10,
             ax: 30,
             ay: 0,
@@ -2544,7 +2545,7 @@ const Chart = (props) => {
                                                 <li>
                                                     <Row justify="space-between" style={{ height: rowHeight }}>
                                                         <Col lg={5} xl={5}>
-                                                            <span>Signal Data</span>
+                                                            <span>Signal Statistics</span>
                                                         </Col>
                                                         <Col lg={7} xl={7}>
 
@@ -3037,7 +3038,7 @@ const Chart = (props) => {
                                 <li>
                                 <div className='configure-wrp'>
                                         <div className='configure-child1 specialwidth'>
-                                            <p>X Column Range:</p>
+                                            <p>X Range:</p>
                                         </div>
                                         <div className='configure-child2'>
                                 <select
@@ -3142,7 +3143,7 @@ const Chart = (props) => {
                                             <input type="radio" onClick={() => handleSelection()} checked={dragMode == 'zoom' ? false : true} name="Pan" />
                                             <span>X-Axis Pan</span>
                                             <input type="radio" onClick={() => handleSelection()} checked={dragMode == 'zoom' ? true : false} className='radio-mrl' name="Pan" />
-                                            <span>X-Axis Selection</span>
+                                            <span>X-Axis Range</span>
                                         </div>
                                     </div>
                                 </li>
