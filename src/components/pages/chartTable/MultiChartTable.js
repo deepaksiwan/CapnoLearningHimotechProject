@@ -19,6 +19,7 @@ const MultiChartTable = () => {
     const [currentConfig ,setCurrentConfig] = useState()
     const clientId = localStorage.getItem('selectedClient');
     
+    
     const [graphs, setgraphs] = useState([]);
     const [notes,setNotes] = useState(null) ; 
     const [reportName,setReportName] = useState(null) ; 

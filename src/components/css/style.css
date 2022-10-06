@@ -3310,3 +3310,26 @@ sub {
 }
 
 /* configure table css closed here */
+
+
+
+/* multidata report css open here */
+
+.multidatareport-list{
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+
+}
+.multidatareport-list > li{
+  font-size: 15px;
+  display: block;
+  margin-top: 8px;
+  
+}
+.multidatareport-list > li > a{
+  color: #800080;
+  display: inline-block;
+}
+
+/* multiple report css closed here */
