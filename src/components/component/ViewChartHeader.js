@@ -13,6 +13,7 @@ import { group } from 'd3';
 const ViewChartHeader = (props) => {
     const accessToken = localStorage.getItem('accessToken');
     const [sessions, setsessions] = useState([]);
+
     const sessionid = localStorage.getItem('selectedSession');
     const clientId = localStorage.getItem('selectedClient');
     const [action, setAction] = useState();
@@ -27,6 +28,8 @@ const ViewChartHeader = (props) => {
     const [alternate, setAlternate] = useState([]);
     const [multipleData, SetMultipleData] = useState([]);
     const [zoomlinks, setZoomlinks] = useState([])
+    const [livesessionsnotes, setlivesessionsnotes] = useState([]);
+    const [Notesid, setNotesid] = useState()
     const group = props.group;
     const reportconfig = useRef();
     const alternateconfig = useRef();
@@ -43,6 +46,10 @@ const ViewChartHeader = (props) => {
 
     const [viewlivesessionMultidataModal, setViewlivesessionMultidataModal] = useState(false);
     const viewlivesessionMultidataModalToggle = () => setViewlivesessionMultidataModal(!viewlivesessionMultidataModal);
+
+
+    const [livesessionnotesModal, setLivesessionnotesModal] = useState(false);
+    const livesessionnotesToggleModal = () => setLivesessionnotesModal(!livesessionnotesModal);
 
 
 
@@ -106,7 +113,14 @@ const ViewChartHeader = (props) => {
         // getAlternate() ;
         getMultiData();
 
+
+
     }, [])
+
+
+
+
+
 
 
     // get createmultidata
@@ -154,13 +168,13 @@ const ViewChartHeader = (props) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     // console.log("result", resp);
-                  
+
                     setZoomlinks(resp.data[0])
                     setOpenModal(false)
-                   if(resp.data[0].zoom_link.length > 0){
-                    window.open(resp.data[0].zoom_link);
-                   }
-                   
+                    if (resp.data[0].zoom_link.length > 0) {
+                        window.open(resp.data[0].zoom_link);
+                    }
+
 
                 });
             }
@@ -176,7 +190,12 @@ const ViewChartHeader = (props) => {
     }
 
     // get live session notes
-    const Viewlivesessionnotes = (id) => {
+
+
+    const handleliveNotes = (id) => {
+
+
+
         setOpenModal(true)
         let dataType = 4;
 
@@ -192,7 +211,7 @@ const ViewChartHeader = (props) => {
             if (response.status == 200) {
                 setOpenModal(false)
                 response.json().then((resp) => {
-
+                    setLivesessionmultidataModal(false)
                     let _clientName = resp.firstname + " " + resp.lastname;
                     let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _sessionDate = resp.sessionDate;
@@ -200,6 +219,11 @@ const ViewChartHeader = (props) => {
                     Viewlivenote(_clientName, _trainerName, resp.dataimg, _sessionDate)
 
                 });
+            }
+            else if (response.status == 202) {
+                livesessionnotesToggleModal();
+                setLivesessionmultidataModal(false)
+                setOpenModal(false)
             }
             else if (response.status == 401) {
                 logout()
@@ -212,51 +236,52 @@ const ViewChartHeader = (props) => {
         })
 
 
+
+
+        const Viewlivenote = (_clientName, _trainerName, _notes, _sessionDate) => {
+            let _notesB = _notes.length > 0 ? _notes[_notes.length - 1].sessiondata : "No note found";
+
+            const doc = new jsPDF();
+            doc.setTextColor(0, 0, 0);
+            doc.text('Capnolearning Report', 10, 10,
+                { styles: { fontSize: 20, fontWeight: 'bold' } })
+
+            doc.setDrawColor(0, 0, 0);
+            doc.line(10, 15, 600, 15);
+            doc.setFontSize(10)
+            doc.text(_sessionDate, 35, 25)
+            doc.text(_clientName, 23, 30);
+            doc.text(_trainerName, 25, 35);
+            doc.setFont(undefined, 'bold');
+            doc.text("Session Date:", 10, 25)
+            doc.text("Client:", 10, 30);
+            doc.text("Trainer:", 10, 35);
+            doc.setFont(undefined, 'normal');
+            if (_notes.length > 0) {
+                _notesB = _notes[_notes.length - 1].sessiondata.split("<br>");
+                _notesB.map((v, i) => {
+                    doc.text(v, 10, 52 + (i * 1));
+
+                })
+
+            }
+            else {
+                doc.text("No note found", 10, 52);
+
+            }
+            doc.setFontSize(13)
+            doc.text('Live Session Notes', 10, 45, { styles: { fontSize: 13, fontWeight: 'bold' } })
+            doc.line(10, 47, 55, 47);
+            window.open(doc.output('bloburl'))
+        }
+
     }
 
-    const Viewlivenote = (_clientName, _trainerName, _notes, _sessionDate) => {
-        let _notesB = _notes.length > 0 ? _notes[_notes.length - 1].sessiondata : "No note found";
-
-        const doc = new jsPDF();
-        doc.setTextColor(0, 0, 0);
-        doc.text('Capnolearning Report', 10, 10,
-            { styles: { fontSize: 20, fontWeight: 'bold' } })
-
-        doc.setDrawColor(0, 0, 0);
-        doc.line(10, 15, 600, 15);
-        doc.setFontSize(10)
-        doc.text(_sessionDate, 35, 25)
-        doc.text(_clientName, 23, 30);
-        doc.text(_trainerName, 25, 35);
-        doc.setFont(undefined, 'bold');
-        doc.text("Session Date:", 10, 25)
-        doc.text("Client:", 10, 30);
-        doc.text("Trainer:", 10, 35);
-        doc.setFont(undefined, 'normal');
-        if (_notes.length > 0) {
-            _notesB = _notes[_notes.length - 1].sessiondata.split("<br>");
-            _notesB.map((v, i) => {
-                doc.text(v, 10, 52 + (i * 1));
-
-            })
-
-        }
-        else {
-            doc.text("No note found", 10, 52);
-
-        }
-        doc.setFontSize(13)
-        doc.text('Live Session Notes', 10, 45, { styles: { fontSize: 13, fontWeight: 'bold' } })
-        doc.line(10, 47, 55, 47);
-        window.open(doc.output('bloburl'))
-    }
 
 
+    const handleliveimages = (id)=>{
 
-
-    const Viewlivesessionimg = (id) => {
-
-        setOpenModal(true);
+        setOpenModal(true)
         let dataType = 3;
         fetch(API_URL + "/get/live/sessionimage/download/" + id + "/" + dataType,
             {
@@ -285,7 +310,13 @@ const ViewChartHeader = (props) => {
     }
 
 
+
+
+
+
    
+
+
 
 
 
@@ -1100,7 +1131,7 @@ const ViewChartHeader = (props) => {
                             {
                                 multipleData.length > 0 && multipleData.map((v, i) => {
                                     return (
-                                        <li><a href='javascript:void(0)' onClick={() => { Viewlivesessionnotes(v.id); }}>{v.name}</a></li>
+                                        <li><a href='javascript:void(0)' onClick={() => { handleliveNotes(v.id); }}>{v.name}</a></li>
                                     )
                                 })
                             }
@@ -1146,7 +1177,7 @@ const ViewChartHeader = (props) => {
                             {
                                 multipleData.length > 0 && multipleData.map((v, i) => {
                                     return (
-                                        <li ><a href='javascript:void(0)' onClick={() => { Viewlivesessionimg(v.id); }}>{v.name}</a></li>
+                                        <li ><a href='javascript:void(0)' onClick={() => { handleliveimages(v.id); }}>{v.name}</a></li>
                                     )
                                 })
                             }
@@ -1171,6 +1202,16 @@ const ViewChartHeader = (props) => {
                             <div class="loading-4"></div>
                         </div>
                     </div>
+                </ModalBody>
+
+            </Modal>
+
+
+            <Modal isOpen={livesessionnotesModal} toggle={livesessionnotesToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={livesessionnotesToggleModal}><span className="ml-1 roititle modal-head">Live Session Notes</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>No Found Live Session Notes</p>
+
                 </ModalBody>
 
             </Modal>
