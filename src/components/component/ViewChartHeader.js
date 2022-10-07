@@ -38,6 +38,9 @@ const ViewChartHeader = (props) => {
     const [openModal, setOpenModal] = useState(false);
     const openToggleModal = () => setOpenModal(!openModal);
 
+    const [settingModal, setSetting] = useState(false);
+    const settingToggleModal = () => setSetting(!settingModal);
+
     const [livesessionmultidataModal, setLivesessionmultidataModal] = useState(false);
     const livesessionMultidataModalToggle = () => setLivesessionmultidataModal(!livesessionmultidataModal);
 
@@ -292,7 +295,10 @@ const ViewChartHeader = (props) => {
                 },
             }
         ).then(res => res.blob())
+      
             .then(response => {
+
+
                 //Create a Blob from the PDF Stream
 
                 const file = new Blob([response], {
@@ -305,6 +311,8 @@ const ViewChartHeader = (props) => {
                 // download(fileURL);
 
                 setOpenModal(false);
+            
+               
 
             })
     }
@@ -943,22 +951,23 @@ const ViewChartHeader = (props) => {
                                 <li><a href="javascript:void" data-tip="Export report as PDF." onClick={saveScreenshot}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="javascript:void" onClick={saveReportConfig} data-tip="Save as alternate configuration."><i class="fa fa-sliders" aria-hidden="true"></i></a></li> */}
                                 <li><a href="javascript:void" onClick={saveReport} data-tip="Save as report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={props.multi == false ?"": settingToggleModal} data-tip="Setting"><i class="fa fa-cog" aria-hidden="true"></i></a></li>
                             </ul>
                         </div>
                         <div className="view-opt" style={{ width: "55%" }}>
                             <p>Viewing Options</p>
                             <ul className='action-list'>
 
-                                <li><a href="javascript:void" onClick={props.multi == true ? notesModalToggle : livesessionMultidataModalToggle} data-tip="View session notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
+                                <li><a href="javascript:void" onClick={props.multi == false ? notesModalToggle : livesessionMultidataModalToggle} data-tip="View session notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
                                 </li>
 
 
-                                <li><a href="javascript:void" onClick={props.multi == true ? zoomModalToggle : zoomMultidataModalToggle} data-tip="View zoom recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={props.multi == false ? zoomModalToggle : zoomMultidataModalToggle} data-tip="View zoom recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
                                 {
                                     !props.multi &&
                                     <li><a href="javascript:void" onClick={getPreviousSessionPDF} data-tip="View PDF of previous session"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li>
                                 }
-                                <li><a href="javascript:void" onClick={props.multi == true ? ViewlivesessionImage : viewlivesessionMultidataModalToggle} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={props.multi == false ? ViewlivesessionImage : viewlivesessionMultidataModalToggle} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
                                 {
                                     !group &&
                                     <li><a href="javascript:void" onClick={() => setShowSignalStat(!showSignalStat)} data-tip="View all signal statistics"><i class="fa fa-table"></i></a></li>
@@ -1211,6 +1220,26 @@ const ViewChartHeader = (props) => {
                 <ModalHeader toggle={livesessionnotesToggleModal}><span className="ml-1 roititle modal-head">Live Session Notes</span></ModalHeader>
                 <ModalBody>
                     <p className='text-center'>No Found Live Session Notes</p>
+
+                </ModalBody>
+
+            </Modal>
+
+
+            <Modal isOpen={settingModal} toggle={settingToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={settingToggleModal}><span className="ml-1 roititle modal-head">Setting</span></ModalHeader>
+                <ModalBody>
+                    <div className='wrp-select-setting'>
+                        <div className='label-setting'>
+                            <p>Setting</p>
+                        </div>
+                        <div className='select-setting'>
+                            <select>
+                                <option>Select Option</option>
+                                <option>Select Option</option>
+                            </select>
+                        </div>
+                    </div>
 
                 </ModalBody>
 
