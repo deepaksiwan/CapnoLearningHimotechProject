@@ -5,7 +5,13 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from "jspdf";
 import { API_URL } from '../../config';
 import ReactTooltip from 'react-tooltip';
-import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
+import {
+    Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody, Accordion,
+    AccordionBody,
+    AccordionHeader,
+    AccordionItem,
+} from "reactstrap";
+
 import ReactExport from "react-export-excel";
 import { group } from 'd3';
 
@@ -54,11 +60,17 @@ const ViewChartHeader = (props) => {
     const [livesessionnotesModal, setLivesessionnotesModal] = useState(false);
     const livesessionnotesToggleModal = () => setLivesessionnotesModal(!livesessionnotesModal);
 
+    const [zoomlinkModal, setZoomlinkModal] = useState(false);
+    const zoomlinkToggleModal = () => setZoomlinkModal(!zoomlinkModal);
+
+    const [nofoundliveimgModal, setNofoundliveimg] = useState(false);
+    const nofoundliveimgToggleModal = () => setNofoundliveimg(!nofoundliveimgModal);
+
 
     const [exportModal, setExportModal] = useState(false);
     const exportModalToggle = () => setExportModal(!exportModal);
 
-    
+
 
 
     const [notesModal, setNotesModal] = useState(false);
@@ -99,6 +111,18 @@ const ViewChartHeader = (props) => {
     const saveReportConfig = props.saveReportConfig;
     const setrequestProcessingModal = props.setrequestProcessingModal;
     const setrequestProcesedModal = props.setrequestProcesedModal;
+
+
+    const [open, setOpen] = useState('');
+    const toggle = (id) => {
+        if (open === id) {
+            setOpen();
+        } else {
+            setOpen(id);
+        }
+    };
+
+
     useEffect(() => {
         // console.log("mydata" , signalStat);
     }, signalStat)
@@ -184,6 +208,11 @@ const ViewChartHeader = (props) => {
 
 
                 });
+            }
+            else if (response.status == 202) {
+                zoomlinkToggleModal();
+                setZoomMultidataModal(false)
+                setOpenModal(false)
             }
             else if (response.status == 401) {
                 logout()
@@ -286,7 +315,7 @@ const ViewChartHeader = (props) => {
 
 
 
-    const handleliveimages = (id)=>{
+    const handleliveimages = (id) => {
 
         setOpenModal(true)
         let dataType = 3;
@@ -298,27 +327,45 @@ const ViewChartHeader = (props) => {
 
                 },
             }
-        ).then(res => res.blob())
-      
-            .then(response => {
+        ).then((response) => {
+            if (response.status == 200) {
+
+                response.blob()
+
+                    .then(response => {
+
+                        //Create a Blob from the PDF Stream
+
+                        const file = new Blob([response], {
+                            type: "application/pdf"
+                        });
+                        //Build a URL from the file
+                        const fileURL = URL.createObjectURL(file);
+                        // Open the URL on new Window
+                        window.open(fileURL);
+                        // download(fileURL);
+
+                        setOpenModal(false);
 
 
-                //Create a Blob from the PDF Stream
 
-                const file = new Blob([response], {
-                    type: "application/pdf"
-                });
-                //Build a URL from the file
-                const fileURL = URL.createObjectURL(file);
-                // Open the URL on new Window
-                window.open(fileURL);
-                // download(fileURL);
+                    })
 
-                setOpenModal(false);
-            
-               
+            }
+            else if (response.status == 202) {
+                nofoundliveimgToggleModal()
+                setViewlivesessionMultidataModal(false)
+                setOpenModal(false)
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                alert("network error")
+            }
 
-            })
+
+        })
     }
 
 
@@ -326,7 +373,7 @@ const ViewChartHeader = (props) => {
 
 
 
-   
+
 
 
 
@@ -951,7 +998,7 @@ const ViewChartHeader = (props) => {
                                         }
                                     </li>
                                 }
-                                   {
+                                {
                                     props.multi && !group &&
 
                                     <li><a href="javascript:void" onClick={exportModalToggle} data-tip="Export data."   ><i class="fa fa-upload whiteicon" aria-hidden="true"></i></a></li>
@@ -960,8 +1007,8 @@ const ViewChartHeader = (props) => {
                                 <li><a href="javascript:void" data-tip="Export report as PDF." onClick={saveScreenshot}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="javascript:void" onClick={saveReportConfig} data-tip="Save as alternate configuration."><i class="fa fa-sliders" aria-hidden="true"></i></a></li> */}
                                 <li><a href="javascript:void" onClick={saveReport} data-tip="Save as report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
-                                <li><a href="javascript:void" onClick={props.multi == false ?"": settingToggleModal} data-tip="Configure Graph Linking"><i class="fa fa-cog" aria-hidden="true"></i></a></li>
-                             
+                                <li><a href="javascript:void" onClick={props.multi == false ? "" : settingToggleModal} data-tip="Configure Graph Linking"><i class="fa fa-cog" aria-hidden="true"></i></a></li>
+
                             </ul>
                         </div>
                         <div className="view-opt" style={{ width: "55%" }}>
@@ -990,11 +1037,11 @@ const ViewChartHeader = (props) => {
                     </div>
                 </div>
                 {
-                            !props.multi &&
-                <div className="chart-header-c2">
-                    <div className="wrp-select-row">
-                        
-                 
+                    !props.multi &&
+                    <div className="chart-header-c2">
+                        <div className="wrp-select-row">
+
+
                             <div className="select-row">
                                 <select value={record} onChange={(e) => window.location.href = e.target.value}>
                                     <option value={'all'}   >All Records</option>
@@ -1010,9 +1057,9 @@ const ViewChartHeader = (props) => {
                                 </select>
                             </div>
 
+                        </div>
                     </div>
-                </div>
-                        }
+                }
 
                 <div className="chart-header-c3">
                     <ul className="username-list">
@@ -1127,7 +1174,7 @@ const ViewChartHeader = (props) => {
                             {
                                 multipleData.length > 0 && multipleData.map((v, i) => {
                                     return (
-                                        <li><a href='javascript:void(0)' onClick={() => { handleliveNotes(v.id); }}>{v.name}</a></li>
+                                        <li><span>{i + 1}</span><a href='javascript:void(0)' onClick={() => { handleliveNotes(v.id); }}>{v.name}</a></li>
                                     )
                                 })
                             }
@@ -1149,7 +1196,7 @@ const ViewChartHeader = (props) => {
                             {
                                 multipleData.length > 0 && multipleData.map((v, i) => {
                                     return (
-                                        <li><a href="javascript:void(0)" onClick={() => { getZoomLinkbyid(v.id); }}>{v.name}</a></li>
+                                        <li> <span>{i + 1}</span> <a href="javascript:void(0)" onClick={() => { getZoomLinkbyid(v.id); }}>{v.name}</a></li>
                                     )
                                 })
                             }
@@ -1170,13 +1217,58 @@ const ViewChartHeader = (props) => {
                     <div>
                         <ol className='multidatareport-list'>
 
-                            {
+                            {/* {
                                 multipleData.length > 0 && multipleData.map((v, i) => {
                                     return (
-                                        <li ><a href='javascript:void(0)' >{v.name}</a></li>
+                                        <li ><span>{i + 1}</span> <a href='javascript:void(0)' >{v.name}</a></li>
+                                    )
+                                })
+                            } */}
+
+
+                             {
+                                multipleData.length > 0 && multipleData.map((v, i) => {
+                                    return (
+                                        <li>
+
+                                <Accordion flush open={open} toggle={toggle}
+                                // defaultOpen={[
+                                //     '1',
+
+                                // ]}
+                                // stayOpen
+                                >
+                                    <AccordionItem>
+                                        <AccordionHeader targetId={v.id} className='wrp-accourdian-head'>
+                                        <div className='list-exort-content'><span>{i + 1}</span> <a href='javascript:void(0)' >{v.name}</a></div>
+                                        </AccordionHeader>
+                                        <AccordionBody accordionId={v.id} className='accourdian-body-wrp'>
+                                        <div className='excel-wrp'>
+                                            <input type="radio" name='csv' className='mrt-radiobtn' />
+                                            <label>CSV</label>
+                                            <input type="radio" name='csv' />
+                                            <label>EXCEL</label>
+                                            <input type="radio" name='csv' />
+                                            <label>ASCII</label>
+                                        </div>
+
+                                        </AccordionBody>
+                                    </AccordionItem>
+
+                                </Accordion>
+
+
+
+
+
+
+                            </li>
                                     )
                                 })
                             }
+
+                            
+
 
                         </ol>
                     </div>
@@ -1195,7 +1287,7 @@ const ViewChartHeader = (props) => {
                             {
                                 multipleData.length > 0 && multipleData.map((v, i) => {
                                     return (
-                                        <li ><a href='javascript:void(0)' onClick={() => { handleliveimages(v.id); }}>{v.name}</a></li>
+                                        <li > <span>{i + 1}</span> <a href='javascript:void(0)' onClick={() => { handleliveimages(v.id); }}>{v.name}</a></li>
                                     )
                                 })
                             }
@@ -1234,6 +1326,24 @@ const ViewChartHeader = (props) => {
 
             </Modal>
 
+            <Modal isOpen={zoomlinkModal} toggle={zoomlinkToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={zoomlinkToggleModal}><span className="ml-1 roititle modal-head"> Zoom Recording</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Zoom Links Not Found </p>
+
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={nofoundliveimgModal} toggle={nofoundliveimgToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={nofoundliveimgToggleModal}><span className="ml-1 roititle modal-head"> View Live Session images</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>Live Session images Not Found </p>
+
+                </ModalBody>
+
+            </Modal>
+
 
             <Modal isOpen={settingModal} toggle={settingToggleModal} className="connect-box" centered={true}>
                 <ModalHeader toggle={settingToggleModal}><span className="ml-1 roititle modal-head">Configure Graph Linking</span></ModalHeader>
@@ -1265,5 +1375,5 @@ const ViewChartHeader = (props) => {
     )
 }
 
-export default ViewChartHeader
+export default ViewChartHeader;
 

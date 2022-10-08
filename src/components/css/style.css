@@ -1710,6 +1710,7 @@ strong {
 
 .modal-title {
   color: #fff;
+  align-self: center;
 }
 
 .close {
@@ -3318,7 +3319,7 @@ sub {
 .multidatareport-list{
   margin: 0px;
   padding: 0px;
-  /* list-style: none; */
+  list-style: none;
 
 }
 .multidatareport-list > li{
@@ -3326,6 +3327,13 @@ sub {
   display: block;
   margin-top: 8px;
   
+}
+
+.multidatareport-list > li > span{
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 15px;
+  font-weight: 600;
 }
 .multidatareport-list > li > a{
   color: #800080;
@@ -3358,5 +3366,50 @@ sub {
   width: 60%;
   align-self: center;
 }
+.btn-close{
+  align-self: center;
+  width: 20px! important;
+  height: 20px! important;
+  opacity: .7! important;
+  background: transparent url('../images/closex.svg') center/13px auto no-repeat! important;
+}
 
+.list-exort-content > span{
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.list-exort-content > a{
+  color: #800080;
+  display: inline-block;
+}
+.wrp-accourdian-head > button{
+  padding: 6px 12px;
+}
+.list-exort-content > a{
+  font-size: 15px;
+}
+.accordion-button:not(.collapsed) {
+  color: #800080! important;
+
+}
+.mrt-radiobtn{
+  margin-left: 15px! important;
+}
+.excel-wrp > input{
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: 8px;
+}
+.excel-wrp > label{
+  display: inline-block;
+    vertical-align: middle;
+    font-size: 15px;
+    margin-left: 8px;
+}
+.accordion {
+  border-bottom: 1px solid #0000008c! important;
+  border-radius: 4px! important;
+}
 /* multiple report css closed here */
