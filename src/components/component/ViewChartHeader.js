@@ -55,6 +55,10 @@ const ViewChartHeader = (props) => {
     const livesessionnotesToggleModal = () => setLivesessionnotesModal(!livesessionnotesModal);
 
 
+    const [exportModal, setExportModal] = useState(false);
+    const exportModalToggle = () => setExportModal(!exportModal);
+
+    
 
 
     const [notesModal, setNotesModal] = useState(false);
@@ -947,11 +951,17 @@ const ViewChartHeader = (props) => {
                                         }
                                     </li>
                                 }
+                                   {
+                                    props.multi && !group &&
+
+                                    <li><a href="javascript:void" onClick={exportModalToggle} data-tip="Export data."   ><i class="fa fa-upload whiteicon" aria-hidden="true"></i></a></li>
+                                }
                                 <li><a href="javascript:void" onClick={takeNotesToggle} data-tip="Take report notes."><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li>
                                 <li><a href="javascript:void" data-tip="Export report as PDF." onClick={saveScreenshot}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="javascript:void" onClick={saveReportConfig} data-tip="Save as alternate configuration."><i class="fa fa-sliders" aria-hidden="true"></i></a></li> */}
                                 <li><a href="javascript:void" onClick={saveReport} data-tip="Save as report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
-                                <li><a href="javascript:void" onClick={props.multi == false ?"": settingToggleModal} data-tip="Setting"><i class="fa fa-cog" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={props.multi == false ?"": settingToggleModal} data-tip="Configure Graph Linking"><i class="fa fa-cog" aria-hidden="true"></i></a></li>
+                             
                             </ul>
                         </div>
                         <div className="view-opt" style={{ width: "55%" }}>
@@ -979,36 +989,12 @@ const ViewChartHeader = (props) => {
                         </div>
                     </div>
                 </div>
+                {
+                            !props.multi &&
                 <div className="chart-header-c2">
                     <div className="wrp-select-row">
-                        {/* <div className="select-row">
-                            <select className="selected-raw-c" onChange={reportconfigupdate} ref={reportconfig}>
-
-                                {
-                                    sessions.map((sessions) => {
-                                        return (
-                                            <option selected={sessions.id == config ? true : false} value={sessions.id}>{sessions.name}</option>
-                                        )
-
-                                    })
-                                }
-
-                            </select>
-                        </div> */}
-                        {/* <div className="select-row">
-                            <select onChange={reportconfigalternateupdate} ref={alternateconfig}>>
-                                <option value={config} selected={config == currentConfig ? "selected" : "" } >Default</option>
-                                {
-                                    alternate.length > 0 && alternate.map((v,i) => {
-                                        return (
-                                            <option value={v.id} selected={v.id == currentConfig ? "selected" : "" }>Alternate {i+1}</option>
-                                        )
-                                    })
-                                }
-                            </select>
-                        </div> */}
-                        {
-                            !props.multi &&
+                        
+                 
                             <div className="select-row">
                                 <select value={record} onChange={(e) => window.location.href = e.target.value}>
                                     <option value={'all'}   >All Records</option>
@@ -1023,10 +1009,11 @@ const ViewChartHeader = (props) => {
 
                                 </select>
                             </div>
-                        }
 
                     </div>
                 </div>
+                        }
+
                 <div className="chart-header-c3">
                     <ul className="username-list">
                         <li data-tip="Name of report">
@@ -1177,6 +1164,28 @@ const ViewChartHeader = (props) => {
 
 
 
+            <Modal isOpen={exportModal} toggle={exportModalToggle} className="modal-box-wrp" centered={true}>
+                <ModalHeader toggle={exportModalToggle}><span className="ml-1 roititle modal-head"> Export Data</span></ModalHeader>
+                <ModalBody>
+                    <div>
+                        <ol className='multidatareport-list'>
+
+                            {
+                                multipleData.length > 0 && multipleData.map((v, i) => {
+                                    return (
+                                        <li ><a href='javascript:void(0)' >{v.name}</a></li>
+                                    )
+                                })
+                            }
+
+                        </ol>
+                    </div>
+
+
+                </ModalBody>
+
+            </Modal>
+
             <Modal isOpen={viewlivesessionMultidataModal} toggle={viewlivesessionMultidataModalToggle} className="modal-box-wrp" centered={true}>
                 <ModalHeader toggle={viewlivesessionMultidataModalToggle}><span className="ml-1 roititle modal-head"> View Live Session images</span></ModalHeader>
                 <ModalBody>
@@ -1219,7 +1228,7 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={livesessionnotesModal} toggle={livesessionnotesToggleModal} className="connect-box" centered={true}>
                 <ModalHeader toggle={livesessionnotesToggleModal}><span className="ml-1 roititle modal-head">Live Session Notes</span></ModalHeader>
                 <ModalBody>
-                    <p className='text-center'>No Found Live Session Notes</p>
+                    <p className='text-center'>Live Session Notes Not Found </p>
 
                 </ModalBody>
 
@@ -1227,7 +1236,7 @@ const ViewChartHeader = (props) => {
 
 
             <Modal isOpen={settingModal} toggle={settingToggleModal} className="connect-box" centered={true}>
-                <ModalHeader toggle={settingToggleModal}><span className="ml-1 roititle modal-head">Setting</span></ModalHeader>
+                <ModalHeader toggle={settingToggleModal}><span className="ml-1 roititle modal-head">Configure Graph Linking</span></ModalHeader>
                 <ModalBody>
                     <div className='wrp-select-setting'>
                         <div className='label-setting'>
@@ -1235,8 +1244,9 @@ const ViewChartHeader = (props) => {
                         </div>
                         <div className='select-setting'>
                             <select>
-                                <option>Select Option</option>
-                                <option>Select Option</option>
+                                <option>Graph by Graph basis</option>
+                                <option>Signal by Signal basis</option>
+                                <option>Link All Graphs</option>
                             </select>
                         </div>
                     </div>

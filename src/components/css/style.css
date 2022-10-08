@@ -3318,7 +3318,7 @@ sub {
 .multidatareport-list{
   margin: 0px;
   padding: 0px;
-  list-style: none;
+  /* list-style: none; */
 
 }
 .multidatareport-list > li{
