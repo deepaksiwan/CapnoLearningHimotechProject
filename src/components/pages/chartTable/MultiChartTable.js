@@ -21,12 +21,15 @@ const MultiChartTable = () => {
     
     
     const [graphs, setgraphs] = useState([]);
+    const [sessionNumber, setSessionNumber] = useState(0);
+    
     const [notes,setNotes] = useState(null) ; 
     const [reportName,setReportName] = useState(null) ; 
     const [showHeader,setShowHeader] = useState(false) ; 
     const [sessionDate,setSessionDate] = useState(null) ; 
     const userId = localStorage.getItem('user_id');
     const [showActualTime,setShowActualTime] =  useState(true) ; 
+    const [refreshMulti,setRefreshMulti] =  useState(null) ; 
      
     // const [value, setValue] = useState(0);
     // const [point, setPoint] = useState(25);
@@ -44,10 +47,13 @@ const MultiChartTable = () => {
     const [savingAlternateConfirmation, setSavingAlternateConfirmation] = useState(false);
     const savingAlternateConfirmationToggle = () => setSavingAlternateConfirmation(!savingAlternateConfirmation);
 
+    const [linkingType,setLinkingType] = useState('')
+    // const [linkingType,setLinkingType] = useState(null)
 
     const [requestProcessedModal, setrequestProcesedModal] = useState(false);
     const requestProcessedModalToggle = () => setrequestProcesedModal(!requestProcessedModal);
 
+    const [main,setMain ] =  useState({}) ;
 
     const setConfig = (_signal,data) => {
         let _temp = signalConfig ; 
@@ -77,7 +83,33 @@ const MultiChartTable = () => {
             lineType: data.lineType
         }
         // console.log("signal config",_temp);
+        setMain({
+            color : data.color,
+            type : data.type,
+            avg : data.avg,
+            xmin : data.xmin/1e3,
+            signal: data.signal,
+            thick : data.thick,
+            xextreme : data.xextreme/1e3,
+            xmax : data.xmax/1e3,
+            ymin : data.ymin,
+            ymax : data.ymax,
+            record : data.record,
+            graph_order : data.graph_order,
+            comment : data.comment,
+            row : data.row,
+            clientSerial : data.clientSerial,
+            col : data.col,
+            xrange: data.xrange, 
+            units: data.units,
+            annotation: data.annotation,
+            grid: data.grid,
+            inverty: data.inverty,
+            yposition: data.yposition,
+            lineType: data.lineType
+        })
         setSignalConfig(_temp)
+
     }
 
 
@@ -149,6 +181,15 @@ const MultiChartTable = () => {
                 response.json().then((resp) => {
                     // console.warn("result", resp);
                     setgraphs(resp.graphs)
+                    // setSessionNumber(3)
+
+                    if(resp.graphs.length % 3 == 0 ){
+                        setSessionNumber(3)
+                    }
+                    if(resp.graphs.length % 2 == 0 ){
+                        setSessionNumber(2)
+                        
+                    }
 
 
                 });
@@ -299,26 +340,38 @@ const MultiChartTable = () => {
         <div>
             {
                 graphs.length > 0  && showHeader &&
-                <ViewChartHeader setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat}  setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} multi={true} config={currentConfig} />
+                <ViewChartHeader setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat} setLinkingType={setLinkingType} showSignalStat={showSignalStat}  setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} multi={true} config={currentConfig} />
             }
 
-{
+            {
                 graphs.length > 0  && !showHeader &&
-                <ViewChartHeader setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat}  setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} multi={true} config={currentConfig} />
+                <ViewChartHeader setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat} setLinkingType={setLinkingType}   showSignalStat={showSignalStat}  setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} multi={true} config={currentConfig} />
             }
               
             <div className="wrp-charttable" id="chart-table">
                 <div className="container-fluid">
                     <div className="row justify-content-between">
                         {
-                           graphs.length > 0 &&  graphs.map(function (d, i) {
+                           graphs.length > 0 && sessionNumber > 0 && graphs.map(function (d, i) {
                             
                                 return (
-                                  
+                                
+                                    
                                         <div className="chart-w" style={{ width:  ((d.col != "1/1" && d.col != "1") ? (eval((d.col)) * 99 )+ "%" : (eval(d.col) * 100) + "%") , maxWidth: (eval(d.col) * 100) + "%", height: "auto" , minHeight:  (eval(d.row) * 84) + "vh"  }}>
-                                        <Chart multi={true} showActualTime={showActualTime} showSignalStat={showSignalStat} comment={d.comment} setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={d.sid} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
+                                        
+                                        {
+                                            (i == 0 || i % sessionNumber == 0) &&
+                                                <p className={(graphs.length - i) === (sessionNumber) ? "flyleft moreflyleft" : "flyleft" } >{d.session_name}</p>
+                                         }
+                                      
+                                       {
+                                        linkingType != '' ?
+                                        <Chart linkingType={linkingType} multi={true} showActualTime={showActualTime} showSignalStat={showSignalStat} comment={d.comment}   setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={d.sid} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={main.thick} otherConfig={main.other_config} graph_order={d.graph_order} type={main.type} color={main.color} />
+                                            :
+                                        <Chart linkingType={linkingType} multi={true} showActualTime={showActualTime} showSignalStat={showSignalStat} comment={d.comment}  setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={d.sid} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
+                                        }
                                         </div>
-                                   
+                                      
 
                                 )
 

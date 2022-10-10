@@ -3313,6 +3313,22 @@ sub {
 /* configure table css closed here */
 
 
+p.flyleft {
+  position: absolute;
+  transform: rotate(270deg);
+  left: -22%;
+  top: 46%;
+  float: none;
+  font-size: 12px;
+  background: purple;
+  color: #fff;
+  padding: 0px 5px;
+}
+
+p.flyleft.moreflyleft{
+  left: -23.5%;
+}
+
 
 /* multidata report css open here */
 

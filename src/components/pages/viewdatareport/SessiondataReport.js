@@ -63,7 +63,7 @@ const SessiondataReport = () => {
                             actions : <p> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="View" placement="top"><a href={type == 'single' ? '/view/report/'+v.other_config+'/'+sessionid+"/"+v.id+'/all' : '/view/group/report/'+sessionid+"/"+v.id+'/all'} className="downloadimg"><img src={preveiw} /></a></Tooltip> </p>
+                              }} title="View" placement="top"><a href={type == 'single' ? '/view/report/'+0+'/'+sessionid+"/"+v.id+'/all' : '/view/group/report/'+sessionid+"/"+v.id+'/all'} className="downloadimg"><img src={preveiw} /></a></Tooltip> </p>
                         })
 
                         if(i == (resp.reports.length - 1)){

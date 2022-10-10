@@ -32,6 +32,7 @@ const Chart = (props) => {
 
     const { showclock } = useParams();
     const sessionDate = props.sessionDate;
+    // const setRefreshMulti = props.setRefreshMulti  ; 
     const [textTooltip, setTextTooltip] = useState([]);
     const [statistics, setStatistics] = useState([]);
     const [statisticsOg, setStatisticsOg] = useState([]);
@@ -63,6 +64,14 @@ const Chart = (props) => {
         // $(this).val(value);
     }
 
+
+    // useEffect(() => {
+        
+     
+    //   setXaxisMax(localStorage.getItem('xmax'));
+    //   setXaxisMin(localStorage.getItem('xmin'));
+
+    // },[props.refreshMulti])
 
     useEffect(() => {
 
@@ -226,6 +235,7 @@ const Chart = (props) => {
     const [showThresholdLine, setShowThresholdLine] = useState(false)
     const setConfig = props.setConfig;
     const setStats = props.setStats;
+    const setRefreshMult = props.setRefreshMult;
 
     const [signalName, setSignalName] = useState({
         pco2wave: "Raw PCO<sub>2</sub>",
@@ -427,7 +437,7 @@ const Chart = (props) => {
     }
 
     const getAlldata = () => {
-        fetch(API_URL + "/session/data/type?session_id=" + session + "&type=2",
+        fetch(API_URL + "/session/data/type?session_id=" + session + "&signal="+props.signal+"&type=2",
             {
                 method: 'GET',
                 headers: {
@@ -481,6 +491,9 @@ const Chart = (props) => {
         let _length = 0;
         let _pauseTime = 0;
         // let userTimeOffset = 0 ; 
+        // let userTimeOffset = 0;
+
+
         let userTimeOffset = new Date().getTimezoneOffset();
 
         userTimeOffset = userTimeOffset * 60 * 1000;
@@ -654,14 +667,14 @@ const Chart = (props) => {
                             sd: parseFloat(v.std).toFixed(2),
                         })
 
-                        if (v.r != prevRecord) {
+                        if (v.r != prevRecord && v.r > prevRecord) {
                             recId++;
                             let _recName = "Rec-" + recId;
                             _recordArray.push([xData, v.rname == "Normal" ? _recName : v.rname]);
 
+                            prevRecord = v.r ;
 
                         }
-                        prevRecord = v.r ;
 
 
                         if (v.rname != "Normal") {
@@ -1220,6 +1233,8 @@ const Chart = (props) => {
         if (props.xmax == "full") {
             setXaxisMax(new Date(new Date(xAxis[xAxis.length - 1])));
             setTxaxisMax(new Date(new Date(xAxis[xAxis.length - 1])));
+         
+            
         }
         else {
             let userTimeOffset = new Date().getTimezoneOffset();
@@ -1228,6 +1243,7 @@ const Chart = (props) => {
             let _max = new Date(parseInt(new Date(xAxis[0]).getTime()) + parseInt(props.xmax * 1e3))
             setXaxisMax(new Date(_max))
             setTxaxisMax(new Date(_max))
+          
       
 
             // console.log(props.signal,)
@@ -1242,23 +1258,33 @@ const Chart = (props) => {
 
     const handleRelayout = (e) => {
         setXRange('')
+        let xmin = new Date(xAxis[0]) ;
+        let xmax = new Date(xAxis[xAxis.length - 1]) ;
         if (new Date(e['xaxis.range[0]']) < new Date(xAxis[0])) {
             let _diff = xAxisMax - xAxisMin;
-            setXaxisMin(new Date(xAxis[0]))
+            xmax = new Date(xAxis[0])
         }
         else if (new Date(e['xaxis.range[1]']) > new Date(xAxis[xAxis.length - 1])) {
             let _diff = xAxisMax - xAxisMin;
-            setXaxisMax(new Date(xAxis[xAxis.length - 1]))
-            setXaxisMin(new Date(xAxis[xAxis.length - 1] - _diff));
+            xmax = new Date(xAxis[xAxis.length - 1]) ;
+            xmin = new Date(xAxis[xAxis.length - 1] - _diff) ; 
+          
         }
         else if (new Date(e['xaxis.range[1]']) < new Date(xAxis[0])) {
-            setXaxisMax(new Date(xAxis[xAxis.length - 1]))
-            setXaxisMin(new Date(xAxis[0]))
+            
+            xmax = new Date(xAxis[xAxis.length - 1])
+            xmin = new Date(xAxis[0]) ; 
         }
         else {
-            setXaxisMin(new Date(e['xaxis.range[0]']))
-            setXaxisMax(new Date(e['xaxis.range[1]']))
+            xmin = new Date(e['xaxis.range[0]'])
+            xmax = new Date(e['xaxis.range[1]']) ; 
+           
         }
+        setXaxisMax(xmax) ; 
+        setXaxisMin(xmin)
+        // localStorage.setItem('max',xmax);
+        // localStorage.setItem('min',xmin);
+        // setRefreshMulti(Math.random());
     }
 
     useEffect(() => {

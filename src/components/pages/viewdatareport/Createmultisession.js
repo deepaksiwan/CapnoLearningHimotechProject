@@ -176,19 +176,25 @@ const logout = () => {
         })
     }
 
+    const handleSignalClick = (e) => {
+        let _temp = selectedSignals ;
+        if(_temp.length == 3){
+            e.preventDefault();
+            e.stopPropagation()
+            alert("You can choose maximum 3 signals");
+            return false;
+        }
+    }
+
     const handleSignalChange = (e) => {
         let _temp = selectedSignals ;
         if(e.target.checked){
-            if(_temp.length == 3){
-                alert("You can choose maximum 3 signals");
-                return false;
-            }
-            else{
+        if(_temp.length < 3){
+             
                 if(!_temp.includes(e.target.value)){
                     _temp.push(e.target.value)
                 }
             }
-           
         } 
         else{
             if(_temp.includes(e.target.value)){
@@ -242,7 +248,7 @@ const logout = () => {
                                         return (
                                             <div className="signal-c-child">
                                             <div class="custom-radios">
-                                                <input type="checkbox"  onChange={handleSignalChange} id={v.signal_code}   value={v.signal_code} />
+                                                <input type="checkbox"  onClick={handleSignalClick} onChange={handleSignalChange} id={v.signal_code}   value={v.signal_code} />
                                                 <label for={v.signal_code}>
                                                     <span className="redious">
                                                     </span>

@@ -44,6 +44,10 @@ const ViewChartHeader = (props) => {
     const [openModal, setOpenModal] = useState(false);
     const openToggleModal = () => setOpenModal(!openModal);
 
+
+    const setLinkingType = props.setLinkingType ; 
+    const [linkT,setLinkt] = useState('') ; 
+
     const [settingModal, setSetting] = useState(false);
     const settingToggleModal = () => setSetting(!settingModal);
 
@@ -945,6 +949,11 @@ const ViewChartHeader = (props) => {
         setrequestProcesedModal(true);
     }
 
+    const handleLinkinChange = (e) => {
+            setLinkingType(e.target.value)
+            setLinkt(e.target.value)
+    }
+
 
     const moveClock = () => {
         let moveClock = (showclock == 0 ? 1 : 0);
@@ -1060,7 +1069,8 @@ const ViewChartHeader = (props) => {
                         </div>
                     </div>
                 }
-
+    {
+                    !props.multi &&
                 <div className="chart-header-c3">
                     <ul className="username-list">
                         <li data-tip="Name of report">
@@ -1098,10 +1108,60 @@ const ViewChartHeader = (props) => {
 
                     </ul>
                 </div>
+}
                 <div className="chart-header-c4">
-                    <div className="dashboard-back">
+                    {
+                            props.multi &&
+                            <div className="chart-header-c3">
+                            <ul className="username-list">
+                                <li data-tip="Name of report">
+                                    {reportDetails.map((repoprtName) => {
+                                        return (
+                                            <a href="javascript:void"><i class="fa fa-file" aria-hidden="true"></i>{repoprtName.name}</a>
+                                        )
+                                    }
+                                    )}
+                                </li>
+                                <li data-tip="Name of client">
+                                    {sessioninfo.map((clientName) => {
+                                        return (
+                                            <a href="javascript:void"><i class="fa fa-user" aria-hidden="true"></i>{clientName.client_firstname} {clientName.client_lastname}</a>
+                                        )
+                                    }
+                                    )}
+                                </li>
+                                <li data-tip="Name of trainer">
+                                    {sessioninfo.map((trainerName) => {
+                                        return (
+                                            <a href="javascript:void"><i class="fa fa-user-md" aria-hidden="true"></i> {trainerName.trainer_firstname} {trainerName.trainer_lastname}</a>
+                                        )
+                                    }
+                                    )}
+                                </li>
+                                <li data-tip="Session date">
+                                    {!props.multi && sessioninfo.map((sessionName) => {
+                                        return (
+                                            <a href="javascript:void"><i class="fa fa-calendar" aria-hidden="true"></i> {sessionName.name}</a>
+                                        )
+                                    }
+                                    )}
+                                </li>
+                                <li data-tip="Session date">
+                                <div className="dashboard-back">
                         <a href="javascript:void" onClick={() => confirmLeave("dashboard")}><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Dashboard</a>
                     </div>
+
+        </li>
+                            </ul>
+                        </div>
+                    }
+                    {
+                        !props.multi &&
+                        <div className="dashboard-back">
+                        <a href="javascript:void" onClick={() => confirmLeave("dashboard")}><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Dashboard</a>
+                    </div>
+                    }
+                  
                 </div>
             </div>
 
@@ -1329,7 +1389,7 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={zoomlinkModal} toggle={zoomlinkToggleModal} className="connect-box" centered={true}>
                 <ModalHeader toggle={zoomlinkToggleModal}><span className="ml-1 roititle modal-head"> Zoom Recording</span></ModalHeader>
                 <ModalBody>
-                    <p className='text-center'>Zoom Links Not Found </p>
+                    <p className='text-center'>Zoom Link Not Found </p>
 
                 </ModalBody>
 
@@ -1338,7 +1398,7 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={nofoundliveimgModal} toggle={nofoundliveimgToggleModal} className="connect-box" centered={true}>
                 <ModalHeader toggle={nofoundliveimgToggleModal}><span className="ml-1 roititle modal-head"> View Live Session images</span></ModalHeader>
                 <ModalBody>
-                    <p className='text-center'>Live Session images Not Found </p>
+                    <p className='text-center'>Live Session Images Not Found </p>
 
                 </ModalBody>
 
@@ -1350,13 +1410,14 @@ const ViewChartHeader = (props) => {
                 <ModalBody>
                     <div className='wrp-select-setting'>
                         <div className='label-setting'>
-                            <p>Setting</p>
+                            <p>Choose Linking Type</p>
                         </div>
                         <div className='select-setting'>
-                            <select>
-                                <option>Graph by Graph basis</option>
-                                <option>Signal by Signal basis</option>
-                                <option>Link All Graphs</option>
+                            <select value={linkT} onChange={handleLinkinChange}>
+                                <option value="">No Linking</option>
+                                <option value="1">Session by Session</option>
+                                <option value="2">Signal by Signal</option>
+                                <option value="3">Link All Signals & Sessions</option>
                             </select>
                         </div>
                     </div>
