@@ -24,6 +24,7 @@ const ViewGroupChartTable = () => {
     const [sessionDate,setSessionDate] = useState(null) ; 
     const userId = localStorage.getItem('user_id');
     const [showActualTime,setShowActualTime] =  useState(true) ; 
+    const [linkGraphs,setLinkGraphs] = useState(true)
     
     // const [value, setValue] = useState(0);
     // const [point, setPoint] = useState(25);
@@ -71,6 +72,7 @@ const ViewGroupChartTable = () => {
             annotation: data.annotation,
             grid: data.grid,
             inverty: data.inverty,
+            stat: data.stat,
             yposition: data.yposition,
             lineType: data.lineType
         }
@@ -151,6 +153,40 @@ const ViewGroupChartTable = () => {
 
     }
 
+    const [globalConfig,setGlobalConfig]  =  useState({
+        color : '',
+        signal: 1,
+        type : '',
+        avg : '',
+        xmin : '',
+        thick : 0.5,
+        xextreme : '',
+        xmax : '',
+        ymin : 0,
+        ymax : 50,
+        record : '',
+        graph_order : '',
+        comment : '',
+        row : '',
+        clientSerial : '',
+        col : '',
+        xrange: 0, 
+        units: '',
+        annotation: 1,
+        grid: 2,
+        showGrid: false,
+        invert: 2,
+        position: '',
+        lineType: '',
+        disabledType: '',
+        signalType: '',
+        thresholdtLine: false,
+        thresholdtLineType: 'dot',
+        thresholdtcolor: '',
+        thresholdthick: '',
+        thresholdvalue: '',
+
+    }) ; 
 
   const saveReport = () => {
     setrequestProcessingModal(true)
@@ -271,8 +307,8 @@ const ViewGroupChartTable = () => {
     return (
         <div>
             {
-                graphs.length > 0  && showHeader &&
-                <ViewChartHeader group={true} setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={currentConfig} />
+                graphs.length > 0   &&
+                <ViewChartHeader group={true} setLinkGraphs={setLinkGraphs} linkGraphs={linkGraphs}  setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={currentConfig} />
             }
 
           
@@ -281,12 +317,13 @@ const ViewGroupChartTable = () => {
                 <div className="container-fluid">
                     <div className="row">
                         {
-                           graphs.length > 0 &&  graphs.map(function (d, i) {
+                           graphs.length > 0 && sessionDate && graphs.map(function (d, i) {
                             
                                 return (
                                   
                                         <div className="chart-w" style={{ width:  (d.col != "1/1" ? (eval((d.col)) * 99 )+ "%" : (eval(d.col) * 100) + "%") , maxWidth: (eval(d.col) * 100) + "%", height: "auto" , minHeight:  (eval(d.row) * 84) + "vh"  }}>
-                                        <Chart group={true} index={i+1} clientSerial={d.clientSerial} showActualTime={showActualTime} showSignalStat={showSignalStat} comment={d.comment} setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
+                                           
+                                        <Chart sessionDate={sessionDate}  linkGraphs={linkGraphs} group={true} globalConfig={globalConfig} setGlobalConfig={setGlobalConfig} index={i+1} clientSerial={d.clientSerial} showActualTime={showActualTime} showSignalStat={showSignalStat} comment={d.comment} setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={session} signalO={d.signal_name} signal={d.signal_name.replace("signal_petco2_avg" , "petco2")} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
                                         </div>
                                    
 

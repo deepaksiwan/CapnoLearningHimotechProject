@@ -16,6 +16,10 @@ const ChartHeader = (props) => {
     const clientId = localStorage.getItem('selectedClient');
 
     const [action, setAction] = useState();
+    const [linkingGraphModal,setLinkingGraphModal] = useState(false)
+    const linkGraphs = props.linkGraphs
+    const setLinkGraphs = props.setLinkGraphs
+    const linkingGraphModalToggle = () => setLinkingGraphModal(!linkingGraphModal) ; 
     const [records, setrecords] = useState([]);
     const [sessionDate, setsessionDate] = useState([]);
     const [clientName, setClientName] = useState([]);
@@ -46,7 +50,10 @@ const ChartHeader = (props) => {
     const [savePdfModal, setSavePdfModal] = useState(false);
     const savePdfModalToggle = () => setSavePdfModal(!savePdfModal);
 
-    
+    const [nofoundliveimgModal, setNofoundliveimg] = useState(false);
+    const nofoundliveimgToggleModal = () => setNofoundliveimg(!nofoundliveimgModal);
+
+
     const [confirmLeaveModal, setConfirmLeaveModal] = useState(false);
     const confirmLeaveModalToggle = () => {
         setConfirmLeaveModal(!confirmLeaveModal);
@@ -62,6 +69,7 @@ const ChartHeader = (props) => {
     }
 
     const [zoomRecording, setZoomRecording] = useState(null);
+    const [fileFormat, setFileFormat] = useState("csv");
 
 
     const [takeNotesModal, setTakeNotesModal] = useState(false);
@@ -83,6 +91,41 @@ const ChartHeader = (props) => {
 
     const setSavingReportConfirmation = props.setSavingReportConfirmation;
 
+
+    const [signalName, setSignalName] = useState([
+        ["pco2wave" ,  "Raw PCO<sub>2</sub>"],
+        ["petco2" , "PetCO<sub>2</sub> History"],
+        ["bpmhistory" , "Breaths/min History"],
+        ["pco2b2b" , "PCO<sub>2</sub> breath to breath"],
+        ["capin" , "Capnia Index"],
+        ["capnia" , "Capnia Index History"],
+        ["gpmhistory", "Gasps/min History"],
+        ["aborted_expmhistory", "Aborted exhales/min History"],
+        ["bholdpmhistory", "Breath-holds/min History"],
+        ["relativevpm", "Relative Volume/per min History"],
+        ["aborted_expm", "Aborted exhales/min History"],
+        ["bhpm", "Breath-holds/min"],
+        ["b2b2hr", "Beat to Beat heart rate"],
+        ["hrhistory", "Heart rate History"],
+        ["rsahistory", "RSA History"],
+        ["b2brsa", "Beat to Beat RSA"],
+        ["bpm", "Breaths/min"],
+        ["hf_avg", "HF Band"],
+        ["b2brr_wave", "Tachograph of RR"],
+        ["arousal_avg", "Activation"],
+        ["tone_avg", "Parasympathetic Tone"],
+        ["reserve_avg", "Parasympathetic Reserve"],
+        ["vlf_avg", "VLF Band"],
+        ["lf_avg", "LF Band"],
+        ["emg1_avg", "EMG 1"],
+        ["emg2_avg", "EMG 2"],
+        ["emg3_avg", "EMG 3"],
+        ["emg4_avg", "EMG 4"],
+        ["emg1_wave", "EMG 1 Raw Wave"],
+        ["emg2_wave", "EMG 2 Raw Wave"],
+        ["emg3_wave", "EMG 3 Raw Wave"],
+        ["emg4_wave", "EMG 4 Raw Wave"]
+    ])
 
 
     const setNotes = props.setNotes;
@@ -385,41 +428,7 @@ const ChartHeader = (props) => {
         })
     }
 
-
-    const [signalName, setSignalName] = useState({
-        pco2wave: "PCO<sub>2</sub> Waveform",
-        petco2: "PetCO<sub>2</sub> History",
-        bpmhistory: "Breaths/min History",
-        pco2b2b: "PCO<sub>2</sub> breath to breath",
-        capin: "Capnia Index",
-        capnia: "Capnia Index History",
-        gpmhistory: "Gasps/min History",
-        aborted_expmhistory: "Aborted exhales/min History",
-        bholdpmhistory: "Breath-holds/min History",
-        relativevpm: "Relative Volume/per min History",
-        aborted_expm: "Aborted exhales/min History",
-        bhpm: "Breath-holds/min",
-        b2b2hr: "Beat to beat heart rate",
-        hrhistory: "Heart rate History",
-        rsahistory: "RSA History",
-        b2brsa: "Beat to Beat RSA",
-        bpm: "Breaths/min",
-        hf_avg: "Tachograph of RR",
-        b2brr_wave: "Arousal",
-        arousal_avg: "Parasympathetic Tone",
-        tone_avg: "Parasympathetic Reserve",
-        reserve_avg: "VLF Band",
-        vlf_avg: "LF Band",
-        lf_avg: "HF Band",
-        emg1_avg: "EMG 1 Average",
-        emg2_avg: "EMG 2 Average",
-        emg3_avg: "EMG 3 Average",
-        emg4_avg: "EMG 4 Average",
-        emg1_wave: "EMG 1 Raw Wave",
-        emg2_wave: "EMG 2 Raw Wave",
-        emg3_wave: "EMG 3 Raw Wave",
-        emg4_wave: "EMG 4 Raw Wave"
-    })
+ 
 
     const getRcord = () => {
         fetch(API_URL + "/session/record?session_id=" + sessionid,
@@ -575,7 +584,14 @@ const ChartHeader = (props) => {
     const reportconfigupdate = () => {
 
         let _configId = reportconfig.current.value;
+        if(group){
+            window.location.href = "/create/group/report/" + showclock + "/" + _configId + "/" + session + "/all/" + _configId;
+
+        }
+        else{
         window.location.href = "/create/report/" + showclock + "/" + _configId + "/" + session + "/all/" + _configId;
+
+        }
     }
 
     const reportconfigalternateupdate = () => {
@@ -685,6 +701,10 @@ const ChartHeader = (props) => {
 
             })
 
+    }
+
+    const showLinkingConfirm = () => {
+        linkingGraphModalToggle()
     }
 
     const viewNotesPDFOld = () => {
@@ -803,11 +823,37 @@ const ChartHeader = (props) => {
     }
 
 
+    const linkAllGrpahs = () => {
+        setLinkGraphs(!linkGraphs)
+        linkingGraphModalToggle()
+    }
 
+
+    
+    
     const ViewlivesessionImage = () => {
         setrequestProcessingModal(true);
 
 
+        let dataType = 3;
+
+        fetch(API_URL + "/get/live/sessionimage/" + sessionid + "/" + dataType,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    if (resp.message == 'No Found') {
+                        setrequestProcessingModal(false)
+                        nofoundliveimgToggleModal(true)
+                    }
+                    else {
+                     
         let dataType = 3;
 
         fetch(API_URL + "/get/live/sessionimage/download/" + sessionid + "/" + dataType,
@@ -835,7 +881,23 @@ const ChartHeader = (props) => {
                 // download(fileURL);
 
             })
+                    }
 
+
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                setrequestProcessingModal(false);
+
+                console.log("network error")
+            }
+
+
+        })
 
 
     }
@@ -888,7 +950,7 @@ const ChartHeader = (props) => {
                             <ul className='action-list'>
 
                                 {
-                                    !group && sessioninfo.length > 0 && showHeader &&
+                                    sessioninfo.length > 0  &&
 
                                     <li>
                                         <ReactTooltip />
@@ -896,6 +958,10 @@ const ChartHeader = (props) => {
                                         
                                     </li>
 
+                                }
+                                {
+                                    group &&
+                                    <li><a href="javascript:void" onClick={linkingGraphModalToggle} data-tip={linkGraphs ? "Unlink All Graphs" : "Link All Graphs"}><i className={linkGraphs  ? "fa fa-link" : "fa fa-unlink"  }aria-hidden="true"></i></a></li>
                                 }
                                 <li><a href="javascript:void" onClick={takeNotesToggle} data-tip="Take Report Notes."><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li>
                                 <li><a href="javascript:void" data-tip="Make PDF Copy." onClick={savePdfModalToggle}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
@@ -1038,7 +1104,7 @@ const ChartHeader = (props) => {
 
                         <p dangerouslySetInnerHTML={{ __html: liveNotes[0].sessiondata }}></p>
 
-                        : "No notes available."}</p>
+                        : <p className='text-center'>No live notes available.</p>}</p>
 
                     <div className='d-flex justify-content-around mt-3'>
                         <button className='lightbtn w-100' onClick={notesModalToggle} >Cancel</button>
@@ -1055,7 +1121,7 @@ const ChartHeader = (props) => {
                 <ModalBody>
                     <p>{zoomRecording ?
                         <a href={zoomRecording} target="_blank" >Open zoom recording in new tab.</a>
-                        : "No zoom recording available."}</p>
+                        : <p className='text-center'>No zoom recording available.</p>}</p>
                 </ModalBody>
 
             </Modal>
@@ -1080,6 +1146,23 @@ const ChartHeader = (props) => {
 
             </Modal>
 
+            
+            <Modal isOpen={linkingGraphModal} toggle={linkingGraphModalToggle} className="modal-box-wrp" centered={true}>
+                <ModalHeader toggle={linkingGraphModalToggle}><span className="ml-1 roititle modal-head"> Confirm {linkGraphs ? "unlinking" : "linking"} of Graphs</span></ModalHeader>
+                <ModalBody>
+                    <p className=''>Do you really wish to {linkGraphs ? "unlink" : "link"} all the graphs ? </p>
+                   
+
+                    <div className='d-flex justify-content-around mt-3'>
+                        <button className='lightbtn w-100' onClick={linkAllGrpahs} >Yes</button>
+
+                        <button className='darktbtn w-100 ml-1' onClick={linkingGraphModalToggle} >NO</button>
+
+                    </div>
+                </ModalBody>
+
+            </Modal>
+
 
             <Modal isOpen={datafileModal} toggle={datafileModalToggle} className="modal-box-wrp" centered={true}>
                 <ModalHeader toggle={datafileModalToggle}><span className="ml-1 roititle modal-head">Data File Format</span></ModalHeader>
@@ -1093,23 +1176,59 @@ const ChartHeader = (props) => {
                                         </div>
                                         <div className='datafileformat-child2'>
                                       
-                                        <input type="radio" className='radio-mrl' name="CSV" />
+                                        <input type="radio" onClick={() => setFileFormat('csv')} checked={fileFormat == "csv" ? true : false} className='radio-mrl' name="CSV" />
                                             <span>CSV.</span>
-                                            <input type="radio" className='radio-mrl' name="CSV" />
+                                            <input onClick={() => setFileFormat('excel')} checked={fileFormat == "excel" ? true : false} type="radio" className='radio-mrl' name="CSV" />
                                             <span>EXCEL.</span>
-                                            <input type="radio" className='radio-mrl' name="CSV" />
+                                            <input onClick={() => setFileFormat('ascii')} checked={fileFormat == "ascii" ? true : false} type="radio" className='radio-mrl' name="CSV" />
                                             <span>ASCII.</span>
                                         </div>
+                                        </div>
+                                        <div className='datafileformat-wrp'>
+
+                                        <div className='datafileformat-child1'>
+                                            <p>Choose Signals:</p>
+                                        </div>
+                                        <div className='datafileformat-child2'>
+                                            {
+                                                signalName.map((v,i) => {
+                                                    return(
+                                                        <p>                                                        
+                                                        <input type="checkbox" value={i}  checked className='radio-mrl mr-2' name="CSV" />
+                                                        <span dangerouslySetInnerHTML={{__html: " "+v[1]}}></span>
+                                                        </p>
+                                                    )
+                                                })
+                                            }
+                                         
+                                        </div>
+
                                     </div>
                                 </li>
                                 
                                
                               
                             </ul>
+
+                            <div className='d-flex justify-content-around mt-3'>
+                        <button className='lightbtn w-100' onClick={datafileModalToggle} >Cancel</button>
+                   
+
+                        <button className='darktbtn w-100 ml-1' >Download</button>
+
+                    </div>
                 </ModalBody>
 
             </Modal>
 
+            <Modal isOpen={nofoundliveimgModal} toggle={nofoundliveimgToggleModal} className="connect-box" centered={true}>
+                <ModalHeader toggle={nofoundliveimgToggleModal}><span className="ml-1 roititle modal-head"> View Live Session images</span></ModalHeader>
+                <ModalBody>
+                    <p className='text-center'>No live session images available.</p>
+
+                </ModalBody>
+
+            </Modal>
             
             <Modal isOpen={confirmLeaveModal} toggle={confirmLeaveModalToggle} className="modal-box-wrp" centered={true}>
                 <ModalHeader toggle={confirmLeaveModalToggle}><span className="ml-1 roititle modal-head">Please Confirm </span></ModalHeader>

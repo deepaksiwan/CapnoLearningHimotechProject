@@ -63,7 +63,7 @@ const SessiondataReport = () => {
                             actions : <p> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="View" placement="top"><a href={type == 'single' ? '/view/report/'+0+'/'+sessionid+"/"+v.id+'/all' : '/view/group/report/'+sessionid+"/"+v.id+'/all'} className="downloadimg"><img src={preveiw} /></a></Tooltip> </p>
+                              }} title="View" placement="top"><a href={type == 'single' ? '/view/report/'+0+'/'+sessionid+"/"+v.id+'/all' : '/view/group/report/'+v.clock+'/'+sessionid+"/"+v.id+'/all'} className="downloadimg"><img src={preveiw} /></a></Tooltip> </p>
                         })
 
                         if(i == (resp.reports.length - 1)){
@@ -107,7 +107,7 @@ const SessiondataReport = () => {
                         _temp.push({
                             report : v.name,
                             Createdate : new Date(v.added_on).toLocaleString(),
-                            actions : <p><a href={"/view/multi/report/"+v.rid} className="downloadimg"><img src={preveiw} /></a></p>
+                            actions : <p><a href={"/view/multi/report/0/"+v.rid} className="downloadimg"><img src={preveiw} /></a></p>
                         })
                     })
                     setData(_temp);                  

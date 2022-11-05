@@ -14,7 +14,7 @@ import { API_URL } from '../../../config';
 
 const GroupChartTable = () => {
     const accessToken = localStorage.getItem('accessToken');
-    const { config, session  , record,currentConfig} = useParams();
+    const { config, session ,showclock , record,currentConfig} = useParams();
     const [graphs, setgraphs] = useState([]);
     const [notes,setNotes] = useState(null) ; 
     const [reportName,setReportName] = useState(null) ; 
@@ -23,6 +23,7 @@ const GroupChartTable = () => {
     const userId = localStorage.getItem('user_id');
     const [showActualTime,setShowActualTime] =  useState(true) ; 
     const selectedClient = localStorage.getItem('selectedClient');
+    const [linkGraphs,setLinkGraphs] = useState(true)
     
     // const [value, setValue] = useState(0);
     // const [point, setPoint] = useState(25);
@@ -44,6 +45,40 @@ const GroupChartTable = () => {
     const [requestProcessedModal, setrequestProcesedModal] = useState(false);
     const requestProcessedModalToggle = () => setrequestProcesedModal(!requestProcessedModal);
 
+    const [globalConfig,setGlobalConfig]  =  useState({
+        color : '',
+        signal: 1,
+        type : '',
+        avg : '',
+        xmin : '',
+        thick : 0.5,
+        xextreme : '',
+        xmax : '',
+        ymin : 0,
+        ymax : 50,
+        record : '',
+        graph_order : '',
+        comment : '',
+        row : '',
+        clientSerial : '',
+        col : '',
+        xrange: 0, 
+        units: '',
+        annotation: 1,
+        grid: 2,
+        showGrid: false,
+        invert: 2,
+        position: '',
+        lineType: '',
+        disabledType: '',
+        signalType: '',
+        thresholdtLine: false,
+        thresholdtLineType: 'dot',
+        thresholdtcolor: '',
+        thresholdthick: '',
+        thresholdvalue: '',
+
+    }) ; 
 
     const setConfig = (_signal,data) => {
         let _temp = signalConfig ; 
@@ -69,16 +104,17 @@ const GroupChartTable = () => {
             annotation: data.annotation,
             grid: data.grid,
             inverty: data.inverty,
+            stat: data.stat,
             yposition: data.yposition,
             lineType: data.lineType
         }
-        // console.log("signal config",_temp);
+        console.log("signal config",_temp);
         setSignalConfig(_temp)
     }
 
 
     const setStats = (_signal,data) => {
-        
+        // alert("her")
     // // console.log("signal data",data)
     let _temp = signalStat ; 
     let _tempData = [] ;
@@ -169,7 +205,7 @@ const getGroupProfile = () => {
             let session_id = session;
             let type = 0;
             let status = 1;
-
+            let clock = showclock; 
             let dataimg = canvas.toDataURL('image/png')
             // const doc = new jsPDF();
 
@@ -199,7 +235,8 @@ const getGroupProfile = () => {
                 'data':  dataimg,
                 'type': type,
                 'status': status,
-                'session_id': session_id    
+                'session_id': session_id  ,
+                'clock' : clock  
                 } ;
 
             fetch(API_URL + "/save/screenshot", {
@@ -222,6 +259,7 @@ const getGroupProfile = () => {
                     'name': reportName,
                     'notes': notes,
                     'status' : 1,
+                    'clock': clock,
                     'timezone' : timezone   
                     } ;
                     
@@ -344,8 +382,8 @@ const getGroupProfile = () => {
     return (
         <div>
             {
-                graphs.length > 0  && showHeader &&
-                <ChartHeader group={true} setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={config} />
+                graphs.length > 0  && 
+                <ChartHeader   group={true} setLinkGraphs={setLinkGraphs} linkGraphs={linkGraphs} setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={config} />
             }
 
           
@@ -355,7 +393,7 @@ const getGroupProfile = () => {
                     <div className="row">
                         {/* {groupProfile.length} */}
                         {
-                            groupProfile.length > 0 &&  groupProfile.map(function (v, j) {
+                            groupProfile.length > 0  && sessionDate &&  groupProfile.map(function (v, j) {
                                
                                 return (
                                    
@@ -364,25 +402,27 @@ const getGroupProfile = () => {
                             let row = d.row ; 
                             if(col == "dynamic"){
                                 if(groupProfile.length > 4){
-                                    col = 1/3
+                                    col = "1/3" ;
                                 }
                                 else{
-                                    col = 1/2 ; 
+                                    col = "1/2" ; 
                                 }
                             }
                             if(row == "dynamic"){
                                 if(groupProfile.length > 4){
-                                    row = 1/3
+                                    row = "1/3" ; 
                                 }
                                 else{
-                                    row = 1/2 ; 
+                                    row = "1/2" ; 
                                 }
                             }
                                 return (
-                                  
-                                        <div className="chart-w" style={{ width:  (d.col != "1/1" ? (eval((d.col)) * 99 )+ "%" : (eval(d.col) * 100) + "%") , maxWidth: (eval(col) * 100) + "%", height: "auto" , minHeight:  (eval(row) * 84) + "vh"  }}>
-                                        <Chart group={true} profile={v} index={j} showActualTime={showActualTime} showSignalStat={showSignalStat} setStats={setStats} col={col} row={row} setConfig={setConfig} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
+                                            <>
+                                            {/* {d.signal_name.replace("signal_" , "")} */}
+                                        <div className="chart-w" style={{ width:  (col != "1/1" ? (eval((col)) * 99 )+ "%" : (eval(col) * 100) + "%") , maxWidth: (eval(col) * 100) + "%", height: "auto" , minHeight:  (eval(row) * 84) + "vh"  }}>
+                                        <Chart sessionDate={sessionDate} linkGraphs={linkGraphs} globalConfig={globalConfig} setGlobalConfig={setGlobalConfig} group={true} profile={v} index={j} showActualTime={showActualTime} showSignalStat={showSignalStat} setStats={setStats} col={col} row={row} setConfig={setConfig} record={record} session={session} signalO={d.signal_name} signal={d.signal_name.replace("signal_petco2_avg" , "petco2")} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
                                         </div>
+                                        </>
                                    
 
                                 ) 

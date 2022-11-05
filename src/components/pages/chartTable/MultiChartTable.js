@@ -14,7 +14,7 @@ import { API_URL } from '../../../config';
 
 const MultiChartTable = () => {
     const accessToken = localStorage.getItem('accessToken');
-    const { reportId } = useParams();
+    const { reportId , showclock } = useParams();
     const record = "all"
     const [currentConfig ,setCurrentConfig] = useState()
     const clientId = localStorage.getItem('selectedClient');
@@ -78,6 +78,7 @@ const MultiChartTable = () => {
             units: data.units,
             annotation: data.annotation,
             grid: data.grid,
+            stat: data.stat,
             inverty: data.inverty,
             yposition: data.yposition,
             lineType: data.lineType
@@ -111,6 +112,8 @@ const MultiChartTable = () => {
         setSignalConfig(_temp)
 
     }
+
+  
 
 
     const setStats = (_signal,data) => {
@@ -226,7 +229,8 @@ const MultiChartTable = () => {
                     'notes': notes,
                     'timezone' : timezone,
                     'name' : reportName,
-                    'cid' : clientId
+                    'cid' : clientId,
+                    'clock': showclock
                     } ;
                     
                     fetch(API_URL + "/save/multi/report", {
@@ -275,6 +279,47 @@ const MultiChartTable = () => {
                     
             
     }
+
+
+    
+    const [linkGraphs,setLinkGraphs] = useState(false)
+        
+    const [globalConfig,setGlobalConfig]  =  useState({
+        color : '',
+        signal: 1,
+        type : '',
+        avg : '',
+        xmin : '',
+        thick : 0.5,
+        xextreme : '',
+        xmax : '',
+        ymin : 0,
+        ymax : 50,
+        record : '',
+        graph_order : '',
+        comment : '',
+        row : '',
+        clientSerial : '',
+        col : '',
+        xrange: 0, 
+        units: '',
+        annotation: 1,
+        grid: 2,
+        showGrid: false,
+        invert: 2,
+        position: '',
+        lineType: '',
+        disabledType: '',
+        signalType: '',
+        thresholdtLine: false,
+        thresholdtLineType: 'dot',
+        thresholdtcolor: '',
+        thresholdthick: '',
+        thresholdvalue: '',
+        signalName: '',
+        session: ''
+
+    }) ; 
 
     const saveReportConfig = () => {
         setSavingAlternateConfirmation(false)
@@ -339,14 +384,11 @@ const MultiChartTable = () => {
     return (
         <div>
             {
-                graphs.length > 0  && showHeader &&
-                <ViewChartHeader setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat} setLinkingType={setLinkingType} showSignalStat={showSignalStat}  setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} multi={true} config={currentConfig} />
+                graphs.length > 0  &&
+                <ViewChartHeader linkGraphs={linkGraphs} setLinkGraphs={setLinkGraphs} setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat} linkingType={linkingType} setLinkingType={setLinkingType} showSignalStat={showSignalStat}  setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} multi={true} config={currentConfig} />
             }
 
-            {
-                graphs.length > 0  && !showHeader &&
-                <ViewChartHeader setShowActualTime={setShowActualTime} showActualTime={showActualTime} setShowSignalStat={setShowSignalStat} setLinkingType={setLinkingType}   showSignalStat={showSignalStat}  setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} multi={true} config={currentConfig} />
-            }
+            
               
             <div className="wrp-charttable" id="chart-table">
                 <div className="container-fluid">
@@ -361,14 +403,11 @@ const MultiChartTable = () => {
                                         
                                         {
                                             (i == 0 || i % sessionNumber == 0) &&
-                                                <p className={(graphs.length - i) === (sessionNumber) ? "flyleft moreflyleft" : "flyleft" } >{d.session_name}</p>
+                                                <p className={d.col == 1/3 ? (graphs.length - i) === (sessionNumber) ?  "flyleft moreflyleft" : "flyleft" : (graphs.length - i) === (sessionNumber) ?  "flyleft2 moreflyleft2" : "flyleft2" } >{d.session_name}</p>
                                          }
-                                      
+                                      {/* {i % sessionNumber} */}
                                        {
-                                        linkingType != '' ?
-                                        <Chart linkingType={linkingType} multi={true} showActualTime={showActualTime} showSignalStat={showSignalStat} comment={d.comment}   setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={d.sid} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={main.thick} otherConfig={main.other_config} graph_order={d.graph_order} type={main.type} color={main.color} />
-                                            :
-                                        <Chart linkingType={linkingType} multi={true} showActualTime={showActualTime} showSignalStat={showSignalStat} comment={d.comment}  setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={d.sid} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
+                                         <Chart linkGraphs={linkGraphs} globalConfig={globalConfig}  setGlobalConfig={setGlobalConfig}  linkingType={linkingType} multi={true} group={false} showActualTime={showActualTime} showSignalStat={showSignalStat} comment={d.comment}  setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={d.sid} signalO={d.signal_name} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
                                         }
                                         </div>
                                       

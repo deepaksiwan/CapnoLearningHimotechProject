@@ -80,7 +80,7 @@ const ViewChartHeader = (props) => {
     const [notesModal, setNotesModal] = useState(false);
     const notesModalToggle = () => setNotesModal(!notesModal);
 
-    const [liveNotes, setLiveNotes] = useState(null);
+    const [liveNotes, setLiveNotes] = useState([]);
 
     const [zoomModal, setZoomModal] = useState(false);
     const zoomModalToggle = () => setZoomModal(!zoomModal);
@@ -118,6 +118,14 @@ const ViewChartHeader = (props) => {
 
 
     const [open, setOpen] = useState('');
+ 
+
+    const [linkingGraphModal,setLinkingGraphModal] = useState(false)
+    const linkGraphs = props.linkGraphs
+    const setLinkGraphs = props.setLinkGraphs
+    const linkingGraphModalToggle = () => setLinkingGraphModal(!linkingGraphModal) ; 
+
+
     const toggle = (id) => {
         if (open === id) {
             setOpen();
@@ -125,6 +133,12 @@ const ViewChartHeader = (props) => {
             setOpen(id);
         }
     };
+
+    
+    const linkAllGrpahs = () => {
+        setLinkGraphs(!linkGraphs)
+        linkingGraphModalToggle()
+    }
 
 
     useEffect(() => {
@@ -322,6 +336,10 @@ const ViewChartHeader = (props) => {
     const handleliveimages = (id) => {
 
         setOpenModal(true)
+
+        
+       
+
         let dataType = 3;
         fetch(API_URL + "/get/live/sessionimage/download/" + id + "/" + dataType,
             {
@@ -890,8 +908,9 @@ const ViewChartHeader = (props) => {
         ).then((response) => {
             if (response.status == 200) {
                 response.json().then((resp) => {
-                    if (resp.length == 0) {
+                    if (resp.message == 'No Found') {
                         setrequestProcessingModal(false)
+                        nofoundliveimgToggleModal(true)
                     }
                     else {
                         let _clientName = resp.firstname + " " + resp.lastname;
@@ -952,6 +971,13 @@ const ViewChartHeader = (props) => {
     const handleLinkinChange = (e) => {
             setLinkingType(e.target.value)
             setLinkt(e.target.value)
+            if(e.target.value == ""){
+                setLinkGraphs(false);
+            }
+            else{
+                setLinkGraphs(true);
+
+            }
     }
 
 
@@ -1016,24 +1042,34 @@ const ViewChartHeader = (props) => {
                                 <li><a href="javascript:void" data-tip="Export report as PDF." onClick={saveScreenshot}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="javascript:void" onClick={saveReportConfig} data-tip="Save as alternate configuration."><i class="fa fa-sliders" aria-hidden="true"></i></a></li> */}
                                 <li><a href="javascript:void" onClick={saveReport} data-tip="Save as report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
-                                <li><a href="javascript:void" onClick={props.multi == false ? "" : settingToggleModal} data-tip="Configure Graph Linking"><i class="fa fa-cog" aria-hidden="true"></i></a></li>
-
+                              
+                                {
+                                    group &&
+                                    <li><a href="javascript:void" onClick={linkingGraphModalToggle} data-tip={linkGraphs ? "Unlink All Graphs" : "Link All Graphs"}><i className={linkGraphs  ? "fa fa-link" : "fa fa-unlink"  } aria-hidden="true"></i></a></li>
+                                }
+                                  {
+                                    props.multi &&
+                                <li><a href="javascript:void" onClick={!props.multi ? "" : settingToggleModal} data-tip="Configure Graph Linking"><i className={linkGraphs  ? "fa fa-link" : "fa fa-unlink"  } aria-hidden="true"></i></a></li>
+                                  }
                             </ul>
                         </div>
                         <div className="view-opt" style={{ width: "55%" }}>
                             <p>Viewing Options</p>
                             <ul className='action-list'>
 
-                                <li><a href="javascript:void" onClick={props.multi == false ? notesModalToggle : livesessionMultidataModalToggle} data-tip="View session notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
+                                <li><a href="javascript:void" onClick={!props.multi ? notesModalToggle : livesessionMultidataModalToggle} data-tip="View live session notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
                                 </li>
 
 
-                                <li><a href="javascript:void" onClick={props.multi == false ? zoomModalToggle : zoomMultidataModalToggle} data-tip="View zoom recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
                                 {
                                     !props.multi &&
                                     <li><a href="javascript:void" onClick={getPreviousSessionPDF} data-tip="View PDF of previous session"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li>
                                 }
-                                <li><a href="javascript:void" onClick={props.multi == false ? ViewlivesessionImage : viewlivesessionMultidataModalToggle} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={!props.multi  ? ViewlivesessionImage : viewlivesessionMultidataModalToggle} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
+
+                                <li><a href="javascript:void" onClick={!props.multi  ? zoomModalToggle : zoomMultidataModalToggle} data-tip="View zoom recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
+
+
                                 {
                                     !group &&
                                     <li><a href="javascript:void" onClick={() => setShowSignalStat(!showSignalStat)} data-tip="View all signal statistics"><i class="fa fa-table"></i></a></li>
@@ -1177,21 +1213,25 @@ const ViewChartHeader = (props) => {
             </Modal>
 
             <Modal isOpen={notesModal} toggle={notesModalToggle} className="modal-box-wrp" centered={true}>
-                <ModalHeader toggle={notesModalToggle}><span className="ml-1 roititle modal-head"> Live Session Notes</span></ModalHeader>
+                <ModalHeader toggle={notesModalToggle}><span className="ml-1 roititle modal-head"> Live Session Notess</span></ModalHeader>
                 <ModalBody>
+                    {/* dd{liveNotes.length} */}
                     <p id="liveNotes">{liveNotes && liveNotes.length > 0 ?
                         liveNotes.map((v, i) => {
                             return (
                                 <p dangerouslySetInnerHTML={{ __html: v.sessiondata }}></p>
                             )
                         })
-                        : "No notes available."}</p>
+                        : <p className='text-center'>No live notes available.</p>}</p>
 
                     <div className='d-flex justify-content-around mt-3'>
-                        <button className='lightbtn w-100' onClick={notesModalToggle} >Cancel</button>
-                        {
+                       
+                    {
                             liveNotes && liveNotes.length > 0 &&
+                            <>
+                            <button className='lightbtn w-100' onClick={notesModalToggle} >Cancel</button>                       
                             <button className='darktbtn w-100 ml-1' onClick={downloadNotesPDF} >Download PDF</button>
+                            </>
                         }
                     </div>
                 </ModalBody>
@@ -1200,7 +1240,7 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={zoomModal} toggle={zoomModalToggle} className="modal-box-wrp" centered={true}>
                 <ModalHeader toggle={zoomModalToggle}><span className="ml-1 roititle modal-head">Zoom Recording</span></ModalHeader>
                 <ModalBody>
-                    <p>{zoomRecording ?
+                    <p className='text-center'>{zoomRecording ?
                         <a href={zoomRecording} target="_blank" >Open zoom recording in new tab.</a>
                         : "No zoom recording available."}</p>
                 </ModalBody>
@@ -1380,7 +1420,7 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={livesessionnotesModal} toggle={livesessionnotesToggleModal} className="connect-box" centered={true}>
                 <ModalHeader toggle={livesessionnotesToggleModal}><span className="ml-1 roititle modal-head">Live Session Notes</span></ModalHeader>
                 <ModalBody>
-                    <p className='text-center'>Live Session Notes Not Found </p>
+                    <p className='text-center'>No live session notes available.</p>
 
                 </ModalBody>
 
@@ -1389,7 +1429,7 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={zoomlinkModal} toggle={zoomlinkToggleModal} className="connect-box" centered={true}>
                 <ModalHeader toggle={zoomlinkToggleModal}><span className="ml-1 roititle modal-head"> Zoom Recording</span></ModalHeader>
                 <ModalBody>
-                    <p className='text-center'>Zoom Link Not Found </p>
+                    <p className='text-center'>No zoom link available.</p>
 
                 </ModalBody>
 
@@ -1398,12 +1438,28 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={nofoundliveimgModal} toggle={nofoundliveimgToggleModal} className="connect-box" centered={true}>
                 <ModalHeader toggle={nofoundliveimgToggleModal}><span className="ml-1 roititle modal-head"> View Live Session images</span></ModalHeader>
                 <ModalBody>
-                    <p className='text-center'>Live Session Images Not Found </p>
+                    <p className='text-center'>No live session images available. </p>
 
                 </ModalBody>
 
             </Modal>
 
+
+            <Modal isOpen={linkingGraphModal} toggle={linkingGraphModalToggle} className="modal-box-wrp" centered={true}>
+                <ModalHeader toggle={linkingGraphModalToggle}><span className="ml-1 roititle modal-head"> Confirm {linkGraphs ? "unlinking" : "linking"} of Graphs</span></ModalHeader>
+                <ModalBody>
+                    <p className=''>Do you really wish to {linkGraphs ? "unlink" : "link"} all the graphs ? </p>
+                   
+
+                    <div className='d-flex justify-content-around mt-3'>
+                        <button className='lightbtn w-100' onClick={linkAllGrpahs} >Yes</button>
+
+                        <button className='darktbtn w-100 ml-1' onClick={linkingGraphModalToggle} >NO</button>
+
+                    </div>
+                </ModalBody>
+
+            </Modal>
 
             <Modal isOpen={settingModal} toggle={settingToggleModal} className="connect-box" centered={true}>
                 <ModalHeader toggle={settingToggleModal}><span className="ml-1 roititle modal-head">Configure Graph Linking</span></ModalHeader>

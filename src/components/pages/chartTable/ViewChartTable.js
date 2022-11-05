@@ -70,6 +70,7 @@ const ViewChartTable = () => {
             annotation: data.annotation,
             grid: data.grid,
             inverty: data.inverty,
+            stat: data.stat,
             yposition: data.yposition,
             lineType: data.lineType
         }
@@ -260,8 +261,46 @@ const ViewChartTable = () => {
 
         })
 
+
     }
 
+
+    const [linkGraphs,setLinkGraphs] = useState(true)
+        
+    const [globalConfig,setGlobalConfig]  =  useState({
+        color : '',
+        signal: 1,
+        type : '',
+        avg : '',
+        xmin : '',
+        thick : 0.5,
+        xextreme : '',
+        xmax : '',
+        ymin : 0,
+        ymax : 50,
+        record : '',
+        graph_order : '',
+        comment : '',
+        row : '',
+        clientSerial : '',
+        col : '',
+        xrange: 0, 
+        units: '',
+        annotation: 1,
+        grid: 2,
+        showGrid: false,
+        invert: 2,
+        position: '',
+        lineType: '',
+        disabledType: '',
+        signalType: '',
+        thresholdtLine: false,
+        thresholdtLineType: 'dot',
+        thresholdtcolor: '',
+        thresholdthick: '',
+        thresholdvalue: '',
+
+    }) ; 
 
     return (
         <div>
@@ -286,7 +325,7 @@ const ViewChartTable = () => {
                                 return (
                                   
                                         <div className="chart-w" style={{ width:  (d.col != "1/1" ? (eval((d.col)) * 99 )+ "%" : (eval(d.col) * 100) + "%"), maxWidth: (eval(d.col) * 100) + "%", height: "auto" , minHeight:  (eval(d.row) * 84) + "vh"  }}>
-                                        <Chart sessionDate={sessionDate} showActualTime={showActualTime} showSignalStat={showSignalStat} comment={d.comment} setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
+                                        <Chart  linkGraphs={linkGraphs} globalConfig={globalConfig} setGlobalConfig={setGlobalConfig}  sessionDate={sessionDate} showActualTime={showActualTime} showSignalStat={showSignalStat} comment={d.comment} setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={session} signalO={d.signal_name} signal={d.signal_name.replace("signal_petco2_avg" , "petco2")} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
                                         </div>
                                    
 

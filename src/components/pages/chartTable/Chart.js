@@ -19,8 +19,13 @@ import Draggable from 'react-draggable';
 import { CollectionsOutlined } from '@material-ui/icons';
 const Chart = (props) => {
     // console.log("props",props)
+    const globalConfig = props.globalConfig ;
+    const setGlobalConfig = props.setGlobalConfig ; 
+    const linkGraphs = props.linkGraphs
+    const setLinkGraphs = props.setLinkGraphs
     const session = props.session;
     const record = props.record;
+    const linkingType = props.linkingType;
     const [xAxis, setXaxis] = useState([]);
     const [yAxis2, setYAxis2] = useState([]);
     const [timeVal, setTimeVal] = useState();
@@ -45,8 +50,8 @@ const Chart = (props) => {
     const timerange = useRef();
     const timerange2 = useRef();
 
-    console.log("timerange", timeVal)
-    console.log("timerange2", timeVal2)
+    // console.log("timerange", timeVal)
+    // console.log("timerange2", timeVal2)
 
 
     const onchangeInput = () => {
@@ -120,11 +125,16 @@ const Chart = (props) => {
 
     const rawSignals = ["pco2wave", "petco2", "bpmhistory", "pco2b2b", "capin", "capnia"];
 
-    const [xAxisMin, setXaxisMin] = useState(props.xmin == 0 ? props.xmin : new Date(parseInt(props.xmin * 1e3)));
+    const [xAxisMin, setXaxisMin] =  useState(linkGraphs && globalConfig.xmin != "" && !props.multi ? globalConfig.xmin  : props.xmin == 0 ? props.xmin : new Date(parseInt(props.xmin * 1e3)));
+    // const [xAxisMin, setXaxisMin] =  useState(0);
+    console.log(props.xmin);
     if (props.signal == "pco2wave") {
         // // console.log("newMin", new Date(parseInt(props.xmin*1e3)));
     }
-    const [xAxisMax, setXaxisMax] = useState(props.xmax == "full" ? props.xmax : new Date(parseInt(props.xmax * 1e3)));
+    const [xAxisMax, setXaxisMax] = useState(linkGraphs && globalConfig.xmax != "" && !props.multi ? globalConfig.xmax : props.xmax == "full" ? props.xmax : new Date(parseInt(props.xmax * 1e3)));
+    // const [xAxisMax, setXaxisMax] = useState(0);
+    // console.log(props.xmax);
+
     const [txaxisMax, setTxaxisMax] = useState(props.xmax == "full" ? props.xmax : new Date(parseInt(props.xmax * 1e3)));
     const [txaxisMin, setTxaxisMin] = useState(props.xmin == 0 ? props.xmin : new Date(parseInt(props.xmin * 1e3)));
     const [yAxisMin, setYaxisMin] = useState(parseFloat(props.ymin));
@@ -145,11 +155,11 @@ const Chart = (props) => {
         xrange: 0,
         units: (unitArray[props.signal][0] ? unitArray[props.signal][0] : ""),
         annotation: 1,
-        grid: 1,
+        grid: 2,
         inverty: 2,
         yposition: 1,
         lineType: "solid",
-        stat: "median",
+        stat: props.signalO == "pco2wave" ? "mean" : "median",
         tline: "dot",
         tcolor: "#FF0000",
         tthick: 1,
@@ -168,7 +178,8 @@ const Chart = (props) => {
     const [thresholdthick, setThresholdthick] = useState(otherConfig.tthick);
     const [thresholdtLine, setThresholdtLine] = useState(otherConfig.tline);
     const [thresholdtcolor, setThresholdtcolor] = useState(otherConfig.tcolor ? otherConfig.tcolor : "#FFFF00");
-
+ 
+   
     const [point, setPoint] = useState(25);
     const [xrange, setXRange] = useState(otherConfig.xrange);
     const [rowHeight, setRowHeight] = useState("30px")
@@ -317,7 +328,7 @@ const Chart = (props) => {
             xmin: new Date(xAxisMin).getTime(),
             thick: value,
             xextreme: new Date(xAxis[xAxis.length - 1]).getTime(),
-            xmax: xAxisMax == "full" ? new Date(xAxis[xAxis.length - 1]).getTime() : new Date(xAxis[0]).getTime() + xAxisMax,
+            xmax: new Date(xAxisMax).getTime(),
             ymin: yAxisMin,
             ymax: yAxisMax,
             record: record,
@@ -334,14 +345,116 @@ const Chart = (props) => {
             yposition: modal.position,
             lineType: signalLinetype,
             thresholdtLine: thresholdtLine,
-            thresholdtcolor: thresholdtLine,
+            thresholdtcolor: thresholdtcolor,
             stat: signalModalData.stat,
             thresholdthick: thresholdthick,
             thresholdvalue: thresholdvalue,
 
         }
-        group ? clientSerial ? setConfig(clientSerial, _temp) : setConfig(props.profile.name, _temp) : props.multi ? setConfig(props.signal + "_" + props.session, _temp) : setConfig(props.signal, _temp)
+        group ? clientSerial ? setConfig(clientSerial, _temp) : setConfig(props.profile.name, _temp) : props.multi ? setConfig(props.signal + "_" + props.session, _temp) : setConfig(props.signal, _temp);
+        console.log("xmax" , xAxisMax)
     }, [color, type, average, xAxisMin, value, xAxisMax, yAxisMin, yAxisMax, record, comment, signalLinetype, modal]);
+
+
+    useEffect(() => {
+        // console.log(linkGraphs,linkingType,props.session,globalConfig.session,props.group)
+        if(linkGraphs && ((linkingType == "1" && props.session == globalConfig.session) || (linkingType == "2" && props.signal == globalConfig.signalName) || linkingType == "3" || props.group)){
+            if(globalConfig.xmax != ""){
+                setXaxisMax(globalConfig.xmax);
+            }
+            if(globalConfig.xmin != ""){
+                setXaxisMin(globalConfig.xmin);
+            }
+            setYaxisMax(globalConfig.ymax);
+            setYaxisMin(globalConfig.ymin);
+            setModal(prevState => ({
+                ...prevState,
+                annotation: globalConfig.annotation,
+                showGrid: globalConfig.showGrid,
+                grid: globalConfig.grid,
+                invert:  globalConfig.invert,
+            }))
+            let _type = globalConfig.type == "" ? props.type : globalConfig.type
+            
+            setSignalModalData(prevState => ({
+                ...prevState,
+                disabledType: _type == "line" ? true : false ,
+                signalType: _type == "line" ? 1 : _type == "bar" ? 2 : 3 
+            }));
+            setValue(globalConfig.thick)
+            setType(_type)
+
+            setSignalModalData(prevState => ({
+                ...prevState,
+                signal: globalConfig.signal
+            }))
+            setSignalLinetype(globalConfig.lineType)
+
+            if(globalConfig.color.hex){
+                // console.log("lcol" , globalConfig.color)
+                setColor(globalConfig.color)
+            }
+            if(globalConfig.thresholdtcolor.hex){
+                // console.log("lcol" , globalConfig.color)
+                setThresholdtcolor(globalConfig.thresholdtcolor)
+            }
+        
+
+            setShowThresholdLine(globalConfig.thresholdtLine)
+        setThresholdvalue(globalConfig.thresholdvalue)
+        setThresholdthick(globalConfig.thresholdthick)
+        setThresholdtLine(globalConfig.thresholdtLineType);
+       
+        }
+
+       
+
+    },[globalConfig])
+
+    const setSessionSignal = () => {
+        setGlobalConfig(prevState => ({
+            ...prevState,
+            signalName: props.signal
+        }))
+
+        setGlobalConfig(prevState => ({
+            ...prevState,
+            session: props.session
+        }))
+    }
+
+
+    const setGlobalColor = (e) => {
+      setColor(e)
+        setGlobalConfig(prevState => ({
+            ...prevState,
+            color: e
+        }))
+        setSessionSignal();
+    }
+        
+    const setGlobalTColor = (e) => {
+        setThresholdtcolor(e)
+          setGlobalConfig(prevState => ({
+              ...prevState,
+              thresholdtcolor: e
+          }))
+        setSessionSignal();
+
+      }
+    
+
+     const setThresholdSlider = (e) => {
+        setThresholdvalue(e.target.value)
+          setGlobalConfig(prevState => ({
+              ...prevState,
+              thresholdvalue: e.target.value
+          }))
+        setSessionSignal();
+
+      }
+
+   
 
     useEffect(() => {
         // super(props);
@@ -387,7 +500,7 @@ const Chart = (props) => {
         return max;
     }
     const getCsv = () => {
-        fetch(API_URL + "/session/data?session_id=" + session + "&signal_name=" + props.signal,
+        fetch(API_URL + "/session/data?session_id=" + session + "&signal_name=" + props.signalO,
             {
                 method: 'GET',
                 headers: {
@@ -589,6 +702,7 @@ const Chart = (props) => {
                             _y.push(parseFloat(v['y' + (props.index + 1) + '_median']));
                             // let yt = parseFloat(v['y'+(props.index+1)+'_median']) ; 
                             let yt;
+                            console.log(_stat);
                             if (_stat == "median") {
                                 yt = parseFloat(v['y' + (props.index + 1) + '_median']);
                             }
@@ -751,7 +865,7 @@ const Chart = (props) => {
                     
                     console.log("Reached Data "+props.signal , i,data.length );
                     if (i == (data.length - 1)) {
-                        console.log("Reached Data "+props.signal , data.length)
+                        // console.log("Reached Data "+props.signal , data.length)
 
                         // alert("here");
                         // // console.log(_x.length)
@@ -1177,7 +1291,7 @@ const Chart = (props) => {
 
 
                         // }
-                        // console.log("signal x:"+props.signal,_x)
+                        console.log("signal x:" , average , props.signal,_x)
 
                         if (props.signal != "pco2wave" && props.signal != "pco2b2b" && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa") {
                             setStats(props.signal, _tempStats)
@@ -1237,12 +1351,13 @@ const Chart = (props) => {
             
         }
         else {
-            let userTimeOffset = new Date().getTimezoneOffset();
 
-            userTimeOffset = userTimeOffset * 60 * 1000;
-            let _max = new Date(parseInt(new Date(xAxis[0]).getTime()) + parseInt(props.xmax * 1e3))
-            setXaxisMax(new Date(_max))
-            setTxaxisMax(new Date(_max))
+            // let userTimeOffset = new Date().getTimezoneOffset();
+
+            // userTimeOffset = userTimeOffset * 60 * 1000;
+            // let _max = new Date(parseInt(new Date(xAxis[0]).getTime()) + parseInt(props.xmax * 1e3))
+            // setXaxisMax(new Date(_max))
+            // setTxaxisMax(new Date(_max))
           
       
 
@@ -1258,33 +1373,66 @@ const Chart = (props) => {
 
     const handleRelayout = (e) => {
         setXRange('')
-        let xmin = new Date(xAxis[0]) ;
-        let xmax = new Date(xAxis[xAxis.length - 1]) ;
+        setGlobalConfig(prevState => ({
+            ...prevState,
+            xrange: ''
+        }))
         if (new Date(e['xaxis.range[0]']) < new Date(xAxis[0])) {
-            let _diff = xAxisMax - xAxisMin;
-            xmax = new Date(xAxis[0])
+            console.log("zoom 1");
+            setXaxisMin(new Date(xAxis[0]))
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmin: new Date(xAxis[0])
+            }))
         }
         else if (new Date(e['xaxis.range[1]']) > new Date(xAxis[xAxis.length - 1])) {
             let _diff = xAxisMax - xAxisMin;
-            xmax = new Date(xAxis[xAxis.length - 1]) ;
-            xmin = new Date(xAxis[xAxis.length - 1] - _diff) ; 
-          
+            console.log("zoom 2",new Date(e['xaxis.range[1]']));
+
+            setXaxisMax(new Date(xAxis[xAxis.length - 1]))
+            setXaxisMin(new Date(xAxis[xAxis.length - 1] - _diff));
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmin: new Date(xAxis[xAxis.length - 1] - _diff),
+                xmax: new Date(xAxis[xAxis.length - 1])
+            }))
+
         }
         else if (new Date(e['xaxis.range[1]']) < new Date(xAxis[0])) {
+            console.log("zoom 3");
+
+            setXaxisMax(new Date(xAxis[xAxis.length - 1]))
+            setXaxisMin(new Date(xAxis[0]))
+
             
-            xmax = new Date(xAxis[xAxis.length - 1])
-            xmin = new Date(xAxis[0]) ; 
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmin: new Date(xAxis[0]),
+                xmax: new Date(xAxis[xAxis.length - 1])
+            }))
+
         }
         else {
-            xmin = new Date(e['xaxis.range[0]'])
-            xmax = new Date(e['xaxis.range[1]']) ; 
-           
+            console.log("zoom 4");
+
+            setXaxisMin(new Date(e['xaxis.range[0]']))
+            setXaxisMax(new Date(e['xaxis.range[1]']))
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmin: new Date(e['xaxis.range[0]']),
+                xmax: new Date(e['xaxis.range[1]'])
+            }))
+
         }
-        setXaxisMax(xmax) ; 
-        setXaxisMin(xmin)
-        // localStorage.setItem('max',xmax);
-        // localStorage.setItem('min',xmin);
-        // setRefreshMulti(Math.random());
+
+
+        setSessionSignal();
+
+
+
+
     }
 
     useEffect(() => {
@@ -1378,10 +1526,21 @@ const Chart = (props) => {
 
             let _newXaxisMax = new Date(xAxisMax).getTime() - _deviation;
             setXaxisMax(new Date(_newXaxisMax))
+            
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmax: new Date(_newXaxisMax)
+            }))
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmin: new Date(_newXaxisMin)
+            }))
         }
         else {
             // console.log("Max Zoom Reached");
         }
+        setSessionSignal();
 
 
 
@@ -1453,10 +1612,21 @@ const Chart = (props) => {
 
             let _newXaxisMax = new Date(xAxisMax).getTime() + _deviation;
             setXaxisMax(new Date(_newXaxisMax))
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmax: new Date(_newXaxisMax)
+            }))
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmin: new Date(_newXaxisMin)
+            }))
         }
         else {
             // console.log("Max Zoom Reached");
         }
+        setSessionSignal();
 
 
 
@@ -1479,6 +1649,14 @@ const Chart = (props) => {
         _newMin = new Date(_newMin);
         if (_newMin < new Date(xAxis[0])) {
             setXaxisMin(new Date(xAxis[0]))
+
+          
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmin: new Date(new Date(xAxis[0]))
+            }))
+            
         }
         else if (_newMin >= new Date(xAxis[xAxis.length - 1])) {
 
@@ -1486,19 +1664,47 @@ const Chart = (props) => {
             _newMin = new Date(xAxis[xAxis.length - 1]).getTime() - _diff;
 
             setXaxisMin(_newMin)
+
+            
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmin: new Date(_newMin)
+            }))
+
+
         }
         else {
-            setXaxisMin(_newMin)
+            setXaxisMin(_newMin);
+            
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmin: new Date(_newMin)
+            }))
         }
         let _newMax = new Date(xAxisMax).getTime() + _diff;
         _newMax = new Date(_newMax);
         if (_newMax >= xAxis[xAxis.length - 1]) {
-            setXaxisMax(new Date(xAxis[xAxis.length - 1]))
+            setXaxisMax(new Date(xAxis[xAxis.length - 1]));
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmax: new Date(new Date(xAxis[xAxis.length - 1]))
+            }))
+
+           
         }
         else {
             setXaxisMax(_newMax)
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmax: _newMax
+            }))
+
+         
         }
 
+        setSessionSignal();
 
 
     }
@@ -1515,7 +1721,16 @@ const Chart = (props) => {
         // setXaxisMax(new Date(xAxis[xAxis.length - 1]))
         setPlay(false);
 
+        setGlobalConfig(prevState => ({
+            ...prevState,
+            xmin: new Date(xAxis[0])
+        }))
 
+        setGlobalConfig(prevState => ({
+            ...prevState,
+            xmax: new Date(_max)
+        }))
+        setSessionSignal();
 
     }
 
@@ -1537,7 +1752,15 @@ const Chart = (props) => {
             // // console.log("Newmin R" ,"true")
             // // console.log("Newmin S" ,xAxisMin)
             // // console.log("Newmin Y" ,xAxis)
-            setXaxisMin(new Date(xAxis[0]))
+            setXaxisMin(new Date(xAxis[0]));
+ 
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmin: new Date(xAxis[0])
+            }))
+
+            
         }
         else if (_newMin >= new Date(xAxis[xAxis.length - 1])) {
 
@@ -1545,28 +1768,53 @@ const Chart = (props) => {
             _newMin = new Date(xAxis[xAxis.length - 1]).getTime() - _diff;
 
             setXaxisMin(_newMin)
+            
+ 
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmin: _newMin
+            }))
+
         }
         else {
             setXaxisMin(_newMin)
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmin: _newMin
+            }))
         }
         let _newMax = new Date(xAxisMax).getTime() - _diff;
         _newMax = new Date(_newMax);
         if (_newMax >= xAxis[xAxis.length - 1]) {
             // console.log("this is set 1");
             setXaxisMax(new Date(xAxis[xAxis.length - 1]))
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmax: new Date(new Date(xAxis[xAxis.length - 1]))
+            }))
         }
         else if (_newMax <= new Date(xAxis[0])) {
             _newMax = new Date(xAxis[0]).getTime() + _diff;
 
             setXaxisMax(_newMax)
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmax: _newMax
+            }))
         }
 
         else {
 
             setXaxisMax(_newMax)
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmax: _newMax
+            }))
         }
 
 
+        setSessionSignal();
 
     }
 
@@ -1590,7 +1838,14 @@ const Chart = (props) => {
             let _newMax = new Date(_xAxisMax).getTime() + _diff;
             _newMax = new Date(_newMax);
             if (_newMax > xAxis[xAxis.length - 1]) {
-                setXaxisMax(new Date(xAxis[xAxis.length - 1]))
+                setXaxisMax(new Date(xAxis[xAxis.length - 1]));
+
+                setGlobalConfig(prevState => ({
+                    ...prevState,
+                    xmax: new Date(xAxis[xAxis.length - 1])
+                }))
+
+
             }
             else {
                 // console.log(_newMin);
@@ -1598,10 +1853,21 @@ const Chart = (props) => {
                 setXaxisMax(_newMax)
                 setXaxisMin(_newMin)
 
+                setGlobalConfig(prevState => ({
+                    ...prevState,
+                    xmin: _newMin
+                }))
+
+                setGlobalConfig(prevState => ({
+                    ...prevState,
+                    xmax: _newMax
+                }))
+
 
             }
         }
 
+        setSessionSignal();
 
     }
 
@@ -1652,6 +1918,7 @@ const Chart = (props) => {
                 }
                 if (i < next) {
                     c++;
+
                     totalsum += parseFloat(data[1][i]);
                 }
                 else if (i == next || i == (data[0].length - 1)) {
@@ -1783,6 +2050,13 @@ const Chart = (props) => {
             ...prevState,
             annotation: value
         }))
+
+        setGlobalConfig(prevState => ({
+            ...prevState,
+            annotation: value
+        }))
+        setSessionSignal();
+ 
     }
     const handleXaxisWiindow = e => {
         let { value = "" } = e.target || {}
@@ -1800,9 +2074,21 @@ const Chart = (props) => {
                 showGrid: true,
                 grid: value
             }))
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                showGrid: true,
+                grid: value
+            }))
+
         }
         else if (value == 2) {
             setModal(prevState => ({
+                ...prevState,
+                showGrid: false,
+                grid: value
+            }))
+            setGlobalConfig(prevState => ({
                 ...prevState,
                 showGrid: false,
                 grid: value
@@ -1814,23 +2100,50 @@ const Chart = (props) => {
                 showGrid: true,
                 grid: value
             }))
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                showGrid: true,
+                grid: value
+            }))
         }
+        setSessionSignal();
 
     }
 
     const handleInvert = e => {
         let { value = "" } = e.target || {}
         if (value === 1) {
+          
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                ymin: yAxisMax,
+                ymax: yAxisMin,
+                invert: value
+
+            }))
             setYaxisMax(yAxisMin)
             setYaxisMin(yAxisMax)
+
         } else {
+         
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                ymin: yAxisMax,
+                ymax: yAxisMin,
+                invert: value
+
+            }))
             setYaxisMin(yAxisMax)
             setYaxisMax(yAxisMin)
+
         }
         setModal(prevState => ({
             ...prevState,
             invert: value
         }))
+        setSessionSignal();
+
     }
 
     const handleYaxisPosition = e => {
@@ -1838,15 +2151,29 @@ const Chart = (props) => {
         if (value == 1) {
             setXaxisMax(xAxisMin)
             setXaxisMin(xAxisMax)
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmax: xAxisMin,
+                xmin: xAxisMax,
+                position: value
+            }))
         } else {
             setXaxisMin(xAxisMax)
             setXaxisMax(xAxisMin)
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmax: xAxisMin,
+                xmin: xAxisMax,
+                position: value
+            }))
         }
 
         setModal(prevState => ({
             ...prevState,
             position: value
         }))
+        setSessionSignal();
+
     }
 
     const xAxisRange = (event) => {
@@ -1855,12 +2182,26 @@ const Chart = (props) => {
 
             setXaxisMin(new Date(xAxis[0]))
             setXaxisMax(new Date(xAxis[xAxis.length - 1]))
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmin: new Date(xAxis[0]),
+                xmax: new Date(xAxis[xAxis.length - 1]), 
+                xrange: value
+            }))
         }
         else if (value != "0") {
             let _deviation = value * 60000
             let xAxisMilisecond = new Date(xAxisMin).getTime() + _deviation
             setXaxisMax(new Date(xAxisMilisecond))
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                xmax: new Date(xAxisMilisecond), 
+                xmin: xAxisMin,
+                xrange: value
+
+            }))
         }
+        setSessionSignal();
 
     }
 
@@ -1893,6 +2234,14 @@ const Chart = (props) => {
                 signalType: value
             }))
             setType("bar")
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                disabledType:  false, 
+                signalType: value,
+                type: 'bar'
+            }))
+
         }
         else if (value == 3) {
             setSignalModalData(prevState => ({
@@ -1901,6 +2250,13 @@ const Chart = (props) => {
                 signalType: value
             }))
             setType("obar")
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                disabledType:  false, 
+                signalType: value,
+                type: 'obar'
+            }))
         }
         else {
             setSignalModalData(prevState => ({
@@ -1909,7 +2265,17 @@ const Chart = (props) => {
                 signalType: value
             }))
             setType("line")
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                disabledType:  true, 
+                signalType: value,
+                type: 'line'
+            }))
+
         }
+        setSessionSignal();
+
     }
 
     const dstOffset = (date = new Date()) => {
@@ -1931,25 +2297,50 @@ const Chart = (props) => {
                 signal: value
             }))
             setSignalLinetype("solid")
+
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                signal: value,
+                lineType: 'solid'
+            }))
+
         } else if (value == 2) {
             setSignalModalData(prevState => ({
                 ...prevState,
                 signal: value
             }))
             setSignalLinetype("dot")
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                signal: value,
+                lineType: 'dot'
+            }))
         } else if (value == 3) {
             setSignalModalData(prevState => ({
                 ...prevState,
                 signal: value
             }))
             setSignalLinetype("dashdot")
+            setGlobalConfig(prevState => ({
+                ...prevState,
+                signal: value,
+                lineType: 'dashdot'
+            }))
         }
+        setSessionSignal();
+
     }
 
 
     const hideThreshold = event => {
         let { value = "" } = event.target || {}
         setShowThresholdLine(value)
+        setGlobalConfig(prevState => ({
+            ...prevState,
+            thresholdtLine: value,
+         
+        }))
+        setSessionSignal();
 
     }
 
@@ -2063,7 +2454,13 @@ const Chart = (props) => {
     }
 
     const handletTline = (e) => {
-        setThresholdtLine(e.target.value)
+        setThresholdtLine(e.target.value);
+        setGlobalConfig(prevState => ({
+            ...prevState,
+            thresholdtLineType: e.target.value
+        }))
+        setSessionSignal();
+
     }
 
     const handleKeypress = (e) => {
@@ -2129,7 +2526,7 @@ const Chart = (props) => {
     return (
         <div >
             <ReactTooltip />
-
+        
 
             {
                 xAxis.length > 0 && yAxis.length > 0 &&
@@ -2192,6 +2589,7 @@ const Chart = (props) => {
                         {
                             // console.log(props.signal,xAxisMax)
                         }
+                       
 
                         <Plot className="plot-charts"
                             onClick={handleClick}
@@ -2406,7 +2804,8 @@ const Chart = (props) => {
                                                         min={yAxisMin}
                                                         max={yAxisMax}
                                                         value={thresholdvalue}
-                                                        onChange={(e) => setThresholdvalue(e.target.value)}
+                                                        onChange={(e) =>   setThresholdSlider(e)
+                                                        }
                                                         tooltip={null}
 
 
@@ -2429,7 +2828,16 @@ const Chart = (props) => {
                                                         max={10}
                                                         value={thresholdthick}
                                                         tooltip={null}
-                                                        onChange={(e) => setThresholdthick(e.target.value)}
+                                                        onChange={(e) => {
+                                                            setThresholdthick(e.target.value);
+                                                        setGlobalConfig(prevState => ({
+                                                                ...prevState,
+                                                                thresholdthick: e.target.value
+                                                            }))
+                                                        setSessionSignal();
+
+                                                        }
+                                                        }
                                                     />
 
                                                 </Col>
@@ -2467,7 +2875,7 @@ const Chart = (props) => {
 
                                                         <InputColor
                                                             initialValue={(thresholdtcolor.hex ? thresholdtcolor.hex : otherConfig.tcolor)}
-                                                            onChange={setThresholdtcolor}
+                                                            onChange={setGlobalTColor}
                                                             placement="right"
                                                             style={{ width: "100%" }}
                                                         />
@@ -2667,7 +3075,16 @@ const Chart = (props) => {
                                                         min={1}
                                                         max={10}
                                                         value={value}
-                                                        onChange={changeEvent => setValue(changeEvent.target.value)}
+                                                        onChange={(changeEvent)  => {
+                                                            setValue(changeEvent.target.value)
+                                                            setGlobalConfig(prevState => ({
+                                                                ...prevState,
+                                                                thick: changeEvent.target.value
+                                                            }))
+                                                             setSessionSignal();
+
+                                                        }
+                                                        }
                                                     />
                                                 </Col>
                                             </Row>
@@ -2694,7 +3111,7 @@ const Chart = (props) => {
                                                     <div  >
                                                         <InputColor
                                                             initialValue={(color.hex ? color.hex : props.color)}
-                                                            onChange={setColor}
+                                                            onChange={setGlobalColor}
                                                             placement="right"
                                                             style={{ width: "100%" }}
                                                         />
@@ -2736,7 +3153,7 @@ const Chart = (props) => {
                                                                 range: value
                                                             }))
                                                             setXRange(value)
-
+                                                            
                                                         }}
                                                         value={xrange}
 
@@ -2816,10 +3233,10 @@ const Chart = (props) => {
                                                         value={modal.grid}
                                                     >
 
-                                                        <option value={1}>Both</option>
+                                                        <option  value={1}>Both</option>
                                                         <option value={3}>Horizontal Only</option>
                                                         <option value={4}>Vertical Only</option>
-                                                        <option value={2}>None</option>
+                                                        <option selected value={2}>None</option>
 
 
 
@@ -2860,6 +3277,13 @@ const Chart = (props) => {
                                                             <input placeholder='0' value={yAxisMin} onChange={(e) => {
                                                                 let { value = "" } = e.target
                                                                 setYaxisMin(value)
+                                                                
+                                                                setGlobalConfig(prevState => ({
+                                                                    ...prevState,
+                                                                    ymin: value
+                                                                }))
+                                                                setSessionSignal();
+
                                                             }} />
 
 
@@ -2868,7 +3292,13 @@ const Chart = (props) => {
                                                         <div className='max-axis'>
                                                             <input placeholder='0' value={yAxisMax} onChange={(e) => {
                                                                 let { value = "" } = e.target
-                                                                setYaxisMax(parseFloat(value))
+                                                                setYaxisMax(parseFloat(value));
+                                                                setGlobalConfig(prevState => ({
+                                                                    ...prevState,
+                                                                    ymax: parseFloat(value)
+                                                                }))
+                                                                setSessionSignal();
+
                                                             }} />
 
                                                         </div>

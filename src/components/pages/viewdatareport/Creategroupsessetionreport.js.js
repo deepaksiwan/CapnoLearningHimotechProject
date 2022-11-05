@@ -74,7 +74,7 @@ const Demodatareport = () => {
                         {
                             sessions.map((sessions) => {
                                 return (
-                                    <li><a href={"/create/group/report/" + sessions.id + "/" + session + "/all/" + sessions.id}   >{sessions.name}</a></li>
+                                    <li><a href={"/create/group/report/0/" + sessions.id + "/" + session + "/all/" + sessions.id}  dangerouslySetInnerHTML={{__html: sessions.name}}  ></a></li>
                                 )
                             }
                             )

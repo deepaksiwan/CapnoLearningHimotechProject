@@ -323,20 +323,58 @@ const ChartTable = () => {
             
 
         })
-
+        
+   
     }
 
+
+    const [linkGraphs,setLinkGraphs] = useState(false);
+        
+    const [globalConfig,setGlobalConfig]  =  useState({
+        color : '',
+        signal: 1,
+        type : '',
+        avg : '',
+        xmin : '',
+        thick : 0.5,
+        xextreme : '',
+        xmax : '',
+        ymin : 0,
+        ymax : 50,
+        record : '',
+        graph_order : '',
+        comment : '',
+        row : '',
+        clientSerial : '',
+        col : '',
+        xrange: 0, 
+        units: '',
+        annotation: 1,
+        grid: 2,
+        showGrid: false,
+        invert: 2,
+        position: '',
+        lineType: '',
+        disabledType: '',
+        signalType: '',
+        thresholdtLine: false,
+        thresholdtLineType: 'dot',
+        thresholdtcolor: '',
+        thresholdthick: '',
+        thresholdvalue: '',
+
+    }) ; 
 
     return (
         // <div onContextMenu={(e) => e.preventDefault()   } >
         <div  >
-            {
+            {/* {
                 graphs.length > 0  && showHeader &&
-                <ChartHeader group={false} showHeader={showHeader}  showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={config} />
-            }
+                <ChartHeader linkGraphs={linkGraphs} group={false} showHeader={showHeader}  showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={config} />
+            } */}
               {
-                graphs.length > 0  && !showHeader &&
-                <ChartHeader group={false} showHeader={showHeader}  showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={config} />
+                graphs.length > 0  &&  
+                <ChartHeader linkGraphs={linkGraphs} group={false} showHeader={showHeader}  showActualTime={showActualTime} setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={config} />
             }
 
           
@@ -351,7 +389,7 @@ const ChartTable = () => {
                                 return (
                                   
                                         <div className="chart-w" style={{ width: (d.col != "1/1" ? (eval((d.col)) * 99 )+ "%" : (eval(d.col) * 100) + "%") , maxWidth: (eval(d.col) * 100) + "%", height: "auto" , minHeight:  (eval(d.row) * 82) + "vh"  }}>
-                                        <Chart sessionDate={sessionDate}  group={false} showActualTime={showActualTime} showSignalStat={showSignalStat} setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={session} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
+                                        <Chart linkGraphs={linkGraphs} globalConfig={globalConfig} setGlobalConfig={setGlobalConfig} sessionDate={sessionDate}  group={false} showActualTime={showActualTime} showSignalStat={showSignalStat} setStats={setStats} col={d.col} row={d.row} setConfig={setConfig} record={record} session={session} signalO={d.signal_name} signal={d.signal_name} xmax={d.xmax} xmin={d.xmin}  ymin={d.ymin} ymax={d.ymax} thick={d.thick} otherConfig={d.other_config} graph_order={d.graph_order} type={d.type} color={d.color} />
                                         </div>
                                    
 

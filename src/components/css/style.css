@@ -3312,6 +3312,22 @@ sub {
 
 /* configure table css closed here */
 
+p.flyleft2 {
+  position: absolute;
+  transform: rotate(270deg);
+  left: -12%;
+  top: 46%;
+  float: none;
+  font-size: 12px;
+  background: purple;
+  color: #fff;
+  padding: 0px 5px;
+}
+
+p.flyleft2.moreflyleft2{
+  left: -11.5%;
+}
+
 
 p.flyleft {
   position: absolute;
