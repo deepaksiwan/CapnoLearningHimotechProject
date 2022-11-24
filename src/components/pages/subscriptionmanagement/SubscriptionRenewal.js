@@ -107,6 +107,7 @@ const SubscriptionRenewal = () =>{
                     purchase_units: [{
                       amount: {
                         value: _price
+                        // value: 0.01
                       }
                     }]
                   });

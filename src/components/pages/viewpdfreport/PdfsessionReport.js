@@ -55,6 +55,47 @@ const PdfsessionReport = () => {
 
 
 
+    const pdfdataMulti = (id) => {
+
+
+
+        fetch(API_URL + "/pdf/list/multi/" + id,
+
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                   
+                    let _clientName = resp.firstname + " " + resp.lastname;
+                    let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
+                    let _pdfname = resp.pdfname.replace(".pdf" ,"");
+                    let _sessionDate = null;
+                    let _reportName = null;
+                    downloadpdf(_clientName, _trainerName, resp.result, _pdfname, _sessionDate,_reportName)
+                    setLoaderModal(false);
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                console.log("network error")
+            }
+
+
+        })
+
+
+    }
+
+
+
     const pdfdata = (sid) => {
 
 
@@ -75,7 +116,8 @@ const PdfsessionReport = () => {
                     let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _pdfname = resp.pdfname;
                     let _sessionDate = resp.sessionDate;
-                    downloadpdf(_clientName, _trainerName, resp.result, _pdfname, _sessionDate)
+                    let _reportName = resp.reportName;
+                    downloadpdf(_clientName, _trainerName, resp.result, _pdfname, _sessionDate,_reportName)
                     setLoaderModal(false);
                 });
             }
@@ -93,7 +135,7 @@ const PdfsessionReport = () => {
     }
 
 
-    const downloadpdf = (_clientName, _trainerName, _image, _pdfname, _sessionDate) => {
+    const downloadpdf = (_clientName, _trainerName, _image, _pdfname, _sessionDate,_reportName) => {
 
         const doc = new jsPDF();
 
@@ -103,14 +145,26 @@ const PdfsessionReport = () => {
         doc.setDrawColor(0, 0, 0);
         doc.line(10, 15, 600, 15);
         doc.setFontSize(10)
+        if(_sessionDate){
 
         doc.text(_sessionDate, 35, 25)
+        }
         doc.text(_clientName, 23, 30);
         doc.text(_trainerName, 25, 35);
+        if(_reportName){
+            doc.text(_reportName.replace(/<\/?[^>]+(>|$)/g, ""), 25, 40);
+        }
+        else{
+        doc.text(_pdfname.replace(".pdf",""), 25, 40);
+
+        }
         doc.setFont(undefined, 'bold');
+        if(_sessionDate){
         doc.text("Session Date:", 10, 25)
+        }
         doc.text("Client:", 10, 30);
         doc.text("Trainer:", 10, 35);
+        doc.text("Report:", 10, 40);
         // doc.setFont(undefined, 'bold')
         doc.addImage(_image, 5, 45, 200, 110);
         doc.save(_pdfname + ".pdf");
@@ -137,8 +191,9 @@ const PdfsessionReport = () => {
                     let _clientName = resp.firstname + " " + resp.lastname;
                     let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
                     let _pdfname = resp.pdfname;
+                    let _reportName = resp.reportName;
                     let _sessionDate = resp.sessionDate;
-                    Viewpdf(_clientName, _trainerName, resp.result, _pdfname, _sessionDate)
+                    Viewpdf(_clientName, _trainerName, resp.result, _pdfname, _sessionDate,_reportName)
 
                 });
             }
@@ -155,7 +210,46 @@ const PdfsessionReport = () => {
 
     }
 
-    const Viewpdf = (_clientName, _trainerName, _image, _pdfname, _sessionDate) => {
+    const ViewpdfdataMulti = (id) => {
+
+        
+
+        fetch(API_URL + "/pdf/list/multi/" + id,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+            
+        ).then((response) => {
+            if (response.status == 200) {
+                response.json().then((resp) => {
+                    setLoaderModal(false)
+                    let _clientName = resp.firstname + " " + resp.lastname;
+                    let _trainerName = resp.data[0].firstname + " " + resp.data[0].lastname;
+                    let _pdfname = resp.pdfname;
+                    let _reportName = null;
+                    let _sessionDate = null;
+                    Viewpdf(_clientName, _trainerName, resp.result, _pdfname, _sessionDate,_reportName)
+
+                });
+            }
+            else if (response.status == 401) {
+                logout()
+            }
+            else {
+                console.log("network error")
+            }
+
+
+        })
+
+
+    }
+
+    const Viewpdf = (_clientName, _trainerName, _image, _pdfname, _sessionDate,_reportName) => {
 
         const doc = new jsPDF();
 
@@ -165,14 +259,28 @@ const PdfsessionReport = () => {
         doc.setDrawColor(0, 0, 0);
         doc.line(10, 15, 600, 15);
         doc.setFontSize(10)
+        if(_sessionDate){
 
         doc.text(_sessionDate, 35, 25)
+        }
         doc.text(_clientName, 23, 30);
         doc.text(_trainerName, 25, 35);
+        if(_reportName){
+            doc.text(_reportName.replace(/<\/?[^>]+(>|$)/g, ""), 25, 40);
+        }
+        else{
+            doc.text(_pdfname.replace(".pdf",""), 25, 40);
+
+
+        }
         doc.setFont(undefined, 'bold');
+        if(_sessionDate){
         doc.text("Session Date:", 10, 25)
+        }
         doc.text("Client:", 10, 30);
         doc.text("Trainer:", 10, 35);
+        doc.text("Report:", 10, 40);
+
         // doc.setFont(undefined, 'bold')
         doc.addImage(_image, 5, 45, 200, 110);
         // doc.output('dataurlnewwindow');
@@ -246,12 +354,21 @@ const PdfsessionReport = () => {
                     let _temp = [];
                     resp.pdfs.map((v, i) => {
                         _temp.push({
-                            report: v.name,
+                            report: v.pdf_name,
                             Createdate: new Date(v.added_on).toLocaleString(),
-                            actions: <p><a href='#' className="downloadimg"><img src={preveiw} /></a></p>
+                            actions: <p><Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="View" placement="top"><a href="javascript:void" onClick={() => {ViewpdfdataMulti(v.id); loaderToggleModal()}} className="downloadimg tooltip2" ><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
+                                tooltip: classes.customTooltip,
+                                
+                              }} title="Download" placement="top"><a href='javascript:void' onClick={() => {pdfdataMulti(v.id); loaderToggleModal()}} className="downloadimg"><img src={download} /></a></Tooltip></p>
                         })
+                        if(i == (resp.pdfs.length - 1) ){
+                            setData(_temp);
+
+                        }
                     })
-                    setData(_temp);
 
                 });
             }
@@ -272,6 +389,8 @@ const PdfsessionReport = () => {
         window.location.reload();
     }
 
+
+  
     const columns = [
         {
             title: t("Report-Name"), field: "report"
@@ -283,6 +402,7 @@ const PdfsessionReport = () => {
             title: <span className="text-right">{t("Actions")}</span>, field: "actions",align: "right"
         }
     ]
+ 
 
 
     return (

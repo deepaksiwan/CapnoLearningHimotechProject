@@ -11,13 +11,16 @@ const Demodatareport = () => {
 
     const Demodata = [
         {
-            displayDemodata: t("Single-Session")
+            displayDemodata: t("Single-Session"),
+            link: "/create/report/0/12/54322/all/12"
         },
         {
-            displayDemodata: t("Multi-Session")
+            displayDemodata: t("Multi-Session"),
+            link: "#"
         },
         {
-            displayDemodata: t("Group-Session")
+            displayDemodata: t("Group-Session"),
+            link: "/create/group/report/0/37/54455/all/37"
         },
         
     ]
@@ -50,7 +53,7 @@ const Demodatareport = () => {
                                         <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option1" />
                                     </div>
                                     <div className="report-child2">
-                                        <a href="#">{demodata.displayDemodata}</a>
+                                        <a href={demodata.link}>{demodata.displayDemodata}</a>
                                     </div>
                                 </div>                    
                             )

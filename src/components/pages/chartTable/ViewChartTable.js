@@ -305,14 +305,14 @@ const ViewChartTable = () => {
     return (
         <div>
             {
-                graphs.length > 0  && showHeader &&
+                graphs.length > 0   &&
                 <ViewChartHeader showHeader={showHeader}   setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={currentConfig} />
             }
 
-{
+{/* {
                 graphs.length > 0  && !showHeader &&
                 <ViewChartHeader showHeader={showHeader}  setShowSignalStat={setShowSignalStat}  showSignalStat={showSignalStat} setSessionDate={setSessionDate} setSavingReportConfirmation={setSavingReportConfirmation} setrequestProcessingModal={setrequestProcessingModal}  setrequestProcesedModal={setrequestProcesedModal} setNotes={setNotes} graphs={graphs} signalStat={signalStat} notes={notes} exportExcel={exportExcel} saveReportConfig={() => setSavingAlternateConfirmation(!savingAlternateConfirmation)} config={currentConfig} />
-            }
+            } */}
 
           
               

@@ -27,6 +27,8 @@ const Chart = (props) => {
     const record = props.record;
     const linkingType = props.linkingType;
     const [xAxis, setXaxis] = useState([]);
+    const [xAxisOg, setXaxisOg] = useState([]);
+    
     const [yAxis2, setYAxis2] = useState([]);
     const [timeVal, setTimeVal] = useState();
     const [timeVal2, setTimeVal2] = useState();
@@ -44,7 +46,7 @@ const Chart = (props) => {
     
     const [zoomEnabled, setZoomEnabled] = useState(true);
     // alert(new Date(parseInt(props.xmin)));
-    let Utz = new Date().getTimezoneOffset();
+    let Utz = new Date(0).getTimezoneOffset();
     const [tableView, setTableView] = useState(props.showSignalStat);
     // Utz = Utz*60*1000 ; 
     const timerange = useRef();
@@ -127,7 +129,7 @@ const Chart = (props) => {
 
     const [xAxisMin, setXaxisMin] =  useState(linkGraphs && globalConfig.xmin != "" && !props.multi ? globalConfig.xmin  : props.xmin == 0 ? props.xmin : new Date(parseInt(props.xmin * 1e3)));
     // const [xAxisMin, setXaxisMin] =  useState(0);
-    console.log(props.xmin);
+    // console.log(props.xmin);
     if (props.signal == "pco2wave") {
         // // console.log("newMin", new Date(parseInt(props.xmin*1e3)));
     }
@@ -195,7 +197,8 @@ const Chart = (props) => {
 
     const [mouseSetingModal, setMouseSetingModal] = useState(false);
     const toggleMouseSetingModal = () => setMouseSetingModal(!mouseSetingModal);
-
+    
+    const [noChart, setNoChart] = useState(false)
     const [images, setImages] = useState([])
     let liveAnnotation = [];
     const [graphModal, setgraphModal] = useState(false);
@@ -319,6 +322,7 @@ const Chart = (props) => {
 
     }, [xAxis, yAxis, textAnnotations, signalModalData])
 
+    
     useEffect(() => {
         let _temp = {
             color: color.hex ? color.hex : color,
@@ -352,7 +356,7 @@ const Chart = (props) => {
 
         }
         group ? clientSerial ? setConfig(clientSerial, _temp) : setConfig(props.profile.name, _temp) : props.multi ? setConfig(props.signal + "_" + props.session, _temp) : setConfig(props.signal, _temp);
-        console.log("xmax" , xAxisMax)
+        // console.log("xmax" , xAxisMax)
     }, [color, type, average, xAxisMin, value, xAxisMax, yAxisMin, yAxisMax, record, comment, signalLinetype, modal]);
 
 
@@ -373,7 +377,10 @@ const Chart = (props) => {
                 showGrid: globalConfig.showGrid,
                 grid: globalConfig.grid,
                 invert:  globalConfig.invert,
+                units: globalConfig.units
             }))
+
+            
             let _type = globalConfig.type == "" ? props.type : globalConfig.type
             
             setSignalModalData(prevState => ({
@@ -404,7 +411,36 @@ const Chart = (props) => {
         setThresholdvalue(globalConfig.thresholdvalue)
         setThresholdthick(globalConfig.thresholdthick)
         setThresholdtLine(globalConfig.thresholdtLineType);
-       
+            
+            if(globalConfig.units != modal.units){
+               
+                let _temp = [];
+                yAxisOg.map((v, i) => {
+                    if (globalConfig.units == "kPa") {
+                        
+                        _temp.push(parseFloat(v) * parseFloat(0.133322));
+                    }
+                    else if (globalConfig.units == "%") {
+                        _temp.push(parseFloat(parseFloat(v) / parseFloat(100)));
+        
+                    }
+                    else if (globalConfig.units == "mmHg") {
+                        _temp.push(v);
+        
+                    }
+        
+                    if (i == (yAxisOg.length - 1)) {
+                        // console.log(yAxisOg);
+                        let _data = calculate_history_sample([xAxis, _temp], average)
+                        setYaxis(_data[1]);
+                        setXaxis(_data[0]);
+        
+        
+                    }
+        
+                })
+            }
+
         }
 
        
@@ -516,6 +552,9 @@ const Chart = (props) => {
                         setCsvFile(resp.sessions[0].sessiondata)
                         getData(resp.sessions[0].sessiondata, otherConfig.stat)
                     }
+                    else{
+                        setNoChart(true);
+                    }
 
 
                 });
@@ -607,7 +646,7 @@ const Chart = (props) => {
         // let userTimeOffset = 0;
 
 
-        let userTimeOffset = new Date().getTimezoneOffset();
+        let userTimeOffset = new Date(0).getTimezoneOffset();
 
         userTimeOffset = userTimeOffset * 60 * 1000;
         // alert(userTimeOffset);
@@ -640,6 +679,10 @@ const Chart = (props) => {
             let vfirstRecord = 0;
             let endTask = 0;
             // // console.log(data[0]);
+            if(data.length == 0){
+                setNoChart(true)
+
+            }
             data.map((v, i) => {
                 if (i == 0 || v.x != data[i - 1].x || i == (data.length - 1)) {
 
@@ -699,7 +742,7 @@ const Chart = (props) => {
                         // // console.log()
                         if (group) {
                             // console.log('which y', v['y'+(props.index+1)+'_median'])
-                            _y.push(parseFloat(v['y' + (props.index + 1) + '_median']));
+                            _y.push(parseFloat(v['y' + (props.index + 1)]));
                             // let yt = parseFloat(v['y'+(props.index+1)+'_median']) ; 
                             let yt;
                             console.log(_stat);
@@ -713,14 +756,14 @@ const Chart = (props) => {
                                 yt = parseFloat(v['y' + (props.index + 1) + '_std']);
 
                             }
-                            if (otherConfig.units == "kPa") {
+                            if (modal.units == "kPa") {
                                 _tempY.push(yt * 0.133322);
                             }
-                            else if (otherConfig.units == "%") {
+                            else if (modal.units == "%") {
                                 _tempY.push(yt / 100);
 
                             }
-                            else if (otherConfig.units == "mmHg") {
+                            else if (modal.units == "mmHg") {
                                 _tempY.push(yt);
 
                             }
@@ -747,14 +790,14 @@ const Chart = (props) => {
                             }
                             if (rawSignals.includes(props.signal)) {
 
-                                if (otherConfig.units == "kPa") {
+                                if (modal.units == "kPa") {
                                     _tempY.push(yt * 0.133322);
                                 }
-                                else if (otherConfig.units == "%") {
+                                else if (modal.units == "%") {
                                     _tempY.push(yt / 100);
 
                                 }
-                                else if (otherConfig.units == "mmHg") {
+                                else if (modal.units == "mmHg") {
                                     _tempY.push(yt);
 
                                 }
@@ -863,7 +906,7 @@ const Chart = (props) => {
                     }
 
                     
-                    console.log("Reached Data "+props.signal , i,data.length );
+                    // console.log("Reached Data "+props.signal , i,data.length );
                     if (i == (data.length - 1)) {
                         // console.log("Reached Data "+props.signal , data.length)
 
@@ -916,7 +959,7 @@ const Chart = (props) => {
                             liveAnnotation.map((v, i) => {
 
                                 let xAnnTime = new Date(parseInt(((parseInt(v.x) - firstRecord) + (userTimeOffset)) - _pauseTime));
-                                // // console.log("I ma here")
+                                console.log("I ma here" , xAnnTime, firstRecord) 
                                 // // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
                                 _temptask.push(
                                     {
@@ -1264,13 +1307,16 @@ const Chart = (props) => {
                         setImages(_tempImages)
                         setTextTooltip(_toolText);
                         setYAxis2(_threshold)
-
+                        setXaxisOg(_x)
                         if (average == 30) {
                             // console.log("axis x" , _x.length)
                             // console.log("axis y" , _tempY.length)
                             setYaxis(_tempY);
                             setXaxis(_x);
-                            console.log(props.signal,[_x,_tempY])
+                            if(_x.length == 0){
+                                setNoChart(true)
+                            }
+                            // console.log(props.signal,[_x,_tempY])
 
                         }
                         else {
@@ -1278,6 +1324,9 @@ const Chart = (props) => {
                             console.log(props.signal,_data)
                             setYaxis(_data[1]);
                             setXaxis(_data[0]);
+                            if(_x.length == 0){
+                                setNoChart(true)
+                            }
                         }
 
 
@@ -1291,7 +1340,7 @@ const Chart = (props) => {
 
 
                         // }
-                        console.log("signal x:" , average , props.signal,_x)
+                        // console.log("signal x:" , average , props.signal,_x)
 
                         if (props.signal != "pco2wave" && props.signal != "pco2b2b" && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa") {
                             setStats(props.signal, _tempStats)
@@ -1641,7 +1690,7 @@ const Chart = (props) => {
         // // console.log(length);
         // // console.log(new Date(xAxisMin))
 
-        let userTimeOffset = new Date().getTimezoneOffset();
+        let userTimeOffset = new Date(0).getTimezoneOffset();
         //    alert(userTimeOffset);
         userTimeOffset = userTimeOffset * 60 * 1000;
         let _diff = new Date(xAxisMax).getTime() - new Date(xAxisMin).getTime();
@@ -1713,7 +1762,7 @@ const Chart = (props) => {
     const reset = () => {
 
         setXaxisMin(new Date(xAxis[0]))
-        let userTimeOffset = new Date().getTimezoneOffset();
+        let userTimeOffset = new Date(0).getTimezoneOffset();
 
         userTimeOffset = userTimeOffset * 60 * 1000;
         let _max = new Date(parseInt(new Date(xAxis[0]).getTime()) + parseInt(props.xmax * 1e3))
@@ -1739,7 +1788,7 @@ const Chart = (props) => {
 
 
 
-        let userTimeOffset = new Date().getTimezoneOffset();
+        let userTimeOffset = new Date(0).getTimezoneOffset();
         //    alert(userTimeOffset);
         userTimeOffset = userTimeOffset * 60 * 1000;
         let _diff = new Date(xAxisMax).getTime() - new Date(xAxisMin).getTime();
@@ -1902,9 +1951,11 @@ const Chart = (props) => {
         var next = num - 1;
         var newdataX = [];
         var newdataY = [];
+        // alert(sample);
         if (sample == 30) {
             newdataX = data[0];
             newdataY = data[1];
+            // console.log([newdataX, newdataY]);
             return [newdataX, newdataY];
 
         }
@@ -2017,13 +2068,18 @@ const Chart = (props) => {
             ...prevState,
             units: value
         }))
+        setGlobalConfig(prevState => ({
+            ...prevState,
+            units: value
+        }))
         let _temp = [];
         yAxisOg.map((v, i) => {
             if (value == "kPa") {
-                _temp.push(v * 0.133322);
+                
+                _temp.push(parseFloat(v) * parseFloat(0.133322));
             }
             else if (value == "%") {
-                _temp.push(v / 100);
+                _temp.push(parseFloat(parseFloat(v) / parseFloat(100)));
 
             }
             else if (value == "mmHg") {
@@ -2032,7 +2088,7 @@ const Chart = (props) => {
             }
 
             if (i == (yAxisOg.length - 1)) {
-
+                // console.log(yAxisOg);
                 let _data = calculate_history_sample([xAxis, _temp], average)
                 setYaxis(_data[1]);
                 setXaxis(_data[0]);
@@ -2149,21 +2205,21 @@ const Chart = (props) => {
     const handleYaxisPosition = e => {
         let { value = "" } = e.target || {}
         if (value == 1) {
-            setXaxisMax(xAxisMin)
-            setXaxisMin(xAxisMax)
+            // setXaxisMax(xAxisMin)
+            // setXaxisMin(xAxisMax)
             setGlobalConfig(prevState => ({
                 ...prevState,
-                xmax: xAxisMin,
-                xmin: xAxisMax,
+                // xmax: xAxisMin,
+                // xmin: xAxisMax,
                 position: value
             }))
         } else {
-            setXaxisMin(xAxisMax)
-            setXaxisMax(xAxisMin)
+            // setXaxisMin(xAxisMax)
+            // setXaxisMax(xAxisMin)
             setGlobalConfig(prevState => ({
                 ...prevState,
-                xmax: xAxisMin,
-                xmin: xAxisMax,
+                // xmax: xAxisMin,
+                // xmin: xAxisMax,
                 position: value
             }))
         }
@@ -2279,8 +2335,8 @@ const Chart = (props) => {
     }
 
     const dstOffset = (date = new Date()) => {
-        const january = new Date(date.getFullYear(), 11, 20).getTimezoneOffset();
-        const july = new Date(date.getFullYear(), 6, 20).getTimezoneOffset();
+        const january = new Date(date.getFullYear(), 11, 1).getTimezoneOffset();
+        const july = new Date(date.getFullYear(), 6, 1).getTimezoneOffset();
         // console.log("Jan Time" , january);
         // console.log("July Time" , july);
         let max = Math.max(january, july);
@@ -2951,7 +3007,7 @@ const Chart = (props) => {
                                                                     let { value = "" } = e.target || {}
 
                                                                     setAverage(value);
-                                                                    let _data = calculate_history_sample([xAxis, yAxis], value)
+                                                                    let _data = calculate_history_sample([xAxisOg, yAxisOg], value)
                                                                     if(tableLinked){
                                                                         calculate_history_sample_table(value)
                                                                     }
@@ -3037,32 +3093,7 @@ const Chart = (props) => {
                                                         </Col>
                                                     </Row>
                                                 </li>
-                                                <li>
-                                                    <Row justify="space-between" style={{ height: rowHeight }}>
-                                                        <Col lg={5} xl={5}>
-                                                            <span>Moving Average</span>
-                                                        </Col>
-                                                        <Col lg={7} xl={7}>
-                                                            <select
-                                                                style={{ width: "100%" }}
-
-                                                                onChange={(e) => movingAverage(e)}
-                                                                value={signalModalData.movingAverage}
-
-
-                                                            >
-                                                                <option value="0">No Averages</option>
-                                                                <option value="2">2 Averages</option>
-                                                                <option value="3">3 Averages</option>
-                                                                <option value="4">4 Averages</option>
-                                                                <option value="5">5 Averages</option>
-
-                                                            </select>
-
-
-                                                        </Col>
-                                                    </Row>
-                                                </li>
+                                            
                                             </>
                                         }
                                         <li>
@@ -3089,6 +3120,36 @@ const Chart = (props) => {
                                                 </Col>
                                             </Row>
                                         </li>
+                                       
+                                        {
+                                            (props.signal == "pco2b2b" || props.signal == "capin" || props.signal == "b2brsa") && 
+                                                <li>
+                                                    <Row justify="space-between" style={{ height: rowHeight }}>
+                                                        <Col lg={5} xl={5}>
+                                                            <span>Moving Average</span>
+                                                        </Col>
+                                                        <Col lg={7} xl={7}>
+                                                            <select
+                                                                style={{ width: "100%" }}
+
+                                                                onChange={(e) => movingAverage(e)}
+                                                                value={signalModalData.movingAverage}
+
+
+                                                            >
+                                                                <option value="0">No Averages</option>
+                                                                <option value="2">2 Averages</option>
+                                                                <option value="3">3 Averages</option>
+                                                                <option value="4">4 Averages</option>
+                                                                <option value="5">5 Averages</option>
+
+                                                            </select>
+
+
+                                                        </Col>
+                                                    </Row>
+                                                </li>
+}
                                         {/* {signalModalData.disabledType && <li>
                                 <div className="range-content-wrp">
                                     <div className="range-c-child1">
@@ -3275,14 +3336,20 @@ const Chart = (props) => {
                                                     <div className="wrp-axis">
                                                         <div className='min-axis'>
                                                             <input placeholder='0' value={yAxisMin} onChange={(e) => {
-                                                                let { value = "" } = e.target
-                                                                setYaxisMin(value)
+                                                                let { value = "" } = e.target;
+                                                                if(value == ""){
+                                                                    setYaxisMin('')
+                                                                }
+                                                                else{
+                                                                    setYaxisMin(value)
                                                                 
-                                                                setGlobalConfig(prevState => ({
-                                                                    ...prevState,
-                                                                    ymin: value
-                                                                }))
+                                                                    setGlobalConfig(prevState => ({
+                                                                        ...prevState,
+                                                                        ymin: value
+                                                                    }))
+                                                                }
                                                                 setSessionSignal();
+                                                            
 
                                                             }} />
 
@@ -3292,11 +3359,17 @@ const Chart = (props) => {
                                                         <div className='max-axis'>
                                                             <input placeholder='0' value={yAxisMax} onChange={(e) => {
                                                                 let { value = "" } = e.target
+                                                                
+                                                                if(value == ""){
+                                                                    setYaxisMax('')
+                                                                }
+                                                                else{
                                                                 setYaxisMax(parseFloat(value));
                                                                 setGlobalConfig(prevState => ({
                                                                     ...prevState,
                                                                     ymax: parseFloat(value)
                                                                 }))
+                                                            }
                                                                 setSessionSignal();
 
                                                             }} />
@@ -3430,7 +3503,7 @@ const Chart = (props) => {
                 </>
             }
             {
-                (xAxis.length == 0 || yAxis.length == 0) &&
+                (xAxis.length == 0 || yAxis.length == 0) && !noChart &&
 
                 <div className="wrp-chart-loader">
                     <div class="loading">
@@ -3440,6 +3513,12 @@ const Chart = (props) => {
                         <div class="loading-4"></div>
                     </div>
                 </div>
+            }
+
+{
+                (xAxis.length == 0 || yAxis.length == 0) && noChart &&
+
+                 <p className='text-center mt-5'><i className='fa fa-ban'></i> No <span dangerouslySetInnerHTML={{__html : signalName[props.signal]}}></span> signal was recorded</p>
             }
 
             <Draggable handle=".handle">

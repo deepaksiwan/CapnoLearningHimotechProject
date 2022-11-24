@@ -13,12 +13,14 @@ import {
 } from "reactstrap";
 
 import ReactExport from "react-export-excel";
-import { group } from 'd3';
+// import { group } from 'd3';
 
 
 const ViewChartHeader = (props) => {
     const accessToken = localStorage.getItem('accessToken');
     const [sessions, setsessions] = useState([]);
+    const [savePdfModal, setSavePdfModal] = useState(false);
+    const savePdfModalToggle = () => setSavePdfModal(!savePdfModal);
 
     const sessionid = localStorage.getItem('selectedSession');
     const clientId = localStorage.getItem('selectedClient');
@@ -50,6 +52,8 @@ const ViewChartHeader = (props) => {
 
     const [settingModal, setSetting] = useState(false);
     const settingToggleModal = () => setSetting(!settingModal);
+    const [reportName, setReportName] = useState(null);
+    const [pdfReportName, setPdfReportName] = useState(null);
 
     const [livesessionmultidataModal, setLivesessionmultidataModal] = useState(false);
     const livesessionMultidataModalToggle = () => setLivesessionmultidataModal(!livesessionmultidataModal);
@@ -124,9 +128,152 @@ const ViewChartHeader = (props) => {
     const linkGraphs = props.linkGraphs
     const setLinkGraphs = props.setLinkGraphs
     const linkingGraphModalToggle = () => setLinkingGraphModal(!linkingGraphModal) ; 
+    const [fileFormat, setFileFormat] = useState("csv");
+    const [multiDileFormat, setMultiDileFormat] = useState("");
+    const [multiSessionid, setMultiSessionid] = useState("");
+    
+    const [datafileModal, setDatafileModal] = useState(false);
+    const datafileModalToggle = () => setDatafileModal(!datafileModal);
 
+    
+    
+    const exportFileMulti = () => {
+        setrequestProcessingModal(true);
+
+        let route = "/get/csvfile/" + multiSessionid ;
+        if(multiDileFormat == 'ascii'){
+            route = "/get/textfile/" + multiSessionid ;
+        }
+        else if (multiDileFormat == "excel"){
+            route = "/get/excelfile/" + multiSessionid ;
+
+        }
+        fetch(API_URL + route,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': accessToken,
+            },
+        }
+    ).then(res => res.blob())
+    .then(response => {
+        //Create a Blob from the PDF Stream
+
+        let file = new Blob([response], {
+            type: "application/csv"
+        });
+       
+
+        if(multiDileFormat == 'ascii'){
+            file = new Blob([response], {
+                type: "application/text-plain"
+            });
+        }
+        else if (multiDileFormat == "excel"){
+            file = new Blob([response], {
+                type: "application/xlsx"
+            });
+
+        }
+        
+
+
+        
+
+        let tempUrl = URL.createObjectURL(file);
+        const aTag = window.document.createElement("a");
+        aTag.href = tempUrl;
+        aTag.download = 'file.csv';
+
+        if(multiDileFormat == 'ascii'){
+            aTag.download = 'file.txt' ; 
+        }
+        else if (multiDileFormat == "excel"){
+            aTag.download = 'file.xlsx' ; 
+
+        }
+
+        window.document.body.appendChild(aTag);
+        aTag.click();
+        URL.revokeObjectURL(tempUrl);
+        aTag.remove();
+ 
+        setrequestProcessingModal(false);
+
+    })
+
+    }
+    const exportFile = () => {
+        setrequestProcessingModal(true);
+
+        let route = "/get/csvfile/" + sessionid ;
+        if(fileFormat == 'ascii'){
+            route = "/get/textfile/" + sessionid ;
+        }
+        else if (fileFormat == "excel"){
+            route = "/get/excelfile/" + sessionid ;
+
+        }
+        fetch(API_URL + route,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': accessToken,
+            },
+        }
+    ).then(res => res.blob())
+    .then(response => {
+        //Create a Blob from the PDF Stream
+
+        let file = new Blob([response], {
+            type: "application/csv"
+        });
+       
+
+        if(fileFormat == 'ascii'){
+            file = new Blob([response], {
+                type: "application/text-plain"
+            });
+        }
+        else if (fileFormat == "excel"){
+            file = new Blob([response], {
+                type: "application/xlsx"
+            });
+
+        }
+        
+
+
+        
+
+        let tempUrl = URL.createObjectURL(file);
+        const aTag = window.document.createElement("a");
+        aTag.href = tempUrl;
+        aTag.download = 'file.csv';
+
+        if(fileFormat == 'ascii'){
+            aTag.download = 'file.txt' ; 
+        }
+        else if (fileFormat == "excel"){
+            aTag.download = 'file.xlsx' ; 
+
+        }
+
+        window.document.body.appendChild(aTag);
+        aTag.click();
+        URL.revokeObjectURL(tempUrl);
+        aTag.remove();
+ 
+        setrequestProcessingModal(false);
+
+    })
+
+    }
 
     const toggle = (id) => {
+        setMultiSessionid(id)
         if (open === id) {
             setOpen();
         } else {
@@ -145,12 +292,12 @@ const ViewChartHeader = (props) => {
         // console.log("mydata" , signalStat);
     }, signalStat)
     useEffect(() => {
-        Report();
         getRcord();
         clientnameUpdate();
         getLiveNotes();
         // getAlternate() ;
         getReportDetails();
+        
 
 
         // getZoomRecording() ; 
@@ -407,6 +554,210 @@ const ViewChartHeader = (props) => {
         window.open('https://capnolearning.com/manualpdf/Operating%20Manual%20P6.0%20-%20April%2026.pdf', 'Manual', 'height=768,width=500');
     }
 
+    // const saveScreenshot = () => {
+    //     // // console.log(sessioninfo);
+    //     setrequestProcessingModal(true);
+    //     html2canvas(document.getElementById("chart-table")).then(function (canvas) {
+
+    //         let session_id = session;
+    //         let type = 0;
+    //         let status = 1;
+
+    //         let dataimg = canvas.toDataURL('image/png')
+    //         const doc = new jsPDF();
+
+    //         for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
+    //             doc.setPage(pageNumber)
+    //             doc.setTextColor(0, 0, 0);
+    //             doc.text('Capnolearning Report', 10, 10,
+    //                 { styles: { fontSize: 20, fontWeight: 'bold' } })
+    //             doc.setDrawColor(0, 0, 0);
+    //             doc.line(10, 15, 600, 15);
+    //             doc.setFontSize(10)
+    //             if (!props.multi) {
+    //                 doc.text(sessioninfo[0].name, 35, 25)
+    //             }
+    //             doc.text(sessioninfo[0].client_firstname + " " + sessioninfo[0].client_firstname, 23, 30);
+    //             doc.text(sessioninfo[0].trainer_firstname + " " + sessioninfo[0].trainer_lastname, 25, 35);
+    //             // doc.text(trainerName, 25, 35);
+    //             doc.setFont(undefined, 'bold');
+    //             if (!props.multi) {
+    //                 doc.text("Session Date:", 10, 25)
+    //             }
+    //             doc.text("Client:", 10, 30);
+    //             doc.text("Trainer:", 10, 35);
+    //             // doc.setFont(undefined, 'bold')
+    //             doc.addImage(dataimg, 5, 45, 200, 110);
+    //         }
+
+    //         setTimeout(() => {
+    //             if (!props.multi) {
+    //                 doc.save("PDF Report - " + sessioninfo[0].name + "-" + sessioninfo[0].client_firstname + " " + sessioninfo[0].client_lastname + ".pdf");
+    //             }
+    //             else {
+    //                 doc.save("PDF Report - " + sessioninfo[0].client_firstname + " " + sessioninfo[0].client_lastname + ".pdf");
+
+    //             }
+    //             setrequestProcessingModal(false);
+    //             // () ;
+    //             setrequestProcesedModal(true);
+
+    //         }, 5000);
+
+
+
+    //     });
+
+    // }
+
+
+    const saveScreenshotPDFMulti = () => {
+        // // console.log(sessioninfo);
+        setrequestProcessingModal(true);
+        html2canvas(document.getElementById("chart-table")).then(function (canvas) {
+
+            let session_id = session;
+            let type = 0;
+            let status = 1;
+
+            let dataimg = canvas.toDataURL('image/png')
+            // const doc = new jsPDF();
+
+            // for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
+            //     doc.setPage(pageNumber)
+            //     doc.setTextColor(0, 0, 0);
+            //     doc.text('Capnolearning Report', 10, 10,
+            //         { styles: { fontSize: 20, fontWeight: 'bold' } })
+            //     doc.setDrawColor(0, 0, 0);
+            //     doc.line(10, 15, 600, 15);
+            //     doc.setFontSize(10)
+
+            //     doc.text(sessioninfo[0].name, 35, 25)
+            //     doc.text(sessioninfo[0].client_firstname + " " + sessioninfo[0].client_firstname, 23, 30);
+            //     doc.text(sessioninfo[0].trainer_firstname + " " + sessioninfo[0].trainer_lastname, 25, 35);
+            //     // doc.text(trainerName, 25, 35);
+            //     doc.setFont(undefined, 'bold');
+            //     doc.text("Session Date:", 10, 25)
+            //     doc.text("Client:", 10, 30);
+            //     doc.text("Trainer:", 10, 35);
+            //     // doc.setFont(undefined, 'bold')
+            //     doc.addImage(dataimg, 5, 45, 200, 110);
+            // }
+            let pdf_name ; 
+           
+                 pdf_name = pdfReportName + ".pdf";
+           
+           
+            setTimeout(() => {
+
+                let formData = {
+                    'data': dataimg,
+                    'pdf_name': pdf_name,
+                    'reportId' : reportId,
+                    'status': status,
+                    'cid': clientId
+                };
+
+                fetch(API_URL + "/save/screenshot/multi", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-access-token': accessToken,
+                    },
+                    body: JSON.stringify(formData),
+                }).then((result) => {
+                    result.json().then((resp) => {
+                        setrequestProcessingModal(false);
+                        // () ;
+                        setrequestProcesedModal(true);
+
+                    })
+                })
+
+
+            }, 5000);
+
+
+
+        });
+
+    }
+
+    
+    const saveScreenshotPDF = () => {
+        // // console.log(sessioninfo);
+        setrequestProcessingModal(true);
+        html2canvas(document.getElementById("chart-table")).then(function (canvas) {
+
+            let session_id = session;
+            let type = 0;
+            let status = 1;
+
+            let dataimg = canvas.toDataURL('image/png')
+            // const doc = new jsPDF();
+
+            // for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
+            //     doc.setPage(pageNumber)
+            //     doc.setTextColor(0, 0, 0);
+            //     doc.text('Capnolearning Report', 10, 10,
+            //         { styles: { fontSize: 20, fontWeight: 'bold' } })
+            //     doc.setDrawColor(0, 0, 0);
+            //     doc.line(10, 15, 600, 15);
+            //     doc.setFontSize(10)
+
+            //     doc.text(sessioninfo[0].name, 35, 25)
+            //     doc.text(sessioninfo[0].client_firstname + " " + sessioninfo[0].client_firstname, 23, 30);
+            //     doc.text(sessioninfo[0].trainer_firstname + " " + sessioninfo[0].trainer_lastname, 25, 35);
+            //     // doc.text(trainerName, 25, 35);
+            //     doc.setFont(undefined, 'bold');
+            //     doc.text("Session Date:", 10, 25)
+            //     doc.text("Client:", 10, 30);
+            //     doc.text("Trainer:", 10, 35);
+            //     // doc.setFont(undefined, 'bold')
+            //     doc.addImage(dataimg, 5, 45, 200, 110);
+            // }
+            let pdf_name ; 
+            if(props.multi){
+                 pdf_name = pdfReportName + ".pdf";
+            }
+            else{
+                pdf_name = sessioninfo[0].name + "-" + pdfReportName + ".pdf";
+            }
+            setTimeout(() => {
+
+                let formData = {
+                    'data': dataimg,
+                    'session_id': session_id,
+                    'pdf_name': pdf_name,
+                    'reportName' : reportName,
+                    'status': status,
+                    'type': type
+                };
+
+                fetch(API_URL + "/save/screenshot", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-access-token': accessToken,
+                    },
+                    body: JSON.stringify(formData),
+                }).then((result) => {
+                    result.json().then((resp) => {
+                        setrequestProcessingModal(false);
+                        // () ;
+                        setrequestProcesedModal(true);
+
+                    })
+                })
+
+
+            }, 5000);
+
+
+
+        });
+
+    }
     const saveScreenshot = () => {
         // // console.log(sessioninfo);
         setrequestProcessingModal(true);
@@ -427,30 +778,45 @@ const ViewChartHeader = (props) => {
                 doc.setDrawColor(0, 0, 0);
                 doc.line(10, 15, 600, 15);
                 doc.setFontSize(10)
-                if (!props.multi) {
+              
+                if(!props.multi){
                     doc.text(sessioninfo[0].name, 35, 25)
+
                 }
+              
                 doc.text(sessioninfo[0].client_firstname + " " + sessioninfo[0].client_firstname, 23, 30);
                 doc.text(sessioninfo[0].trainer_firstname + " " + sessioninfo[0].trainer_lastname, 25, 35);
+                if(!props.multi){
+                    doc.text(reportName.replace(/<\/?[^>]+(>|$)/g, ""), 25, 40);
+
+                }
                 // doc.text(trainerName, 25, 35);
                 doc.setFont(undefined, 'bold');
-                if (!props.multi) {
+                if(!props.multi){
                     doc.text("Session Date:", 10, 25)
+
+
                 }
                 doc.text("Client:", 10, 30);
                 doc.text("Trainer:", 10, 35);
+                if(!props.multi){
+
+                doc.text("Report:", 10, 40);
+                }
                 // doc.setFont(undefined, 'bold')
                 doc.addImage(dataimg, 5, 45, 200, 110);
             }
 
             setTimeout(() => {
-                if (!props.multi) {
-                    doc.save("PDF Report - " + sessioninfo[0].name + "-" + sessioninfo[0].client_firstname + " " + sessioninfo[0].client_lastname + ".pdf");
-                }
-                else {
-                    doc.save("PDF Report - " + sessioninfo[0].client_firstname + " " + sessioninfo[0].client_lastname + ".pdf");
+                if(props.multi){
+                    doc.save(pdfReportName + ".pdf");
 
                 }
+                else{
+                    doc.save(sessioninfo[0].name + "-" + pdfReportName + ".pdf");
+
+                }
+
                 setrequestProcessingModal(false);
                 // () ;
                 setrequestProcesedModal(true);
@@ -463,6 +829,8 @@ const ViewChartHeader = (props) => {
 
     }
 
+
+
     const saveReport = () => {
 
         setSavingReportConfirmation(true);
@@ -471,7 +839,7 @@ const ViewChartHeader = (props) => {
 
     }
 
-    console.log("multi", props.multi)
+    // console.log("multi", props.multi)
 
     // const getScreenshort = () => {
     //     fetch(API_URL + "/get/screenshort/" + session,
@@ -627,8 +995,12 @@ const ViewChartHeader = (props) => {
         })
     }
 
-    const Report = () => {
-        fetch(API_URL + "/configured/report?type=1",
+    const Report = (_details) => {
+        let url = API_URL + "/configured/report?type=1";
+        if (group) {
+            url = API_URL + "/configured/report?type=2";
+        }
+        fetch(url,
             {
                 method: 'GET',
                 headers: {
@@ -641,7 +1013,12 @@ const ViewChartHeader = (props) => {
                 response.json().then((resp) => {
                     // console.warn("result", resp);
                     setsessions(resp.sessions)
-
+                    console.log("det",_details);
+                    resp.sessions.map((v,i) => {
+                        if(v.id == _details.pid){
+                            setReportName(v.name);
+                        }
+                    })
                 });
             }
             else if (response.status == 401) {
@@ -774,7 +1151,7 @@ const ViewChartHeader = (props) => {
                 response.json().then((resp) => {
                     if (resp.details[0]) {
                         setReportDetails(resp.details);
-
+                        Report(resp.details[0]);
                         setNotes(resp.details[0].notes);
                     }
                 })
@@ -1004,9 +1381,9 @@ const ViewChartHeader = (props) => {
 
                             <ul className='action-list'>
                                 {
-                                    !props.multi && !group &&
+                                    !props.multi &&
                                     <li>
-                                        {
+                                        {/* {
                                             sessioninfo.length > 0 &&
 
                                             <ExcelFile filename={"Statistics - " + sessioninfo[0].name + "-" + sessioninfo[0].client_firstname + " " + sessioninfo[0].client_lastname} element={<a href="javascript:void" onClick={exportExcel} data-tip="Export session data as Excel Sheet."   ><i class="fa fa-upload whiteicon" aria-hidden="true"></i></a>}>
@@ -1030,7 +1407,9 @@ const ViewChartHeader = (props) => {
 
                                             </ExcelFile>
 
-                                        }
+                                        } */}
+                                        
+                                        <a href="javascript:void" onClick={datafileModalToggle} data-tip="Export data."   ><i class="fa fa-upload whiteicon" aria-hidden="true"></i></a>
                                     </li>
                                 }
                                 {
@@ -1039,7 +1418,7 @@ const ViewChartHeader = (props) => {
                                     <li><a href="javascript:void" onClick={exportModalToggle} data-tip="Export data."   ><i class="fa fa-upload whiteicon" aria-hidden="true"></i></a></li>
                                 }
                                 <li><a href="javascript:void" onClick={takeNotesToggle} data-tip="Take report notes."><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li>
-                                <li><a href="javascript:void" data-tip="Export report as PDF." onClick={saveScreenshot}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" data-tip="Make PDF copy." onClick={savePdfModalToggle}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="javascript:void" onClick={saveReportConfig} data-tip="Save as alternate configuration."><i class="fa fa-sliders" aria-hidden="true"></i></a></li> */}
                                 <li><a href="javascript:void" onClick={saveReport} data-tip="Save as report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
                               
@@ -1344,12 +1723,15 @@ const ViewChartHeader = (props) => {
                                         </AccordionHeader>
                                         <AccordionBody accordionId={v.id} className='accourdian-body-wrp'>
                                         <div className='excel-wrp'>
-                                            <input type="radio" name='csv' className='mrt-radiobtn' />
-                                            <label>CSV</label>
-                                            <input type="radio" name='csv' />
+                                            
+                                            
+                                        <input type="radio" onClick={() => setMultiDileFormat('csv')} checked={multiDileFormat == "csv" && multiSessionid == v.id ? true : false} className='mrt-radiobtn' name="CSV" />
+                                        <label>CSV</label>
+
+                                            <input onClick={() => setMultiDileFormat('excel')} checked={multiDileFormat == "excel" && multiSessionid == v.id ? true : false} type="radio"   name="CSV" />
                                             <label>EXCEL</label>
-                                            <input type="radio" name='csv' />
-                                            <label>ASCII</label>
+                                            {/* <input onClick={() => setMultiDileFormat('ascii')} checked={multiDileFormat  == "ascii" && multiSessionid == v.id ? true : false} type="radio"   name="CSV" />
+                                            <label>ASCII</label> */}
                                         </div>
 
                                         </AccordionBody>
@@ -1372,7 +1754,13 @@ const ViewChartHeader = (props) => {
 
                         </ol>
                     </div>
+                    <div className='d-flex justify-content-around mt-3'>
+                        <button className='lightbtn w-100' onClick={exportModalToggle} >Cancel</button>
+                   
 
+                        <button className='darktbtn w-100 ml-1' onClick={exportFileMulti} >Download</button>
+
+                    </div>
 
                 </ModalBody>
 
@@ -1399,7 +1787,34 @@ const ViewChartHeader = (props) => {
                 </ModalBody>
 
             </Modal>
+            <Modal isOpen={savePdfModal} toggle={savePdfModalToggle} className="modal-box-wrp" centered={true}>
+                <ModalHeader toggle={savePdfModalToggle}><span className="ml-1 roititle modal-head"> PDF Report</span></ModalHeader>
+                <ModalBody>
+                    <p className=''>Please enter the name of PDF you want to save.</p>
+                    <div class="input-group mb-3">
+                        {
+                            !props.multi &&
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">{sessioninfo[0] ? sessioninfo[0].name : ""}</span>
+                        </div>
 
+                        }
+                        <input type="text" class="form-control" value={pdfReportName} onChange={(e) => setPdfReportName(e.target.value)} placeholder="Report Name" aria-label="Report Name" aria-describedby="basic-addon1" />
+                    </div>
+
+                    <div className='d-flex justify-content-around mt-3'>
+                        {
+                             session != "54322" &&
+                             <button className='lightbtn w-100' onClick={props.multi ? saveScreenshotPDFMulti : saveScreenshotPDF} >Save PDF</button>
+
+                        }
+                        
+                        <button className='darktbtn w-100 ml-1' onClick={saveScreenshot} >Download PDF</button>
+
+                    </div>
+                </ModalBody>
+
+            </Modal>
             <Modal isOpen={openModal} toggle={openToggleModal} className="connect-box" centered={true}>
                 <ModalHeader toggle={openToggleModal}><span className="ml-1 roititle modal-head">Request processing...</span></ModalHeader>
                 <ModalBody>
@@ -1483,6 +1898,62 @@ const ViewChartHeader = (props) => {
             </Modal>
 
 
+            <Modal isOpen={datafileModal} toggle={datafileModalToggle} className="modal-box-wrp" centered={true}>
+                <ModalHeader toggle={datafileModalToggle}><span className="ml-1 roititle modal-head">Data File Format</span></ModalHeader>
+                <ModalBody>
+                <ul className='configure-list'>
+                               
+                                <li>
+                                    <div className='datafileformat-wrp'>
+                                        <div className='datafileformat-child1'>
+                                            <p>Choose Data File Format:</p>
+                                        </div>
+                                        <div className='datafileformat-child2'>
+                                      
+                                        <input type="radio" onClick={() => setFileFormat('csv')} checked={fileFormat == "csv" ? true : false} className='radio-mrl' name="CSV" />
+                                            <span>CSV</span>
+                                            <input onClick={() => setFileFormat('excel')} checked={fileFormat == "excel" ? true : false} type="radio" className='radio-mrl' name="CSV" />
+                                            <span>EXCEL</span>
+                                            {/* <input onClick={() => setFileFormat('ascii')} checked={fileFormat == "ascii" ? true : false} type="radio" className='radio-mrl' name="CSV" />
+                                            <span>ASCII</span> */}
+                                        </div>
+                                        </div>
+                                        {/* <div className='datafileformat-wrp'>
+
+                                        <div className='datafileformat-child1'>
+                                            <p>Choose Signals:</p>
+                                        </div>
+                                        <div className='datafileformat-child2'>
+                                            {
+                                                signalName.map((v,i) => {
+                                                    return(
+                                                        <p>                                                        
+                                                        <input type="checkbox" value={i}  checked className='radio-mrl mr-2' name="CSV" />
+                                                        <span dangerouslySetInnerHTML={{__html: " "+v[1]}}></span>
+                                                        </p>
+                                                    )
+                                                })
+                                            }
+                                         
+                                        </div>
+
+                                    </div> */}
+                                </li>
+                                
+                               
+                              
+                            </ul>
+
+                            <div className='d-flex justify-content-around mt-3'>
+                        <button className='lightbtn w-100' onClick={datafileModalToggle} >Cancel</button>
+                   
+
+                        <button className='darktbtn w-100 ml-1' onClick={exportFile} >Download</button>
+
+                    </div>
+                </ModalBody>
+
+            </Modal>
 
 
 

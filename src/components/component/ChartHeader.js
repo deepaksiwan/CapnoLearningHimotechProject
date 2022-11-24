@@ -28,7 +28,8 @@ const ChartHeader = (props) => {
     const setSessionDate = props.setSessionDate;
     const [alternate, setAlternate] = useState([]);
     const [pdfReportName, setPdfReportName] = useState(null);
-
+    const [reportName, setReportName] = useState(null);
+    
     const [emgAvg, setEmgAvg] = useState(false);
     const [emgRaw, setEmgRaw] = useState(false);
 
@@ -83,9 +84,9 @@ const ChartHeader = (props) => {
 
     const setShowSignalStat = props.setShowSignalStat;
     const showSignalStat = props.showSignalStat;
-    const ExcelFile = ReactExport.ExcelFile;
-    const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-    const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+    // const ExcelFile = ReactExport.ExcelFile;
+    // const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+    // const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
     const userId = localStorage.getItem('user_id');
 
@@ -130,7 +131,7 @@ const ChartHeader = (props) => {
 
     const setNotes = props.setNotes;
     const notes = props.notes;
-    const exportExcel = props.exportExcel;
+    // const exportExcel = props.exportExcel;
     const graphs = props.graphs;
     const showHeader = props.showHeader;
 
@@ -159,6 +160,75 @@ const ChartHeader = (props) => {
         // getAlternate() ;
 
     })
+
+
+    const exportFile = () => {
+        setrequestProcessingModal(true);
+
+        let route = "/get/csvfile/" + sessionid ;
+        if(fileFormat == 'ascii'){
+            route = "/get/textfile/" + sessionid ;
+        }
+        else if (fileFormat == "excel"){
+            route = "/get/excelfile/" + sessionid ;
+
+        }
+        fetch(API_URL + route,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': accessToken,
+            },
+        }
+    ).then(res => res.blob())
+    .then(response => {
+        //Create a Blob from the PDF Stream
+
+        let file = new Blob([response], {
+            type: "application/csv"
+        });
+       
+
+        if(fileFormat == 'ascii'){
+            file = new Blob([response], {
+                type: "application/text-plain"
+            });
+        }
+        else if (fileFormat == "excel"){
+            file = new Blob([response], {
+                type: "application/xlsx"
+            });
+
+        }
+        
+
+
+        
+
+        let tempUrl = URL.createObjectURL(file);
+        const aTag = window.document.createElement("a");
+        aTag.href = tempUrl;
+        aTag.download = 'file.csv';
+
+        if(fileFormat == 'ascii'){
+            aTag.download = 'file.txt' ; 
+        }
+        else if (fileFormat == "excel"){
+            aTag.download = 'file.xlsx' ; 
+
+        }
+
+        window.document.body.appendChild(aTag);
+        aTag.click();
+        URL.revokeObjectURL(tempUrl);
+        aTag.remove();
+ 
+        setrequestProcessingModal(false);
+
+    })
+
+    }
 
 
     const viewManual = () => {
@@ -255,28 +325,28 @@ const ChartHeader = (props) => {
             let status = 1;
 
             let dataimg = canvas.toDataURL('image/png')
-            const doc = new jsPDF();
+            // const doc = new jsPDF();
 
-            for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
-                doc.setPage(pageNumber)
-                doc.setTextColor(0, 0, 0);
-                doc.text('Capnolearning Report', 10, 10,
-                    { styles: { fontSize: 20, fontWeight: 'bold' } })
-                doc.setDrawColor(0, 0, 0);
-                doc.line(10, 15, 600, 15);
-                doc.setFontSize(10)
+            // for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
+            //     doc.setPage(pageNumber)
+            //     doc.setTextColor(0, 0, 0);
+            //     doc.text('Capnolearning Report', 10, 10,
+            //         { styles: { fontSize: 20, fontWeight: 'bold' } })
+            //     doc.setDrawColor(0, 0, 0);
+            //     doc.line(10, 15, 600, 15);
+            //     doc.setFontSize(10)
 
-                doc.text(sessioninfo[0].name, 35, 25)
-                doc.text(sessioninfo[0].client_firstname + " " + sessioninfo[0].client_firstname, 23, 30);
-                doc.text(sessioninfo[0].trainer_firstname + " " + sessioninfo[0].trainer_lastname, 25, 35);
-                // doc.text(trainerName, 25, 35);
-                doc.setFont(undefined, 'bold');
-                doc.text("Session Date:", 10, 25)
-                doc.text("Client:", 10, 30);
-                doc.text("Trainer:", 10, 35);
-                // doc.setFont(undefined, 'bold')
-                doc.addImage(dataimg, 5, 45, 200, 110);
-            }
+            //     doc.text(sessioninfo[0].name, 35, 25)
+            //     doc.text(sessioninfo[0].client_firstname + " " + sessioninfo[0].client_firstname, 23, 30);
+            //     doc.text(sessioninfo[0].trainer_firstname + " " + sessioninfo[0].trainer_lastname, 25, 35);
+            //     // doc.text(trainerName, 25, 35);
+            //     doc.setFont(undefined, 'bold');
+            //     doc.text("Session Date:", 10, 25)
+            //     doc.text("Client:", 10, 30);
+            //     doc.text("Trainer:", 10, 35);
+            //     // doc.setFont(undefined, 'bold')
+            //     doc.addImage(dataimg, 5, 45, 200, 110);
+            // }
             let pdf_name = sessioninfo[0].name + "-" + pdfReportName + ".pdf";
             setTimeout(() => {
 
@@ -284,6 +354,7 @@ const ChartHeader = (props) => {
                     'data': dataimg,
                     'session_id': session_id,
                     'pdf_name': pdf_name,
+                    'reportName' : reportName,
                     'status': status,
                     'type': type
                 };
@@ -336,11 +407,13 @@ const ChartHeader = (props) => {
                 doc.text(sessioninfo[0].name, 35, 25)
                 doc.text(sessioninfo[0].client_firstname + " " + sessioninfo[0].client_firstname, 23, 30);
                 doc.text(sessioninfo[0].trainer_firstname + " " + sessioninfo[0].trainer_lastname, 25, 35);
+                doc.text(reportName.replace(/<\/?[^>]+(>|$)/g, ""), 25, 40);
                 // doc.text(trainerName, 25, 35);
                 doc.setFont(undefined, 'bold');
                 doc.text("Session Date:", 10, 25)
                 doc.text("Client:", 10, 30);
                 doc.text("Trainer:", 10, 35);
+                doc.text("Report:", 10, 40);
                 // doc.setFont(undefined, 'bold')
                 doc.addImage(dataimg, 5, 45, 200, 110);
             }
@@ -508,8 +581,12 @@ const ChartHeader = (props) => {
                     // console.warn("result", resp);
                     setsessions(resp.sessions)
                     getCsv()
-
-                });
+                    resp.sessions.map((v,i) => {
+                        if(v.id == config){
+                            setReportName(v.name);
+                        }
+                    })
+                    });
             }
             else if (response.status == 401) {
                 logout()
@@ -964,12 +1041,17 @@ const ChartHeader = (props) => {
                                     <li><a href="javascript:void" onClick={linkingGraphModalToggle} data-tip={linkGraphs ? "Unlink All Graphs" : "Link All Graphs"}><i className={linkGraphs  ? "fa fa-link" : "fa fa-unlink"  }aria-hidden="true"></i></a></li>
                                 }
                                 <li><a href="javascript:void" onClick={takeNotesToggle} data-tip="Take Report Notes."><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li>
+                                
                                 <li><a href="javascript:void" data-tip="Make PDF Copy." onClick={savePdfModalToggle}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 {
-                                    !group &&
+                                    !group &&  session != "54322" &&
                                     <li><a href="javascript:void" onClick={saveReportConfig} data-tip="Save Alt Config."><i class="fa fa-sliders" aria-hidden="true"></i></a></li>
                                 }
-                                <li><a href="javascript:void" onClick={saveReport} data-tip="Save Report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
+                                {
+                                    session != "54322" &&
+                                    <li><a href="javascript:void" onClick={saveReport} data-tip="Save Report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
+
+                                }
                             </ul>
                         </div>
                         <div className="view-opt" style={{ width: "50%" }}>
@@ -1137,7 +1219,11 @@ const ChartHeader = (props) => {
                     </div>
 
                     <div className='d-flex justify-content-around mt-3'>
-                        <button className='lightbtn w-100' onClick={saveScreenshotPDF} >Save PDF</button>
+                        {
+                             session != "54322" &&
+                             <button className='lightbtn w-100' onClick={saveScreenshotPDF} >Save PDF</button>
+
+                        }
 
                         <button className='darktbtn w-100 ml-1' onClick={saveScreenshot} >Download PDF</button>
 
@@ -1177,14 +1263,14 @@ const ChartHeader = (props) => {
                                         <div className='datafileformat-child2'>
                                       
                                         <input type="radio" onClick={() => setFileFormat('csv')} checked={fileFormat == "csv" ? true : false} className='radio-mrl' name="CSV" />
-                                            <span>CSV.</span>
+                                            <span>CSV</span>
                                             <input onClick={() => setFileFormat('excel')} checked={fileFormat == "excel" ? true : false} type="radio" className='radio-mrl' name="CSV" />
-                                            <span>EXCEL.</span>
-                                            <input onClick={() => setFileFormat('ascii')} checked={fileFormat == "ascii" ? true : false} type="radio" className='radio-mrl' name="CSV" />
-                                            <span>ASCII.</span>
+                                            <span>EXCEL</span>
+                                            {/* <input onClick={() => setFileFormat('ascii')} checked={fileFormat == "ascii" ? true : false} type="radio" className='radio-mrl' name="CSV" />
+                                            <span>ASCII</span> */}
                                         </div>
                                         </div>
-                                        <div className='datafileformat-wrp'>
+                                        {/* <div className='datafileformat-wrp'>
 
                                         <div className='datafileformat-child1'>
                                             <p>Choose Signals:</p>
@@ -1203,7 +1289,7 @@ const ChartHeader = (props) => {
                                          
                                         </div>
 
-                                    </div>
+                                    </div> */}
                                 </li>
                                 
                                
@@ -1214,7 +1300,7 @@ const ChartHeader = (props) => {
                         <button className='lightbtn w-100' onClick={datafileModalToggle} >Cancel</button>
                    
 
-                        <button className='darktbtn w-100 ml-1' >Download</button>
+                        <button className='darktbtn w-100 ml-1' onClick={exportFile} >Download</button>
 
                     </div>
                 </ModalBody>

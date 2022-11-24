@@ -3328,7 +3328,11 @@ p.flyleft2.moreflyleft2{
   left: -11.5%;
 }
 
-
+.table .thead-dark th {
+  color: #fff;
+  background-color: purple;
+  border-color: purple;
+}
 p.flyleft {
   position: absolute;
   transform: rotate(270deg);
