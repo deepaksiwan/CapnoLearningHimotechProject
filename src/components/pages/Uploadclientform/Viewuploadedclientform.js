@@ -11,7 +11,7 @@ import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
-import { API_URL, SERVER_URL } from "../../../config";
+import { API_URL, FORM_URL, SERVER_URL } from "../../../config";
 import backIcon from "../../images/back.png";
 
 
@@ -470,10 +470,10 @@ const Viewuploadedclientform = () => {
                             action: <p><Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="Download" placement="top"><a href={SERVER_URL+'/client_forms/'+v.form} target={"_blank"} className="downloadimg tooltip2" download><img src={download} /> </a></Tooltip> <Tooltip classes={{
+                              }} title="Download" placement="top"><a href={FORM_URL+'/client_forms/'+v.form} target={"_blank"} className="downloadimg tooltip2" download><img src={download} /> </a></Tooltip> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="View" placement="top"><a href={SERVER_URL+'/client_forms/'+v.form} target={"_blank"} className="downloadimg tooltip2"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
+                              }} title="View" placement="top"><a href={FORM_URL+'/client_forms/'+v.form} target={"_blank"} className="downloadimg tooltip2"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
                               }} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id)}    className="downloadimg tooltip2"><img src={Delete} /></a></Tooltip></p>
