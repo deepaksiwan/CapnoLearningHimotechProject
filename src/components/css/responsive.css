@@ -27,6 +27,9 @@
     
 }
 @media(max-width: 1166px){
+    .chart-header-c1{
+        width: 30%! important;
+    }
     .email-box{
         width: 60%;
     }
@@ -79,6 +82,10 @@
     
 }
 @media(max-width: 992px){
+    .chart-header-c1 {
+        width: 55%! important;
+        margin: auto;
+    }
     .email-box{
         width: 80%;
     }
@@ -107,6 +114,7 @@
     }
     .chart-w{
         width: 100%! important;
+        max-width: 100%! important;
         margin-top: 20px;
     }
     .wrp-dashbord {
@@ -317,6 +325,32 @@
     }
 }
 @media(max-width: 640px){
+    /* .top-filter{
+        position: inherit! important;
+    }
+    .chart-w{
+        min-height: 45vh! important;
+    }
+    .top-filter-left{
+        position: inherit! important;
+    }
+    .plot-charts{
+        padding-top: 0px !important;
+    }
+    .js-plotly-plot .plotly .main-svg {
+        top: 0px! important;
+        background-color: transparent! important;
+    
+    } */
+    .chart-header-c1 {
+        width: 99%! important;
+    }
+    .action-opt > p{
+        text-align: center;
+    }
+    .view-opt > p{
+        text-align: center;
+    }
     .step-smallbox{
         margin-top: 47px;
     }
