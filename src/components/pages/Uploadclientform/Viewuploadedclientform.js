@@ -11,7 +11,7 @@ import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
-import { API_URL, SERVER_URL } from "../../../config";
+import { API_URL, FORM_URL, SERVER_URL } from "../../../config";
 import backIcon from "../../images/back.png";
 
 
@@ -30,6 +30,8 @@ const Viewuploadedclientform = () => {
     const [itemId, setItemId] = useState(null);
     const [clients, setinclients] = useState([]);
     const [trainers, settrainers] = useState([]);
+    const [formArray, setFormArray] = useState([]);
+    
     const [currentForm, setCurrentForm] = useState("all");
     
     const [sesstion, setsesstion] = useState([]);
@@ -458,8 +460,9 @@ const Viewuploadedclientform = () => {
             if (response.status == 200) {
                 response.json().then((resp) => {
                     let _temp = [];
+                    let _tempArray = [] ;
                     resp.data.map((v, i) => {
-                        
+                        _tempArray.push(v.form_name);
                         if(v.form_name == currentForm || currentForm == "all"){
                            
                         _temp.push({
@@ -467,10 +470,10 @@ const Viewuploadedclientform = () => {
                             action: <p><Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="Download" placement="top"><a href={SERVER_URL+'/client_forms/'+v.form} target={"_blank"} className="downloadimg tooltip2" download><img src={download} /> </a></Tooltip> <Tooltip classes={{
+                              }} title="Download" placement="top"><a href={FORM_URL+'/client_forms/'+v.form} target={"_blank"} className="downloadimg tooltip2" download><img src={download} /> </a></Tooltip> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="View" placement="top"><a href={SERVER_URL+'/client_forms/'+v.form} target={"_blank"} className="downloadimg tooltip2"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
+                              }} title="View" placement="top"><a href={FORM_URL+'/client_forms/'+v.form} target={"_blank"} className="downloadimg tooltip2"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
                               }} title="Delete" placement="top"><a onClick={() => openItemPopUp(v.id)}    className="downloadimg tooltip2"><img src={Delete} /></a></Tooltip></p>
@@ -481,7 +484,7 @@ const Viewuploadedclientform = () => {
 
                     if(i == (resp.data.length - 1)){
                         setdata(_temp);
-
+                        setFormArray(_tempArray)
                     }
                     })
 
@@ -628,12 +631,15 @@ const Viewuploadedclientform = () => {
                                         <div className="select-client mrt-select">
                                             <select ref={formname} onChange={() => handleFormName()}>
                                             <option className="selected-bold" value="all" selected  >All</option>
-
                                                 {
-                                                    blankform.map((bankforms, i) => {
+                                                    formArray.length > 0 &&  blankform.map((blankforms, i) => {
+                                                        if(formArray.includes(blankforms.id.toString())){
+
                                                         return (
-                                                            <option className="selected-bold" value={bankforms.id} >{bankforms.forms}</option>
+                                                            <option className="selected-bold" value={blankforms.id} >{blankforms.forms}</option>
                                                         );
+                                                    }
+
                                                     })
                                                 }
 

@@ -184,7 +184,7 @@ console.log("Clientid",Clientid)
     }
 
     const Homeworklist = () => {
-        fetch(API_URL + "/homework/client/" + sessionid,
+        fetch(API_URL + "/homework/client/" + Clientid,
             {
                 method: 'GET',
                 headers: {

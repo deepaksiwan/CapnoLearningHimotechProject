@@ -10,7 +10,7 @@ import download from '../../images/download.png'
 import preveiw from '../../images/preveiw.png'
 import Delete from '../../images/delete.png';
 import closeicon from '../../images/closeicon.png';
-import { API_URL, SERVER_URL } from "../../../config";
+import { API_URL, FORM_URL, SERVER_URL } from "../../../config";
 import backIcon from "../../images/back.png";
 import { useTranslation } from "react-i18next";
 import md5 from "md5";
@@ -266,10 +266,10 @@ console.log("Sessionid",Sessionid)
                             action: <p> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="Download" placement="top"><a href={SERVER_URL+'/homework/'+v.file} target={"_blank"} className="downloadimg" download><img src={download} /></a></Tooltip> <Tooltip classes={{
+                              }} title="Download" placement="top"><a href={FORM_URL+'/homework/'+v.file} target={"_blank"} className="downloadimg" download><img src={download} /></a></Tooltip> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
-                              }} title="View" placement="top"><a href={SERVER_URL+'/homework/'+v.file} target={"_blank"}  className="downloadimg"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
+                              }} title="View" placement="top"><a href={FORM_URL+'/homework/'+v.file} target={"_blank"}  className="downloadimg"><img src={preveiw} /></a></Tooltip> <Tooltip classes={{
                                 tooltip: classes.customTooltip,
                                 
                               }} title="View" placement="top"><a onClick={() => openItemPopUp(v.id)} className="downloadimg"><img src={Delete} /></a></Tooltip></p>
