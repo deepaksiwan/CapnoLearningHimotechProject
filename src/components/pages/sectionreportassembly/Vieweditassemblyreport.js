@@ -13,7 +13,7 @@ import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
 import report from '../../images/report.png'
 import right from '../../images/right.png';
-import { API_URL } from "../../../config";
+import { API_URL, FORM_URL } from "../../../config";
 import backIcon from "../../images/back.png";
 
 
@@ -38,7 +38,7 @@ const Vieweditassemblyreport = () => {
     const [trainerName, setTrainerName] = useState([]);
     const [sessionDate, setSessionDate] = useState([]);
     const [completeForm, setCompleteForm] = useState([]);
-    const pdfUrl = "https://capnolearning.com/webroot/client_forms/";
+    const pdfUrl = FORM_URL+"/client_forms/";
     const [dataPdf, setDataPdf] = useState([]);
     const [liveImg, setLiveImg] = useState([]);
     const [assemblydata, setAssemblydata] = useState([]);

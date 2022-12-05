@@ -135,7 +135,7 @@ const ChartExportedHeader = (props) => {
     }
 
     const viewManual = () => {
-        window.open('https://capnolearning.com/manualpdf/Operating%20Manual%20P6.0%20-%20April%2026.pdf','Manual','height=768,width=500');
+        window.open('/manualpdf/OperatingManualP6.0-November25-2022.pdf/manualpdf/OperatingManualP6.0-November25-2022.pdf','Manual','height=768,width=500');
     }
     // const choosefolder = (event) => {
     //     setselectfolder(true)

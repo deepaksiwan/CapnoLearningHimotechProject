@@ -178,7 +178,7 @@ const SubscriptionRenewalGroup = () =>{
            messageToggle();
          
            setTimeout(() => {
-               window.location.replace('https://capnolearning.com/dashboard2')
+               window.location.replace('https://wwwcapnolearning.com/')
            },10000)
 
        }

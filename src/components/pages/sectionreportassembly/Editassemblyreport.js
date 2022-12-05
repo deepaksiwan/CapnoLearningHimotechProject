@@ -13,7 +13,7 @@ import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
 import report from '../../images/report.png'
 import right from '../../images/right.png';
-import { API_URL } from "../../../config";
+import { API_URL, FORM_URL } from "../../../config";
 import backIcon from "../../images/back.png";
 
 
@@ -40,8 +40,8 @@ const Editassemblyreport = () => {
     const [completeForm, setCompleteForm] = useState([]);
     const [completetForm, setCompletetForm] = useState([]);
     
-    const pdfUrl = "https://capnolearning.com/webroot/client_forms/";
-    const tpdfUrl = "https://capnolearning.com/webroot/practioner_forms/";
+    const pdfUrl = FORM_URL+"/client_forms/";
+    const tpdfUrl = FORM_URL+"/practioner_forms/";
     
     const [dataPdf, setDataPdf] = useState([]);
     const [liveImg, setLiveImg] = useState([]);
