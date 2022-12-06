@@ -1566,6 +1566,7 @@ const Chart = (props) => {
         // let userTimeOffset = new Date().getTimezoneOffset() ; 
         // //    alert(userTimeOffset);
         // userTimeOffset = userTimeOffset*60*1000 ; 
+        // alert(0);
         let _diff = new Date(xAxisMax).getTime() - new Date(xAxisMin).getTime();
         if (_diff > _deviation && _diff > 60000) {
             let _newXaxisMin = new Date(xAxisMin).getTime() + _deviation;
@@ -1587,7 +1588,7 @@ const Chart = (props) => {
             }))
         }
         else {
-            // console.log("Max Zoom Reached");
+            alert("Max Zoom Reached");
         }
         setSessionSignal();
 
@@ -2581,12 +2582,12 @@ const Chart = (props) => {
 
     return (
         <div >
-            <ReactTooltip />
         
 
             {
                 xAxis.length > 0 && yAxis.length > 0 &&
                 <>
+            <ReactTooltip />
 
                     <div style={{ width: "100%", maxWidth: "100%", height: (props.row == '1/2' ? (eval(props.row) * 70 + "vh") : (eval(props.row) * 66 + "vh")) }}>
                         <ul className="top-filter-left">
