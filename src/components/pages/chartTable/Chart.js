@@ -17,10 +17,20 @@ import { API_URL } from '../../../config';
 import arrowHeadRight from '../../images/turn_arrow.png'
 import Draggable from 'react-draggable';
 import { CollectionsOutlined } from '@material-ui/icons';
+import graphsettingimg from '../../../components/images/graphsetting.png'
+import signalsetingimg from '../../../components/images/signalseting.png'
+import zoomimg from '../../../components/images/zoomimg.png'
+import mouseseting from '../../../components/images/mouseseting.png'
+import resetgraph from '../../../components/images/resetgraph.png'
+import tableseting from '../../../components/images/tableseting.png'
+import holdsetting from '../../../components/images/holdsetting.png'
+
+
+
 const Chart = (props) => {
     // console.log("props",props)
-    const globalConfig = props.globalConfig ;
-    const setGlobalConfig = props.setGlobalConfig ; 
+    const globalConfig = props.globalConfig;
+    const setGlobalConfig = props.setGlobalConfig;
     const linkGraphs = props.linkGraphs
     const setLinkGraphs = props.setLinkGraphs
     const session = props.session;
@@ -28,14 +38,14 @@ const Chart = (props) => {
     const linkingType = props.linkingType;
     const [xAxis, setXaxis] = useState([]);
     const [xAxisOg, setXaxisOg] = useState([]);
-    
+
     const [yAxis2, setYAxis2] = useState([]);
     const [timeVal, setTimeVal] = useState();
     const [timeVal2, setTimeVal2] = useState();
     const [sdShow, setSdShow] = useState(true);
     const [medianShow, setMedianShow] = useState(true);
     const [meanShow, setMeanShow] = useState(true);
-    const [txRange,setTxRange] = useState(0);
+    const [txRange, setTxRange] = useState(0);
 
     const { showclock } = useParams();
     const sessionDate = props.sessionDate;
@@ -43,7 +53,7 @@ const Chart = (props) => {
     const [textTooltip, setTextTooltip] = useState([]);
     const [statistics, setStatistics] = useState([]);
     const [statisticsOg, setStatisticsOg] = useState([]);
-    
+
     const [zoomEnabled, setZoomEnabled] = useState(true);
     // alert(new Date(parseInt(props.xmin)));
     let Utz = new Date(0).getTimezoneOffset();
@@ -73,8 +83,8 @@ const Chart = (props) => {
 
 
     // useEffect(() => {
-        
-     
+
+
     //   setXaxisMax(localStorage.getItem('xmax'));
     //   setXaxisMin(localStorage.getItem('xmin'));
 
@@ -127,7 +137,7 @@ const Chart = (props) => {
 
     const rawSignals = ["pco2wave", "petco2", "bpmhistory", "pco2b2b", "capin", "capnia"];
 
-    const [xAxisMin, setXaxisMin] =  useState(linkGraphs && globalConfig.xmin != "" && !props.multi ? globalConfig.xmin  : props.xmin == 0 ? props.xmin : new Date(parseInt(props.xmin * 1e3)));
+    const [xAxisMin, setXaxisMin] = useState(linkGraphs && globalConfig.xmin != "" && !props.multi ? globalConfig.xmin : props.xmin == 0 ? props.xmin : new Date(parseInt(props.xmin * 1e3)));
     // const [xAxisMin, setXaxisMin] =  useState(0);
     // console.log(props.xmin);
     if (props.signal == "pco2wave") {
@@ -144,7 +154,7 @@ const Chart = (props) => {
     const unit = useRef(0);
     const [color, setColor] = useState(props.color);
     const [taverage, setTaverage] = useState(30);
-    
+
 
     const group = props.group;
     const clientSerial = props.clientSerial;
@@ -180,8 +190,8 @@ const Chart = (props) => {
     const [thresholdthick, setThresholdthick] = useState(otherConfig.tthick);
     const [thresholdtLine, setThresholdtLine] = useState(otherConfig.tline);
     const [thresholdtcolor, setThresholdtcolor] = useState(otherConfig.tcolor ? otherConfig.tcolor : "#FFFF00");
- 
-   
+
+
     const [point, setPoint] = useState(25);
     const [xrange, setXRange] = useState(otherConfig.xrange);
     const [rowHeight, setRowHeight] = useState("30px")
@@ -197,7 +207,16 @@ const Chart = (props) => {
 
     const [mouseSetingModal, setMouseSetingModal] = useState(false);
     const toggleMouseSetingModal = () => setMouseSetingModal(!mouseSetingModal);
-    
+
+    const [resetgraphModal, setResetgraphModal] = useState(false);
+    const resetgraphtogglegModal = () => setResetgraphModal(!resetgraphModal);
+
+    const [tablesetingModal, setTablesetingModal] = useState(false);
+    const tablesetingtogglegModal = () => setTablesetingModal(!tablesetingModal);
+
+    const [thresholdModal, setThresholdModal] = useState(false);
+    const thresholdtogglegModal = () => setThresholdModal(!thresholdModal);
+
     const [noChart, setNoChart] = useState(false)
     const [images, setImages] = useState([])
     let liveAnnotation = [];
@@ -223,8 +242,23 @@ const Chart = (props) => {
 
     const [annotationtModal, setannotationtModal] = useState(false);
     const toggleannotationtModal = () => setannotationtModal(!annotationtModal);
+
     const [play, setPlay] = useState(false);
     const [dragMode, setDragMode] = useState('pan');
+
+    const [graphsetingModal, setGraphsetingModal] = useState(false);
+    const graphsetingtoggleModal = () => setGraphsetingModal(!graphsetingModal);
+
+    const [singnalsetingModal, setSingnalsetingModal] = useState(false);
+    const singnalsetingtogleModal = () => setSingnalsetingModal(!singnalsetingModal);
+
+    const [zoomimgModal, setZoomimgModal] = useState(false);
+    const zoomimgtoggleModal = () => setZoomimgModal(!zoomimgModal);
+
+
+    const [mousesetingModal, setMousesetingModal] = useState(false);
+    const mousesetingtoggleModal = () => setMousesetingModal(!mousesetingModal);
+
 
     const [modal, setModal] = useState({
         range: otherConfig.xrange,
@@ -297,23 +331,23 @@ const Chart = (props) => {
     colorCodes['BR-6'] = "#FFF000"
     colorCodes['Paused'] = "#FF0000"
     useEffect(() => {
-        if(tableLinked){
+        if (tableLinked) {
             setTxaxisMax(xAxisMax);
-            setTxaxisMin(xAxisMin);    
+            setTxaxisMin(xAxisMin);
         }
     }, [xAxisMax, xAxisMin, tableLinked])
     useEffect(() => {
-        if(!tableLinked){
+        if (!tableLinked) {
             setTxaxisMin(new Date(xAxis[0]))
             setTxaxisMax(new Date(xAxis[xAxis.length - 1]))
 
-           calculate_history_sample_table(taverage)
-            
+            calculate_history_sample_table(taverage)
+
         }
-        if(tableLinked){
-           setTxRange(0)
-           setTaverage(30)
-           calculate_history_sample_table(average)
+        if (tableLinked) {
+            setTxRange(0)
+            setTaverage(30)
+            calculate_history_sample_table(average)
         }
     }, [tableLinked])
     useEffect(() => {
@@ -322,7 +356,7 @@ const Chart = (props) => {
 
     }, [xAxis, yAxis, textAnnotations, signalModalData])
 
-    
+
     useEffect(() => {
         let _temp = {
             color: color.hex ? color.hex : color,
@@ -362,11 +396,11 @@ const Chart = (props) => {
 
     useEffect(() => {
         // console.log(linkGraphs,linkingType,props.session,globalConfig.session,props.group)
-        if(linkGraphs && ((linkingType == "1" && props.session == globalConfig.session) || (linkingType == "2" && props.signal == globalConfig.signalName) || linkingType == "3" || props.group)){
-            if(globalConfig.xmax != ""){
+        if (linkGraphs && ((linkingType == "1" && props.session == globalConfig.session) || (linkingType == "2" && props.signal == globalConfig.signalName) || linkingType == "3" || props.group)) {
+            if (globalConfig.xmax != "") {
                 setXaxisMax(globalConfig.xmax);
             }
-            if(globalConfig.xmin != ""){
+            if (globalConfig.xmin != "") {
                 setXaxisMin(globalConfig.xmin);
             }
             setYaxisMax(globalConfig.ymax);
@@ -376,17 +410,17 @@ const Chart = (props) => {
                 annotation: globalConfig.annotation,
                 showGrid: globalConfig.showGrid,
                 grid: globalConfig.grid,
-                invert:  globalConfig.invert,
+                invert: globalConfig.invert,
                 units: globalConfig.units
             }))
 
-            
+
             let _type = globalConfig.type == "" ? props.type : globalConfig.type
-            
+
             setSignalModalData(prevState => ({
                 ...prevState,
-                disabledType: _type == "line" ? true : false ,
-                signalType: _type == "line" ? 1 : _type == "bar" ? 2 : 3 
+                disabledType: _type == "line" ? true : false,
+                signalType: _type == "line" ? 1 : _type == "bar" ? 2 : 3
             }));
             setValue(globalConfig.thick)
             setType(_type)
@@ -397,55 +431,55 @@ const Chart = (props) => {
             }))
             setSignalLinetype(globalConfig.lineType)
 
-            if(globalConfig.color.hex){
+            if (globalConfig.color.hex) {
                 // console.log("lcol" , globalConfig.color)
                 setColor(globalConfig.color)
             }
-            if(globalConfig.thresholdtcolor.hex){
+            if (globalConfig.thresholdtcolor.hex) {
                 // console.log("lcol" , globalConfig.color)
                 setThresholdtcolor(globalConfig.thresholdtcolor)
             }
-        
+
 
             setShowThresholdLine(globalConfig.thresholdtLine)
-        setThresholdvalue(globalConfig.thresholdvalue)
-        setThresholdthick(globalConfig.thresholdthick)
-        setThresholdtLine(globalConfig.thresholdtLineType);
-            
-            if(globalConfig.units != modal.units){
-               
+            setThresholdvalue(globalConfig.thresholdvalue)
+            setThresholdthick(globalConfig.thresholdthick)
+            setThresholdtLine(globalConfig.thresholdtLineType);
+
+            if (globalConfig.units != modal.units) {
+
                 let _temp = [];
                 yAxisOg.map((v, i) => {
                     if (globalConfig.units == "kPa") {
-                        
+
                         _temp.push(parseFloat(v) * parseFloat(0.133322));
                     }
                     else if (globalConfig.units == "%") {
                         _temp.push(parseFloat(parseFloat(v) / parseFloat(100)));
-        
+
                     }
                     else if (globalConfig.units == "mmHg") {
                         _temp.push(v);
-        
+
                     }
-        
+
                     if (i == (yAxisOg.length - 1)) {
                         // console.log(yAxisOg);
                         let _data = calculate_history_sample([xAxis, _temp], average)
                         setYaxis(_data[1]);
                         setXaxis(_data[0]);
-        
-        
+
+
                     }
-        
+
                 })
             }
 
         }
 
-       
 
-    },[globalConfig])
+
+    }, [globalConfig])
 
     const setSessionSignal = () => {
         setGlobalConfig(prevState => ({
@@ -461,36 +495,36 @@ const Chart = (props) => {
 
 
     const setGlobalColor = (e) => {
-      setColor(e)
+        setColor(e)
         setGlobalConfig(prevState => ({
             ...prevState,
             color: e
         }))
         setSessionSignal();
     }
-        
+
     const setGlobalTColor = (e) => {
         setThresholdtcolor(e)
-          setGlobalConfig(prevState => ({
-              ...prevState,
-              thresholdtcolor: e
-          }))
+        setGlobalConfig(prevState => ({
+            ...prevState,
+            thresholdtcolor: e
+        }))
         setSessionSignal();
 
-      }
-    
+    }
 
-     const setThresholdSlider = (e) => {
+
+    const setThresholdSlider = (e) => {
         setThresholdvalue(e.target.value)
-          setGlobalConfig(prevState => ({
-              ...prevState,
-              thresholdvalue: e.target.value
-          }))
+        setGlobalConfig(prevState => ({
+            ...prevState,
+            thresholdvalue: e.target.value
+        }))
         setSessionSignal();
 
-      }
+    }
 
-   
+
 
     useEffect(() => {
         // super(props);
@@ -552,7 +586,7 @@ const Chart = (props) => {
                         setCsvFile(resp.sessions[0].sessiondata)
                         getData(resp.sessions[0].sessiondata, otherConfig.stat)
                     }
-                    else{
+                    else {
                         setNoChart(true);
                     }
 
@@ -571,11 +605,11 @@ const Chart = (props) => {
     }
 
     const handleTxrange = (e) => {
-      
+
         let { value = "" } = e.target || {}
-         
+
         setTxRange(value)
- 
+
         if (value == "0") {
 
             setTxaxisMin(new Date(xAxis[0]))
@@ -589,7 +623,7 @@ const Chart = (props) => {
     }
 
     const getAlldata = () => {
-        fetch(API_URL + "/session/data/type?session_id=" + session + "&signal="+props.signal+"&type=2",
+        fetch(API_URL + "/session/data/type?session_id=" + session + "&signal=" + props.signal + "&type=2",
             {
                 method: 'GET',
                 headers: {
@@ -679,7 +713,7 @@ const Chart = (props) => {
             let vfirstRecord = 0;
             let endTask = 0;
             // // console.log(data[0]);
-            if(data.length == 0){
+            if (data.length == 0) {
                 setNoChart(true)
 
             }
@@ -713,7 +747,7 @@ const Chart = (props) => {
                             firstRecord = v.x;
 
 
-                        }  
+                        }
 
 
 
@@ -829,7 +863,7 @@ const Chart = (props) => {
                             let _recName = "Rec-" + recId;
                             _recordArray.push([xData, v.rname == "Normal" ? _recName : v.rname]);
 
-                            prevRecord = v.r ;
+                            prevRecord = v.r;
 
                         }
 
@@ -905,7 +939,7 @@ const Chart = (props) => {
                         _npauseTime = parseInt(v.x) - parseInt(lastRecord);
                     }
 
-                    
+
                     // console.log("Reached Data "+props.signal , i,data.length );
                     if (i == (data.length - 1)) {
                         // console.log("Reached Data "+props.signal , data.length)
@@ -959,7 +993,7 @@ const Chart = (props) => {
                             liveAnnotation.map((v, i) => {
 
                                 let xAnnTime = new Date(parseInt(((parseInt(v.x) - firstRecord) + (userTimeOffset)) - _pauseTime));
-                                console.log("I ma here" , xAnnTime, firstRecord) 
+                                console.log("I ma here", xAnnTime, firstRecord)
                                 // // console.log(parseInt(((parseInt(annData.x) - firstRecord) + (userTimeOffset) ) - _pauseTime  ));
                                 _temptask.push(
                                     {
@@ -1313,7 +1347,7 @@ const Chart = (props) => {
                             // console.log("axis y" , _tempY.length)
                             setYaxis(_tempY);
                             setXaxis(_x);
-                            if(_x.length == 0){
+                            if (_x.length == 0) {
                                 setNoChart(true)
                             }
                             // console.log(props.signal,[_x,_tempY])
@@ -1321,10 +1355,10 @@ const Chart = (props) => {
                         }
                         else {
                             let _data = calculate_history_sample([_x, _tempY], average);
-                            console.log(props.signal,_data)
+                            console.log(props.signal, _data)
                             setYaxis(_data[1]);
                             setXaxis(_data[0]);
-                            if(_x.length == 0){
+                            if (_x.length == 0) {
                                 setNoChart(true)
                             }
                         }
@@ -1396,8 +1430,8 @@ const Chart = (props) => {
         if (props.xmax == "full") {
             setXaxisMax(new Date(new Date(xAxis[xAxis.length - 1])));
             setTxaxisMax(new Date(new Date(xAxis[xAxis.length - 1])));
-         
-            
+
+
         }
         else {
 
@@ -1407,8 +1441,8 @@ const Chart = (props) => {
             // let _max = new Date(parseInt(new Date(xAxis[0]).getTime()) + parseInt(props.xmax * 1e3))
             // setXaxisMax(new Date(_max))
             // setTxaxisMax(new Date(_max))
-          
-      
+
+
 
             // console.log(props.signal,)
 
@@ -1436,7 +1470,7 @@ const Chart = (props) => {
         }
         else if (new Date(e['xaxis.range[1]']) > new Date(xAxis[xAxis.length - 1])) {
             let _diff = xAxisMax - xAxisMin;
-            console.log("zoom 2",new Date(e['xaxis.range[1]']));
+            console.log("zoom 2", new Date(e['xaxis.range[1]']));
 
             setXaxisMax(new Date(xAxis[xAxis.length - 1]))
             setXaxisMin(new Date(xAxis[xAxis.length - 1] - _diff));
@@ -1454,7 +1488,7 @@ const Chart = (props) => {
             setXaxisMax(new Date(xAxis[xAxis.length - 1]))
             setXaxisMin(new Date(xAxis[0]))
 
-            
+
             setGlobalConfig(prevState => ({
                 ...prevState,
                 xmin: new Date(xAxis[0]),
@@ -1576,7 +1610,7 @@ const Chart = (props) => {
 
             let _newXaxisMax = new Date(xAxisMax).getTime() - _deviation;
             setXaxisMax(new Date(_newXaxisMax))
-            
+
             setGlobalConfig(prevState => ({
                 ...prevState,
                 xmax: new Date(_newXaxisMax)
@@ -1700,13 +1734,13 @@ const Chart = (props) => {
         if (_newMin < new Date(xAxis[0])) {
             setXaxisMin(new Date(xAxis[0]))
 
-          
+
 
             setGlobalConfig(prevState => ({
                 ...prevState,
                 xmin: new Date(new Date(xAxis[0]))
             }))
-            
+
         }
         else if (_newMin >= new Date(xAxis[xAxis.length - 1])) {
 
@@ -1715,7 +1749,7 @@ const Chart = (props) => {
 
             setXaxisMin(_newMin)
 
-            
+
 
             setGlobalConfig(prevState => ({
                 ...prevState,
@@ -1726,7 +1760,7 @@ const Chart = (props) => {
         }
         else {
             setXaxisMin(_newMin);
-            
+
 
             setGlobalConfig(prevState => ({
                 ...prevState,
@@ -1742,7 +1776,7 @@ const Chart = (props) => {
                 xmax: new Date(new Date(xAxis[xAxis.length - 1]))
             }))
 
-           
+
         }
         else {
             setXaxisMax(_newMax)
@@ -1751,7 +1785,7 @@ const Chart = (props) => {
                 xmax: _newMax
             }))
 
-         
+
         }
 
         setSessionSignal();
@@ -1803,14 +1837,14 @@ const Chart = (props) => {
             // // console.log("Newmin S" ,xAxisMin)
             // // console.log("Newmin Y" ,xAxis)
             setXaxisMin(new Date(xAxis[0]));
- 
+
 
             setGlobalConfig(prevState => ({
                 ...prevState,
                 xmin: new Date(xAxis[0])
             }))
 
-            
+
         }
         else if (_newMin >= new Date(xAxis[xAxis.length - 1])) {
 
@@ -1818,8 +1852,8 @@ const Chart = (props) => {
             _newMin = new Date(xAxis[xAxis.length - 1]).getTime() - _diff;
 
             setXaxisMin(_newMin)
-            
- 
+
+
 
             setGlobalConfig(prevState => ({
                 ...prevState,
@@ -1998,13 +2032,13 @@ const Chart = (props) => {
     }
 
 
-    
+
     const calculate_history_sample_table = (sample) => {
         let first = 0;
         var num = sample / 30;
         var next = num - 1;
         var data = statisticsOg;
-     
+
         if (sample == 30) {
             setStatistics(data)
 
@@ -2014,10 +2048,10 @@ const Chart = (props) => {
             var totalsum = 0;
             var totalsumM = 0;
             var totalsumS = 0;
-        let _tempStats = [];
-           
+            let _tempStats = [];
+
             var c = 1;
-           
+
             for (var i = 0; i < data.length; i++) {
                 if (first == 0) {
                     first = i;
@@ -2039,7 +2073,7 @@ const Chart = (props) => {
                     var avgvalueS = parseFloat(totalsumS / num);
                     // // console.log(data[i][0]);
                     // // console.log(avgvalue);
-                    
+
                     _tempStats.push({
                         x: data[i].x,
                         xdate: data[i].xdate,
@@ -2076,7 +2110,7 @@ const Chart = (props) => {
         let _temp = [];
         yAxisOg.map((v, i) => {
             if (value == "kPa") {
-                
+
                 _temp.push(parseFloat(v) * parseFloat(0.133322));
             }
             else if (value == "%") {
@@ -2113,7 +2147,7 @@ const Chart = (props) => {
             annotation: value
         }))
         setSessionSignal();
- 
+
     }
     const handleXaxisWiindow = e => {
         let { value = "" } = e.target || {}
@@ -2171,7 +2205,7 @@ const Chart = (props) => {
     const handleInvert = e => {
         let { value = "" } = e.target || {}
         if (value === 1) {
-          
+
             setGlobalConfig(prevState => ({
                 ...prevState,
                 ymin: yAxisMax,
@@ -2183,7 +2217,7 @@ const Chart = (props) => {
             setYaxisMin(yAxisMax)
 
         } else {
-         
+
             setGlobalConfig(prevState => ({
                 ...prevState,
                 ymin: yAxisMax,
@@ -2242,7 +2276,7 @@ const Chart = (props) => {
             setGlobalConfig(prevState => ({
                 ...prevState,
                 xmin: new Date(xAxis[0]),
-                xmax: new Date(xAxis[xAxis.length - 1]), 
+                xmax: new Date(xAxis[xAxis.length - 1]),
                 xrange: value
             }))
         }
@@ -2252,7 +2286,7 @@ const Chart = (props) => {
             setXaxisMax(new Date(xAxisMilisecond))
             setGlobalConfig(prevState => ({
                 ...prevState,
-                xmax: new Date(xAxisMilisecond), 
+                xmax: new Date(xAxisMilisecond),
                 xmin: xAxisMin,
                 xrange: value
 
@@ -2294,7 +2328,7 @@ const Chart = (props) => {
 
             setGlobalConfig(prevState => ({
                 ...prevState,
-                disabledType:  false, 
+                disabledType: false,
                 signalType: value,
                 type: 'bar'
             }))
@@ -2310,7 +2344,7 @@ const Chart = (props) => {
 
             setGlobalConfig(prevState => ({
                 ...prevState,
-                disabledType:  false, 
+                disabledType: false,
                 signalType: value,
                 type: 'obar'
             }))
@@ -2325,7 +2359,7 @@ const Chart = (props) => {
 
             setGlobalConfig(prevState => ({
                 ...prevState,
-                disabledType:  true, 
+                disabledType: true,
                 signalType: value,
                 type: 'line'
             }))
@@ -2395,7 +2429,7 @@ const Chart = (props) => {
         setGlobalConfig(prevState => ({
             ...prevState,
             thresholdtLine: value,
-         
+
         }))
         setSessionSignal();
 
@@ -2427,7 +2461,7 @@ const Chart = (props) => {
             showarrow: true,
             bgcolor: "#FFffff60",
             arrowcolor: "#FF0000",
-            
+
             arrowhead: 10,
             ax: 30,
             ay: 0,
@@ -2580,14 +2614,116 @@ const Chart = (props) => {
 
     }
 
+    const graphsetinghandle = (event) => {
+
+        if (event.ctrlKey) {
+            graphsetingtoggleModal()
+        } else {
+            toggleGraphModal()
+        }
+    }
+
+    const signalsetingHandle = (event) => {
+
+        if (event.ctrlKey) {
+            singnalsetingtogleModal()
+        } else {
+            toggleSignalModal()
+        }
+    }
+
+    const zoominHandle = (event) => {
+
+        if (event.ctrlKey) {
+            zoomimgtoggleModal()
+        } else {
+            zoomIn()
+        }
+    }
+    const zoomOutHandle = (event) => {
+
+        if (event.ctrlKey) {
+            zoomimgtoggleModal()
+        } else {
+            zoomOut()
+        }
+    }
+
+    const backHandle = (event) => {
+
+        if (event.ctrlKey) {
+            zoomimgtoggleModal()
+        } else {
+            moveBackward()
+        }
+    }
+
+    const forwardHandle = (event) => {
+
+        if (event.ctrlKey) {
+            zoomimgtoggleModal()
+        } else {
+            
+            moveForward()
+        }
+    }
+
+    const playHandle = (event) => {
+
+        if (event.ctrlKey) {
+            zoomimgtoggleModal()
+        } else {
+            handlePlay()
+        }
+    }
+
+
+    const mousesettingHandle = (event) => {
+
+        if (event.ctrlKey) {
+            mousesetingtoggleModal()
+        } else {
+            toggleMouseSetingModal()
+        }
+    }
+
+    const graphrestHandle = (event) => {
+
+        if (event.ctrlKey) {
+            resetgraphtogglegModal()
+        } else {
+            reset()
+        }
+    }
+
+    const tableSetttingHandle = (event) => {
+
+        if (event.ctrlKey) {
+            tablesetingtogglegModal()
+        } else {
+            toggleconfigureTableModal()
+        }
+    }
+
+
+    const thresholdHandle = (event) => {
+
+        if (event.ctrlKey) {
+            thresholdtogglegModal()
+        } else {
+            toggletrehSoldModal()
+        }
+    }
+
+
     return (
         <div >
-        
+
 
             {
                 xAxis.length > 0 && yAxis.length > 0 &&
                 <>
-            <ReactTooltip />
+                    <ReactTooltip />
 
                     <div style={{ width: "100%", maxWidth: "100%", height: (props.row == '1/2' ? (eval(props.row) * 70 + "vh") : (eval(props.row) * 66 + "vh")) }}>
                         <ul className="top-filter-left">
@@ -2608,25 +2744,25 @@ const Chart = (props) => {
                             </li>
                         </ul>
                         <ul className="top-filter" data-html2canvas-ignore="true">
-                            <li data-tip="Graph Settings"><a onClick={toggleGraphModal}><i class="fa fa-line-chart" aria-hidden="true"></i></a></li>
-                            <li data-tip="Signal Settings"><a onClick={toggleSignalModal}><i class="fa fa-signal" aria-hidden="true"></i></a></li>
-                            <li data-tip="Threshold Settings"><a onClick={toggletrehSoldModal}><i class="fa fa-area-chart" aria-hidden="true"></i></a></li>
-                            <li data-tip="Zoom in"><a onClick={zoomIn}><i class="fa fa-search-plus"></i></a></li>
-                            <li data-tip="Zoom out"><a onClick={zoomOut}><i class="fa fa-search-minus"></i></a></li>
-                            <li data-tip="Move Backward"><a onClick={moveBackward}><i class="fa fa-arrow-left"></i></a></li>
+                            <li data-tip="Graph Settings"><a onClick={graphsetinghandle}><i class="fa fa-line-chart" aria-hidden="true"></i></a></li>
+                            <li data-tip="Signal Settings"><a onClick={signalsetingHandle}><i class="fa fa-signal" aria-hidden="true"></i></a></li>
+                            <li data-tip="Threshold Settings"><a onClick={thresholdHandle}><i class="fa fa-area-chart" aria-hidden="true"></i></a></li>
+                            <li data-tip="Zoom in"><a onClick={zoominHandle}><i class="fa fa-search-plus"></i></a></li>
+                            <li data-tip="Zoom out"><a onClick={zoomOutHandle}><i class="fa fa-search-minus"></i></a></li>
+                            <li data-tip="Move Backward"><a onClick={backHandle}><i class="fa fa-arrow-left"></i></a></li>
 
-                            <li data-tip="Move Forward"><a onClick={moveForward}><i class="fa fa-arrow-right"></i></a></li>
+                            <li data-tip="Move Forward"><a onClick={forwardHandle}><i class="fa fa-arrow-right"></i></a></li>
                             {
                                 play ?
                                     <li data-tip="Pause"><a onClick={handlePause}><i class="fa fa-pause"></i></a></li>
                                     :
-                                    <li data-tip="Play"><a onClick={handlePlay}><i class="fa fa-play"></i></a></li>
+                                    <li data-tip="Play"><a onClick={playHandle}><i class="fa fa-play"></i></a></li>
                             }
-                            <li data-tip="Mouse Settings"  ><a onClick={() => { toggleMouseSetingModal() }}><i class="fa fa-mouse-pointer" aria-hidden="true"></i></a></li>
-                            <li data-tip="Reset Graph"><a onClick={reset}><i class="fa fa-undo"></i></a></li>
+                            <li data-tip="Mouse Settings"  ><a onClick={mousesettingHandle}><i class="fa fa-mouse-pointer" aria-hidden="true"></i></a></li>
+                            <li data-tip="Reset Graph"><a onClick={graphrestHandle}><i class="fa fa-undo"></i></a></li>
                             {
                                 props.signal != "pco2wave" && props.signal != "pco2b2b" && props.signal != "capin" && props.signal != "b2b2hr" && props.signal != "b2brsa" &&
-                                <li data-tip="Table Settings"><a onClick={() => { toggleconfigureTableModal(); }}><i class="fa fa-table" aria-hidden="true"></i></a></li>
+                                <li data-tip="Table Settings"><a onClick={tableSetttingHandle}><i class="fa fa-table" aria-hidden="true"></i></a></li>
 
                             }
                             {/*   <li><a  onClick={toggleannotationtModal}><i class="fa fa-comment"></i></a></li> */}
@@ -2646,7 +2782,7 @@ const Chart = (props) => {
                         {
                             // console.log(props.signal,xAxisMax)
                         }
-                       
+
 
                         <Plot className="plot-charts"
                             onClick={handleClick}
@@ -2861,7 +2997,7 @@ const Chart = (props) => {
                                                         min={yAxisMin}
                                                         max={yAxisMax}
                                                         value={thresholdvalue}
-                                                        onChange={(e) =>   setThresholdSlider(e)
+                                                        onChange={(e) => setThresholdSlider(e)
                                                         }
                                                         tooltip={null}
 
@@ -2887,11 +3023,11 @@ const Chart = (props) => {
                                                         tooltip={null}
                                                         onChange={(e) => {
                                                             setThresholdthick(e.target.value);
-                                                        setGlobalConfig(prevState => ({
+                                                            setGlobalConfig(prevState => ({
                                                                 ...prevState,
                                                                 thresholdthick: e.target.value
                                                             }))
-                                                        setSessionSignal();
+                                                            setSessionSignal();
 
                                                         }
                                                         }
@@ -3009,7 +3145,7 @@ const Chart = (props) => {
 
                                                                     setAverage(value);
                                                                     let _data = calculate_history_sample([xAxisOg, yAxisOg], value)
-                                                                    if(tableLinked){
+                                                                    if (tableLinked) {
                                                                         calculate_history_sample_table(value)
                                                                     }
 
@@ -3094,7 +3230,7 @@ const Chart = (props) => {
                                                         </Col>
                                                     </Row>
                                                 </li>
-                                            
+
                                             </>
                                         }
                                         <li>
@@ -3107,13 +3243,13 @@ const Chart = (props) => {
                                                         min={1}
                                                         max={10}
                                                         value={value}
-                                                        onChange={(changeEvent)  => {
+                                                        onChange={(changeEvent) => {
                                                             setValue(changeEvent.target.value)
                                                             setGlobalConfig(prevState => ({
                                                                 ...prevState,
                                                                 thick: changeEvent.target.value
                                                             }))
-                                                             setSessionSignal();
+                                                            setSessionSignal();
 
                                                         }
                                                         }
@@ -3121,36 +3257,36 @@ const Chart = (props) => {
                                                 </Col>
                                             </Row>
                                         </li>
-                                       
+
                                         {
-                                            (props.signal == "pco2b2b" || props.signal == "capin" || props.signal == "b2brsa") && 
-                                                <li>
-                                                    <Row justify="space-between" style={{ height: rowHeight }}>
-                                                        <Col lg={5} xl={5}>
-                                                            <span>Moving Average</span>
-                                                        </Col>
-                                                        <Col lg={7} xl={7}>
-                                                            <select
-                                                                style={{ width: "100%" }}
+                                            (props.signal == "pco2b2b" || props.signal == "capin" || props.signal == "b2brsa") &&
+                                            <li>
+                                                <Row justify="space-between" style={{ height: rowHeight }}>
+                                                    <Col lg={5} xl={5}>
+                                                        <span>Moving Average</span>
+                                                    </Col>
+                                                    <Col lg={7} xl={7}>
+                                                        <select
+                                                            style={{ width: "100%" }}
 
-                                                                onChange={(e) => movingAverage(e)}
-                                                                value={signalModalData.movingAverage}
-
-
-                                                            >
-                                                                <option value="0">No Averages</option>
-                                                                <option value="2">2 Averages</option>
-                                                                <option value="3">3 Averages</option>
-                                                                <option value="4">4 Averages</option>
-                                                                <option value="5">5 Averages</option>
-
-                                                            </select>
+                                                            onChange={(e) => movingAverage(e)}
+                                                            value={signalModalData.movingAverage}
 
 
-                                                        </Col>
-                                                    </Row>
-                                                </li>
-}
+                                                        >
+                                                            <option value="0">No Averages</option>
+                                                            <option value="2">2 Averages</option>
+                                                            <option value="3">3 Averages</option>
+                                                            <option value="4">4 Averages</option>
+                                                            <option value="5">5 Averages</option>
+
+                                                        </select>
+
+
+                                                    </Col>
+                                                </Row>
+                                            </li>
+                                        }
                                         {/* {signalModalData.disabledType && <li>
                                 <div className="range-content-wrp">
                                     <div className="range-c-child1">
@@ -3215,7 +3351,7 @@ const Chart = (props) => {
                                                                 range: value
                                                             }))
                                                             setXRange(value)
-                                                            
+
                                                         }}
                                                         value={xrange}
 
@@ -3295,7 +3431,7 @@ const Chart = (props) => {
                                                         value={modal.grid}
                                                     >
 
-                                                        <option  value={1}>Both</option>
+                                                        <option value={1}>Both</option>
                                                         <option value={3}>Horizontal Only</option>
                                                         <option value={4}>Vertical Only</option>
                                                         <option selected value={2}>None</option>
@@ -3338,19 +3474,19 @@ const Chart = (props) => {
                                                         <div className='min-axis'>
                                                             <input placeholder='0' value={yAxisMin} onChange={(e) => {
                                                                 let { value = "" } = e.target;
-                                                                if(value == ""){
+                                                                if (value == "") {
                                                                     setYaxisMin('')
                                                                 }
-                                                                else{
+                                                                else {
                                                                     setYaxisMin(value)
-                                                                
+
                                                                     setGlobalConfig(prevState => ({
                                                                         ...prevState,
                                                                         ymin: value
                                                                     }))
                                                                 }
                                                                 setSessionSignal();
-                                                            
+
 
                                                             }} />
 
@@ -3360,17 +3496,17 @@ const Chart = (props) => {
                                                         <div className='max-axis'>
                                                             <input placeholder='0' value={yAxisMax} onChange={(e) => {
                                                                 let { value = "" } = e.target
-                                                                
-                                                                if(value == ""){
+
+                                                                if (value == "") {
                                                                     setYaxisMax('')
                                                                 }
-                                                                else{
-                                                                setYaxisMax(parseFloat(value));
-                                                                setGlobalConfig(prevState => ({
-                                                                    ...prevState,
-                                                                    ymax: parseFloat(value)
-                                                                }))
-                                                            }
+                                                                else {
+                                                                    setYaxisMax(parseFloat(value));
+                                                                    setGlobalConfig(prevState => ({
+                                                                        ...prevState,
+                                                                        ymax: parseFloat(value)
+                                                                    }))
+                                                                }
                                                                 setSessionSignal();
 
                                                             }} />
@@ -3473,7 +3609,7 @@ const Chart = (props) => {
 
                                     {
                                         statistics.length > 0 && statistics.map((v, i) => {
-                                            if (new Date(v.xdate) >= new Date(txaxisMin) && new Date(v.xdate) <= new Date(txaxisMax) ) {
+                                            if (new Date(v.xdate) >= new Date(txaxisMin) && new Date(v.xdate) <= new Date(txaxisMax)) {
                                                 return (
                                                     <tr>
                                                         <td>{v.x}</td>
@@ -3516,10 +3652,10 @@ const Chart = (props) => {
                 </div>
             }
 
-{
+            {
                 (xAxis.length == 0 || yAxis.length == 0) && noChart &&
 
-                 <p className='text-center mt-5'><i className='fa fa-ban'></i> No <span dangerouslySetInnerHTML={{__html : signalName[props.signal]}}></span> signal was recorded</p>
+                <p className='text-center mt-5'><i className='fa fa-ban'></i> No <span dangerouslySetInnerHTML={{ __html: signalName[props.signal] }}></span> signal was recorded</p>
             }
 
             <Draggable handle=".handle">
@@ -3572,34 +3708,34 @@ const Chart = (props) => {
                                 </li>
 
                                 <li>
-                                <div className='configure-wrp'>
+                                    <div className='configure-wrp'>
                                         <div className='configure-child1 specialwidth'>
                                             <p>X Range:</p>
                                         </div>
                                         <div className='configure-child2'>
-                                <select
-                                disabled={tableLinked ? true : false}
-                                                        style={{ width: "100%" }}
+                                            <select
+                                                disabled={tableLinked ? true : false}
+                                                style={{ width: "100%" }}
 
-                                                        onChange={(e) => handleTxrange(e)}
-                                                        value={txRange}
+                                                onChange={(e) => handleTxrange(e)}
+                                                value={txRange}
 
-                                                    >
-                                                        <option value="0">Full Length</option>
-                                                        <option value="0.5">30 Seconds</option>
-                                                        <option value="1">1 Minute</option>
-                                                        <option value="2">2 Minutes</option>
-                                                        <option value="5">5 Minutes</option>
-                                                        <option value="10">10 Minutes</option>
-                                                        <option value="15">15 Minutes</option>
-                                                        <option value="20">20 Minutes</option>
-                                                        <option value="30">30 Minutes</option>
-                                                        <option value="60">60 Minutes</option>
-                                                       
-                                                    </select>
+                                            >
+                                                <option value="0">Full Length</option>
+                                                <option value="0.5">30 Seconds</option>
+                                                <option value="1">1 Minute</option>
+                                                <option value="2">2 Minutes</option>
+                                                <option value="5">5 Minutes</option>
+                                                <option value="10">10 Minutes</option>
+                                                <option value="15">15 Minutes</option>
+                                                <option value="20">20 Minutes</option>
+                                                <option value="30">30 Minutes</option>
+                                                <option value="60">60 Minutes</option>
 
-                                                    </div>
-                                                    </div>
+                                            </select>
+
+                                        </div>
+                                    </div>
 
                                 </li>
 
@@ -3622,21 +3758,21 @@ const Chart = (props) => {
                                             <p className='data-point'>Data Point:</p>
                                         </div>
                                         <div className='configure-child2'>
-                                            <select     disabled={tableLinked ? true : false} className='select-option-time'
-                                           
-                                                                onChange={(e) => {
+                                            <select disabled={tableLinked ? true : false} className='select-option-time'
 
-                                                                    let { value = "" } = e.target || {}
-                                                                     calculate_history_sample_table(value)
-                                                                    setTaverage(value)
-                                                                }}
-                                                               
-                                                                value={taverage}
-                                                            >
-                                                                <option value="30">30 Seconds</option>
-                                                                <option value="60">60 Seconds</option>
-                                                                <option value="90">90 Seconds</option>
-                                                                <option value="120">120 Seconds</option>
+                                                onChange={(e) => {
+
+                                                    let { value = "" } = e.target || {}
+                                                    calculate_history_sample_table(value)
+                                                    setTaverage(value)
+                                                }}
+
+                                                value={taverage}
+                                            >
+                                                <option value="30">30 Seconds</option>
+                                                <option value="60">60 Seconds</option>
+                                                <option value="90">90 Seconds</option>
+                                                <option value="120">120 Seconds</option>
                                             </select>
                                         </div>
                                     </div>
@@ -3694,7 +3830,65 @@ const Chart = (props) => {
                 </Modal>
 
             </Draggable>
+
+            <Modal isOpen={graphsetingModal} toggle={graphsetingtoggleModal} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={graphsetingtoggleModal}><span className="ml-1 roititle modal-head">Graph Signal</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={graphsettingimg} /></div>
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={singnalsetingModal} toggle={singnalsetingtogleModal} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={singnalsetingtogleModal}><span className="ml-1 roititle modal-head">Signal Setting</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={signalsetingimg} /></div>
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={zoomimgModal} toggle={zoomimgtoggleModal} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={zoomimgtoggleModal}><span className="ml-1 roititle modal-head"></span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={zoomimg} /></div>
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={mousesetingModal} toggle={mousesetingtoggleModal} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={mousesetingtoggleModal}><span className="ml-1 roititle modal-head">Mouse Settings</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={mouseseting} /></div>
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={resetgraphModal} toggle={resetgraphtogglegModal} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={resetgraphtogglegModal}><span className="ml-1 roititle modal-head">Reset Graph</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={resetgraph} /></div>
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={tablesetingModal} toggle={tablesetingtogglegModal} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={tablesetingtogglegModal}><span className="ml-1 roititle modal-head">Table Setting</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={tableseting} /></div>
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={thresholdModal} toggle={thresholdtogglegModal} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={thresholdtogglegModal}><span className="ml-1 roititle modal-head">Threshold Setting</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={holdsetting} /></div>
+                </ModalBody>
+
+            </Modal>
+            
         </div>
+        
 
     )
 }

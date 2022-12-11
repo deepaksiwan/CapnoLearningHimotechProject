@@ -3449,3 +3449,15 @@ p.flyleft.moreflyleft{
   border-radius: 4px! important;
 }
 /* multiple report css closed here */
+
+
+/* popup css open here */
+
+.imgexportdata > img{
+  width: 100%;
+}
+.modal-box-wrpaction{
+  max-width: 45%! important;
+}
+
+/* popup css closed here */

@@ -7,6 +7,8 @@ import ReactTooltip from 'react-tooltip';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import ReactExport from "react-export-excel";
 import { csv } from 'd3';
+import exportdata from '../../components/images/exportdata.png';
+import viewaction from '../../components/images/viewaction.png'
 
 
 const ChartHeader = (props) => {
@@ -51,8 +53,15 @@ const ChartHeader = (props) => {
     const [savePdfModal, setSavePdfModal] = useState(false);
     const savePdfModalToggle = () => setSavePdfModal(!savePdfModal);
 
+
     const [nofoundliveimgModal, setNofoundliveimg] = useState(false);
     const nofoundliveimgToggleModal = () => setNofoundliveimg(!nofoundliveimgModal);
+
+    const [pressdatafileModal, setPressdatafileModal] = useState(false);
+    const pressdatafileModalToggle = () => setPressdatafileModal(!pressdatafileModal);
+
+    const [viewactionModal, setViewactionModal] = useState(false);
+    const viewactionModalToggle = () => setViewactionModal(!viewactionModal);
 
 
     const [confirmLeaveModal, setConfirmLeaveModal] = useState(false);
@@ -1016,6 +1025,128 @@ const ChartHeader = (props) => {
     // // console.log("excel data",v)
 
     // })
+
+    const pressdatafileformat = (event)=> {
+       
+        if (event.ctrlKey) {
+            pressdatafileModalToggle()
+        } else {
+            datafileModalToggle()
+        }
+      }
+
+      const takereportNote = (event)=> {
+        
+        if (event.ctrlKey) {
+            pressdatafileModalToggle()
+        } else {
+            takeNotesToggle()
+        }
+      }
+
+      const makepdfcopy = (event)=> {
+        
+        if (event.ctrlKey) {
+            pressdatafileModalToggle()
+        } else {
+            savePdfModalToggle()
+        }
+      }
+
+    const savealtconfig = (event)=> {
+       
+        if (event.ctrlKey) {
+            pressdatafileModalToggle()
+        } else {
+            saveReportConfig()
+        }
+      }
+
+      const savereportaction = (event)=> {
+       
+        if (event.ctrlKey) {
+            pressdatafileModalToggle()
+        } else {
+            saveReport()
+        }
+      }
+
+      const viewlivesessionNote = (event)=> {
+       
+        if (event.ctrlKey) {
+            viewactionModalToggle()
+        } else {
+            notesModalToggle()
+        }
+      }
+
+      const viewlivesessionImg = (event)=> {
+       
+        if (event.ctrlKey) {
+            viewactionModalToggle()
+        } else {
+            ViewlivesessionImage()
+        }
+      }
+
+      const zoomviewaction = (event)=> {
+       
+        if (event.ctrlKey) {
+            viewactionModalToggle()
+        } else {
+            zoomModalToggle()
+        }
+      }
+
+      const previewpdfsession = (event)=> {
+       
+        if (event.ctrlKey) {
+            viewactionModalToggle()
+        } else {
+            getPreviousSessionPDF()
+        }
+      }
+
+      const togglereports = (event)=> {
+       
+        if (event.ctrlKey) {
+            viewactionModalToggle()
+        } else {
+            setShowSignalStat(!showSignalStat)
+        }
+      }
+
+      const switchfileformat = (event)=> {
+       
+        if (event.ctrlKey) {
+            viewactionModalToggle()
+        } else {
+            moveClock()
+        }
+      }
+
+      const usermanul = (event)=> {
+       
+        if (event.ctrlKey) {
+            viewactionModalToggle()
+        } else {
+            viewManual()
+        }
+      }
+
+
+      const unlinkHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            pressdatafileModalToggle()
+        } else {
+            linkingGraphModalToggle()
+        }
+      }
+
+      
+
+
     return (
         <div className="bg-c-header">
             <ReactTooltip />
@@ -1031,25 +1162,25 @@ const ChartHeader = (props) => {
 
                                     <li>
                                         <ReactTooltip />
-                                        <a href="javascript:void" onClick={ ()=>{datafileModalToggle();}} data-tip="Export Data."   ><i class="fa fa-upload" aria-hidden="true"></i></a>
+                                        <a href="javascript:void" onClick={pressdatafileformat} data-tip="Export Data."   ><i class="fa fa-upload" aria-hidden="true"></i></a>
                                         
                                     </li>
 
                                 }
                                 {
                                     group &&
-                                    <li><a href="javascript:void" onClick={linkingGraphModalToggle} data-tip={linkGraphs ? "Unlink All Graphs" : "Link All Graphs"}><i className={linkGraphs  ? "fa fa-link" : "fa fa-unlink"  }aria-hidden="true"></i></a></li>
+                                    <li><a href="javascript:void" onClick={unlinkHandle} data-tip={linkGraphs ? "Unlink All Graphs" : "Link All Graphs"}><i className={linkGraphs  ? "fa fa-link" : "fa fa-unlink"  }aria-hidden="true"></i></a></li>
                                 }
-                                <li><a href="javascript:void" onClick={takeNotesToggle} data-tip="Take Report Notes."><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={takereportNote} data-tip="Take Report Notes."><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li>
                                 
-                                <li><a href="javascript:void" data-tip="Make PDF Copy." onClick={savePdfModalToggle}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" data-tip="Make PDF Copy." onClick={makepdfcopy}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 {
                                     !group &&  session != "54322" &&
-                                    <li><a href="javascript:void" onClick={saveReportConfig} data-tip="Save Alt Config."><i class="fa fa-sliders" aria-hidden="true"></i></a></li>
+                                    <li><a href="javascript:void" onClick={savealtconfig} data-tip="Save Alt Config."><i class="fa fa-sliders" aria-hidden="true"></i></a></li>
                                 }
                                 {
                                     session != "54322" &&
-                                    <li><a href="javascript:void" onClick={saveReport} data-tip="Save Report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
+                                    <li><a href="javascript:void" onClick={savereportaction} data-tip="Save Report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
 
                                 }
                             </ul>
@@ -1057,24 +1188,24 @@ const ChartHeader = (props) => {
                         <div className="view-opt" style={{ width: "50%" }}>
                             <p>Viewing Options</p>
                             <ul className='action-list'>
-                                <li><a href="javascript:void" onClick={notesModalToggle} data-tip="View Live Session Notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
+                                <li><a href="javascript:void" onClick={viewlivesessionNote} data-tip="View Live Session Notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
                                 </li>
-                                <li><a href="javascript:void" onClick={ViewlivesessionImage} data-tip="View Live Session Images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={viewlivesessionImg} data-tip="View Live Session Images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
 
-                                <li><a href="javascript:void" onClick={zoomModalToggle} data-tip="View Zoom Session Recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
-                                <li><a href="javascript:void" onClick={getPreviousSessionPDF} data-tip="View PDF of previous session"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={zoomviewaction} data-tip="View Zoom Session Recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={previewpdfsession} data-tip="View PDF of previous session"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li>
                                 {
                                     !group &&
-                                    <li><a href="javascript:void" onClick={() => setShowSignalStat(!showSignalStat)} data-tip="Toggle all signal statistics"><i class="fa fa-table"></i></a></li>
+                                    <li><a href="javascript:void" onClick={togglereports} data-tip="Toggle all signal statistics"><i class="fa fa-table"></i></a></li>
                                 }
                                 <li data-tip="Switch time format">
 
-                                    <a href="javascript:void">  <i class="fa fa-clock-o" aria-hidden="true" onClick={moveClock} data-tip='Switch time format'></i>
+                                    <a href="javascript:void">  <i class="fa fa-clock-o" aria-hidden="true" onClick={switchfileformat} data-tip='Switch time format'></i>
                                     </a>
 
 
                                 </li>
-                                <li><a href="javascript:void" onClick={viewManual} data-tip="User Manual"><i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={usermanul} data-tip="User Manual"><i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
 
                             </ul>
                         </div>
@@ -1326,14 +1457,34 @@ const ChartHeader = (props) => {
                         {/* <button className='lightbtn w-100' onClick={confirmLeaveModalToggle} >Cancel</button> */}
                         <button className='lightbtn w-100 ml-1' onClick={performAction} >Discard & Exit</button>
 
-                        <button className='darktbtn w-100 ml-1' onClick={() => { saveReport() ; confirmLeaveModalToggle(); }} >Save & Exit</button>
+                        <button className='darktbtn w-100 ml-1' onClick={() => { saveReport(); confirmLeaveModalToggle(); }} >Save & Exit</button>
 
                     </div>
                 </ModalBody>
 
             </Modal>
 
+            {/* press ctrl modal */}
+
+            <Modal isOpen={pressdatafileModal} toggle={pressdatafileModalToggle} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={pressdatafileModalToggle}><span className="ml-1 roititle modal-head">Actions Options</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={exportdata} /></div> 
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={viewactionModal} toggle={viewactionModalToggle} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={viewactionModalToggle}><span className="ml-1 roititle modal-head">Viewing Options</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={viewaction} /></div> 
+                </ModalBody>
+
+            </Modal>
+
         </div>
+
+
     )
 }
 

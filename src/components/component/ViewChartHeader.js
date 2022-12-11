@@ -15,6 +15,18 @@ import {
 import ReactExport from "react-export-excel";
 // import { group } from 'd3';
 
+import multiexportdata from '../../components/images/multiexportdata.png'
+import takeshort from '../../components/images/takeshort.png'
+import configgraph from '../../components/images/configgraph.png'
+import sessionnote from '../../components/images/sessionnote.png'
+import viewliveimg from '../../components/images/viewliveimg.png'
+import zoomimg from '../../components/images/zoom.png'
+import exportdata from '../../components/images/exportdata.png';
+import linking from '../../components/images/linking.png';
+import viewaction from '../../components/images/viewaction.png';
+
+
+
 
 const ViewChartHeader = (props) => {
     const accessToken = localStorage.getItem('accessToken');
@@ -94,6 +106,35 @@ const ViewChartHeader = (props) => {
 
     const [takeNotesModal, setTakeNotesModal] = useState(false);
     const takeNotesToggle = () => setTakeNotesModal(!takeNotesModal);
+
+    const [exportdataModal, setExportdataModal] = useState(false);
+    const exportdataToggle = () => setExportdataModal(!exportdataModal);
+
+    const [takereportNoteModel, setTakereportNoteModel] = useState(false);
+    const takereportNoteToggleModel = () => setTakereportNoteModel(!takereportNoteModel);
+
+    const [configGraphModel, setConfigGraphModel] = useState(false);
+    const configGraphToggleModel = () => setConfigGraphModel(!configGraphModel);
+
+    const [sessionNotesModel, setSessionNotesModel] = useState(false);
+    const sessionNotesToggleModel = () => setSessionNotesModel(!sessionNotesModel);
+
+    const [viewliveimgModel, setViewliveimgModel] = useState(false);
+    const viewliveToggleModel = () => setViewliveimgModel(!viewliveimgModel);
+
+    const [zoomlistModel, setZoomlistModel] = useState(false);
+    const zoomToggleModel = () => setZoomlistModel(!zoomlistModel);
+
+    const [exportdataGroupModel, setExportdataGroupModel] = useState(false);
+    const exportdataGroupToggleModel = () => setExportdataGroupModel(!exportdataGroupModel);
+
+
+    const [unlinkgroupModel, setUnlinkgroupModelModel] = useState(false);
+    const unlinkgroupToggleModel = () => setExportdataGroupModel(!unlinkgroupModel);
+
+    const [viewpdfpreviewModel, setViewpdfpreviewModel] = useState(false);
+    const viewpdfpreviewToggleModel = () => setExportdataGroupModel(!viewpdfpreviewModel);
+
 
     const setShowActualTime = props.setShowActualTime;
     const showActualTime = props.showActualTime;
@@ -244,8 +285,6 @@ const ViewChartHeader = (props) => {
 
         }
         
-
-
         
 
         let tempUrl = URL.createObjectURL(file);
@@ -1370,6 +1409,168 @@ const ViewChartHeader = (props) => {
     // // console.log("excel data",v)
 
     // })
+
+    const exportdataHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            exportdataToggle()
+        } else {
+            exportModalToggle()
+        }
+      }
+
+      const takereportHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            takereportNoteToggleModel()
+        } else {
+            takeNotesToggle()
+        }
+      }
+
+      const makepdfHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            takereportNoteToggleModel()
+        } else {
+            savePdfModalToggle()
+        }
+      }
+
+      const saveReportHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            takereportNoteToggleModel()
+        } else {
+            saveReport()
+        }
+      }
+
+      const configgraphicHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            configGraphToggleModel()
+           
+        } else {
+            settingToggleModal()
+        }
+      }
+
+      const livesessionNotesHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            sessionNotesToggleModel()
+           
+        } else {
+            livesessionMultidataModalToggle()
+        }
+      }
+
+      const livesessionimgHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            viewliveToggleModel()
+           
+        } else {
+            viewlivesessionMultidataModalToggle()
+        }
+      }
+
+      const zoomrecordingHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            
+            zoomToggleModel()
+           
+        } else {
+            zoomMultidataModalToggle()
+        }
+      }
+
+      const viewallsignalHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            zoomToggleModel()
+           
+        } else {
+            setShowSignalStat(!showSignalStat)
+        }
+      }
+
+
+      const viewhelpHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            zoomToggleModel()
+           
+        } else {
+            viewManual()
+        }
+      }
+
+      const exportdataGroupHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            exportdataGroupToggleModel()
+           
+        } else {
+            datafileModalToggle()
+        }
+      }
+
+      const unlinkgroupHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            unlinkgroupToggleModel()
+           
+        } else {
+            linkingGraphModalToggle()
+        }
+      }
+
+
+      const grouplivesessionnoteHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            sessionNotesToggleModel()
+           
+        } else {
+            notesModalToggle()
+        }
+      }
+
+
+      const viewpdfpreviewHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            viewpdfpreviewToggleModel()
+           
+        } else {
+            getPreviousSessionPDF()
+        }
+      }
+
+    //   const groupviewLivesessionimgHandle = (event)=> {
+       
+    //     if (event.ctrlKey) {
+    //         viewpdfpreviewToggleModel()
+           
+    //     } else {
+    //         ViewlivesessionImage()
+    //     }
+    //   }
+
+      const zoomviewgroupHandle = (event)=> {
+       
+        if (event.ctrlKey) {
+            viewpdfpreviewToggleModel()
+           
+        } else {
+            zoomModalToggle()
+        }
+      }
+
+
     return (
         <div className="bg-c-header">
             <ReactTooltip />
@@ -1409,26 +1610,26 @@ const ViewChartHeader = (props) => {
 
                                         } */}
                                         
-                                        <a href="javascript:void" onClick={datafileModalToggle} data-tip="Export data."   ><i class="fa fa-upload whiteicon" aria-hidden="true"></i></a>
+                                        <a href="javascript:void" onClick={exportdataGroupHandle} data-tip="Export data."   ><i class="fa fa-upload whiteicon" aria-hidden="true"></i></a>
                                     </li>
                                 }
                                 {
                                     props.multi && !group &&
 
-                                    <li><a href="javascript:void" onClick={exportModalToggle} data-tip="Export data."   ><i class="fa fa-upload whiteicon" aria-hidden="true"></i></a></li>
+                                    <li><a href="javascript:void" onClick={exportdataHandle} data-tip="Export data."   ><i class="fa fa-upload whiteicon" aria-hidden="true"></i></a></li>
                                 }
-                                <li><a href="javascript:void" onClick={takeNotesToggle} data-tip="Take report notes."><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li>
-                                <li><a href="javascript:void" data-tip="Make PDF copy." onClick={savePdfModalToggle}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={takereportHandle} data-tip="Take report notes."><i class="fa fa-sticky-note" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" data-tip="Make PDF copy." onClick={makepdfHandle}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="javascript:void" onClick={saveReportConfig} data-tip="Save as alternate configuration."><i class="fa fa-sliders" aria-hidden="true"></i></a></li> */}
-                                <li><a href="javascript:void" onClick={saveReport} data-tip="Save as report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={saveReportHandle} data-tip="Save as report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
                               
                                 {
                                     group &&
-                                    <li><a href="javascript:void" onClick={linkingGraphModalToggle} data-tip={linkGraphs ? "Unlink All Graphs" : "Link All Graphs"}><i className={linkGraphs  ? "fa fa-link" : "fa fa-unlink"  } aria-hidden="true"></i></a></li>
+                                    <li><a href="javascript:void" onClick={unlinkgroupHandle} data-tip={linkGraphs ? "Unlink All Graphs" : "Link All Graphs"}><i className={linkGraphs  ? "fa fa-link" : "fa fa-unlink"  } aria-hidden="true"></i></a></li>
                                 }
                                   {
                                     props.multi &&
-                                <li><a href="javascript:void" onClick={!props.multi ? "" : settingToggleModal} data-tip="Configure Graph Linking"><i className={linkGraphs  ? "fa fa-link" : "fa fa-unlink"  } aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={!props.multi ? "" : configgraphicHandle} data-tip="Configure Graph Linking"><i className={linkGraphs  ? "fa fa-link" : "fa fa-unlink"  } aria-hidden="true"></i></a></li>
                                   }
                             </ul>
                         </div>
@@ -1436,25 +1637,25 @@ const ViewChartHeader = (props) => {
                             <p>Viewing Options</p>
                             <ul className='action-list'>
 
-                                <li><a href="javascript:void" onClick={!props.multi ? notesModalToggle : livesessionMultidataModalToggle} data-tip="View live session notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
+                                <li><a href="javascript:void" onClick={!props.multi ? grouplivesessionnoteHandle : livesessionNotesHandle} data-tip="View live session notes"><i class="fa fa-file-text" aria-hidden="true"></i></a>
                                 </li>
 
 
                                 {
                                     !props.multi &&
-                                    <li><a href="javascript:void" onClick={getPreviousSessionPDF} data-tip="View PDF of previous session"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li>
+                                    <li><a href="javascript:void" onClick={viewpdfpreviewHandle} data-tip="View PDF of previous session"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li>
                                 }
-                                <li><a href="javascript:void" onClick={!props.multi  ? ViewlivesessionImage : viewlivesessionMultidataModalToggle} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={!props.multi  ? ViewlivesessionImage : livesessionimgHandle} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
 
-                                <li><a href="javascript:void" onClick={!props.multi  ? zoomModalToggle : zoomMultidataModalToggle} data-tip="View zoom recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={!props.multi  ? zoomviewgroupHandle : zoomrecordingHandle} data-tip="View zoom recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
 
 
                                 {
                                     !group &&
-                                    <li><a href="javascript:void" onClick={() => setShowSignalStat(!showSignalStat)} data-tip="View all signal statistics"><i class="fa fa-table"></i></a></li>
+                                    <li><a href="javascript:void" onClick={viewallsignalHandle} data-tip="View all signal statistics"><i class="fa fa-table"></i></a></li>
                                 }
 
-                                <li><a href="javascript:void" onClick={viewManual} data-tip="View help document"><i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={viewhelpHandle} data-tip="View help document"><i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
 
                             </ul>
                         </div>
@@ -1957,8 +2158,85 @@ const ViewChartHeader = (props) => {
 
 
 
+            <Modal isOpen={exportdataModal} toggle={exportdataToggle} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={exportdataToggle}><span className="ml-1 roititle modal-head">Export Data</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={multiexportdata} /></div> 
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={takereportNoteModel} toggle={takereportNoteToggleModel} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={takereportNoteToggleModel}><span className="ml-1 roititle modal-head">Actions Options</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={takeshort} /></div> 
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={configGraphModel} toggle={configGraphToggleModel} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={configGraphToggleModel}><span className="ml-1 roititle modal-head">Configure Graph Linking</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={configgraph} /></div> 
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={sessionNotesModel} toggle={sessionNotesToggleModel} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={sessionNotesToggleModel}><span className="ml-1 roititle modal-head">view Live Session Notes</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={sessionnote} /></div> 
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={viewliveimgModel} toggle={viewliveToggleModel} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={viewliveToggleModel}><span className="ml-1 roititle modal-head">view Live Session Images</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={viewliveimg} /></div> 
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={zoomlistModel} toggle={zoomToggleModel} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={zoomToggleModel}><span className="ml-1 roititle modal-head">Actions Options</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={zoomimg} /></div> 
+                </ModalBody>
+
+            </Modal>
 
 
+            <Modal isOpen={exportdataGroupModel} toggle={exportdataGroupToggleModel} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={exportdataGroupToggleModel}><span className="ml-1 roititle modal-head">Actions Options</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={exportdata} /></div> 
+                </ModalBody>
+
+            </Modal>
+
+
+            <Modal isOpen={unlinkgroupModel} toggle={unlinkgroupToggleModel} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={unlinkgroupToggleModel}><span className="ml-1 roititle modal-head">Unlink All Graphs</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={linking} /></div> 
+                </ModalBody>
+
+            </Modal>
+
+            <Modal isOpen={viewpdfpreviewModel} toggle={viewpdfpreviewToggleModel} className="modal-box-wrpaction" centered={true}>
+                <ModalHeader toggle={viewpdfpreviewToggleModel}><span className="ml-1 roititle modal-head">Viewing Options</span></ModalHeader>
+                <ModalBody>
+                    <div className='imgexportdata'><img src={viewaction} /></div> 
+                </ModalBody>
+
+            </Modal>
+
+
+            
+
+            
+            
         </div>
     )
 }

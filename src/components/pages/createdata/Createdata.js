@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from 'react-router-dom';
 import i18n from "i18next";
 import { useTranslation, initReactI18next } from "react-i18next";
@@ -7,6 +7,10 @@ import Header from '../../component/Header';
 import Filter from '../../component/Filter';
 import Sidebar from '../../component/Sidebar';
 import Item from "antd/lib/list/Item";
+import { event } from "jquery";
+
+
+
 
 const Createdata = (props) => {
     const { t } = useTranslation();
@@ -46,6 +50,9 @@ const Createdata = (props) => {
             setUserType(localStorage.getItem('userType'));
         }, 1000);
 
+        
+
+
     }, [])
 
     // const choosefolder = (event) => {
@@ -69,6 +76,12 @@ const Createdata = (props) => {
     //     setselectedfiles(temp);
     // };
 
+
+    
+
+    
+   
+
     return (
         <div>
             <Header />
@@ -78,6 +91,7 @@ const Createdata = (props) => {
                 </div>
                 <div className="right-section">
                     <Filter />
+                    
                     <div className="create-section">
                         <ul className="create-list">
                         {/* <i class="fa fa-file-image" aria-hidden="true"></i> */}
