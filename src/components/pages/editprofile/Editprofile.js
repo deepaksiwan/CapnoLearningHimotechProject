@@ -317,7 +317,7 @@ const Editprofile = () => {
                             <div className="edit-input-wrp">
                                 <div className="edit-input">
                                     <p>Email:</p>
-                                    <input placeholder="Email" defaultValue={owner.email} ref={email} />
+                                    <input placeholder="Email"  value={owner.email} onChange={(e) => owner.email = e.target.value  } ref={email} />
                                 </div>
                                 <div className="edit-input">
                                     <p>*Password:</p>
