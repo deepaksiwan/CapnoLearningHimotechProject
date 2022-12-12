@@ -1412,7 +1412,7 @@ const ViewChartHeader = (props) => {
 
     const exportdataHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             exportdataToggle()
         } else {
             exportModalToggle()
@@ -1421,7 +1421,7 @@ const ViewChartHeader = (props) => {
 
       const takereportHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             takereportNoteToggleModel()
         } else {
             takeNotesToggle()
@@ -1430,7 +1430,7 @@ const ViewChartHeader = (props) => {
 
       const makepdfHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             takereportNoteToggleModel()
         } else {
             savePdfModalToggle()
@@ -1439,7 +1439,7 @@ const ViewChartHeader = (props) => {
 
       const saveReportHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             takereportNoteToggleModel()
         } else {
             saveReport()
@@ -1448,7 +1448,7 @@ const ViewChartHeader = (props) => {
 
       const configgraphicHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             configGraphToggleModel()
            
         } else {
@@ -1458,7 +1458,7 @@ const ViewChartHeader = (props) => {
 
       const livesessionNotesHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             sessionNotesToggleModel()
            
         } else {
@@ -1468,7 +1468,7 @@ const ViewChartHeader = (props) => {
 
       const livesessionimgHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             viewliveToggleModel()
            
         } else {
@@ -1478,7 +1478,7 @@ const ViewChartHeader = (props) => {
 
       const zoomrecordingHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             
             zoomToggleModel()
            
@@ -1489,7 +1489,7 @@ const ViewChartHeader = (props) => {
 
       const viewallsignalHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             zoomToggleModel()
            
         } else {
@@ -1500,7 +1500,7 @@ const ViewChartHeader = (props) => {
 
       const viewhelpHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             zoomToggleModel()
            
         } else {
@@ -1510,7 +1510,7 @@ const ViewChartHeader = (props) => {
 
       const exportdataGroupHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             exportdataGroupToggleModel()
            
         } else {
@@ -1520,7 +1520,7 @@ const ViewChartHeader = (props) => {
 
       const unlinkgroupHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             unlinkgroupToggleModel()
            
         } else {
@@ -1531,7 +1531,7 @@ const ViewChartHeader = (props) => {
 
       const grouplivesessionnoteHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             sessionNotesToggleModel()
            
         } else {
@@ -1542,7 +1542,7 @@ const ViewChartHeader = (props) => {
 
       const viewpdfpreviewHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey ) {
             viewpdfpreviewToggleModel()
            
         } else {
@@ -1562,7 +1562,7 @@ const ViewChartHeader = (props) => {
 
       const zoomviewgroupHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             viewpdfpreviewToggleModel()
            
         } else {

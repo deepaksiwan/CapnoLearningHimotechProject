@@ -2616,7 +2616,7 @@ const Chart = (props) => {
 
     const graphsetinghandle = (event) => {
 
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             graphsetingtoggleModal()
         } else {
             toggleGraphModal()
@@ -2625,7 +2625,7 @@ const Chart = (props) => {
 
     const signalsetingHandle = (event) => {
 
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             singnalsetingtogleModal()
         } else {
             toggleSignalModal()
@@ -2634,7 +2634,7 @@ const Chart = (props) => {
 
     const zoominHandle = (event) => {
 
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             zoomimgtoggleModal()
         } else {
             zoomIn()
@@ -2642,7 +2642,7 @@ const Chart = (props) => {
     }
     const zoomOutHandle = (event) => {
 
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             zoomimgtoggleModal()
         } else {
             zoomOut()
@@ -2651,7 +2651,7 @@ const Chart = (props) => {
 
     const backHandle = (event) => {
 
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             zoomimgtoggleModal()
         } else {
             moveBackward()
@@ -2660,7 +2660,7 @@ const Chart = (props) => {
 
     const forwardHandle = (event) => {
 
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             zoomimgtoggleModal()
         } else {
             
@@ -2670,7 +2670,7 @@ const Chart = (props) => {
 
     const playHandle = (event) => {
 
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             zoomimgtoggleModal()
         } else {
             handlePlay()
@@ -2680,7 +2680,7 @@ const Chart = (props) => {
 
     const mousesettingHandle = (event) => {
 
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             mousesetingtoggleModal()
         } else {
             toggleMouseSetingModal()
@@ -2689,7 +2689,7 @@ const Chart = (props) => {
 
     const graphrestHandle = (event) => {
 
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             resetgraphtogglegModal()
         } else {
             reset()
@@ -2698,7 +2698,7 @@ const Chart = (props) => {
 
     const tableSetttingHandle = (event) => {
 
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             tablesetingtogglegModal()
         } else {
             toggleconfigureTableModal()
@@ -2708,7 +2708,7 @@ const Chart = (props) => {
 
     const thresholdHandle = (event) => {
 
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             thresholdtogglegModal()
         } else {
             toggletrehSoldModal()
