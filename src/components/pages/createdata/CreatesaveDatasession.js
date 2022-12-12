@@ -58,7 +58,7 @@ const CreatesaveDatasession = () => {
     }
 
     const getCsv = () => {
-        fetch(API_URL + "/session/data?session_id=" + session + "&signal_name=emg3_wave",
+        fetch(API_URL + "/session/data?session_id=" + session + "&signal_name=emg1_wave",
             {
                 method: 'GET',
                 headers: {
