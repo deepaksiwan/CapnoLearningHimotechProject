@@ -1028,7 +1028,7 @@ const ChartHeader = (props) => {
 
     const pressdatafileformat = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             pressdatafileModalToggle()
         } else {
             datafileModalToggle()
@@ -1037,7 +1037,7 @@ const ChartHeader = (props) => {
 
       const takereportNote = (event)=> {
         
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             pressdatafileModalToggle()
         } else {
             takeNotesToggle()
@@ -1046,7 +1046,7 @@ const ChartHeader = (props) => {
 
       const makepdfcopy = (event)=> {
         
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             pressdatafileModalToggle()
         } else {
             savePdfModalToggle()
@@ -1055,7 +1055,7 @@ const ChartHeader = (props) => {
 
     const savealtconfig = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             pressdatafileModalToggle()
         } else {
             saveReportConfig()
@@ -1064,7 +1064,7 @@ const ChartHeader = (props) => {
 
       const savereportaction = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             pressdatafileModalToggle()
         } else {
             saveReport()
@@ -1073,7 +1073,7 @@ const ChartHeader = (props) => {
 
       const viewlivesessionNote = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             viewactionModalToggle()
         } else {
             notesModalToggle()
@@ -1082,7 +1082,7 @@ const ChartHeader = (props) => {
 
       const viewlivesessionImg = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             viewactionModalToggle()
         } else {
             ViewlivesessionImage()
@@ -1091,7 +1091,7 @@ const ChartHeader = (props) => {
 
       const zoomviewaction = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             viewactionModalToggle()
         } else {
             zoomModalToggle()
@@ -1100,7 +1100,7 @@ const ChartHeader = (props) => {
 
       const previewpdfsession = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             viewactionModalToggle()
         } else {
             getPreviousSessionPDF()
@@ -1109,7 +1109,7 @@ const ChartHeader = (props) => {
 
       const togglereports = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             viewactionModalToggle()
         } else {
             setShowSignalStat(!showSignalStat)
@@ -1118,7 +1118,7 @@ const ChartHeader = (props) => {
 
       const switchfileformat = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             viewactionModalToggle()
         } else {
             moveClock()
@@ -1127,7 +1127,7 @@ const ChartHeader = (props) => {
 
       const usermanul = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             viewactionModalToggle()
         } else {
             viewManual()
@@ -1137,7 +1137,7 @@ const ChartHeader = (props) => {
 
       const unlinkHandle = (event)=> {
        
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             pressdatafileModalToggle()
         } else {
             linkingGraphModalToggle()
