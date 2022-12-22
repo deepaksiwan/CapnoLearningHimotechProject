@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect, useRef } from 'react';
-import { Link, useParams, Router } from 'react-router-dom';
+import { Link, Router } from 'react-router-dom';
 import { Row, Col, Container, Button, ModalHeader, ModalFooter, Modal, ModalBody } from "reactstrap";
 import Sidebar from '../../component/Sidebar';
 import Header from '../../component/Header';
@@ -51,7 +51,6 @@ const Clientinformation = () => {
 
     
 
-    const { id } = useParams();
 
     useEffect(() => {
         getClient();

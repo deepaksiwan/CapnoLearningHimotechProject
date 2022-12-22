@@ -2,9 +2,33 @@
   
       
 }
-@media(max-width: 1440px){
+@media(max-width: 1460px){
+    .wrp-chart-header{
+        flex-wrap: wrap;
+    }
+    .chart-header-c2{
+        width: 70%;
+    }
     .launch-list > li {
         margin-left: 25px;
+    }
+    .wrp-select-row{
+        justify-content: flex-end;
+    }
+    .select-row {
+        margin-right: 0px;
+        margin-left: 10px;
+    }
+    .chart-header-c3{
+        width: 76%;
+        margin-top: 6px;
+    }
+    .chart-header-c4{
+        width: 104px;
+        margin-top: 6px;
+    }
+    .dashboard-back{
+        text-align: center;
     }
     h3{
         font-size: 48px;
@@ -26,18 +50,21 @@
     
     
 }
-@media(max-width: 1166px){
+@media(max-width: 1330px){
     .chart-header-c1{
         width: 30%! important;
     }
+    .chart-header-c2 {
+        width: 68%;
+    }
+}
+@media(max-width: 1166px){
+    
     .email-box{
         width: 60%;
     }
     .modal-box-wrp {
         max-width: 45%;
-    }
-    .wrp-chart-header{
-        flex-wrap: wrap;
     }
     .select-row {
         margin-left: 10px;
@@ -83,11 +110,22 @@
 }
 @media(max-width: 992px){
     .chart-header-c1 {
-        width: 55%! important;
+        width: 40%! important;
         margin: auto;
     }
     .email-box{
         width: 80%;
+    }
+    .chart-header-c2 {
+        width: 100%;
+        margin: auto;
+    }
+    .chart-header-c4 {
+        margin: auto;
+        margin-top: 6px;
+    }
+    .chart-header-c3 {
+        width: 100%;
     }
     .modal-box-wrp {
         max-width: 65%;
