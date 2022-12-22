@@ -3,6 +3,9 @@
       
 }
 @media(max-width: 1399px){
+    .multi-chart-header-c1{
+        width: 25%! important;
+    }
     .wrp-chart-header{
         flex-wrap: wrap;
     }
@@ -59,7 +62,9 @@
     }
 }
 @media(max-width: 1166px){
-    
+    .multi-chart-header-c1 {
+        width: 32%! important;
+    }
     .email-box{
         width: 60%;
     }
@@ -109,9 +114,19 @@
     
 }
 @media(max-width: 992px){
+    .multi-chart-header-c1 {
+        width: 40%! important;
+        margin: auto;
+    }
+    .multi-chart-header-c4{
+        margin-top: 5px;
+    }
     .chart-header-c1 {
         width: 40%! important;
         margin: auto;
+    }
+    .multi-dashboard-back{
+        margin-top: 0px! important;
     }
     .email-box{
         width: 80%;
@@ -255,6 +270,13 @@
     
 }
 @media(max-width: 767px){
+    .multi-chart-header-c1 {
+        width: 54%! important;
+        margin: auto;
+    }
+    .multi-dashboard-back {
+        margin-top: 10px! important;
+    }
     .header-child1>h3{
         font-size: 16px;
     }
@@ -437,6 +459,19 @@
     
 }
 @media(max-width: 580px){
+    .multi-chart-header-c1 {
+        width: 99%! important;
+        margin: auto;
+    }
+    .action-opt{
+        width: 45%! important;
+    }
+    .view-opt{
+        width: 45%! important;
+    }
+    .view-opt {
+        margin-left: 20px;
+    }
     .downloadimg {
         margin-right: 3px;
     }

@@ -59,8 +59,8 @@ const ViewChartHeader = (props) => {
     const openToggleModal = () => setOpenModal(!openModal);
 
 
-    const setLinkingType = props.setLinkingType ; 
-    const [linkT,setLinkt] = useState('') ; 
+    const setLinkingType = props.setLinkingType;
+    const [linkT, setLinkt] = useState('');
 
     const [settingModal, setSetting] = useState(false);
     const settingToggleModal = () => setSetting(!settingModal);
@@ -163,151 +163,151 @@ const ViewChartHeader = (props) => {
 
 
     const [open, setOpen] = useState('');
- 
 
-    const [linkingGraphModal,setLinkingGraphModal] = useState(false)
+
+    const [linkingGraphModal, setLinkingGraphModal] = useState(false)
     const linkGraphs = props.linkGraphs
     const setLinkGraphs = props.setLinkGraphs
-    const linkingGraphModalToggle = () => setLinkingGraphModal(!linkingGraphModal) ; 
+    const linkingGraphModalToggle = () => setLinkingGraphModal(!linkingGraphModal);
     const [fileFormat, setFileFormat] = useState("csv");
     const [multiDileFormat, setMultiDileFormat] = useState("");
     const [multiSessionid, setMultiSessionid] = useState("");
-    
+
     const [datafileModal, setDatafileModal] = useState(false);
     const datafileModalToggle = () => setDatafileModal(!datafileModal);
 
-    
-    
+
+
     const exportFileMulti = () => {
         setrequestProcessingModal(true);
 
-        let route = "/get/csvfile/" + multiSessionid ;
-        if(multiDileFormat == 'ascii'){
-            route = "/get/textfile/" + multiSessionid ;
+        let route = "/get/csvfile/" + multiSessionid;
+        if (multiDileFormat == 'ascii') {
+            route = "/get/textfile/" + multiSessionid;
         }
-        else if (multiDileFormat == "excel"){
-            route = "/get/excelfile/" + multiSessionid ;
+        else if (multiDileFormat == "excel") {
+            route = "/get/excelfile/" + multiSessionid;
 
         }
         fetch(API_URL + route,
-        {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-access-token': accessToken,
-            },
-        }
-    ).then(res => res.blob())
-    .then(response => {
-        //Create a Blob from the PDF Stream
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then(res => res.blob())
+            .then(response => {
+                //Create a Blob from the PDF Stream
 
-        let file = new Blob([response], {
-            type: "application/csv"
-        });
-       
-
-        if(multiDileFormat == 'ascii'){
-            file = new Blob([response], {
-                type: "application/text-plain"
-            });
-        }
-        else if (multiDileFormat == "excel"){
-            file = new Blob([response], {
-                type: "application/xlsx"
-            });
-
-        }
-        
+                let file = new Blob([response], {
+                    type: "application/csv"
+                });
 
 
-        
+                if (multiDileFormat == 'ascii') {
+                    file = new Blob([response], {
+                        type: "application/text-plain"
+                    });
+                }
+                else if (multiDileFormat == "excel") {
+                    file = new Blob([response], {
+                        type: "application/xlsx"
+                    });
 
-        let tempUrl = URL.createObjectURL(file);
-        const aTag = window.document.createElement("a");
-        aTag.href = tempUrl;
-        aTag.download = 'file.csv';
+                }
 
-        if(multiDileFormat == 'ascii'){
-            aTag.download = 'file.txt' ; 
-        }
-        else if (multiDileFormat == "excel"){
-            aTag.download = 'file.xlsx' ; 
 
-        }
 
-        window.document.body.appendChild(aTag);
-        aTag.click();
-        URL.revokeObjectURL(tempUrl);
-        aTag.remove();
- 
-        setrequestProcessingModal(false);
 
-    })
+
+                let tempUrl = URL.createObjectURL(file);
+                const aTag = window.document.createElement("a");
+                aTag.href = tempUrl;
+                aTag.download = 'file.csv';
+
+                if (multiDileFormat == 'ascii') {
+                    aTag.download = 'file.txt';
+                }
+                else if (multiDileFormat == "excel") {
+                    aTag.download = 'file.xlsx';
+
+                }
+
+                window.document.body.appendChild(aTag);
+                aTag.click();
+                URL.revokeObjectURL(tempUrl);
+                aTag.remove();
+
+                setrequestProcessingModal(false);
+
+            })
 
     }
     const exportFile = () => {
         setrequestProcessingModal(true);
 
-        let route = "/get/csvfile/" + sessionid ;
-        if(fileFormat == 'ascii'){
-            route = "/get/textfile/" + sessionid ;
+        let route = "/get/csvfile/" + sessionid;
+        if (fileFormat == 'ascii') {
+            route = "/get/textfile/" + sessionid;
         }
-        else if (fileFormat == "excel"){
-            route = "/get/excelfile/" + sessionid ;
+        else if (fileFormat == "excel") {
+            route = "/get/excelfile/" + sessionid;
 
         }
         fetch(API_URL + route,
-        {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-access-token': accessToken,
-            },
-        }
-    ).then(res => res.blob())
-    .then(response => {
-        //Create a Blob from the PDF Stream
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': accessToken,
+                },
+            }
+        ).then(res => res.blob())
+            .then(response => {
+                //Create a Blob from the PDF Stream
 
-        let file = new Blob([response], {
-            type: "application/csv"
-        });
-       
+                let file = new Blob([response], {
+                    type: "application/csv"
+                });
 
-        if(fileFormat == 'ascii'){
-            file = new Blob([response], {
-                type: "application/text-plain"
-            });
-        }
-        else if (fileFormat == "excel"){
-            file = new Blob([response], {
-                type: "application/xlsx"
-            });
 
-        }
-        
-        
+                if (fileFormat == 'ascii') {
+                    file = new Blob([response], {
+                        type: "application/text-plain"
+                    });
+                }
+                else if (fileFormat == "excel") {
+                    file = new Blob([response], {
+                        type: "application/xlsx"
+                    });
 
-        let tempUrl = URL.createObjectURL(file);
-        const aTag = window.document.createElement("a");
-        aTag.href = tempUrl;
-        aTag.download = 'file.csv';
+                }
 
-        if(fileFormat == 'ascii'){
-            aTag.download = 'file.txt' ; 
-        }
-        else if (fileFormat == "excel"){
-            aTag.download = 'file.xlsx' ; 
 
-        }
 
-        window.document.body.appendChild(aTag);
-        aTag.click();
-        URL.revokeObjectURL(tempUrl);
-        aTag.remove();
- 
-        setrequestProcessingModal(false);
+                let tempUrl = URL.createObjectURL(file);
+                const aTag = window.document.createElement("a");
+                aTag.href = tempUrl;
+                aTag.download = 'file.csv';
 
-    })
+                if (fileFormat == 'ascii') {
+                    aTag.download = 'file.txt';
+                }
+                else if (fileFormat == "excel") {
+                    aTag.download = 'file.xlsx';
+
+                }
+
+                window.document.body.appendChild(aTag);
+                aTag.click();
+                URL.revokeObjectURL(tempUrl);
+                aTag.remove();
+
+                setrequestProcessingModal(false);
+
+            })
 
     }
 
@@ -320,7 +320,7 @@ const ViewChartHeader = (props) => {
         }
     };
 
-    
+
     const linkAllGrpahs = () => {
         setLinkGraphs(!linkGraphs)
         linkingGraphModalToggle()
@@ -336,7 +336,7 @@ const ViewChartHeader = (props) => {
         getLiveNotes();
         // getAlternate() ;
         getReportDetails();
-        
+
 
 
         // getZoomRecording() ; 
@@ -523,8 +523,8 @@ const ViewChartHeader = (props) => {
 
         setOpenModal(true)
 
-        
-       
+
+
 
         let dataType = 3;
         fetch(API_URL + "/get/live/sessionimage/download/" + id + "/" + dataType,
@@ -682,17 +682,17 @@ const ViewChartHeader = (props) => {
             //     // doc.setFont(undefined, 'bold')
             //     doc.addImage(dataimg, 5, 45, 200, 110);
             // }
-            let pdf_name ; 
-           
-                 pdf_name = pdfReportName + ".pdf";
-           
-           
+            let pdf_name;
+
+            pdf_name = pdfReportName + ".pdf";
+
+
             setTimeout(() => {
 
                 let formData = {
                     'data': dataimg,
                     'pdf_name': pdf_name,
-                    'reportId' : reportId,
+                    'reportId': reportId,
                     'status': status,
                     'cid': clientId
                 };
@@ -722,7 +722,7 @@ const ViewChartHeader = (props) => {
 
     }
 
-    
+
     const saveScreenshotPDF = () => {
         // // console.log(sessioninfo);
         setrequestProcessingModal(true);
@@ -755,11 +755,11 @@ const ViewChartHeader = (props) => {
             //     // doc.setFont(undefined, 'bold')
             //     doc.addImage(dataimg, 5, 45, 200, 110);
             // }
-            let pdf_name ; 
-            if(props.multi){
-                 pdf_name = pdfReportName + ".pdf";
+            let pdf_name;
+            if (props.multi) {
+                pdf_name = pdfReportName + ".pdf";
             }
-            else{
+            else {
                 pdf_name = sessioninfo[0].name + "-" + pdfReportName + ".pdf";
             }
             setTimeout(() => {
@@ -768,7 +768,7 @@ const ViewChartHeader = (props) => {
                     'data': dataimg,
                     'session_id': session_id,
                     'pdf_name': pdf_name,
-                    'reportName' : reportName,
+                    'reportName': reportName,
                     'status': status,
                     'type': type
                 };
@@ -817,41 +817,41 @@ const ViewChartHeader = (props) => {
                 doc.setDrawColor(0, 0, 0);
                 doc.line(10, 15, 600, 15);
                 doc.setFontSize(10)
-              
-                if(!props.multi){
+
+                if (!props.multi) {
                     doc.text(sessioninfo[0].name, 35, 25)
 
                 }
-              
+
                 doc.text(sessioninfo[0].client_firstname + " " + sessioninfo[0].client_firstname, 23, 30);
                 doc.text(sessioninfo[0].trainer_firstname + " " + sessioninfo[0].trainer_lastname, 25, 35);
-                if(!props.multi){
+                if (!props.multi) {
                     doc.text(reportName.replace(/<\/?[^>]+(>|$)/g, ""), 25, 40);
 
                 }
                 // doc.text(trainerName, 25, 35);
                 doc.setFont(undefined, 'bold');
-                if(!props.multi){
+                if (!props.multi) {
                     doc.text("Session Date:", 10, 25)
 
 
                 }
                 doc.text("Client:", 10, 30);
                 doc.text("Trainer:", 10, 35);
-                if(!props.multi){
+                if (!props.multi) {
 
-                doc.text("Report:", 10, 40);
+                    doc.text("Report:", 10, 40);
                 }
                 // doc.setFont(undefined, 'bold')
                 doc.addImage(dataimg, 5, 45, 200, 110);
             }
 
             setTimeout(() => {
-                if(props.multi){
+                if (props.multi) {
                     doc.save(pdfReportName + ".pdf");
 
                 }
-                else{
+                else {
                     doc.save(sessioninfo[0].name + "-" + pdfReportName + ".pdf");
 
                 }
@@ -1052,9 +1052,9 @@ const ViewChartHeader = (props) => {
                 response.json().then((resp) => {
                     // console.warn("result", resp);
                     setsessions(resp.sessions)
-                    console.log("det",_details);
-                    resp.sessions.map((v,i) => {
-                        if(v.id == _details.pid){
+                    console.log("det", _details);
+                    resp.sessions.map((v, i) => {
+                        if (v.id == _details.pid) {
                             setReportName(v.name);
                         }
                     })
@@ -1385,15 +1385,15 @@ const ViewChartHeader = (props) => {
     }
 
     const handleLinkinChange = (e) => {
-            setLinkingType(e.target.value)
-            setLinkt(e.target.value)
-            if(e.target.value == ""){
-                setLinkGraphs(false);
-            }
-            else{
-                setLinkGraphs(true);
+        setLinkingType(e.target.value)
+        setLinkt(e.target.value)
+        if (e.target.value == "") {
+            setLinkGraphs(false);
+        }
+        else {
+            setLinkGraphs(true);
 
-            }
+        }
     }
 
 
@@ -1410,172 +1410,172 @@ const ViewChartHeader = (props) => {
 
     // })
 
-    const exportdataHandle = (event)=> {
-       
+    const exportdataHandle = (event) => {
+
         if (event.ctrlKey || event.metaKey) {
             exportdataToggle()
         } else {
             exportModalToggle()
         }
-      }
+    }
 
-      const takereportHandle = (event)=> {
-       
+    const takereportHandle = (event) => {
+
         if (event.ctrlKey || event.metaKey) {
             takereportNoteToggleModel()
         } else {
             takeNotesToggle()
         }
-      }
+    }
 
-      const makepdfHandle = (event)=> {
-       
+    const makepdfHandle = (event) => {
+
         if (event.ctrlKey || event.metaKey) {
             takereportNoteToggleModel()
         } else {
             savePdfModalToggle()
         }
-      }
+    }
 
-      const saveReportHandle = (event)=> {
-       
+    const saveReportHandle = (event) => {
+
         if (event.ctrlKey || event.metaKey) {
             takereportNoteToggleModel()
         } else {
             saveReport()
         }
-      }
+    }
 
-      const configgraphicHandle = (event)=> {
-       
+    const configgraphicHandle = (event) => {
+
         if (event.ctrlKey || event.metaKey) {
             configGraphToggleModel()
-           
+
         } else {
             settingToggleModal()
         }
-      }
+    }
 
-      const livesessionNotesHandle = (event)=> {
-       
+    const livesessionNotesHandle = (event) => {
+
         if (event.ctrlKey || event.metaKey) {
             sessionNotesToggleModel()
-           
+
         } else {
             livesessionMultidataModalToggle()
         }
-      }
+    }
 
-      const livesessionimgHandle = (event)=> {
-       
+    const livesessionimgHandle = (event) => {
+
         if (event.ctrlKey || event.metaKey) {
             viewliveToggleModel()
-           
+
         } else {
             viewlivesessionMultidataModalToggle()
         }
-      }
+    }
 
-      const zoomrecordingHandle = (event)=> {
-       
+    const zoomrecordingHandle = (event) => {
+
         if (event.ctrlKey || event.metaKey) {
-            
+
             zoomToggleModel()
-           
+
         } else {
             zoomMultidataModalToggle()
         }
-      }
+    }
 
-      const viewallsignalHandle = (event)=> {
-       
+    const viewallsignalHandle = (event) => {
+
         if (event.ctrlKey || event.metaKey) {
             zoomToggleModel()
-           
+
         } else {
             setShowSignalStat(!showSignalStat)
         }
-      }
+    }
 
 
-      const viewhelpHandle = (event)=> {
-       
+    const viewhelpHandle = (event) => {
+
         if (event.ctrlKey || event.metaKey) {
             zoomToggleModel()
-           
+
         } else {
             viewManual()
         }
-      }
+    }
 
-      const exportdataGroupHandle = (event)=> {
-       
+    const exportdataGroupHandle = (event) => {
+
         if (event.ctrlKey || event.metaKey) {
             exportdataGroupToggleModel()
-           
+
         } else {
             datafileModalToggle()
         }
-      }
+    }
 
-      const unlinkgroupHandle = (event)=> {
-       
+    const unlinkgroupHandle = (event) => {
+
         if (event.ctrlKey || event.metaKey) {
             unlinkgroupToggleModel()
-           
+
         } else {
             linkingGraphModalToggle()
         }
-      }
+    }
 
 
-      const grouplivesessionnoteHandle = (event)=> {
-       
+    const grouplivesessionnoteHandle = (event) => {
+
         if (event.ctrlKey || event.metaKey) {
             sessionNotesToggleModel()
-           
+
         } else {
             notesModalToggle()
         }
-      }
+    }
 
 
-      const viewpdfpreviewHandle = (event)=> {
-       
-        if (event.ctrlKey || event.metaKey ) {
+    const viewpdfpreviewHandle = (event) => {
+
+        if (event.ctrlKey || event.metaKey) {
             viewpdfpreviewToggleModel()
-           
+
         } else {
             getPreviousSessionPDF()
         }
-      }
+    }
 
     //   const groupviewLivesessionimgHandle = (event)=> {
-       
+
     //     if (event.ctrlKey) {
     //         viewpdfpreviewToggleModel()
-           
+
     //     } else {
     //         ViewlivesessionImage()
     //     }
     //   }
 
-      const zoomviewgroupHandle = (event)=> {
-       
+    const zoomviewgroupHandle = (event) => {
+
         if (event.ctrlKey || event.metaKey) {
             viewpdfpreviewToggleModel()
-           
+
         } else {
             zoomModalToggle()
         }
-      }
+    }
 
 
     return (
         <div className="bg-c-header">
             <ReactTooltip />
             <div className="wrp-chart-header">
-                <div className="chart-header-c1" style={{ width: "20%" }}>
+                <div className="multi-chart-header-c1" style={{ width: "20%" }}>
                     <div className="wrp-action">
                         <div className="action-opt" style={{ width: "38%" }}>
                             <p>Actions Options</p>
@@ -1609,7 +1609,7 @@ const ViewChartHeader = (props) => {
                                             </ExcelFile>
 
                                         } */}
-                                        
+
                                         <a href="javascript:void" onClick={exportdataGroupHandle} data-tip="Export data."   ><i class="fa fa-upload whiteicon" aria-hidden="true"></i></a>
                                     </li>
                                 }
@@ -1622,15 +1622,15 @@ const ViewChartHeader = (props) => {
                                 <li><a href="javascript:void" data-tip="Make PDF copy." onClick={makepdfHandle}><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
                                 {/* <li><a href="javascript:void" onClick={saveReportConfig} data-tip="Save as alternate configuration."><i class="fa fa-sliders" aria-hidden="true"></i></a></li> */}
                                 <li><a href="javascript:void" onClick={saveReportHandle} data-tip="Save as report."><i class="fa fa-bookmark" aria-hidden="true"></i></a></li>
-                              
+
                                 {
                                     group &&
-                                    <li><a href="javascript:void" onClick={unlinkgroupHandle} data-tip={linkGraphs ? "Unlink All Graphs" : "Link All Graphs"}><i className={linkGraphs  ? "fa fa-link" : "fa fa-unlink"  } aria-hidden="true"></i></a></li>
+                                    <li><a href="javascript:void" onClick={unlinkgroupHandle} data-tip={linkGraphs ? "Unlink All Graphs" : "Link All Graphs"}><i className={linkGraphs ? "fa fa-link" : "fa fa-unlink"} aria-hidden="true"></i></a></li>
                                 }
-                                  {
+                                {
                                     props.multi &&
-                                <li><a href="javascript:void" onClick={!props.multi ? "" : configgraphicHandle} data-tip="Configure Graph Linking"><i className={linkGraphs  ? "fa fa-link" : "fa fa-unlink"  } aria-hidden="true"></i></a></li>
-                                  }
+                                    <li><a href="javascript:void" onClick={!props.multi ? "" : configgraphicHandle} data-tip="Configure Graph Linking"><i className={linkGraphs ? "fa fa-link" : "fa fa-unlink"} aria-hidden="true"></i></a></li>
+                                }
                             </ul>
                         </div>
                         <div className="view-opt" style={{ width: "55%" }}>
@@ -1645,9 +1645,9 @@ const ViewChartHeader = (props) => {
                                     !props.multi &&
                                     <li><a href="javascript:void" onClick={viewpdfpreviewHandle} data-tip="View PDF of previous session"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li>
                                 }
-                                <li><a href="javascript:void" onClick={!props.multi  ? ViewlivesessionImage : livesessionimgHandle} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={!props.multi ? ViewlivesessionImage : livesessionimgHandle} data-tip="View live session images"><i class="fa fa-image" aria-hidden="true"></i></a></li>
 
-                                <li><a href="javascript:void" onClick={!props.multi  ? zoomviewgroupHandle : zoomrecordingHandle} data-tip="View zoom recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void" onClick={!props.multi ? zoomviewgroupHandle : zoomrecordingHandle} data-tip="View zoom recording"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
 
 
                                 {
@@ -1685,50 +1685,50 @@ const ViewChartHeader = (props) => {
                         </div>
                     </div>
                 }
-    {
+                {
                     !props.multi &&
-                <div className="chart-header-c3">
-                    <ul className="username-list">
-                        <li data-tip="Name of report">
-                            {reportDetails.map((repoprtName) => {
-                                return (
-                                    <a href="javascript:void"><i class="fa fa-file" aria-hidden="true"></i>{repoprtName.name}</a>
-                                )
-                            }
-                            )}
-                        </li>
-                        <li data-tip="Name of client">
-                            {sessioninfo.map((clientName) => {
-                                return (
-                                    <a href="javascript:void"><i class="fa fa-user" aria-hidden="true"></i>{clientName.client_firstname} {clientName.client_lastname}</a>
-                                )
-                            }
-                            )}
-                        </li>
-                        <li data-tip="Name of trainer">
-                            {sessioninfo.map((trainerName) => {
-                                return (
-                                    <a href="javascript:void"><i class="fa fa-user-md" aria-hidden="true"></i> {trainerName.trainer_firstname} {trainerName.trainer_lastname}</a>
-                                )
-                            }
-                            )}
-                        </li>
-                        <li data-tip="Session date">
-                            {!props.multi && sessioninfo.map((sessionName) => {
-                                return (
-                                    <a href="javascript:void"><i class="fa fa-calendar" aria-hidden="true"></i> {sessionName.name}</a>
-                                )
-                            }
-                            )}
-                        </li>
+                    <div className="chart-header-c3">
+                        <ul className="username-list">
+                            <li data-tip="Name of report">
+                                {reportDetails.map((repoprtName) => {
+                                    return (
+                                        <a href="javascript:void"><i class="fa fa-file" aria-hidden="true"></i>{repoprtName.name}</a>
+                                    )
+                                }
+                                )}
+                            </li>
+                            <li data-tip="Name of client">
+                                {sessioninfo.map((clientName) => {
+                                    return (
+                                        <a href="javascript:void"><i class="fa fa-user" aria-hidden="true"></i>{clientName.client_firstname} {clientName.client_lastname}</a>
+                                    )
+                                }
+                                )}
+                            </li>
+                            <li data-tip="Name of trainer">
+                                {sessioninfo.map((trainerName) => {
+                                    return (
+                                        <a href="javascript:void"><i class="fa fa-user-md" aria-hidden="true"></i> {trainerName.trainer_firstname} {trainerName.trainer_lastname}</a>
+                                    )
+                                }
+                                )}
+                            </li>
+                            <li data-tip="Session date">
+                                {!props.multi && sessioninfo.map((sessionName) => {
+                                    return (
+                                        <a href="javascript:void"><i class="fa fa-calendar" aria-hidden="true"></i> {sessionName.name}</a>
+                                    )
+                                }
+                                )}
+                            </li>
 
-                    </ul>
-                </div>
-}
-                <div className="chart-header-c4">
+                        </ul>
+                    </div>
+                }
+                <div className="multi-chart-header-c4">
                     {
-                            props.multi &&
-                            <div className="chart-header-c3">
+                        props.multi &&
+                        <div>
                             <ul className="username-list">
                                 <li data-tip="Name of report">
                                     {reportDetails.map((repoprtName) => {
@@ -1763,21 +1763,21 @@ const ViewChartHeader = (props) => {
                                     )}
                                 </li>
                                 <li data-tip="Session date">
-                                <div className="dashboard-back">
-                        <a href="javascript:void" onClick={() => confirmLeave("dashboard")}><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Dashboard</a>
-                    </div>
+                                    <div className="dashboard-back multi-dashboard-back">
+                                        <a href="javascript:void" onClick={() => confirmLeave("dashboard")}><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Dashboard</a>
+                                    </div>
 
-        </li>
+                                </li>
                             </ul>
                         </div>
                     }
                     {
                         !props.multi &&
                         <div className="dashboard-back">
-                        <a href="javascript:void" onClick={() => confirmLeave("dashboard")}><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Dashboard</a>
-                    </div>
+                            <a href="javascript:void" onClick={() => confirmLeave("dashboard")}><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Dashboard</a>
+                        </div>
                     }
-                  
+
                 </div>
             </div>
 
@@ -1805,12 +1805,12 @@ const ViewChartHeader = (props) => {
                         : <p className='text-center'>No live notes available.</p>}</p>
 
                     <div className='d-flex justify-content-around mt-3'>
-                       
-                    {
+
+                        {
                             liveNotes && liveNotes.length > 0 &&
                             <>
-                            <button className='lightbtn w-100' onClick={notesModalToggle} >Cancel</button>                       
-                            <button className='darktbtn w-100 ml-1' onClick={downloadNotesPDF} >Download PDF</button>
+                                <button className='lightbtn w-100' onClick={notesModalToggle} >Cancel</button>
+                                <button className='darktbtn w-100 ml-1' onClick={downloadNotesPDF} >Download PDF</button>
                             </>
                         }
                     </div>
@@ -1906,58 +1906,58 @@ const ViewChartHeader = (props) => {
                             } */}
 
 
-                             {
+                            {
                                 multipleData.length > 0 && multipleData.map((v, i) => {
                                     return (
                                         <li>
 
-                                <Accordion flush open={open} toggle={toggle}
-                                // defaultOpen={[
-                                //     '1',
+                                            <Accordion flush open={open} toggle={toggle}
+                                            // defaultOpen={[
+                                            //     '1',
 
-                                // ]}
-                                // stayOpen
-                                >
-                                    <AccordionItem>
-                                        <AccordionHeader targetId={v.id} className='wrp-accourdian-head'>
-                                        <div className='list-exort-content'><span>{i + 1}</span> <a href='javascript:void(0)' >{v.name}</a></div>
-                                        </AccordionHeader>
-                                        <AccordionBody accordionId={v.id} className='accourdian-body-wrp'>
-                                        <div className='excel-wrp'>
-                                            
-                                            
-                                        <input type="radio" onClick={() => setMultiDileFormat('csv')} checked={multiDileFormat == "csv" && multiSessionid == v.id ? true : false} className='mrt-radiobtn' name="CSV" />
-                                        <label>CSV</label>
+                                            // ]}
+                                            // stayOpen
+                                            >
+                                                <AccordionItem>
+                                                    <AccordionHeader targetId={v.id} className='wrp-accourdian-head'>
+                                                        <div className='list-exort-content'><span>{i + 1}</span> <a href='javascript:void(0)' >{v.name}</a></div>
+                                                    </AccordionHeader>
+                                                    <AccordionBody accordionId={v.id} className='accourdian-body-wrp'>
+                                                        <div className='excel-wrp'>
 
-                                            <input onClick={() => setMultiDileFormat('excel')} checked={multiDileFormat == "excel" && multiSessionid == v.id ? true : false} type="radio"   name="CSV" />
-                                            <label>EXCEL</label>
-                                            {/* <input onClick={() => setMultiDileFormat('ascii')} checked={multiDileFormat  == "ascii" && multiSessionid == v.id ? true : false} type="radio"   name="CSV" />
+
+                                                            <input type="radio" onClick={() => setMultiDileFormat('csv')} checked={multiDileFormat == "csv" && multiSessionid == v.id ? true : false} className='mrt-radiobtn' name="CSV" />
+                                                            <label>CSV</label>
+
+                                                            <input onClick={() => setMultiDileFormat('excel')} checked={multiDileFormat == "excel" && multiSessionid == v.id ? true : false} type="radio" name="CSV" />
+                                                            <label>EXCEL</label>
+                                                            {/* <input onClick={() => setMultiDileFormat('ascii')} checked={multiDileFormat  == "ascii" && multiSessionid == v.id ? true : false} type="radio"   name="CSV" />
                                             <label>ASCII</label> */}
-                                        </div>
+                                                        </div>
 
-                                        </AccordionBody>
-                                    </AccordionItem>
+                                                    </AccordionBody>
+                                                </AccordionItem>
 
-                                </Accordion>
-
-
+                                            </Accordion>
 
 
 
 
-                            </li>
+
+
+                                        </li>
                                     )
                                 })
                             }
 
-                            
+
 
 
                         </ol>
                     </div>
                     <div className='d-flex justify-content-around mt-3'>
                         <button className='lightbtn w-100' onClick={exportModalToggle} >Cancel</button>
-                   
+
 
                         <button className='darktbtn w-100 ml-1' onClick={exportFileMulti} >Download</button>
 
@@ -1995,9 +1995,9 @@ const ViewChartHeader = (props) => {
                     <div class="input-group mb-3">
                         {
                             !props.multi &&
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">{sessioninfo[0] ? sessioninfo[0].name : ""}</span>
-                        </div>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">{sessioninfo[0] ? sessioninfo[0].name : ""}</span>
+                            </div>
 
                         }
                         <input type="text" class="form-control" value={pdfReportName} onChange={(e) => setPdfReportName(e.target.value)} placeholder="Report Name" aria-label="Report Name" aria-describedby="basic-addon1" />
@@ -2005,11 +2005,11 @@ const ViewChartHeader = (props) => {
 
                     <div className='d-flex justify-content-around mt-3'>
                         {
-                             session != "54322" &&
-                             <button className='lightbtn w-100' onClick={props.multi ? saveScreenshotPDFMulti : saveScreenshotPDF} >Save PDF</button>
+                            session != "54322" &&
+                            <button className='lightbtn w-100' onClick={props.multi ? saveScreenshotPDFMulti : saveScreenshotPDF} >Save PDF</button>
 
                         }
-                        
+
                         <button className='darktbtn w-100 ml-1' onClick={saveScreenshot} >Download PDF</button>
 
                     </div>
@@ -2065,7 +2065,7 @@ const ViewChartHeader = (props) => {
                 <ModalHeader toggle={linkingGraphModalToggle}><span className="ml-1 roititle modal-head"> Confirm {linkGraphs ? "unlinking" : "linking"} of Graphs</span></ModalHeader>
                 <ModalBody>
                     <p className=''>Do you really wish to {linkGraphs ? "unlink" : "link"} all the graphs ? </p>
-                   
+
 
                     <div className='d-flex justify-content-around mt-3'>
                         <button className='lightbtn w-100' onClick={linkAllGrpahs} >Yes</button>
@@ -2102,24 +2102,24 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={datafileModal} toggle={datafileModalToggle} className="modal-box-wrp" centered={true}>
                 <ModalHeader toggle={datafileModalToggle}><span className="ml-1 roititle modal-head">Data File Format</span></ModalHeader>
                 <ModalBody>
-                <ul className='configure-list'>
-                               
-                                <li>
-                                    <div className='datafileformat-wrp'>
-                                        <div className='datafileformat-child1'>
-                                            <p>Choose Data File Format:</p>
-                                        </div>
-                                        <div className='datafileformat-child2'>
-                                      
-                                        <input type="radio" onClick={() => setFileFormat('csv')} checked={fileFormat == "csv" ? true : false} className='radio-mrl' name="CSV" />
-                                            <span>CSV</span>
-                                            <input onClick={() => setFileFormat('excel')} checked={fileFormat == "excel" ? true : false} type="radio" className='radio-mrl' name="CSV" />
-                                            <span>EXCEL</span>
-                                            {/* <input onClick={() => setFileFormat('ascii')} checked={fileFormat == "ascii" ? true : false} type="radio" className='radio-mrl' name="CSV" />
+                    <ul className='configure-list'>
+
+                        <li>
+                            <div className='datafileformat-wrp'>
+                                <div className='datafileformat-child1'>
+                                    <p>Choose Data File Format:</p>
+                                </div>
+                                <div className='datafileformat-child2'>
+
+                                    <input type="radio" onClick={() => setFileFormat('csv')} checked={fileFormat == "csv" ? true : false} className='radio-mrl' name="CSV" />
+                                    <span>CSV</span>
+                                    <input onClick={() => setFileFormat('excel')} checked={fileFormat == "excel" ? true : false} type="radio" className='radio-mrl' name="CSV" />
+                                    <span>EXCEL</span>
+                                    {/* <input onClick={() => setFileFormat('ascii')} checked={fileFormat == "ascii" ? true : false} type="radio" className='radio-mrl' name="CSV" />
                                             <span>ASCII</span> */}
-                                        </div>
-                                        </div>
-                                        {/* <div className='datafileformat-wrp'>
+                                </div>
+                            </div>
+                            {/* <div className='datafileformat-wrp'>
 
                                         <div className='datafileformat-child1'>
                                             <p>Choose Signals:</p>
@@ -2139,15 +2139,15 @@ const ViewChartHeader = (props) => {
                                         </div>
 
                                     </div> */}
-                                </li>
-                                
-                               
-                              
-                            </ul>
+                        </li>
 
-                            <div className='d-flex justify-content-around mt-3'>
+
+
+                    </ul>
+
+                    <div className='d-flex justify-content-around mt-3'>
                         <button className='lightbtn w-100' onClick={datafileModalToggle} >Cancel</button>
-                   
+
 
                         <button className='darktbtn w-100 ml-1' onClick={exportFile} >Download</button>
 
@@ -2161,7 +2161,7 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={exportdataModal} toggle={exportdataToggle} className="modal-box-wrpaction" centered={true}>
                 <ModalHeader toggle={exportdataToggle}><span className="ml-1 roititle modal-head">Export Data</span></ModalHeader>
                 <ModalBody>
-                    <div className='imgexportdata'><img src={multiexportdata} /></div> 
+                    <div className='imgexportdata'><img src={multiexportdata} /></div>
                 </ModalBody>
 
             </Modal>
@@ -2169,7 +2169,7 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={takereportNoteModel} toggle={takereportNoteToggleModel} className="modal-box-wrpaction" centered={true}>
                 <ModalHeader toggle={takereportNoteToggleModel}><span className="ml-1 roititle modal-head">Actions Options</span></ModalHeader>
                 <ModalBody>
-                    <div className='imgexportdata'><img src={takeshort} /></div> 
+                    <div className='imgexportdata'><img src={takeshort} /></div>
                 </ModalBody>
 
             </Modal>
@@ -2177,7 +2177,7 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={configGraphModel} toggle={configGraphToggleModel} className="modal-box-wrpaction" centered={true}>
                 <ModalHeader toggle={configGraphToggleModel}><span className="ml-1 roititle modal-head">Configure Graph Linking</span></ModalHeader>
                 <ModalBody>
-                    <div className='imgexportdata'><img src={configgraph} /></div> 
+                    <div className='imgexportdata'><img src={configgraph} /></div>
                 </ModalBody>
 
             </Modal>
@@ -2185,7 +2185,7 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={sessionNotesModel} toggle={sessionNotesToggleModel} className="modal-box-wrpaction" centered={true}>
                 <ModalHeader toggle={sessionNotesToggleModel}><span className="ml-1 roititle modal-head">view Live Session Notes</span></ModalHeader>
                 <ModalBody>
-                    <div className='imgexportdata'><img src={sessionnote} /></div> 
+                    <div className='imgexportdata'><img src={sessionnote} /></div>
                 </ModalBody>
 
             </Modal>
@@ -2193,7 +2193,7 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={viewliveimgModel} toggle={viewliveToggleModel} className="modal-box-wrpaction" centered={true}>
                 <ModalHeader toggle={viewliveToggleModel}><span className="ml-1 roititle modal-head">view Live Session Images</span></ModalHeader>
                 <ModalBody>
-                    <div className='imgexportdata'><img src={viewliveimg} /></div> 
+                    <div className='imgexportdata'><img src={viewliveimg} /></div>
                 </ModalBody>
 
             </Modal>
@@ -2201,7 +2201,7 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={zoomlistModel} toggle={zoomToggleModel} className="modal-box-wrpaction" centered={true}>
                 <ModalHeader toggle={zoomToggleModel}><span className="ml-1 roititle modal-head">Actions Options</span></ModalHeader>
                 <ModalBody>
-                    <div className='imgexportdata'><img src={zoomimg} /></div> 
+                    <div className='imgexportdata'><img src={zoomimg} /></div>
                 </ModalBody>
 
             </Modal>
@@ -2210,7 +2210,7 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={exportdataGroupModel} toggle={exportdataGroupToggleModel} className="modal-box-wrpaction" centered={true}>
                 <ModalHeader toggle={exportdataGroupToggleModel}><span className="ml-1 roititle modal-head">Actions Options</span></ModalHeader>
                 <ModalBody>
-                    <div className='imgexportdata'><img src={exportdata} /></div> 
+                    <div className='imgexportdata'><img src={exportdata} /></div>
                 </ModalBody>
 
             </Modal>
@@ -2219,7 +2219,7 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={unlinkgroupModel} toggle={unlinkgroupToggleModel} className="modal-box-wrpaction" centered={true}>
                 <ModalHeader toggle={unlinkgroupToggleModel}><span className="ml-1 roititle modal-head">Unlink All Graphs</span></ModalHeader>
                 <ModalBody>
-                    <div className='imgexportdata'><img src={linking} /></div> 
+                    <div className='imgexportdata'><img src={linking} /></div>
                 </ModalBody>
 
             </Modal>
@@ -2227,16 +2227,16 @@ const ViewChartHeader = (props) => {
             <Modal isOpen={viewpdfpreviewModel} toggle={viewpdfpreviewToggleModel} className="modal-box-wrpaction" centered={true}>
                 <ModalHeader toggle={viewpdfpreviewToggleModel}><span className="ml-1 roititle modal-head">Viewing Options</span></ModalHeader>
                 <ModalBody>
-                    <div className='imgexportdata'><img src={viewaction} /></div> 
+                    <div className='imgexportdata'><img src={viewaction} /></div>
                 </ModalBody>
 
             </Modal>
 
 
-            
 
-            
-            
+
+
+
         </div>
     )
 }
