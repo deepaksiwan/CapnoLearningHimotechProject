@@ -2847,7 +2847,7 @@ const Chart = (props) => {
                                 yaxis: { rangemode: 'tozero' },
                                 xaxis: { rangemode: 'tozero' },
                                 hovermode: true,
-
+                                
                                 images: images,
                                 dragmode: dragMode,
                                 showlegend: false,
@@ -2893,7 +2893,7 @@ const Chart = (props) => {
                                 displayModeBar: false,
                                 scrollZoom: zoomEnabled,
                                 // autosize: true,
-
+                                responsive: true,
 
                                 doubleClick: false,
                                 transition: {
