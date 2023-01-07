@@ -684,9 +684,10 @@ const Chart = (props) => {
 
         userTimeOffset = userTimeOffset * 60 * 1000;
         // alert(userTimeOffset);
-        if (userTimeOffset > 0 || userTimeOffset < -60 * 60 * 1000) {
-            userTimeOffset += dstOffset() * 60 * 1000;
-        }
+
+        // if (userTimeOffset > 0 || userTimeOffset < -60 * 60 * 1000) {
+        //     userTimeOffset += dstOffset() * 60 * 1000;
+        // }
 
         // alert(userTimeOffset);
 
@@ -2370,12 +2371,11 @@ const Chart = (props) => {
     }
 
     const dstOffset = (date = new Date()) => {
-        const january = new Date(date.getFullYear(), 11, 1).getTimezoneOffset();
-        const july = new Date(date.getFullYear(), 6, 1).getTimezoneOffset();
-        // console.log("Jan Time" , january);
-        // console.log("July Time" , july);
-        let max = Math.max(january, july);
-        let min = Math.min(january, july);
+        const november = new Date(date.getFullYear(), 11, 30).getTimezoneOffset();
+        const june = new Date(date.getFullYear(), 6, 1).getTimezoneOffset();
+        let max = Math.max(november, june);
+        let min = Math.min(november, june);
+        
         return Math.abs(min - max);
     }
 
