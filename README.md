@@ -20,7 +20,6 @@ This guide explains:
 - Compile and run the application
 - Build the application 
 - Deploy the application 
-- FAQs
   
 
 ## Setup Dev Environment
@@ -50,7 +49,7 @@ $ node-gyp.cmd -v # On Mac/Linux, use `node-gyp -v`
 v8.2.0 
 ```
 
-## Compile & Run the Application: 
+## Compile & Run the Application
 
 Run the following commands from a terminal/powershell
 
