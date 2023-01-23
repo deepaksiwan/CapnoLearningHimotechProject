@@ -26,11 +26,10 @@ This guide explains:
 
 1) Install <b>NodeJS (latest version)</b>. 
 2) You may also need to install the <b>aws-cli (latest version)</b>
-3) Please note that <b> ElectronJS </b> is downloaded locally using the npm package.
 
-4) For ease-of-coding, you should also download VSCode, and its Github extension.
+3) For ease-of-coding, you should also download VSCode, and its Github extension.
 
-5) You also need to install <b> node-gyp v8.2.0 </b> using the npm globally (system-wise) as follows: 
+4) You also need to install <b> node-gyp v8.2.0 </b> using the npm globally (system-wise) as follows: 
 
 ```node
 $ npm install node-gyp@8.2.0 -g 
