@@ -11,7 +11,7 @@ This guide explains:
 
 - [Instructions](#instructions)
 - [Setup Dev Environment](#setup-dev-environment)
-- [Compile and run the application](#compile-&-run-the-application)
+- [Compile and run the application](#compile-and-run-the-application)
 - [Build the application](#build-the-application)
 
 ## Instructions
@@ -49,7 +49,7 @@ $ node-gyp.cmd -v # On Mac/Linux, use `node-gyp -v`
 v8.2.0 
 ```
 
-## Compile & Run the Application
+## Compile and Run the Application
 
 Run the following commands from a terminal/powershell
 
