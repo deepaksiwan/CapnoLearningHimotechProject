@@ -11,8 +11,8 @@ This guide explains:
 
 - [Instructions](#instructions)
 - [Setup Dev Environment](#setup-dev-environment)
-- [Compile and run the application](#compile-run)
-- [Build the application](#deploy)
+- [Compile and run the application](#compile-&-run-the-application)
+- [Build the application](#build-the-application)
 
 ## Instructions
 
