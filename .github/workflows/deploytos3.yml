@@ -13,7 +13,8 @@ jobs:
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
     steps:
         - uses: actions/checkout@v1
-
+        - name: Install typescript
+          run: npm i typescript @types/react @types/node
         - name: Install dependencies
           run: yarn
 
