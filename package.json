@@ -70,8 +70,8 @@
   },
   "scripts": {
     "start": "react-scripts --max_old_space_size=4096 start",
-    "build": "react-scripts --max_old_space_size=8192 build",
-    "deploy": "aws --profile peter --region us-east-1 s3 sync ./build s3://capnolearner-web --delete",
+    "build": "react-scripts --max_old_space_size=4096 build",
+    "deploy": "aws --profile deployer --region us-east-1 s3 sync ./build s3://capnolearner-web --delete",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
