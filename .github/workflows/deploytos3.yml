@@ -11,12 +11,14 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+    strategy:
+      matrix:
+        node-version: [16.x]
     steps:
         - uses: actions/checkout@v1
-        - name: Install typescript
-          run: npm i typescript @types/react @types/node
+    
         - name: Install dependencies
-          run: yarn
+          run: yarn install
 
         - name: Build
           run: yarn build
