@@ -22,8 +22,11 @@ import Multilanguage from '../component/Multilanguage'
 
 const Sidebar = () => {
   const { t } = useTranslation();
+  const userType = localStorage.getItem('userType');
 
   const [activeIndex, setActiveIndex] = useState()
+
+ 
 
   const tabArray = [
     {
@@ -41,11 +44,13 @@ const Sidebar = () => {
     {
       links: "/view/manageform", tabDisplay: t('View/Manage-Forms'), "tabimg": <ManageAccountsIcon />
     },
+     
     {
-      links: "/viewcreate", tabDisplay: t('View-Create-Edit-Profile'), "tabimg": <PersonAddIcon />
+      links: "/viewcreate", tabDisplay: (userType == 5 || userType == 6 || userType == 7)?"Edit Profile":t('View-Create-Edit-Profile'), "tabimg": <PersonAddIcon />
     },
+   
     {
-      links: "/section/report/assembly", tabDisplay: t('Session-Report-Assembly'), "tabimg": <ReportIcon />
+      links: "/case/report/assembly", tabDisplay: t('Session-Report-Assembly'), "tabimg": <ReportIcon />
     },
     {
       links: "/recording", tabDisplay: t('Recording-by-Distributors'), "tabimg": <VideocamIcon />
@@ -62,6 +67,45 @@ const Sidebar = () => {
   //   },
 
   ];
+
+  const tabArray2 = [
+    {
+      links: "/", tabDisplay: t('Create-Data-Report'), "tabimg": <BorderColorIcon />
+    },
+    {
+      links: "/view/data/report", tabDisplay: t('View-&-Edit-Data-Report'), "tabimg":<PageviewIcon />
+    },
+    {
+      links: "/view/pdf/report", tabDisplay: t('View-PDF-Report'), "tabimg": <PictureAsPdfIcon />
+    },
+    {
+      links: "/view/live", tabDisplay: t('View-Live-Session-Info'), "tabimg": <StreamIcon />
+    },
+    {
+      links: "/view/manageform", tabDisplay: t('View/Manage-Forms'), "tabimg": <ManageAccountsIcon />
+    },
+     
+    {
+      links: "/viewcreate", tabDisplay: "Edit Profile", "tabimg": <PersonAddIcon />
+    },
+   
+    {
+      links: "/recording", tabDisplay: t('Recording-by-Distributors'), "tabimg": <VideocamIcon />
+    },
+    {
+      links: "/subscription/management", tabDisplay: t('Subscription-Management'), "tabimg": <TouchAppIcon />
+    },
+    // {
+    //   links: "/subscribe/user", tabDisplay: t('Subscribed Users'), "tabimg": sidebarmenu8
+    // },
+
+  // {
+  //     links: "/", tabDisplay: t('Group-Subscription-Management'), "tabimg": <PictureAsPdfIcon />
+  //   },
+
+  ];
+
+
 
   const handleActive = (index)=>{
     setActiveIndex(index)
@@ -81,7 +125,17 @@ const Sidebar = () => {
         <div class="header-child1 mrb-header"><h3>{t("Database-Dashboard")}</h3></div>
         <ul className="sidebar-list">
          {/* "hi" {activeIndex} */}
-          {
+
+         {
+          (userType == 5 || userType == 6 || userType == 7)?
+            tabArray2.map(function (v, index) {
+              return (
+                <li><NavLink to={v.links}  onClick={() => handleActive(index)}><div className="sidebar-icon-img">{v.tabimg} </div> <p>{v.tabDisplay}</p></NavLink></li>
+              )
+            }
+
+           )
+          :
             tabArray.map(function (v, index) {
               return (
                 <li><NavLink to={v.links}  onClick={() => handleActive(index)}><div className="sidebar-icon-img">{v.tabimg} </div> <p>{v.tabDisplay}</p></NavLink></li>
@@ -89,7 +143,9 @@ const Sidebar = () => {
             }
 
            )
-          }
+          
+         }
+          
           
           <li>{
             auth ? <Link to="/login" onClick={logout} className="tabs"><div className="sidebar-icon-img"><LogoutIcon /></div><p>{t('Logout')}</p></Link> : null

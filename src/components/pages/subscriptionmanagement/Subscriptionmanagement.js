@@ -123,7 +123,7 @@ const Subscriptionmanagement = () => {
                 <div className="right-section">
 
                     <div className="subscription-content">
-                        <h3>Your subscription expiration date is:  {owner.expire_account ? new Date(owner.expire_account*1e3).toDateString() : "NA"}</h3>
+                        <h3>Your subscription expires date is:  {owner.expire_account ? new Date(owner.expire_account*1e3).toDateString() : "NA"}</h3>
                         <div className="software-updated-wrp">
                             <div className="software-updt-child1">
                                 <h3>{t('Auto-software-update')}</h3>
@@ -186,7 +186,7 @@ const Subscriptionmanagement = () => {
 
                         <div className="notification-c">
                             <p>If you choose to auto-renew, you will receive two emails, 30 days and 3 days before your expiration date, with a link for payment by credit card or PayPal.</p>
-                            <h3>If you fail to renew your subscription, three thigs will happen:</h3>
+                            <h3>If you fail to renew your subscription, three things will happen:</h3>
                             <div className="notify-step-p">
                                 <p>(1) Your software will no longer update.</p>
                                 <p>(2) Your access to live tech support will terminate.</p>

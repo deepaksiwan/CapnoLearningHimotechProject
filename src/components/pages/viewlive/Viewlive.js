@@ -538,7 +538,7 @@ const Viewlive = () => {
                                 <div className="create-list-box"><a href="javascript:void" className={(sessions.length == 0 || selectedSession === "" ||selectedSession === "null") ? "deactivate" : ""} onClick={() => { downloadlivesessionImage(); DownloaderToggleModal() }}>{t('Download-Live-Session-Images')}</a></div>
                             </li>
                             <li>
-                                <div className="create-list-box" >
+                                <div className="create-list-box create-list-boxzoomlink" >
                                     <a href="javascript:void" className={(selectedSession === "" ||selectedSession === "null") ? "deactivate" : ""}>
                                         {/* {session} */}
                                         {

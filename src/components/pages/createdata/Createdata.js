@@ -16,14 +16,17 @@ const Createdata = (props) => {
     const { t } = useTranslation();
     const [selectedClient, setSelectedClient] = useState();
     const [selectedSession, setSelectedSession] = useState();
-    
+
     const [selectedGroup, setselectedGroup] = useState();
     const [userType, setUserType] = useState();
+    const [selectedtrainerActive, setselectedtrainerActive] = useState()
+    const selectedclientActive = localStorage.getItem('selectedclientActive');
     //const [graphModal, setgraphModal] = useState(false);
-   // const toggleGraphModal = () => setgraphModal(!graphModal);
+    // const toggleGraphModal = () => setgraphModal(!graphModal);
     // const [selectfolder, setselectfolder] = useState(false)
     // const [Showfiles, setShowfiles] = useState(false)
     // const [selectedfiles, setselectedfiles] = useState([])
+
 
 
     const CreateDatalist = [
@@ -48,9 +51,11 @@ const Createdata = (props) => {
             setselectedGroup(localStorage.getItem('selectedGroup'));
             //// console.log(selectedSession);
             setUserType(localStorage.getItem('userType'));
+            setselectedtrainerActive(localStorage.getItem('selectedtrainerActive'));
+
         }, 1000);
 
-        
+
 
 
     }, [])
@@ -77,10 +82,10 @@ const Createdata = (props) => {
     // };
 
 
-    
 
-    
-   
+
+
+
 
     return (
         <div>
@@ -91,32 +96,34 @@ const Createdata = (props) => {
                 </div>
                 <div className="right-section">
                     <Filter />
-                    
+
                     <div className="create-section">
                         <ul className="create-list">
-                        {/* <i class="fa fa-file-image" aria-hidden="true"></i> */}
+                            {/* <i class="fa fa-file-image" aria-hidden="true"></i> */}
 
                             <li>
-                                <div className="create-list-box"><Link to={(selectedSession === "" || selectedGroup === "true" || selectedSession === "null") ? "" : "/choose/report/config"} className={(selectedSession === "" || selectedGroup === "true" ||selectedSession === "null") ? "deactivate" : ""}>{t('Create-&-Save-a-Session-Data-Report')}</Link></div>
+                                <div className="create-list-box"><Link to={(selectedtrainerActive === "false" || selectedclientActive === "false" || selectedSession === "" || selectedGroup === "true" || selectedSession === "null") ? "" : "/choose/report/config"} className={(selectedclientActive === "false" || selectedtrainerActive === "false" || selectedSession === "" || selectedGroup === "true" || selectedSession === "null") ? "deactivate" : ""}>{t('Create-&-Save-a-Session-Data-Report')}</Link></div>
 
                             </li>
-                        
 
-                            <li>
-                                <div className="create-list-box"><Link to={(selectedClient === "Choose a Client" || selectedClient === "null" || selectedSession !== "" && selectedSession !== "null" || selectedGroup === "true")? "" : "/createmultisession"} className={(selectedClient === "Choose a Client" || selectedClient === "null" || selectedSession !== "" && selectedSession !== "null" || selectedGroup === "true")? "deactivate" : ""} >{t('Create-&-Save-a-Multisession-Report')}</Link></div>
+                            {
+                                (userType == 5 || userType == 6 || userType == 7)?"":<><li>
+                                <div className="create-list-box"><Link to={(selectedClient === "Choose a Client" || selectedClient === "null" || selectedSession !== "" && selectedSession !== "null" || selectedGroup === "true") ? "" : "/createmultisession"} className={(selectedClient === "Choose a Client" || selectedClient === "null" || selectedSession !== "" && selectedSession !== "null" || selectedGroup === "true") ? "deactivate" : ""} >{t('Create-&-Save-a-Multisession-Report')}</Link></div>
 
                             </li>
                             <li>
-                                <div className="create-list-box"><Link to={selectedSession === "" || selectedGroup === "false" ||selectedSession === "null" ? "" : "/create/group/session/report"} className={selectedSession === "" || selectedGroup === "false" ||selectedSession === "null" ? "deactivate" : ""}>{t('Create-&-Save-a-Group-Session-Report')}</Link></div>
+                                <div className="create-list-box"><Link to={selectedSession === "" || selectedGroup === "false" || selectedSession === "null" ? "" : "/create/group/session/report"} className={selectedSession === "" || selectedGroup === "false" || selectedSession === "null" ? "deactivate" : ""}>{t('Create-&-Save-a-Group-Session-Report')}</Link></div>
                             </li>
                             <li>
                                 <div className="create-list-box"><Link to="/demodatareport" >{t('PRACTICE:-Creating-Data-Reports-(Demo Data Only)')}</Link></div>
                             </li>
                             <li>
-                              
+
                                 <div className="create-list-box"><Link to="/choose/exported/file/config" >{t('Create report using offline data on the computer')}</Link></div>
-                                
-                            </li>
+
+                            </li></>
+                            }
+                            
 
                             {/* <li>
                                 <div className="create-list-box1" onClick={toggleGraphModal}>{t('Create report using exported session files')}</div>

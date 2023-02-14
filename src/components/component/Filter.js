@@ -36,23 +36,23 @@ const Filter = () => {
     const selectedtrainerInactive = localStorage.getItem('selectedtrainerInactive');
     const selectedclientActive = localStorage.getItem('selectedclientActive');
     const selectedclientInactive = localStorage.getItem('selectedclientInactive');
-    const [selectedHomework,setselectedHomework] = useState(localStorage.getItem('selectedHomework'));
-    const [selectedStandard,setselectedStandard] = useState(localStorage.getItem('selectedStandard'));
+    const [selectedHomework, setselectedHomework] = useState(localStorage.getItem('selectedHomework'));
+    const [selectedStandard, setselectedStandard] = useState(localStorage.getItem('selectedStandard'));
 
-    
+
     const userType = localStorage.getItem('userType');
 
     const accessToken = localStorage.getItem('accessToken');
 
     useEffect(() => {
         setInterval(() => {
-    
+
             setselectedHomework(localStorage.getItem('selectedHomework'));
             setselectedStandard(localStorage.getItem('selectedStandard'));
 
         }, 1000);
 
-       
+
 
     }, []);
 
@@ -65,7 +65,7 @@ const Filter = () => {
         }
         if (selectedClient) {
             getSession()
-         
+
         }
 
         // getSession();
@@ -231,32 +231,32 @@ const Filter = () => {
 
         })
     }
-    
+
     const getSession = () => {
         const _cid = localStorage.getItem('selectedClient');
 
-        let _homework = cid.current.checked;
+        let _homework = (userType == 5 || userType == 6 || userType == 7)?"":cid.current.checked;
         let _standard = cid2.current.checked;
 
         let _hw;
-        if(_standard){
-             _hw = 0;
+        if (_standard) {
+            _hw = 0;
         }
 
         if (!_homework && !_standard) {
             _hw = 5;
         }
-       
+
 
         if (_homework) {
             _hw = 1;
         }
-        if (cid.current.checked) {
-            setselectedHomework(true)   ;
+        if ((userType == 5 || userType == 6 || userType == 7)?"": cid.current.checked) {
+            setselectedHomework(true);
             localStorage.setItem('selectedHomework', true);
         }
         else {
-            setselectedHomework(false)   ;
+            setselectedHomework(false);
 
             localStorage.setItem('selectedHomework', false);
 
@@ -264,20 +264,20 @@ const Filter = () => {
 
 
         if (cid2.current.checked) {
-            setselectedStandard(true)   ;
+            setselectedStandard(true);
             localStorage.setItem('selectedStandard', true);
         }
         else {
-            setselectedStandard(false)   ;
+            setselectedStandard(false);
 
             localStorage.setItem('selectedStandard', false);
 
         }
 
 
-     
 
-        if(_homework && _standard){
+
+        if (_homework && _standard) {
             let url = API_URL + "/sessions/by/client?cid=" + _cid;
             fetch(url,
                 {
@@ -287,15 +287,15 @@ const Filter = () => {
                         'x-access-token': accessToken,
                     },
                 }
-    
+
             ).then((response) => {
                 if (response.status == 200) {
                     response.json().then((result) => {
                         // // console.log(result.sessions)
-                        
-                            setsesstion(result.sessions)
-                           
-    
+
+                        setsesstion(result.sessions)
+
+
                     })
                 }
                 else if (response.status == 401) {
@@ -304,14 +304,14 @@ const Filter = () => {
                 else {
                     alert("network error")
                 }
-    
-    
+
+
             }).catch(err => {
                 // // console.log(err)
-    
+
             })
-           
-        }else{
+
+        } else {
             let url = API_URL + "/sessions?cid=" + _cid + "&hw=" + _hw;
             fetch(url,
                 {
@@ -321,7 +321,7 @@ const Filter = () => {
                         'x-access-token': accessToken,
                     },
                 }
-    
+
             ).then((response) => {
                 if (response.status == 200) {
                     response.json().then((result) => {
@@ -330,12 +330,12 @@ const Filter = () => {
                             setsesstion(result.sessions)
                             // // console.log(setsesstion)
                         }
-    
-    
+
+
                         else {
                             alert("no data error")
                         }
-    
+
                     })
                 }
                 else if (response.status == 401) {
@@ -344,16 +344,16 @@ const Filter = () => {
                 else {
                     alert("network error")
                 }
-    
-    
+
+
             }).catch(err => {
                 // // console.log(err)
-    
+
             })
         }
 
 
-        
+
     }
 
 
@@ -376,7 +376,7 @@ const Filter = () => {
     }
     const updateselectedSecssion = () => {
         localStorage.setItem('selectedSession', sessionSelected.current.value);
-        
+
     }
     const Reset = () => {
         localStorage.setItem('selectedClient', null);
@@ -432,6 +432,7 @@ const Filter = () => {
 
 
                             </div>
+                            
                             <div className="checkbox-wrp">
                                 <div class="custom-radios">
                                     <input type="checkbox" id="inactive" onChange={getTrainers} ref={trainerInactive} defaultChecked={(selectedtrainerInactive === "true" ? true : false)} />
@@ -474,7 +475,7 @@ const Filter = () => {
                             <p>{t("CLIENTS")}</p>
                         </div>
                         <div className="main-checkbox">
-                            
+
                             <div className="checkbox-wrp">
                                 <div class="custom-radios">
                                     <input type="checkbox" id="color-9" value="color-9" onChange={getClients} ref={clientActive} defaultChecked={(selectedclientActive === "true" ? true : false)} />
@@ -516,9 +517,9 @@ const Filter = () => {
                             <select ref={clientSelected} onChange={updateSelectClient}>
 
                                 {
-                                    selectedGroup == "true"? <option className="selected-bold">Choose a Group</option>: <option className="selected-bold">{t('Choose-a-client')}</option>
+                                    selectedGroup == "true" ? <option className="selected-bold">Choose a Group</option> : <option className="selected-bold">{t('Choose-a-client')}</option>
                                 }
-                                
+
 
                                 {
                                     clients.length > 0 && clients.map((client, i) =>
@@ -537,37 +538,43 @@ const Filter = () => {
 
                 }
 
+
+
                 <div className="step-box">
                     <div className="step-trainers-box">
                         <p>{t("SESSIONS")}</p>
                     </div>
                     <div className="main-checkbox">
-                    <div className="checkbox-wrp">
-                        <div class="custom-radios">
-                            <input type="checkbox" id="cid2" onChange={getSession} ref={cid2} defaultChecked={(selectedStandard === "true" ? true : false)} />
-                            <label for="cid2">
-                                <span className="redious">
-                                </span>
-                            </label>
+                        <div className="checkbox-wrp">
+                            <div class="custom-radios">
+                                <input type="checkbox" id="cid2" onChange={getSession} ref={cid2} defaultChecked={(selectedStandard === "true" ? true : false)} />
+                                <label for="cid2">
+                                    <span className="redious">
+                                    </span>
+                                </label>
+                            </div>
+                            <div className="caption-cheeckbox">
+                                <p>{t('Standard')}</p>
+                            </div>
                         </div>
-                        <div className="caption-cheeckbox">
-                            <p>{t('Standard')}</p>
+
+                        {
+                            (userType == 5 || userType == 6 || userType == 7)?"":<div className="checkbox-wrp">
+                            <div class="custom-radios">
+                                <input type="checkbox" id="cid" onChange={getSession} ref={cid} defaultChecked={(selectedHomework === "true" ? true : false)} />
+                                <label for="cid">
+                                    <span className="redious">
+                                    </span>
+                                </label>
+                            </div>
+                            <div className="caption-cheeckbox">
+                                <p>{t('Home-Work-Session')}</p>
+                            </div>
                         </div>
+                        }
+                        
                     </div>
-                    <div className="checkbox-wrp">
-                        <div class="custom-radios">
-                            <input type="checkbox" id="cid" onChange={getSession} ref={cid} defaultChecked={(selectedHomework === "true" ? true : false)} />
-                            <label for="cid">
-                                <span className="redious">
-                                </span>
-                            </label>
-                        </div>
-                        <div className="caption-cheeckbox">
-                            <p>{t('Home-Work-Session')}</p>
-                        </div>
-                    </div>
-                    </div>
-                    
+
                     <div className="select-client">
                         <select ref={sessionSelected} onChange={updateselectedSecssion}>
                             <option className="selected-bold" value={""}>{t('Choose-a-session')}</option>

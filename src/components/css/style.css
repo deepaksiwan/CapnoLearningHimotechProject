@@ -717,6 +717,13 @@ a:hover {
   padding: 8px 10px;
   display: flex;
   padding-right: 10px;
+  transition: 0.5s;
+}
+.sidebar-list>li>a:hover{
+  color: #fff;
+  border-radius: 4px;
+  transition: 0.5s;
+  background-color: #8000808f;
 }
 .sidebar-list > li > .active{
   color: #fff;
@@ -1930,10 +1937,15 @@ strong {
   padding: 6px 10px;
   background: linear-gradient(90deg, #a060c2, #c360a9);
 }
+.create-list-boxzoomlink > a{
+  padding: 0px 0px! important;
+}
 
 .create-list-box>a>a {
   color: #000;
   font-size: 14px;
+  display: block;
+  padding: 10px 15px;
 }
 
 .addlink-input {

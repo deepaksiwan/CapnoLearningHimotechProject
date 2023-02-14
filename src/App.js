@@ -97,7 +97,7 @@ function App(){
 				<Route  path="/view/manageform" element={<Viewmanageform />} />
 				<Route  path="/viewcreate" element={<Viewcreate />} />
 				<Route  path="/addclient" element={<Addclient />} />
-				<Route  path="/section/report/assembly" element={<Sectionreportassembly />} />
+				<Route  path="/case/report/assembly" element={<Sectionreportassembly />} />
 				<Route  path="/subscription/management" element={<Subscriptionmanagement />} />
 				<Route  path="/dropdown" element={<Dropdown />} />
 				<Route  path="/recording" element={<Recording />} />

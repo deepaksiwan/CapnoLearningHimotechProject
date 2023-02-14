@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ModalHeader, Modal, ModalBody } from "reactstrap";
 import i18n from "i18next";
+import validator from 'validator';
 import { API_URL } from '../../../config';
 import { useTranslation, initReactI18next } from "react-i18next";
 import user from '../../images/user.png'
@@ -25,6 +26,7 @@ const Login = () => {
     const [unsuccessModal, setUnsuccessModal] = useState(false);
     const unsuccessModalToggle = () => setUnsuccessModal(!unsuccessModal);
     const [Loader2, setLoader2] = useState(false)
+    const [emailerror, setEmailerror] = useState('')
 
     const togglePasswordVisiblity = () => {
         setPasswordShown(passwordShown ? false : true);
@@ -45,9 +47,6 @@ const Login = () => {
                 password,
             }),
         })
-
-
-
 
 
         const data = await response.json()
@@ -94,16 +93,25 @@ const Login = () => {
         // alert('Logined')
     }
 
+    
 
     const ForgotPassword = () => {
 
         setLoader2(true)
         let data = {};
+        console.log("forgootEmail",forgootEmail.current.value)
 
         data['email'] = forgootEmail.current.value;
 
         if (forgootEmail.current.value == "") {
             setRequiredemail(true);
+            setLoader2(false)
+            return false;
+        }
+        if(validator.isEmail(forgootEmail.current.value)){
+            setEmailerror(false)
+        }else{
+            setEmailerror('Email does not exist')
             setLoader2(false)
             return false;
         }
@@ -138,6 +146,13 @@ const Login = () => {
 
     }
 
+    const handleemailInput = (e)=>{
+        let email = e.target.value;
+        if(email.length > 0){
+            setRequiredemail(false)
+        }
+    }
+
     console.warn('user');
     return (
         <div className='login-bg'>
@@ -167,6 +182,7 @@ const Login = () => {
                                 type={passwordShown ? "text" : "password"}
                                 placeholder="Password"
 
+                                
                             />
                             <p className="forgot-password"><a href="#" onClick={forgotModalToggle}>Forgot Password? </a></p>
 
@@ -205,8 +221,13 @@ const Login = () => {
                                     ref={forgootEmail}
                                     type="email"
                                     placeholder="Email Address"
-
+                                    onChange={handleemailInput}
                                 />
+                                <span style={{
+                                fontSize: '15px',
+                                color: 'red',
+                               
+                            }}>{emailerror}</span>
 
                                 {
                                     requiredemail && <p className='require-email'>Email is Required</p>

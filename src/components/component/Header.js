@@ -81,7 +81,7 @@ const Header = () => {
           links: "/viewcreate", tabDisplay: t('View-Create-Edit-Profile'), "tabimg": <PersonAddIcon />
         },
         {
-          links: "/section/report/assembly", tabDisplay: t('Session-Report-Assembly'), "tabimg": <ReportIcon />
+          links: "/case/report/assembly", tabDisplay: t('Session-Report-Assembly'), "tabimg": <ReportIcon />
         },
         {
           links: "/recording", tabDisplay: t('Recording-by-Distributors'), "tabimg": <VideocamIcon />
@@ -98,6 +98,46 @@ const Header = () => {
       //   },
     
       ];
+
+      const tabArray2 = [
+        {
+          links: "/", tabDisplay: t('Create-Data-Report'), "tabimg": <BorderColorIcon />
+        },
+        {
+          links: "/view/data/report", tabDisplay: t('View-&-Edit-Data-Report'), "tabimg":<PageviewIcon />
+        },
+        {
+          links: "/view/pdf/report", tabDisplay: t('View-PDF-Report'), "tabimg": <PictureAsPdfIcon />
+        },
+        {
+          links: "/view/live", tabDisplay: t('View-Live-Session-Info'), "tabimg": <StreamIcon />
+        },
+        {
+          links: "/view/manageform", tabDisplay: t('View/Manage-Forms'), "tabimg": <ManageAccountsIcon />
+        },
+         
+        {
+          links: "/viewcreate", tabDisplay: "Edit Profile", "tabimg": <PersonAddIcon />
+        },
+       
+        {
+          links: "/recording", tabDisplay: t('Recording-by-Distributors'), "tabimg": <VideocamIcon />
+        },
+        {
+          links: "/subscription/management", tabDisplay: t('Subscription-Management'), "tabimg": <TouchAppIcon />
+        },
+        // {
+        //   links: "/subscribe/user", tabDisplay: t('Subscribed Users'), "tabimg": sidebarmenu8
+        // },
+    
+      // {
+      //     links: "/", tabDisplay: t('Group-Subscription-Management'), "tabimg": <PictureAsPdfIcon />
+      //   },
+    
+      ];
+
+
+
     const auth = localStorage.getItem('user_id');
     const userType = localStorage.getItem('userType'); 
     const logout = () => {
@@ -130,6 +170,15 @@ const Header = () => {
                     <button class="close-menu"><img src={crosss} className="img-close" /></button>
                     <ul className="sidebar-list">
                         {
+                            (userType == 5 || userType == 6 || userType == 7)?
+                            tabArray2.map(function (v, i) {
+                                return (
+                                    <li><NavLink to={v.links} className="close-menu" ><div className="sidebar-icon-img">{v.tabimg}</div><p>{v.tabDisplay}</p></NavLink></li>
+                                )
+                            }
+
+                            )
+                            :
                             tabArray.map(function (v, i) {
                                 return (
                                     <li><NavLink to={v.links} className="close-menu" ><div className="sidebar-icon-img">{v.tabimg}</div><p>{v.tabDisplay}</p></NavLink></li>
@@ -137,6 +186,7 @@ const Header = () => {
                             }
 
                             )
+
                         }
                         <li>{
                             auth ? <Link to="/login" onClick={logout} className="tabs close-menu"><div className="sidebar-icon-img"><LogoutIcon /></div> <p>Logout</p></Link> : null
