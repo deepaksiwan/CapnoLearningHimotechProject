@@ -13,7 +13,7 @@ jobs:
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
     steps:
         - uses: actions/checkout@v1
     
