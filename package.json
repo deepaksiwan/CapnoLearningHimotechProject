@@ -70,7 +70,7 @@
   },
   "scripts": {
     "start": "react-scripts --max_old_space_size=4096 start",
-    "build": "CI=false react-scripts --max_old_space_size=8192  build",
+    "build": "react-scripts --max_old_space_size=8192  build",
     "deploy": "aws --profile peter --region us-east-1 s3 sync ./build s3://capnolearner-web --delete",
     "invalidate": "aws --profile peter cloudfront create-invalidation --distribution-id EG4544HB04AGI --paths '/*'",
     "deploy_test": "aws --profile peter --region us-east-1 s3 sync ./build s3://capno-web --delete",
