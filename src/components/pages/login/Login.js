@@ -216,7 +216,7 @@ const Login = () => {
                     <div className="modal-p">
                         <div>
                             <div className="wrp-label">
-                                <label>Email Address</label>
+                                <label>Email Addresses</label>
                                 <input
                                     ref={forgootEmail}
                                     type="email"
