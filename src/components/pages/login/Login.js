@@ -166,7 +166,7 @@ const Login = () => {
                             <img src={user} alt="user-img" />
                         </div>
                         <div className="wrp-label">
-                            <label>{t('Email-Address')}</label>
+                            <label>{t('Email-Addresses')}</label>
                             <input
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
