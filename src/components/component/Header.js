@@ -136,6 +136,34 @@ const Header = () => {
     
       ];
 
+      const tabArrayusertype5 = [
+        {
+          links: "/", tabDisplay: t('Create-Data-Report'), "tabimg": <BorderColorIcon />
+        },
+        {
+          links: "/view/data/report", tabDisplay: t('View-&-Edit-Data-Report'), "tabimg":<PageviewIcon />
+        },
+        {
+          links: "/view/pdf/report", tabDisplay: t('View-PDF-Report'), "tabimg": <PictureAsPdfIcon />
+        },
+        {
+          links: "/view/live", tabDisplay: t('View-Live-Session-Info'), "tabimg": <StreamIcon />
+        },
+         
+        {
+          links: "/viewcreate", tabDisplay: "Edit Profile", "tabimg": <PersonAddIcon />
+        },
+       
+        {
+          links: "/recording", tabDisplay: t('Recording-by-Distributors'), "tabimg": <VideocamIcon />
+        },
+        {
+          links: "/subscription/management", tabDisplay: t('Subscription-Management'), "tabimg": <TouchAppIcon />
+        },
+  
+    
+      ];
+
 
 
     const auth = localStorage.getItem('user_id');
@@ -150,7 +178,7 @@ const Header = () => {
                 <div className="header-box">
                     <div className="header-c1">
                         <div className="header-child1">
-                            <h3>{userType == 1 ? "Admin" :  userType == 2 ? "Trainer" : "Client" } {t("Cloud-Database-Dashboard")}</h3>
+                            <h3>{userType == 1 ? "Admin" : userType == 2 ? "Trainer": userType == 3 ? "Client" : userType == 5 ? "GoPersonal": userType == 6? "GoBasic": userType == 7? "GoProfessional": "" } {t("Cloud-Database-Dashboard")}</h3>
                         </div>
                     </div>
 
@@ -170,7 +198,7 @@ const Header = () => {
                     <button class="close-menu"><img src={crosss} className="img-close" /></button>
                     <ul className="sidebar-list">
                         {
-                            (userType == 5 || userType == 6 || userType == 7)?
+                            (userType == 6 || userType == 7)?
                             tabArray2.map(function (v, i) {
                                 return (
                                     <li><NavLink to={v.links} className="close-menu" ><div className="sidebar-icon-img">{v.tabimg}</div><p>{v.tabDisplay}</p></NavLink></li>
@@ -178,7 +206,13 @@ const Header = () => {
                             }
 
                             )
-                            :
+                            :userType == 5?tabArrayusertype5.map(function (v, i) {
+                              return (
+                                  <li><NavLink to={v.links} className="close-menu" ><div className="sidebar-icon-img">{v.tabimg}</div><p>{v.tabDisplay}</p></NavLink></li>
+                              )
+                          }
+
+                          ):
                             tabArray.map(function (v, i) {
                                 return (
                                     <li><NavLink to={v.links} className="close-menu" ><div className="sidebar-icon-img">{v.tabimg}</div><p>{v.tabDisplay}</p></NavLink></li>

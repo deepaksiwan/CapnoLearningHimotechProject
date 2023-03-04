@@ -41,6 +41,7 @@ const Filter = () => {
 
 
     const userType = localStorage.getItem('userType');
+    const M_module = localStorage.getItem('m_module');
 
     const accessToken = localStorage.getItem('accessToken');
 
@@ -412,63 +413,61 @@ const Filter = () => {
             </div>
             <div className="wrp-step-box">
                 {
-                    userType == 1 &&
-                    <div className="step-box">
-                        <div className="step-trainers-box">
-                            <p>{t('Trainer-box')}</p>
-                        </div>
-                        <div className="main-checkbox">
+                    userType == 1 || userType == 7? <> <div className="step-box">
+                    <div className="step-trainers-box">
+                        <p>{t('Trainer-box')}</p>
+                    </div>
+                    <div className="main-checkbox">
 
-                            <div className="checkbox-wrp">
-                                <div class="custom-radios">
-                                    <input type="checkbox" id="active" onChange={getTrainers} ref={trainerActive} defaultChecked={(selectedtrainerActive === "true" ? true : false)}
-                                    />
-                                    <label for="active">
-                                        <span className="redious">
-                                        </span>
-                                        <b className="lactive">{t('Active')}</b>
-                                    </label>
-                                </div>
-
-
+                        <div className="checkbox-wrp">
+                            <div class="custom-radios">
+                                <input type="checkbox" id="active" onChange={getTrainers} ref={trainerActive} defaultChecked={(selectedtrainerActive === "true" ? true : false)}
+                                />
+                                <label for="active">
+                                    <span className="redious">
+                                    </span>
+                                    <b className="lactive">{t('Active')}</b>
+                                </label>
                             </div>
-                            
-                            <div className="checkbox-wrp">
-                                <div class="custom-radios">
-                                    <input type="checkbox" id="inactive" onChange={getTrainers} ref={trainerInactive} defaultChecked={(selectedtrainerInactive === "true" ? true : false)} />
-                                    <label for="inactive">
-                                        <span className="redious">
-                                        </span>
-                                        <b className="lactive">{t('Inactive')}</b>
-                                    </label>
-                                </div>
 
+
+                        </div>
+                        
+                        <div className="checkbox-wrp">
+                            <div class="custom-radios">
+                                <input type="checkbox" id="inactive" onChange={getTrainers} ref={trainerInactive} defaultChecked={(selectedtrainerInactive === "true" ? true : false)} />
+                                <label for="inactive">
+                                    <span className="redious">
+                                    </span>
+                                    <b className="lactive">{t('Inactive')}</b>
+                                </label>
                             </div>
-                        </div>
-                        <div className="select-client">
-                            <select ref={trainerSelected} onChange={updateSelectTrainer}  >
-                                <option className="selected-bold">{t('Choose-a-trainer')}</option>
-                                <option value={"all"} className="selected-bold">All trainers</option>
-                                {
-                                    trainers.map((items) =>
-                                        <option className="selected-bold" selected={items.id == selectedTrainer ? true : false} value={items.id}>
-                                            {items.firstname} {items.lastname}
-                                        </option>)
-                                }
 
-                            </select>
-                        </div>
-                        <div className="step-smallbox">
-                            <p>{t('Step-1')}</p>
                         </div>
                     </div>
+                    <div className="select-client">
+                        <select ref={trainerSelected} onChange={updateSelectTrainer}  >
+                            <option className="selected-bold">{t('Choose-a-trainer')}</option>
+                            <option value={"all"} className="selected-bold">All trainers</option>
+                            {
+                                trainers.map((items) =>
+                                    <option className="selected-bold" selected={items.id == selectedTrainer ? true : false} value={items.id}>
+                                        {items.firstname} {items.lastname}
+                                    </option>)
+                            }
 
+                        </select>
+                    </div>
+                    <div className="step-smallbox">
+                        <p>{t('Step-1')}</p>
+                    </div>
+                </div></> : ""
 
 
                 }
 
                 {
-                    (userType == 2 || userType == 1) &&
+                    (userType == 2 || userType == 1 || userType == 7 || userType == 6 || M_module == 1 && userType == 5)?
 
                     <div className="step-box">
                         <div className="step-trainers-box">
@@ -530,13 +529,14 @@ const Filter = () => {
                             </select>
                         </div>
                         <div className="step-smallbox">
-                            <p>{t('Step')} {userType == 1 ? 2 : 1}</p>
+                            <p>{t('Step')} {userType == 1 || userType == 7 ? 2 : 1}</p>
                         </div>
-                    </div>
+                    </div>: ""
 
 
 
                 }
+                
 
 
 
@@ -588,7 +588,7 @@ const Filter = () => {
                         </select>
                     </div>
                     <div className="step-smallbox">
-                        <p>{t("Step")} {userType == 1 ? 3 : userType == 2 ? 2 : 1}</p>
+                        <p>{t("Step")} {userType == 1 || userType == 7? 3 : userType == 5 && M_module == 1? 2 : userType == 2 || userType == 6 ?2 : 1}</p>
                     </div>
                 </div>
 

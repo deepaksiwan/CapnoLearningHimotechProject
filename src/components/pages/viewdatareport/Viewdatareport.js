@@ -115,20 +115,33 @@ const Viewdatareport = () =>{
             <Filter />
             <div className="create-section">
                        <ul className="create-list">
-                            <li>
+                        {
+                            userType == 5 || userType == 6?<><li>
                             
-                                <div className="create-list-box"><Link to={(sreports.length == 0 || selectedSession === "" || selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "" ) ? "": "/session/data/report/single" } className={(sreports.length == 0 || (selectedSession === ""  || selectedSession === "null" ||  selectedGroup === "true" || selectedHomework === "true" || selectedClient === "") ) ? "deactivate": "" }>{t('Session-Data-Reports')}</Link></div>
-                            </li>
-                            <li>
+                            <div className="create-list-box"><Link to={(sreports.length == 0 || selectedSession === "" || selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "" ) ? "": "/session/data/report/single" } className={(sreports.length == 0 || (selectedSession === ""  || selectedSession === "null" ||  selectedGroup === "true" || selectedHomework === "true" || selectedClient === "") ) ? "deactivate": "" }>{t('Session-Data-Reports')}</Link></div>
+                        </li>
+                        </>: <>
+                        <li>
+                        
+                            <div className="create-list-box"><Link to={(mreports.length == 0 || selectedClient === "" || selectedGroup === "true" || (selectedSession !== "" && selectedSession !== "null")) ? "": "/session/data/report/multi" } className={(mreports.length == 0 || selectedClient === "" || selectedGroup === "true" || (selectedSession !== "" && selectedSession !== "null")) ? "deactivate": "" }>{t('Multi-session-Data-Reports')}</Link></div>
+                        </li>
+                        <li>
                             
-                                <div className="create-list-box"><Link to={(mreports.length == 0 || selectedClient === "" || selectedGroup === "true" || (selectedSession !== "" && selectedSession !== "null")) ? "": "/session/data/report/multi" } className={(mreports.length == 0 || selectedClient === "" || selectedGroup === "true" || (selectedSession !== "" && selectedSession !== "null")) ? "deactivate": "" }>{t('Multi-session-Data-Reports')}</Link></div>
-                            </li>
-                            <li>
+                            <div className="create-list-box"><Link to={(sreports.length == 0 || selectedSession === "" || selectedSession === "null" || selectedGroup === "true" || selectedHomework === "true" || selectedClient === "" ) ? "": "/session/data/report/single" } className={(sreports.length == 0 || (selectedSession === ""  || selectedSession === "null" ||  selectedGroup === "true" || selectedHomework === "true" || selectedClient === "") ) ? "deactivate": "" }>{t('Session-Data-Reports')}</Link></div>
+                        </li>
+                        <li>
+                        
+                            <div className="create-list-box"><Link to={(mreports.length == 0 || selectedClient === "" || selectedGroup === "true" || (selectedSession !== "" && selectedSession !== "null")) ? "": "/session/data/report/multi" } className={(mreports.length == 0 || selectedClient === "" || selectedGroup === "true" || (selectedSession !== "" && selectedSession !== "null")) ? "deactivate": "" }>{t('Multi-session-Data-Reports')}</Link></div>
+                        </li>
+                        <li>
                                 <div className="create-list-box"><Link to={(sreports.length == 0 || selectedSession === "" || selectedGroup === "false" || selectedSession === "" || selectedSession === "null" ) ? "": "/session/data/report/group" } className={(sreports.length == 0 || selectedSession === "" || selectedGroup === "false" || selectedSession === "" ||selectedSession === "null" ) ? "deactivate": "" }>{t('Group-Session-Data-Reports')}</Link></div>
                             </li>
                             <li>
                                 <div className="create-list-box"><Link to={( selectedSession === "" || selectedSession === "null" || selectedHomework === "false") ? "": "/session/data/report/homework" } className={(selectedSession === "" ||selectedSession === "null" || selectedHomework === "false") ? "deactivate": "" }>{t('Client-Homework-Data-Reports')}</Link></div>
                             </li>
+                        </>
+                        }
+                            
                        </ul>
                    </div>
               

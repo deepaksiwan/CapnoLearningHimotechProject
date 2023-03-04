@@ -107,7 +107,7 @@ const Createdata = (props) => {
                             </li>
 
                             {
-                                (userType == 5 || userType == 6 || userType == 7)?"":<><li>
+                                (userType == 5 || userType == 6)?"":<><li>
                                 <div className="create-list-box"><Link to={(selectedClient === "Choose a Client" || selectedClient === "null" || selectedSession !== "" && selectedSession !== "null" || selectedGroup === "true") ? "" : "/createmultisession"} className={(selectedClient === "Choose a Client" || selectedClient === "null" || selectedSession !== "" && selectedSession !== "null" || selectedGroup === "true") ? "deactivate" : ""} >{t('Create-&-Save-a-Multisession-Report')}</Link></div>
 
                             </li>

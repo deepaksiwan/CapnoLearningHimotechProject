@@ -774,7 +774,7 @@ a:hover {
 
 .wrp-step-box {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   margin-top: 40px;
   margin-bottom: 10px;
 }
@@ -787,9 +787,12 @@ a:hover {
   height: 165px;
   position: relative;
   border: 2px solid #c867c6;
+  margin-right: 20px;
   box-shadow: 1px 1px 8px 1px #00000052;
 }
-
+.step-box:nth-child(3){
+  margin-right: 0px;
+}
 .checkbox-wrp {
   display: flex;
 

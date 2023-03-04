@@ -67,6 +67,8 @@ const Login = () => {
             localStorage.setItem('selectedclientActive', true);
             localStorage.setItem('selectedclientInactive', false);
             localStorage.setItem('selectedHomework', false);
+            localStorage.setItem('c_module', data.c_module);
+            localStorage.setItem('m_module', data.m_module);    
 
             localStorage.setItem('selectedTrainer', null);
             localStorage.setItem('selectedTrainerGroup', null);

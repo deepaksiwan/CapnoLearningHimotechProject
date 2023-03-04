@@ -105,6 +105,34 @@ const Sidebar = () => {
 
   ];
 
+  const tabArrayusertype5 = [
+    {
+      links: "/", tabDisplay: t('Create-Data-Report'), "tabimg": <BorderColorIcon />
+    },
+    {
+      links: "/view/data/report", tabDisplay: t('View-&-Edit-Data-Report'), "tabimg":<PageviewIcon />
+    },
+    {
+      links: "/view/pdf/report", tabDisplay: t('View-PDF-Report'), "tabimg": <PictureAsPdfIcon />
+    },
+    {
+      links: "/view/live", tabDisplay: t('View-Live-Session-Info'), "tabimg": <StreamIcon />
+    },
+    
+    {
+      links: "/viewcreate", tabDisplay: "Edit Profile", "tabimg": <PersonAddIcon />
+    },
+   
+    {
+      links: "/recording", tabDisplay: t('Recording-by-Distributors'), "tabimg": <VideocamIcon />
+    },
+    {
+      links: "/subscription/management", tabDisplay: t('Subscription-Management'), "tabimg": <TouchAppIcon />
+    }
+  
+
+  ];
+
 
 
   const handleActive = (index)=>{
@@ -127,7 +155,7 @@ const Sidebar = () => {
          {/* "hi" {activeIndex} */}
 
          {
-          (userType == 5 || userType == 6 || userType == 7)?
+          (userType == 6 || userType == 7)?
             tabArray2.map(function (v, index) {
               return (
                 <li><NavLink to={v.links}  onClick={() => handleActive(index)}><div className="sidebar-icon-img">{v.tabimg} </div> <p>{v.tabDisplay}</p></NavLink></li>
@@ -135,6 +163,13 @@ const Sidebar = () => {
             }
 
            )
+           :userType == 5?tabArrayusertype5.map(function (v, i) {
+            return (
+                <li><NavLink to={v.links} className="close-menu" ><div className="sidebar-icon-img">{v.tabimg}</div><p>{v.tabDisplay}</p></NavLink></li>
+            )
+        }
+
+        )
           :
             tabArray.map(function (v, index) {
               return (
